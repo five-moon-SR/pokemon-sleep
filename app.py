@@ -1,8 +1,11 @@
 import streamlit as st
 
 import db
+import ui
 
 st.set_page_config(page_title="ポケスリ管理", page_icon="🌙", layout="wide")
+
+ui.apply_mobile_css()
 
 db.init_db()
 
