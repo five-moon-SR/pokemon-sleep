@@ -1,0 +1,1027 @@
+{
+  "records": [
+    {
+      "from": "フシギダネ",
+      "to": "フシギソウ",
+      "candy": 40,
+      "conditions": {
+        "min_level": 12
+      }
+    },
+    {
+      "from": "フシギソウ",
+      "to": "フシギバナ",
+      "candy": 80,
+      "conditions": {
+        "min_level": 27
+      }
+    },
+    {
+      "from": "ヒトカゲ",
+      "to": "リザード",
+      "candy": 40,
+      "conditions": {
+        "min_level": 12
+      }
+    },
+    {
+      "from": "リザード",
+      "to": "リザードン",
+      "candy": 80,
+      "conditions": {
+        "min_level": 27
+      }
+    },
+    {
+      "from": "ゼニガメ",
+      "to": "カメール",
+      "candy": 40,
+      "conditions": {
+        "min_level": 12
+      }
+    },
+    {
+      "from": "カメール",
+      "to": "カメックス",
+      "candy": 80,
+      "conditions": {
+        "min_level": 27
+      }
+    },
+    {
+      "from": "キャタピー",
+      "to": "トランセル",
+      "candy": 40,
+      "conditions": {
+        "min_level": 5
+      }
+    },
+    {
+      "from": "トランセル",
+      "to": "バタフリー",
+      "candy": 80,
+      "conditions": {
+        "min_level": 8
+      }
+    },
+    {
+      "from": "コラッタ",
+      "to": "ラッタ",
+      "candy": 40,
+      "conditions": {
+        "min_level": 15
+      }
+    },
+    {
+      "from": "アーボ",
+      "to": "アーボック",
+      "candy": 40,
+      "conditions": {
+        "min_level": 17
+      }
+    },
+    {
+      "from": "ピチュー",
+      "to": "ピカチュウ",
+      "candy": 20,
+      "conditions": {
+        "min_sleep_hours": 50
+      }
+    },
+    {
+      "from": "ピカチュウ",
+      "to": "ライチュウ",
+      "candy": 80,
+      "conditions": {
+        "items": [
+          "かみなりのいし"
+        ]
+      }
+    },
+    {
+      "from": "ピィ",
+      "to": "ピッピ",
+      "candy": 20,
+      "conditions": {
+        "min_sleep_hours": 50
+      }
+    },
+    {
+      "from": "ピッピ",
+      "to": "ピクシー",
+      "candy": 80,
+      "conditions": {
+        "items": [
+          "つきのいし"
+        ]
+      }
+    },
+    {
+      "from": "ロコン",
+      "to": "キュウコン",
+      "candy": 80,
+      "conditions": {
+        "items": [
+          "ほのおのいし"
+        ]
+      }
+    },
+    {
+      "from": "ロコン(アローラ)",
+      "to": "キュウコン(アローラ)",
+      "candy": 80,
+      "conditions": {
+        "items": [
+          "こおりのいし"
+        ]
+      }
+    },
+    {
+      "from": "ププリン",
+      "to": "プリン",
+      "candy": 20,
+      "conditions": {
+        "min_sleep_hours": 50
+      }
+    },
+    {
+      "from": "プリン",
+      "to": "プクリン",
+      "candy": 80,
+      "conditions": {
+        "items": [
+          "つきのいし"
+        ]
+      }
+    },
+    {
+      "from": "ディグダ",
+      "to": "ダグトリオ",
+      "candy": 40,
+      "conditions": {
+        "min_level": 20
+      }
+    },
+    {
+      "from": "ニャース",
+      "to": "ペルシアン",
+      "candy": 40,
+      "conditions": {
+        "min_level": 21
+      }
+    },
+    {
+      "from": "コダック",
+      "to": "ゴルダック",
+      "candy": 40,
+      "conditions": {
+        "min_level": 25
+      }
+    },
+    {
+      "from": "マンキー",
+      "to": "オコリザル",
+      "candy": 40,
+      "conditions": {
+        "min_level": 21
+      }
+    },
+    {
+      "from": "ガーディ",
+      "to": "ウインディ",
+      "candy": 80,
+      "conditions": {
+        "items": [
+          "ほのおのいし"
+        ]
+      }
+    },
+    {
+      "from": "マダツボミ",
+      "to": "ウツドン",
+      "candy": 40,
+      "conditions": {
+        "min_level": 16
+      }
+    },
+    {
+      "from": "ウツドン",
+      "to": "ウツボット",
+      "candy": 80,
+      "conditions": {
+        "items": [
+          "リーフのいし"
+        ]
+      }
+    },
+    {
+      "from": "イシツブテ",
+      "to": "ゴローン",
+      "candy": 40,
+      "conditions": {
+        "min_level": 19
+      }
+    },
+    {
+      "from": "ゴローン",
+      "to": "ゴローニャ",
+      "candy": 80,
+      "conditions": {
+        "items": [
+          "つながりのヒモ"
+        ]
+      }
+    },
+    {
+      "from": "ヤドン",
+      "to": "ヤドラン",
+      "candy": 40,
+      "conditions": {
+        "min_level": 28
+      }
+    },
+    {
+      "from": "ヤドン",
+      "to": "ヤドキング",
+      "candy": 80,
+      "conditions": {
+        "items": [
+          "おうじゃのしるし",
+          "つながりのヒモ"
+        ]
+      }
+    },
+    {
+      "from": "コイル",
+      "to": "レアコイル",
+      "candy": 40,
+      "conditions": {
+        "min_level": 23
+      }
+    },
+    {
+      "from": "レアコイル",
+      "to": "ジバコイル",
+      "candy": 80,
+      "conditions": {
+        "items": [
+          "かみなりのいし"
+        ]
+      }
+    },
+    {
+      "from": "ドードー",
+      "to": "ドードリオ",
+      "candy": 40,
+      "conditions": {
+        "min_level": 23
+      }
+    },
+    {
+      "from": "ゴース",
+      "to": "ゴースト",
+      "candy": 40,
+      "conditions": {
+        "min_level": 19
+      }
+    },
+    {
+      "from": "ゴースト",
+      "to": "ゲンガー",
+      "candy": 80,
+      "conditions": {
+        "items": [
+          "つながりのヒモ"
+        ]
+      }
+    },
+    {
+      "from": "イワーク",
+      "to": "ハガネール",
+      "candy": 80,
+      "conditions": {
+        "items": [
+          "つながりのヒモ",
+          "メタルコート"
+        ]
+      }
+    },
+    {
+      "from": "カラカラ",
+      "to": "ガラガラ",
+      "candy": 40,
+      "conditions": {
+        "min_level": 21
+      }
+    },
+    {
+      "from": "ピンプク",
+      "to": "ラッキー",
+      "candy": 80,
+      "conditions": {
+        "items": [
+          "まんまるいし"
+        ],
+        "time_of_day": "day"
+      }
+    },
+    {
+      "from": "ラッキー",
+      "to": "ハピナス",
+      "candy": 80,
+      "conditions": {
+        "min_sleep_hours": 150
+      }
+    },
+    {
+      "from": "マネネ",
+      "to": "バリヤード",
+      "candy": 40,
+      "conditions": {
+        "min_level": 12
+      }
+    },
+    {
+      "from": "イーブイ",
+      "to": "シャワーズ",
+      "candy": 80,
+      "conditions": {
+        "items": [
+          "みずのいし"
+        ]
+      }
+    },
+    {
+      "from": "イーブイ",
+      "to": "サンダース",
+      "candy": 80,
+      "conditions": {
+        "items": [
+          "かみなりのいし"
+        ]
+      }
+    },
+    {
+      "from": "イーブイ",
+      "to": "ブースター",
+      "candy": 80,
+      "conditions": {
+        "items": [
+          "ほのおのいし"
+        ]
+      }
+    },
+    {
+      "from": "イーブイ",
+      "to": "エーフィ",
+      "candy": 80,
+      "conditions": {
+        "min_sleep_hours": 150,
+        "time_of_day": "day"
+      }
+    },
+    {
+      "from": "イーブイ",
+      "to": "ブラッキー",
+      "candy": 80,
+      "conditions": {
+        "min_sleep_hours": 150,
+        "time_of_day": "night"
+      }
+    },
+    {
+      "from": "イーブイ",
+      "to": "リーフィア",
+      "candy": 80,
+      "conditions": {
+        "items": [
+          "リーフのいし"
+        ]
+      }
+    },
+    {
+      "from": "イーブイ",
+      "to": "グレイシア",
+      "candy": 80,
+      "conditions": {
+        "items": [
+          "こおりのいし"
+        ]
+      }
+    },
+    {
+      "from": "イーブイ",
+      "to": "ニンフィア",
+      "candy": 80,
+      "conditions": {
+        "min_sleep_hours": 150
+      }
+    },
+    {
+      "from": "ミニリュウ",
+      "to": "ハクリュー",
+      "candy": 40,
+      "conditions": {
+        "min_level": 23
+      }
+    },
+    {
+      "from": "ハクリュー",
+      "to": "カイリュー",
+      "candy": 100,
+      "conditions": {
+        "min_level": 41
+      }
+    },
+    {
+      "from": "チコリータ",
+      "to": "ベイリーフ",
+      "candy": 40,
+      "conditions": {
+        "min_level": 12
+      }
+    },
+    {
+      "from": "ベイリーフ",
+      "to": "メガニウム",
+      "candy": 80,
+      "conditions": {
+        "min_level": 27
+      }
+    },
+    {
+      "from": "ヒノアラシ",
+      "to": "マグマラシ",
+      "candy": 40,
+      "conditions": {
+        "min_level": 12
+      }
+    },
+    {
+      "from": "マグマラシ",
+      "to": "バクフーン",
+      "candy": 80,
+      "conditions": {
+        "min_level": 27
+      }
+    },
+    {
+      "from": "ワニノコ",
+      "to": "アリゲイツ",
+      "candy": 40,
+      "conditions": {
+        "min_level": 12
+      }
+    },
+    {
+      "from": "アリゲイツ",
+      "to": "オーダイル",
+      "candy": 80,
+      "conditions": {
+        "min_level": 27
+      }
+    },
+    {
+      "from": "トゲピー",
+      "to": "トゲチック",
+      "candy": 20,
+      "conditions": {
+        "min_sleep_hours": 50
+      }
+    },
+    {
+      "from": "トゲチック",
+      "to": "トゲキッス",
+      "candy": 80,
+      "conditions": {
+        "items": [
+          "ひかりのいし"
+        ]
+      }
+    },
+    {
+      "from": "メリープ",
+      "to": "モココ",
+      "candy": 40,
+      "conditions": {
+        "min_level": 11
+      }
+    },
+    {
+      "from": "モココ",
+      "to": "デンリュウ",
+      "candy": 80,
+      "conditions": {
+        "min_level": 23
+      }
+    },
+    {
+      "from": "ネイティ",
+      "to": "ネイティオ",
+      "candy": 20,
+      "conditions": {
+        "min_level": 17
+      }
+    },
+    {
+      "from": "ウソハチ",
+      "to": "ウソッキー",
+      "candy": 20,
+      "conditions": {
+        "min_level": 12
+      }
+    },
+    {
+      "from": "ウパー",
+      "to": "ヌオー",
+      "candy": 40,
+      "conditions": {
+        "min_level": 15
+      }
+    },
+    {
+      "from": "ヤミカラス",
+      "to": "ドンカラス",
+      "candy": 80,
+      "conditions": {
+        "items": [
+          "やみのいし"
+        ]
+      }
+    },
+    {
+      "from": "ソーナノ",
+      "to": "ソーナンス",
+      "candy": 20,
+      "conditions": {
+        "min_level": 11
+      }
+    },
+    {
+      "from": "ニューラ",
+      "to": "マニューラ",
+      "candy": 80,
+      "conditions": {
+        "items": [
+          "するどいツメ"
+        ],
+        "time_of_day": "night"
+      }
+    },
+    {
+      "from": "デルビル",
+      "to": "ヘルガー",
+      "candy": 40,
+      "conditions": {
+        "min_level": 18
+      }
+    },
+    {
+      "from": "ヨーギラス",
+      "to": "サナギラス",
+      "candy": 40,
+      "conditions": {
+        "min_level": 23
+      }
+    },
+    {
+      "from": "サナギラス",
+      "to": "バンギラス",
+      "candy": 100,
+      "conditions": {
+        "min_level": 41
+      }
+    },
+    {
+      "from": "キモリ",
+      "to": "ジュプトル",
+      "candy": 40,
+      "conditions": {
+        "min_level": 12
+      }
+    },
+    {
+      "from": "ジュプトル",
+      "to": "ジュカイン",
+      "candy": 80,
+      "conditions": {
+        "min_level": 27
+      }
+    },
+    {
+      "from": "アチャモ",
+      "to": "ワカシャモ",
+      "candy": 40,
+      "conditions": {
+        "min_level": 12
+      }
+    },
+    {
+      "from": "ワカシャモ",
+      "to": "バシャーモ",
+      "candy": 80,
+      "conditions": {
+        "min_level": 27
+      }
+    },
+    {
+      "from": "ミズゴロウ",
+      "to": "ヌマクロー",
+      "candy": 40,
+      "conditions": {
+        "min_level": 12
+      }
+    },
+    {
+      "from": "ヌマクロー",
+      "to": "ラグラージ",
+      "candy": 80,
+      "conditions": {
+        "min_level": 27
+      }
+    },
+    {
+      "from": "ラルトス",
+      "to": "キルリア",
+      "candy": 40,
+      "conditions": {
+        "min_level": 15
+      }
+    },
+    {
+      "from": "キルリア",
+      "to": "サーナイト",
+      "candy": 80,
+      "conditions": {
+        "min_level": 23
+      }
+    },
+    {
+      "from": "キルリア",
+      "to": "エルレイド",
+      "candy": 80,
+      "conditions": {
+        "items": [
+          "めざめいし"
+        ],
+        "gender": "male"
+      }
+    },
+    {
+      "from": "ナマケロ",
+      "to": "ヤルキモノ",
+      "candy": 40,
+      "conditions": {
+        "min_level": 14
+      }
+    },
+    {
+      "from": "ヤルキモノ",
+      "to": "ケッキング",
+      "candy": 80,
+      "conditions": {
+        "min_level": 27
+      }
+    },
+    {
+      "from": "ココドラ",
+      "to": "コドラ",
+      "candy": 40,
+      "conditions": {
+        "min_level": 24
+      }
+    },
+    {
+      "from": "コドラ",
+      "to": "ボスゴドラ",
+      "candy": 80,
+      "conditions": {
+        "min_level": 32
+      }
+    },
+    {
+      "from": "ゴクリン",
+      "to": "マルノーム",
+      "candy": 40,
+      "conditions": {
+        "min_level": 20
+      }
+    },
+    {
+      "from": "ナックラー",
+      "to": "ビブラーバ",
+      "candy": 40,
+      "conditions": {
+        "min_level": 26
+      }
+    },
+    {
+      "from": "ビブラーバ",
+      "to": "フライゴン",
+      "candy": 80,
+      "conditions": {
+        "min_level": 34
+      }
+    },
+    {
+      "from": "チルット",
+      "to": "チルタリス",
+      "candy": 40,
+      "conditions": {
+        "min_level": 26
+      }
+    },
+    {
+      "from": "カゲボウズ",
+      "to": "ジュペッタ",
+      "candy": 40,
+      "conditions": {
+        "min_level": 28
+      }
+    },
+    {
+      "from": "タマザラシ",
+      "to": "トドグラー",
+      "candy": 40,
+      "conditions": {
+        "min_level": 24
+      }
+    },
+    {
+      "from": "トドグラー",
+      "to": "トドゼルガ",
+      "candy": 80,
+      "conditions": {
+        "min_level": 33
+      }
+    },
+    {
+      "from": "タツベイ",
+      "to": "コモルー",
+      "candy": 40,
+      "conditions": {
+        "min_level": 23
+      }
+    },
+    {
+      "from": "コモルー",
+      "to": "ボーマンダ",
+      "candy": 100,
+      "conditions": {
+        "min_level": 38
+      }
+    },
+    {
+      "from": "コリンク",
+      "to": "ルクシオ",
+      "candy": 40,
+      "conditions": {
+        "min_level": 11
+      }
+    },
+    {
+      "from": "ルクシオ",
+      "to": "レントラー",
+      "candy": 80,
+      "conditions": {
+        "min_level": 23
+      }
+    },
+    {
+      "from": "フワンテ",
+      "to": "フワライド",
+      "candy": 40,
+      "conditions": {
+        "min_level": 21
+      }
+    },
+    {
+      "from": "リオル",
+      "to": "ルカリオ",
+      "candy": 80,
+      "conditions": {
+        "min_sleep_hours": 150,
+        "time_of_day": "day"
+      }
+    },
+    {
+      "from": "グレッグル",
+      "to": "ドクロッグ",
+      "candy": 40,
+      "conditions": {
+        "min_level": 28
+      }
+    },
+    {
+      "from": "ユキカブリ",
+      "to": "ユキノオー",
+      "candy": 40,
+      "conditions": {
+        "min_level": 30
+      }
+    },
+    {
+      "from": "ムンナ",
+      "to": "ムシャーナ",
+      "candy": 80,
+      "conditions": {
+        "items": [
+          "つきのいし"
+        ]
+      }
+    },
+    {
+      "from": "イシズマイ",
+      "to": "イワパレス",
+      "candy": 40,
+      "conditions": {
+        "min_level": 26
+      }
+    },
+    {
+      "from": "ワシボン",
+      "to": "ウォーグル",
+      "candy": 40,
+      "conditions": {
+        "min_level": 41
+      }
+    },
+    {
+      "from": "バケッチャ(おおだま)",
+      "to": "パンプジン(おおだま)",
+      "candy": 80,
+      "conditions": {
+        "items": [
+          "つながりのヒモ"
+        ]
+      }
+    },
+    {
+      "from": "バケッチャ(こだま)",
+      "to": "パンプジン(こだま)",
+      "candy": 80,
+      "conditions": {
+        "items": [
+          "つながりのヒモ"
+        ]
+      }
+    },
+    {
+      "from": "バケッチャ(ちゅうだま)",
+      "to": "パンプジン(ちゅうだま)",
+      "candy": 80,
+      "conditions": {
+        "items": [
+          "つながりのヒモ"
+        ]
+      }
+    },
+    {
+      "from": "バケッチャ(ギガだま)",
+      "to": "パンプジン(ギガだま)",
+      "candy": 80,
+      "conditions": {
+        "items": [
+          "つながりのヒモ"
+        ]
+      }
+    },
+    {
+      "from": "アゴジムシ",
+      "to": "デンヂムシ",
+      "candy": 40,
+      "conditions": {
+        "min_level": 15
+      }
+    },
+    {
+      "from": "デンヂムシ",
+      "to": "クワガノン",
+      "candy": 80,
+      "conditions": {
+        "items": [
+          "かみなりのいし"
+        ]
+      }
+    },
+    {
+      "from": "アブリー",
+      "to": "アブリボン",
+      "candy": 40,
+      "conditions": {
+        "min_level": 19
+      }
+    },
+    {
+      "from": "ヌイコグマ",
+      "to": "キテルグマ",
+      "candy": 40,
+      "conditions": {
+        "min_level": 20
+      }
+    },
+    {
+      "from": "エレズン",
+      "to": "ストリンダー(ハイ)",
+      "candy": 80,
+      "conditions": {
+        "min_level": 23
+      }
+    },
+    {
+      "from": "エレズン",
+      "to": "ストリンダー(ロー)",
+      "candy": 80,
+      "conditions": {
+        "min_level": 23
+      }
+    },
+    {
+      "from": "ニャオハ",
+      "to": "ニャローテ",
+      "candy": 40,
+      "conditions": {
+        "min_level": 12
+      }
+    },
+    {
+      "from": "ニャローテ",
+      "to": "マスカーニャ",
+      "candy": 80,
+      "conditions": {
+        "min_level": 27
+      }
+    },
+    {
+      "from": "ホゲータ",
+      "to": "アチゲータ",
+      "candy": 40,
+      "conditions": {
+        "min_level": 12
+      }
+    },
+    {
+      "from": "アチゲータ",
+      "to": "ラウドボーン",
+      "candy": 80,
+      "conditions": {
+        "min_level": 27
+      }
+    },
+    {
+      "from": "クワッス",
+      "to": "ウェルカモ",
+      "candy": 40,
+      "conditions": {
+        "min_level": 12
+      }
+    },
+    {
+      "from": "ウェルカモ",
+      "to": "ウェーニバル",
+      "candy": 80,
+      "conditions": {
+        "min_level": 27
+      }
+    },
+    {
+      "from": "パモ",
+      "to": "パモット",
+      "candy": 40,
+      "conditions": {
+        "min_level": 14
+      }
+    },
+    {
+      "from": "パモット",
+      "to": "パーモット",
+      "candy": 80,
+      "conditions": {
+        "min_sleep_hours": 150
+      }
+    },
+    {
+      "from": "アルクジラ",
+      "to": "ハルクジラ",
+      "candy": 80,
+      "conditions": {
+        "items": [
+          "こおりのいし"
+        ]
+      }
+    },
+    {
+      "from": "ウパー(パルデア)",
+      "to": "ドオー",
+      "candy": 40,
+      "conditions": {
+        "min_level": 15
+      }
+    }
+  ],
+  "_meta": {
+    "count": 119,
+    "source": "https://jara-blog.com/sleep_shinka",
+    "fetched_at": "2026-05-01"
+  }
+}

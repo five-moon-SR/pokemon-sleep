@@ -1,0 +1,234 @@
+{
+  "records": [
+    {
+      "rarity": "gold",
+      "name": "睡眠EXPボーナス",
+      "category": "sleep_exp",
+      "effect_kind": "percent",
+      "effect_value": "14%",
+      "effect_value_num": 14.0,
+      "scope": "team",
+      "description": "チーム全員の睡眠でもらえるEXPが14%増える",
+      "is_max_rank": false,
+      "can_upgrade_with_seed": false
+    },
+    {
+      "rarity": "gold",
+      "name": "おてつだいボーナス",
+      "category": "help_bonus",
+      "effect_kind": "percent",
+      "effect_value": "5%",
+      "effect_value_num": 5.0,
+      "scope": "team",
+      "description": "チーム全員のおてつだい時間が5%短くなる",
+      "is_max_rank": false,
+      "can_upgrade_with_seed": false
+    },
+    {
+      "rarity": "gold",
+      "name": "げんき回復ボーナス",
+      "category": "energy_recovery",
+      "effect_kind": "multiplier",
+      "effect_value": "×1.14",
+      "effect_value_num": 1.14,
+      "scope": "team",
+      "description": "チーム全員の睡眠で回復するげんきが1.14倍になる 自分のみ、睡眠で回復するげんき量の上限が105になる",
+      "is_max_rank": false,
+      "can_upgrade_with_seed": false
+    },
+    {
+      "rarity": "gold",
+      "name": "ゆめのかけらボーナス",
+      "category": "dream_shard",
+      "effect_kind": "percent",
+      "effect_value": "6%",
+      "effect_value_num": 6.0,
+      "scope": "self",
+      "description": "睡眠リサーチでもらえるゆめのかけらが6%増える",
+      "is_max_rank": false,
+      "can_upgrade_with_seed": false
+    },
+    {
+      "rarity": "gold",
+      "name": "リサーチEXPボーナス",
+      "category": "research_exp",
+      "effect_kind": "percent",
+      "effect_value": "9%",
+      "effect_value_num": 9.0,
+      "scope": "self",
+      "description": "睡眠リサーチでもらえるリサーチEXPが9%増える",
+      "is_max_rank": false,
+      "can_upgrade_with_seed": false
+    },
+    {
+      "rarity": "gold",
+      "name": "きのみの数S",
+      "category": "berry_count",
+      "effect_kind": "count",
+      "effect_value": "+1",
+      "effect_value_num": 1,
+      "scope": "self",
+      "description": "一度に拾うきのみの数が1個増える",
+      "is_max_rank": false,
+      "can_upgrade_with_seed": false
+    },
+    {
+      "rarity": "gold",
+      "name": "スキルレベルアップM",
+      "category": "skill_level",
+      "effect_kind": "count",
+      "effect_value": "+2",
+      "effect_value_num": 2,
+      "scope": "self",
+      "description": "スキルレベルが2あがる",
+      "is_max_rank": true,
+      "can_upgrade_with_seed": false
+    },
+    {
+      "rarity": "blue",
+      "name": "スキルレベルアップS",
+      "category": "skill_level",
+      "effect_kind": "count",
+      "effect_value": "+1",
+      "effect_value_num": 1,
+      "scope": "self",
+      "description": "スキルレベルが1あがる",
+      "is_max_rank": false,
+      "can_upgrade_with_seed": true
+    },
+    {
+      "rarity": "blue",
+      "name": "最大所持数アップL",
+      "category": "inventory",
+      "effect_kind": "count",
+      "effect_value": "+18",
+      "effect_value_num": 18,
+      "scope": "self",
+      "description": "きのみ・食材の最大所持数が18個増える",
+      "is_max_rank": true,
+      "can_upgrade_with_seed": false
+    },
+    {
+      "rarity": "blue",
+      "name": "最大所持数アップM",
+      "category": "inventory",
+      "effect_kind": "count",
+      "effect_value": "+12",
+      "effect_value_num": 12,
+      "scope": "self",
+      "description": "きのみ・食材の最大所持数が12個増える",
+      "is_max_rank": false,
+      "can_upgrade_with_seed": true
+    },
+    {
+      "rarity": "blue",
+      "name": "おてつだいスピードM",
+      "category": "speed",
+      "effect_kind": "percent",
+      "effect_value": "14%",
+      "effect_value_num": 14.0,
+      "scope": "self",
+      "description": "おてつだい時間が14%短くなる",
+      "is_max_rank": true,
+      "can_upgrade_with_seed": false
+    },
+    {
+      "rarity": "blue",
+      "name": "食材確率アップM",
+      "category": "ingredient_rate",
+      "effect_kind": "percent",
+      "effect_value": "36%",
+      "effect_value_num": 36.0,
+      "scope": "self",
+      "description": "食材をとってくる確率が上がる",
+      "is_max_rank": true,
+      "can_upgrade_with_seed": false
+    },
+    {
+      "rarity": "blue",
+      "name": "スキル確率アップM",
+      "category": "skill_trigger",
+      "effect_kind": "percent",
+      "effect_value": "36%",
+      "effect_value_num": 36.0,
+      "scope": "self",
+      "description": "スキル発生確率が上がる",
+      "is_max_rank": true,
+      "can_upgrade_with_seed": false
+    },
+    {
+      "rarity": "white",
+      "name": "最大所持数アップS",
+      "category": "inventory",
+      "effect_kind": "count",
+      "effect_value": "+6",
+      "effect_value_num": 6,
+      "scope": "self",
+      "description": "きのみ・食材の最大所持数が6個増える",
+      "is_max_rank": false,
+      "can_upgrade_with_seed": true
+    },
+    {
+      "rarity": "white",
+      "name": "おてつだいスピードS",
+      "category": "speed",
+      "effect_kind": "percent",
+      "effect_value": "7%",
+      "effect_value_num": 7.0,
+      "scope": "self",
+      "description": "おてつだい時間が7%短くなる",
+      "is_max_rank": false,
+      "can_upgrade_with_seed": true
+    },
+    {
+      "rarity": "white",
+      "name": "食材確率アップS",
+      "category": "ingredient_rate",
+      "effect_kind": "percent",
+      "effect_value": "18%",
+      "effect_value_num": 18.0,
+      "scope": "self",
+      "description": "食材をとってくる確率が少し上がる",
+      "is_max_rank": false,
+      "can_upgrade_with_seed": true
+    },
+    {
+      "rarity": "white",
+      "name": "スキル確率アップS",
+      "category": "skill_trigger",
+      "effect_kind": "percent",
+      "effect_value": "18%",
+      "effect_value_num": 18.0,
+      "scope": "self",
+      "description": "スキル発生確率が少し上がる",
+      "is_max_rank": false,
+      "can_upgrade_with_seed": true
+    }
+  ],
+  "_meta": {
+    "count": 17,
+    "categories": {
+      "speed": "おてつだいスピード短縮（時間×0.93/0.86 等）",
+      "skill_trigger": "メインスキル発生確率アップ",
+      "ingredient_rate": "食材おてつだい確率アップ",
+      "berry_count": "きのみ獲得個数+1",
+      "inventory": "最大所持数アップ（きのみ・食材枠）",
+      "skill_level": "スキルレベル+1/+2",
+      "sleep_exp": "睡眠EXPボーナス（チーム）",
+      "research_exp": "リサーチEXPボーナス",
+      "energy_recovery": "げんき回復量倍率",
+      "dream_shard": "ゆめのかけら獲得量",
+      "help_bonus": "おてつだい時間短縮（チーム）"
+    },
+    "effect_kinds": {
+      "percent": "%（時間短縮率／確率上昇率／取得増加率）",
+      "count": "個数 or レベル（+1, +2, +6, +12, +18）",
+      "multiplier": "倍率（×1.14 など）"
+    },
+    "scopes": {
+      "self": "自分のみ",
+      "team": "チーム全員"
+    },
+    "source": "貼り付けデータ集/サブスキルデータ.txt"
+  }
+}

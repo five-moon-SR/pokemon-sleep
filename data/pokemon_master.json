@@ -1,0 +1,8366 @@
+{
+  "records": [
+    {
+      "dex_no": "0001",
+      "species_name": "フシギダネ",
+      "sleep_type": "うとうと",
+      "specialty": "食材",
+      "berry": {
+        "name": "ドリのみ",
+        "qty": 1
+      },
+      "ingredients": {
+        "a": {
+          "name": "あまいミツ",
+          "qty": [
+            2,
+            5,
+            7
+          ]
+        },
+        "b": {
+          "name": "あんみんトマト",
+          "qty": [
+            4,
+            7
+          ]
+        },
+        "c": {
+          "name": "ほっこりポテト",
+          "qty": [
+            6
+          ]
+        }
+      },
+      "main_skill": "食材ゲットS",
+      "base_assist_seconds": 4400,
+      "food_drop_rate": 25.63,
+      "main_skill_rate": 1.9
+    },
+    {
+      "dex_no": "0002",
+      "species_name": "フシギソウ",
+      "sleep_type": "うとうと",
+      "specialty": "食材",
+      "berry": {
+        "name": "ドリのみ",
+        "qty": 1
+      },
+      "ingredients": {
+        "a": {
+          "name": "あまいミツ",
+          "qty": [
+            2,
+            5,
+            7
+          ]
+        },
+        "b": {
+          "name": "あんみんトマト",
+          "qty": [
+            4,
+            7
+          ]
+        },
+        "c": {
+          "name": "ほっこりポテト",
+          "qty": [
+            6
+          ]
+        }
+      },
+      "main_skill": "食材ゲットS",
+      "base_assist_seconds": 3300,
+      "food_drop_rate": 25.46,
+      "main_skill_rate": 1.9
+    },
+    {
+      "dex_no": "0003",
+      "species_name": "フシギバナ",
+      "sleep_type": "うとうと",
+      "specialty": "食材",
+      "berry": {
+        "name": "ドリのみ",
+        "qty": 1
+      },
+      "ingredients": {
+        "a": {
+          "name": "あまいミツ",
+          "qty": [
+            2,
+            5,
+            7
+          ]
+        },
+        "b": {
+          "name": "あんみんトマト",
+          "qty": [
+            4,
+            7
+          ]
+        },
+        "c": {
+          "name": "ほっこりポテト",
+          "qty": [
+            6
+          ]
+        }
+      },
+      "main_skill": "食材ゲットS",
+      "base_assist_seconds": 2800,
+      "food_drop_rate": 26.6,
+      "main_skill_rate": 2.1
+    },
+    {
+      "dex_no": "0004",
+      "species_name": "ヒトカゲ",
+      "sleep_type": "すやすや",
+      "specialty": "食材",
+      "berry": {
+        "name": "ヒメリのみ",
+        "qty": 1
+      },
+      "ingredients": {
+        "a": {
+          "name": "マメミート",
+          "qty": [
+            2,
+            5,
+            7
+          ]
+        },
+        "b": {
+          "name": "あったかジンジャー",
+          "qty": [
+            4,
+            7
+          ]
+        },
+        "c": {
+          "name": "げきからハーブ",
+          "qty": [
+            6
+          ]
+        }
+      },
+      "main_skill": "食材ゲットS",
+      "base_assist_seconds": 3500,
+      "food_drop_rate": 20.05,
+      "main_skill_rate": 1.1
+    },
+    {
+      "dex_no": "0005",
+      "species_name": "リザード",
+      "sleep_type": "すやすや",
+      "specialty": "食材",
+      "berry": {
+        "name": "ヒメリのみ",
+        "qty": 1
+      },
+      "ingredients": {
+        "a": {
+          "name": "マメミート",
+          "qty": [
+            2,
+            5,
+            7
+          ]
+        },
+        "b": {
+          "name": "あったかジンジャー",
+          "qty": [
+            4,
+            7
+          ]
+        },
+        "c": {
+          "name": "げきからハーブ",
+          "qty": [
+            6
+          ]
+        }
+      },
+      "main_skill": "食材ゲットS",
+      "base_assist_seconds": 3000,
+      "food_drop_rate": 22.67,
+      "main_skill_rate": 1.6
+    },
+    {
+      "dex_no": "0006",
+      "species_name": "リザードン",
+      "sleep_type": "すやすや",
+      "specialty": "食材",
+      "berry": {
+        "name": "ヒメリのみ",
+        "qty": 1
+      },
+      "ingredients": {
+        "a": {
+          "name": "マメミート",
+          "qty": [
+            2,
+            5,
+            7
+          ]
+        },
+        "b": {
+          "name": "あったかジンジャー",
+          "qty": [
+            4,
+            7
+          ]
+        },
+        "c": {
+          "name": "げきからハーブ",
+          "qty": [
+            6
+          ]
+        }
+      },
+      "main_skill": "食材ゲットS",
+      "base_assist_seconds": 2400,
+      "food_drop_rate": 22.43,
+      "main_skill_rate": 1.6
+    },
+    {
+      "dex_no": "0007",
+      "species_name": "ゼニガメ",
+      "sleep_type": "ぐっすり",
+      "specialty": "食材",
+      "berry": {
+        "name": "オレンのみ",
+        "qty": 1
+      },
+      "ingredients": {
+        "a": {
+          "name": "モーモーミルク",
+          "qty": [
+            2,
+            5,
+            7
+          ]
+        },
+        "b": {
+          "name": "リラックスカカオ",
+          "qty": [
+            3,
+            5
+          ]
+        },
+        "c": {
+          "name": "マメミート",
+          "qty": [
+            7
+          ]
+        }
+      },
+      "main_skill": "食材ゲットS",
+      "base_assist_seconds": 4500,
+      "food_drop_rate": 27.01,
+      "main_skill_rate": 2.0
+    },
+    {
+      "dex_no": "0008",
+      "species_name": "カメール",
+      "sleep_type": "ぐっすり",
+      "specialty": "食材",
+      "berry": {
+        "name": "オレンのみ",
+        "qty": 1
+      },
+      "ingredients": {
+        "a": {
+          "name": "モーモーミルク",
+          "qty": [
+            2,
+            5,
+            7
+          ]
+        },
+        "b": {
+          "name": "リラックスカカオ",
+          "qty": [
+            3,
+            5
+          ]
+        },
+        "c": {
+          "name": "マメミート",
+          "qty": [
+            7
+          ]
+        }
+      },
+      "main_skill": "食材ゲットS",
+      "base_assist_seconds": 3400,
+      "food_drop_rate": 27.07,
+      "main_skill_rate": 2.0
+    },
+    {
+      "dex_no": "0009",
+      "species_name": "カメックス",
+      "sleep_type": "ぐっすり",
+      "specialty": "食材",
+      "berry": {
+        "name": "オレンのみ",
+        "qty": 1
+      },
+      "ingredients": {
+        "a": {
+          "name": "モーモーミルク",
+          "qty": [
+            2,
+            5,
+            7
+          ]
+        },
+        "b": {
+          "name": "リラックスカカオ",
+          "qty": [
+            3,
+            5
+          ]
+        },
+        "c": {
+          "name": "マメミート",
+          "qty": [
+            7
+          ]
+        }
+      },
+      "main_skill": "食材ゲットS",
+      "base_assist_seconds": 2800,
+      "food_drop_rate": 27.5,
+      "main_skill_rate": 2.1
+    },
+    {
+      "dex_no": "0010",
+      "species_name": "キャタピー",
+      "sleep_type": "うとうと",
+      "specialty": "きのみ",
+      "berry": {
+        "name": "ラムのみ",
+        "qty": 2
+      },
+      "ingredients": {
+        "a": {
+          "name": "あまいミツ",
+          "qty": [
+            1,
+            2,
+            4
+          ]
+        },
+        "b": {
+          "name": "あんみんトマト",
+          "qty": [
+            2,
+            3
+          ]
+        },
+        "c": {
+          "name": "ワカクサ大豆",
+          "qty": [
+            4
+          ]
+        }
+      },
+      "main_skill": "食材ゲットS",
+      "base_assist_seconds": 4400,
+      "food_drop_rate": 17.96,
+      "main_skill_rate": 0.8
+    },
+    {
+      "dex_no": "0011",
+      "species_name": "トランセル",
+      "sleep_type": "うとうと",
+      "specialty": "きのみ",
+      "berry": {
+        "name": "ラムのみ",
+        "qty": 2
+      },
+      "ingredients": {
+        "a": {
+          "name": "あまいミツ",
+          "qty": [
+            1,
+            2,
+            4
+          ]
+        },
+        "b": {
+          "name": "あんみんトマト",
+          "qty": [
+            2,
+            3
+          ]
+        },
+        "c": {
+          "name": "ワカクサ大豆",
+          "qty": [
+            4
+          ]
+        }
+      },
+      "main_skill": "食材ゲットS",
+      "base_assist_seconds": 4200,
+      "food_drop_rate": 20.83,
+      "main_skill_rate": 1.8
+    },
+    {
+      "dex_no": "0012",
+      "species_name": "バタフリー",
+      "sleep_type": "うとうと",
+      "specialty": "きのみ",
+      "berry": {
+        "name": "ラムのみ",
+        "qty": 2
+      },
+      "ingredients": {
+        "a": {
+          "name": "あまいミツ",
+          "qty": [
+            1,
+            2,
+            4
+          ]
+        },
+        "b": {
+          "name": "あんみんトマト",
+          "qty": [
+            2,
+            3
+          ]
+        },
+        "c": {
+          "name": "ワカクサ大豆",
+          "qty": [
+            4
+          ]
+        }
+      },
+      "main_skill": "食材ゲットS",
+      "base_assist_seconds": 2500,
+      "food_drop_rate": 19.7,
+      "main_skill_rate": 1.4
+    },
+    {
+      "dex_no": "0019",
+      "species_name": "コラッタ",
+      "sleep_type": "すやすや",
+      "specialty": "きのみ",
+      "berry": {
+        "name": "キーのみ",
+        "qty": 2
+      },
+      "ingredients": {
+        "a": {
+          "name": "とくせんリンゴ",
+          "qty": [
+            1,
+            2,
+            4
+          ]
+        },
+        "b": {
+          "name": "ワカクサ大豆",
+          "qty": [
+            2,
+            3
+          ]
+        },
+        "c": {
+          "name": "マメミート",
+          "qty": [
+            3
+          ]
+        }
+      },
+      "main_skill": "げんきチャージS",
+      "base_assist_seconds": 4900,
+      "food_drop_rate": 23.72,
+      "main_skill_rate": 3.0
+    },
+    {
+      "dex_no": "0020",
+      "species_name": "ラッタ",
+      "sleep_type": "すやすや",
+      "specialty": "きのみ",
+      "berry": {
+        "name": "キーのみ",
+        "qty": 2
+      },
+      "ingredients": {
+        "a": {
+          "name": "とくせんリンゴ",
+          "qty": [
+            1,
+            2,
+            4
+          ]
+        },
+        "b": {
+          "name": "ワカクサ大豆",
+          "qty": [
+            2,
+            3
+          ]
+        },
+        "c": {
+          "name": "マメミート",
+          "qty": [
+            3
+          ]
+        }
+      },
+      "main_skill": "げんきチャージS",
+      "base_assist_seconds": 2950,
+      "food_drop_rate": 23.67,
+      "main_skill_rate": 3.0
+    },
+    {
+      "dex_no": "0023",
+      "species_name": "アーボ",
+      "sleep_type": "うとうと",
+      "specialty": "きのみ",
+      "berry": {
+        "name": "カゴのみ",
+        "qty": 2
+      },
+      "ingredients": {
+        "a": {
+          "name": "マメミート",
+          "qty": [
+            1,
+            2,
+            4
+          ]
+        },
+        "b": {
+          "name": "とくせんエッグ",
+          "qty": [
+            2,
+            3
+          ]
+        },
+        "c": {
+          "name": "げきからハーブ",
+          "qty": [
+            3
+          ]
+        }
+      },
+      "main_skill": "げんきチャージS",
+      "base_assist_seconds": 5000,
+      "food_drop_rate": 23.47,
+      "main_skill_rate": 3.3
+    },
+    {
+      "dex_no": "0024",
+      "species_name": "アーボック",
+      "sleep_type": "うとうと",
+      "specialty": "きのみ",
+      "berry": {
+        "name": "カゴのみ",
+        "qty": 2
+      },
+      "ingredients": {
+        "a": {
+          "name": "マメミート",
+          "qty": [
+            1,
+            2,
+            4
+          ]
+        },
+        "b": {
+          "name": "とくせんエッグ",
+          "qty": [
+            2,
+            3
+          ]
+        },
+        "c": {
+          "name": "げきからハーブ",
+          "qty": [
+            3
+          ]
+        }
+      },
+      "main_skill": "げんきチャージS",
+      "base_assist_seconds": 3400,
+      "food_drop_rate": 26.32,
+      "main_skill_rate": 5.7
+    },
+    {
+      "dex_no": "0025",
+      "species_name": "ピカチュウ",
+      "sleep_type": "すやすや",
+      "specialty": "きのみ",
+      "berry": {
+        "name": "ウブのみ",
+        "qty": 2
+      },
+      "ingredients": {
+        "a": {
+          "name": "とくせんリンゴ",
+          "qty": [
+            1,
+            2,
+            4
+          ]
+        },
+        "b": {
+          "name": "あったかジンジャー",
+          "qty": [
+            2,
+            3
+          ]
+        },
+        "c": {
+          "name": "とくせんエッグ",
+          "qty": [
+            3
+          ]
+        }
+      },
+      "main_skill": "エナジーチャージS",
+      "base_assist_seconds": 2700,
+      "food_drop_rate": 20.74,
+      "main_skill_rate": 2.1
+    },
+    {
+      "dex_no": "0025",
+      "species_name": "ピカチュウ(ハロウィン)",
+      "sleep_type": "すやすや",
+      "specialty": "きのみ",
+      "berry": {
+        "name": "ウブのみ",
+        "qty": 2
+      },
+      "ingredients": {
+        "a": {
+          "name": "とくせんリンゴ",
+          "qty": [
+            1,
+            2,
+            4
+          ]
+        },
+        "b": {
+          "name": "あったかジンジャー",
+          "qty": [
+            2,
+            3
+          ]
+        },
+        "c": {
+          "name": "とくせんエッグ",
+          "qty": [
+            3
+          ]
+        }
+      },
+      "main_skill": "エナジーチャージS(ランダム)",
+      "base_assist_seconds": 2500,
+      "food_drop_rate": 21.87,
+      "main_skill_rate": 2.8
+    },
+    {
+      "dex_no": "0025",
+      "species_name": "ピカチュウ(ホリデー)",
+      "sleep_type": "すやすや",
+      "specialty": "スキル",
+      "berry": {
+        "name": "ウブのみ",
+        "qty": 1
+      },
+      "ingredients": {
+        "a": {
+          "name": "とくせんリンゴ",
+          "qty": [
+            1,
+            2,
+            4
+          ]
+        },
+        "b": {
+          "name": "あったかジンジャー",
+          "qty": [
+            2,
+            3
+          ]
+        },
+        "c": {
+          "name": "とくせんエッグ",
+          "qty": [
+            3
+          ]
+        }
+      },
+      "main_skill": "ゆめのかけらゲットS",
+      "base_assist_seconds": 2500,
+      "food_drop_rate": 13.1,
+      "main_skill_rate": 4.2
+    },
+    {
+      "dex_no": "0026",
+      "species_name": "ライチュウ",
+      "sleep_type": "すやすや",
+      "specialty": "きのみ",
+      "berry": {
+        "name": "ウブのみ",
+        "qty": 2
+      },
+      "ingredients": {
+        "a": {
+          "name": "とくせんリンゴ",
+          "qty": [
+            1,
+            2,
+            4
+          ]
+        },
+        "b": {
+          "name": "あったかジンジャー",
+          "qty": [
+            2,
+            3
+          ]
+        },
+        "c": {
+          "name": "とくせんエッグ",
+          "qty": [
+            3
+          ]
+        }
+      },
+      "main_skill": "エナジーチャージS",
+      "base_assist_seconds": 2200,
+      "food_drop_rate": 22.41,
+      "main_skill_rate": 3.2
+    },
+    {
+      "dex_no": "0027",
+      "species_name": "サンド",
+      "sleep_type": "ぐっすり",
+      "specialty": "スキル",
+      "berry": {
+        "name": "フィラのみ",
+        "qty": 1
+      },
+      "ingredients": {
+        "a": {
+          "name": "ずっしりカボチャ",
+          "qty": [
+            1,
+            2,
+            4
+          ]
+        },
+        "b": {
+          "name": "ワカクサコーン",
+          "qty": [
+            4,
+            6
+          ]
+        },
+        "c": {
+          "name": "ほっこりポテト",
+          "qty": [
+            7
+          ]
+        }
+      },
+      "main_skill": "食材セレクトS",
+      "base_assist_seconds": 5300,
+      "food_drop_rate": null,
+      "main_skill_rate": null
+    },
+    {
+      "dex_no": "0028",
+      "species_name": "サンドパン",
+      "sleep_type": "ぐっすり",
+      "specialty": "スキル",
+      "berry": {
+        "name": "フィラのみ",
+        "qty": 1
+      },
+      "ingredients": {
+        "a": {
+          "name": "ずっしりカボチャ",
+          "qty": [
+            1,
+            2,
+            4
+          ]
+        },
+        "b": {
+          "name": "ワカクサコーン",
+          "qty": [
+            4,
+            6
+          ]
+        },
+        "c": {
+          "name": "ほっこりポテト",
+          "qty": [
+            7
+          ]
+        }
+      },
+      "main_skill": "食材セレクトS",
+      "base_assist_seconds": 2800,
+      "food_drop_rate": null,
+      "main_skill_rate": null
+    },
+    {
+      "dex_no": "0035",
+      "species_name": "ピッピ",
+      "sleep_type": "すやすや",
+      "specialty": "きのみ",
+      "berry": {
+        "name": "モモンのみ",
+        "qty": 2
+      },
+      "ingredients": {
+        "a": {
+          "name": "とくせんリンゴ",
+          "qty": [
+            1,
+            2,
+            4
+          ]
+        },
+        "b": {
+          "name": "あまいミツ",
+          "qty": [
+            2,
+            3
+          ]
+        },
+        "c": {
+          "name": "ワカクサ大豆",
+          "qty": [
+            3
+          ]
+        }
+      },
+      "main_skill": "ゆびをふる",
+      "base_assist_seconds": 4000,
+      "food_drop_rate": 16.88,
+      "main_skill_rate": 3.6
+    },
+    {
+      "dex_no": "0036",
+      "species_name": "ピクシー",
+      "sleep_type": "すやすや",
+      "specialty": "きのみ",
+      "berry": {
+        "name": "モモンのみ",
+        "qty": 2
+      },
+      "ingredients": {
+        "a": {
+          "name": "とくせんリンゴ",
+          "qty": [
+            1,
+            2,
+            4
+          ]
+        },
+        "b": {
+          "name": "あまいミツ",
+          "qty": [
+            2,
+            3
+          ]
+        },
+        "c": {
+          "name": "ワカクサ大豆",
+          "qty": [
+            3
+          ]
+        }
+      },
+      "main_skill": "ゆびをふる",
+      "base_assist_seconds": 2800,
+      "food_drop_rate": 16.8,
+      "main_skill_rate": 3.6
+    },
+    {
+      "dex_no": "0037",
+      "species_name": "ロコン",
+      "sleep_type": "すやすや",
+      "specialty": "きのみ",
+      "berry": {
+        "name": "ヒメリのみ",
+        "qty": 2
+      },
+      "ingredients": {
+        "a": {
+          "name": "ワカクサ大豆",
+          "qty": [
+            1,
+            2,
+            4
+          ]
+        },
+        "b": {
+          "name": "ワカクサコーン",
+          "qty": [
+            2,
+            3
+          ]
+        },
+        "c": {
+          "name": "ほっこりポテト",
+          "qty": [
+            3
+          ]
+        }
+      },
+      "main_skill": "げんきエールS",
+      "base_assist_seconds": 4700,
+      "food_drop_rate": 16.79,
+      "main_skill_rate": 2.7
+    },
+    {
+      "dex_no": "0037",
+      "species_name": "ロコン(アローラ)",
+      "sleep_type": "ぐっすり",
+      "specialty": "きのみ",
+      "berry": {
+        "name": "チーゴのみ",
+        "qty": 2
+      },
+      "ingredients": {
+        "a": {
+          "name": "ワカクサ大豆",
+          "qty": [
+            1,
+            2,
+            4
+          ]
+        },
+        "b": {
+          "name": "ワカクサコーン",
+          "qty": [
+            2,
+            3
+          ]
+        },
+        "c": {
+          "name": "ほっこりポテト",
+          "qty": [
+            3
+          ]
+        }
+      },
+      "main_skill": "おてつだいサポートS",
+      "base_assist_seconds": 5600,
+      "food_drop_rate": 23.0,
+      "main_skill_rate": 2.8
+    },
+    {
+      "dex_no": "0038",
+      "species_name": "キュウコン",
+      "sleep_type": "すやすや",
+      "specialty": "きのみ",
+      "berry": {
+        "name": "ヒメリのみ",
+        "qty": 2
+      },
+      "ingredients": {
+        "a": {
+          "name": "ワカクサ大豆",
+          "qty": [
+            1,
+            2,
+            4
+          ]
+        },
+        "b": {
+          "name": "ワカクサコーン",
+          "qty": [
+            2,
+            3
+          ]
+        },
+        "c": {
+          "name": "ほっこりポテト",
+          "qty": [
+            3
+          ]
+        }
+      },
+      "main_skill": "げんきエールS",
+      "base_assist_seconds": 2600,
+      "food_drop_rate": 16.4,
+      "main_skill_rate": 2.5
+    },
+    {
+      "dex_no": "0038",
+      "species_name": "キュウコン(アローラ)",
+      "sleep_type": "ぐっすり",
+      "specialty": "きのみ",
+      "berry": {
+        "name": "チーゴのみ",
+        "qty": 2
+      },
+      "ingredients": {
+        "a": {
+          "name": "ワカクサ大豆",
+          "qty": [
+            1,
+            2,
+            4
+          ]
+        },
+        "b": {
+          "name": "ワカクサコーン",
+          "qty": [
+            2,
+            3
+          ]
+        },
+        "c": {
+          "name": "ほっこりポテト",
+          "qty": [
+            3
+          ]
+        }
+      },
+      "main_skill": "おてつだいサポートS",
+      "base_assist_seconds": 2900,
+      "food_drop_rate": 23.2,
+      "main_skill_rate": 2.8
+    },
+    {
+      "dex_no": "0039",
+      "species_name": "プリン",
+      "sleep_type": "すやすや",
+      "specialty": "スキル",
+      "berry": {
+        "name": "モモンのみ",
+        "qty": 1
+      },
+      "ingredients": {
+        "a": {
+          "name": "あまいミツ",
+          "qty": [
+            1,
+            2,
+            4
+          ]
+        },
+        "b": {
+          "name": "ピュアなオイル",
+          "qty": [
+            2,
+            3
+          ]
+        },
+        "c": {
+          "name": "リラックスカカオ",
+          "qty": [
+            2
+          ]
+        }
+      },
+      "main_skill": "げんきオールS",
+      "base_assist_seconds": 3900,
+      "food_drop_rate": 18.27,
+      "main_skill_rate": 4.3
+    },
+    {
+      "dex_no": "0040",
+      "species_name": "プクリン",
+      "sleep_type": "すやすや",
+      "specialty": "スキル",
+      "berry": {
+        "name": "モモンのみ",
+        "qty": 1
+      },
+      "ingredients": {
+        "a": {
+          "name": "あまいミツ",
+          "qty": [
+            1,
+            2,
+            4
+          ]
+        },
+        "b": {
+          "name": "ピュアなオイル",
+          "qty": [
+            2,
+            3
+          ]
+        },
+        "c": {
+          "name": "リラックスカカオ",
+          "qty": [
+            2
+          ]
+        }
+      },
+      "main_skill": "げんきオールS",
+      "base_assist_seconds": 2900,
+      "food_drop_rate": 17.26,
+      "main_skill_rate": 4.0
+    },
+    {
+      "dex_no": "0050",
+      "species_name": "ディグダ",
+      "sleep_type": "すやすや",
+      "specialty": "食材",
+      "berry": {
+        "name": "フィラのみ",
+        "qty": 1
+      },
+      "ingredients": {
+        "a": {
+          "name": "あんみんトマト",
+          "qty": [
+            2,
+            5,
+            7
+          ]
+        },
+        "b": {
+          "name": "ふといながねぎ",
+          "qty": [
+            3,
+            4
+          ]
+        },
+        "c": {
+          "name": "ワカクサ大豆",
+          "qty": [
+            8
+          ]
+        }
+      },
+      "main_skill": "エナジーチャージS",
+      "base_assist_seconds": 4300,
+      "food_drop_rate": 19.14,
+      "main_skill_rate": 2.1
+    },
+    {
+      "dex_no": "0051",
+      "species_name": "ダグトリオ",
+      "sleep_type": "すやすや",
+      "specialty": "食材",
+      "berry": {
+        "name": "フィラのみ",
+        "qty": 1
+      },
+      "ingredients": {
+        "a": {
+          "name": "あんみんトマト",
+          "qty": [
+            2,
+            5,
+            7
+          ]
+        },
+        "b": {
+          "name": "ふといながねぎ",
+          "qty": [
+            3,
+            4
+          ]
+        },
+        "c": {
+          "name": "ワカクサ大豆",
+          "qty": [
+            8
+          ]
+        }
+      },
+      "main_skill": "エナジーチャージS",
+      "base_assist_seconds": 2650,
+      "food_drop_rate": 18.93,
+      "main_skill_rate": 2.0
+    },
+    {
+      "dex_no": "0052",
+      "species_name": "ニャース",
+      "sleep_type": "すやすや",
+      "specialty": "スキル",
+      "berry": {
+        "name": "キーのみ",
+        "qty": 1
+      },
+      "ingredients": {
+        "a": {
+          "name": "モーモーミルク",
+          "qty": [
+            1,
+            2,
+            4
+          ]
+        },
+        "b": {
+          "name": "マメミート",
+          "qty": [
+            2,
+            3
+          ]
+        },
+        "c": null
+      },
+      "main_skill": "ゆめのかけらゲットS",
+      "base_assist_seconds": 4400,
+      "food_drop_rate": 16.39,
+      "main_skill_rate": 4.19
+    },
+    {
+      "dex_no": "0053",
+      "species_name": "ペルシアン",
+      "sleep_type": "すやすや",
+      "specialty": "スキル",
+      "berry": {
+        "name": "キーのみ",
+        "qty": 1
+      },
+      "ingredients": {
+        "a": {
+          "name": "モーモーミルク",
+          "qty": [
+            1,
+            2,
+            4
+          ]
+        },
+        "b": {
+          "name": "マメミート",
+          "qty": [
+            2,
+            3
+          ]
+        },
+        "c": null
+      },
+      "main_skill": "ゆめのかけらゲットS",
+      "base_assist_seconds": 2800,
+      "food_drop_rate": 16.9,
+      "main_skill_rate": 4.4
+    },
+    {
+      "dex_no": "0054",
+      "species_name": "コダック",
+      "sleep_type": "うとうと",
+      "specialty": "スキル",
+      "berry": {
+        "name": "オレンのみ",
+        "qty": 1
+      },
+      "ingredients": {
+        "a": {
+          "name": "リラックスカカオ",
+          "qty": [
+            1,
+            2,
+            4
+          ]
+        },
+        "b": {
+          "name": "とくせんリンゴ",
+          "qty": [
+            4,
+            6
+          ]
+        },
+        "c": {
+          "name": "マメミート",
+          "qty": [
+            5
+          ]
+        }
+      },
+      "main_skill": "エナジーチャージS(ランダム)",
+      "base_assist_seconds": 5400,
+      "food_drop_rate": 13.6,
+      "main_skill_rate": 12.6
+    },
+    {
+      "dex_no": "0055",
+      "species_name": "ゴルダック",
+      "sleep_type": "ぐっすり",
+      "specialty": "スキル",
+      "berry": {
+        "name": "オレンのみ",
+        "qty": 1
+      },
+      "ingredients": {
+        "a": {
+          "name": "リラックスカカオ",
+          "qty": [
+            1,
+            2,
+            4
+          ]
+        },
+        "b": {
+          "name": "とくせんリンゴ",
+          "qty": [
+            4,
+            6
+          ]
+        },
+        "c": {
+          "name": "マメミート",
+          "qty": [
+            5
+          ]
+        }
+      },
+      "main_skill": "エナジーチャージS(ランダム)",
+      "base_assist_seconds": 3400,
+      "food_drop_rate": 16.2,
+      "main_skill_rate": 12.5
+    },
+    {
+      "dex_no": "0056",
+      "species_name": "マンキー",
+      "sleep_type": "うとうと",
+      "specialty": "きのみ",
+      "berry": {
+        "name": "クラボのみ",
+        "qty": 2
+      },
+      "ingredients": {
+        "a": {
+          "name": "マメミート",
+          "qty": [
+            1,
+            2,
+            4
+          ]
+        },
+        "b": {
+          "name": "あじわいキノコ",
+          "qty": [
+            1,
+            2
+          ]
+        },
+        "c": {
+          "name": "あまいミツ",
+          "qty": [
+            4
+          ]
+        }
+      },
+      "main_skill": "エナジーチャージS(ランダム)",
+      "base_assist_seconds": 4200,
+      "food_drop_rate": 19.71,
+      "main_skill_rate": 2.2
+    },
+    {
+      "dex_no": "0057",
+      "species_name": "オコリザル",
+      "sleep_type": "うとうと",
+      "specialty": "きのみ",
+      "berry": {
+        "name": "クラボのみ",
+        "qty": 2
+      },
+      "ingredients": {
+        "a": {
+          "name": "マメミート",
+          "qty": [
+            1,
+            2,
+            4
+          ]
+        },
+        "b": {
+          "name": "あじわいキノコ",
+          "qty": [
+            1,
+            2
+          ]
+        },
+        "c": {
+          "name": "あまいミツ",
+          "qty": [
+            4
+          ]
+        }
+      },
+      "main_skill": "エナジーチャージS(ランダム)",
+      "base_assist_seconds": 2800,
+      "food_drop_rate": 19.99,
+      "main_skill_rate": 2.4
+    },
+    {
+      "dex_no": "0058",
+      "species_name": "ガーディ",
+      "sleep_type": "すやすや",
+      "specialty": "スキル",
+      "berry": {
+        "name": "ヒメリのみ",
+        "qty": 1
+      },
+      "ingredients": {
+        "a": {
+          "name": "げきからハーブ",
+          "qty": [
+            1,
+            2,
+            4
+          ]
+        },
+        "b": {
+          "name": "マメミート",
+          "qty": [
+            3,
+            5
+          ]
+        },
+        "c": {
+          "name": "モーモーミルク",
+          "qty": [
+            5
+          ]
+        }
+      },
+      "main_skill": "おてつだいサポートS",
+      "base_assist_seconds": 4300,
+      "food_drop_rate": 13.73,
+      "main_skill_rate": 5.0
+    },
+    {
+      "dex_no": "0059",
+      "species_name": "ウインディ",
+      "sleep_type": "すやすや",
+      "specialty": "スキル",
+      "berry": {
+        "name": "ヒメリのみ",
+        "qty": 1
+      },
+      "ingredients": {
+        "a": {
+          "name": "げきからハーブ",
+          "qty": [
+            1,
+            2,
+            4
+          ]
+        },
+        "b": {
+          "name": "マメミート",
+          "qty": [
+            3,
+            5
+          ]
+        },
+        "c": {
+          "name": "モーモーミルク",
+          "qty": [
+            5
+          ]
+        }
+      },
+      "main_skill": "おてつだいサポートS",
+      "base_assist_seconds": 2500,
+      "food_drop_rate": 13.6,
+      "main_skill_rate": 4.9
+    },
+    {
+      "dex_no": "0069",
+      "species_name": "マダツボミ",
+      "sleep_type": "うとうと",
+      "specialty": "食材",
+      "berry": {
+        "name": "ドリのみ",
+        "qty": 1
+      },
+      "ingredients": {
+        "a": {
+          "name": "あんみんトマト",
+          "qty": [
+            2,
+            5,
+            7
+          ]
+        },
+        "b": {
+          "name": "ほっこりポテト",
+          "qty": [
+            4,
+            6
+          ]
+        },
+        "c": {
+          "name": "ふといながねぎ",
+          "qty": [
+            4
+          ]
+        }
+      },
+      "main_skill": "げんきチャージS",
+      "base_assist_seconds": 5200,
+      "food_drop_rate": 23.28,
+      "main_skill_rate": 3.91
+    },
+    {
+      "dex_no": "0070",
+      "species_name": "ウツドン",
+      "sleep_type": "うとうと",
+      "specialty": "食材",
+      "berry": {
+        "name": "ドリのみ",
+        "qty": 1
+      },
+      "ingredients": {
+        "a": {
+          "name": "あんみんトマト",
+          "qty": [
+            2,
+            5,
+            7
+          ]
+        },
+        "b": {
+          "name": "ほっこりポテト",
+          "qty": [
+            4,
+            6
+          ]
+        },
+        "c": {
+          "name": "ふといながねぎ",
+          "qty": [
+            4
+          ]
+        }
+      },
+      "main_skill": "げんきチャージS",
+      "base_assist_seconds": 3800,
+      "food_drop_rate": 23.5,
+      "main_skill_rate": 4.0
+    },
+    {
+      "dex_no": "0071",
+      "species_name": "ウツボット",
+      "sleep_type": "うとうと",
+      "specialty": "食材",
+      "berry": {
+        "name": "ドリのみ",
+        "qty": 1
+      },
+      "ingredients": {
+        "a": {
+          "name": "あんみんトマト",
+          "qty": [
+            2,
+            5,
+            7
+          ]
+        },
+        "b": {
+          "name": "ほっこりポテト",
+          "qty": [
+            4,
+            6
+          ]
+        },
+        "c": {
+          "name": "ふといながねぎ",
+          "qty": [
+            4
+          ]
+        }
+      },
+      "main_skill": "げんきチャージS",
+      "base_assist_seconds": 2800,
+      "food_drop_rate": 23.3,
+      "main_skill_rate": 3.9
+    },
+    {
+      "dex_no": "0074",
+      "species_name": "イシツブテ",
+      "sleep_type": "ぐっすり",
+      "specialty": "食材",
+      "berry": {
+        "name": "オボンのみ",
+        "qty": 1
+      },
+      "ingredients": {
+        "a": {
+          "name": "ワカクサ大豆",
+          "qty": [
+            2,
+            5,
+            7
+          ]
+        },
+        "b": {
+          "name": "ほっこりポテト",
+          "qty": [
+            4,
+            6
+          ]
+        },
+        "c": {
+          "name": "あじわいキノコ",
+          "qty": [
+            4
+          ]
+        }
+      },
+      "main_skill": "エナジーチャージS(ランダム)",
+      "base_assist_seconds": 5700,
+      "food_drop_rate": 28.03,
+      "main_skill_rate": 5.19
+    },
+    {
+      "dex_no": "0075",
+      "species_name": "ゴローン",
+      "sleep_type": "ぐっすり",
+      "specialty": "食材",
+      "berry": {
+        "name": "オボンのみ",
+        "qty": 1
+      },
+      "ingredients": {
+        "a": {
+          "name": "ワカクサ大豆",
+          "qty": [
+            2,
+            5,
+            7
+          ]
+        },
+        "b": {
+          "name": "ほっこりポテト",
+          "qty": [
+            4,
+            6
+          ]
+        },
+        "c": {
+          "name": "あじわいキノコ",
+          "qty": [
+            4
+          ]
+        }
+      },
+      "main_skill": "エナジーチャージS(ランダム)",
+      "base_assist_seconds": 4000,
+      "food_drop_rate": 27.17,
+      "main_skill_rate": 4.78
+    },
+    {
+      "dex_no": "0076",
+      "species_name": "ゴローニャ",
+      "sleep_type": "ぐっすり",
+      "specialty": "食材",
+      "berry": {
+        "name": "オボンのみ",
+        "qty": 1
+      },
+      "ingredients": {
+        "a": {
+          "name": "ワカクサ大豆",
+          "qty": [
+            2,
+            5,
+            7
+          ]
+        },
+        "b": {
+          "name": "ほっこりポテト",
+          "qty": [
+            4,
+            6
+          ]
+        },
+        "c": {
+          "name": "あじわいキノコ",
+          "qty": [
+            4
+          ]
+        }
+      },
+      "main_skill": "エナジーチャージS(ランダム)",
+      "base_assist_seconds": 3100,
+      "food_drop_rate": 27.96,
+      "main_skill_rate": 5.19
+    },
+    {
+      "dex_no": "0079",
+      "species_name": "ヤドン",
+      "sleep_type": "すやすや",
+      "specialty": "スキル",
+      "berry": {
+        "name": "オレンのみ",
+        "qty": 1
+      },
+      "ingredients": {
+        "a": {
+          "name": "リラックスカカオ",
+          "qty": [
+            1,
+            2,
+            4
+          ]
+        },
+        "b": {
+          "name": "おいしいシッポ",
+          "qty": [
+            1,
+            2
+          ]
+        },
+        "c": {
+          "name": "あんみんトマト",
+          "qty": [
+            5
+          ]
+        }
+      },
+      "main_skill": "げんきエールS",
+      "base_assist_seconds": 5700,
+      "food_drop_rate": 15.1,
+      "main_skill_rate": 6.7
+    },
+    {
+      "dex_no": "0080",
+      "species_name": "ヤドラン",
+      "sleep_type": "すやすや",
+      "specialty": "スキル",
+      "berry": {
+        "name": "オレンのみ",
+        "qty": 1
+      },
+      "ingredients": {
+        "a": {
+          "name": "リラックスカカオ",
+          "qty": [
+            1,
+            2,
+            4
+          ]
+        },
+        "b": {
+          "name": "おいしいシッポ",
+          "qty": [
+            1,
+            2
+          ]
+        },
+        "c": {
+          "name": "あんみんトマト",
+          "qty": [
+            5
+          ]
+        }
+      },
+      "main_skill": "げんきエールS",
+      "base_assist_seconds": 3800,
+      "food_drop_rate": 19.7,
+      "main_skill_rate": 6.8
+    },
+    {
+      "dex_no": "0081",
+      "species_name": "コイル",
+      "sleep_type": "ぐっすり",
+      "specialty": "スキル",
+      "berry": {
+        "name": "ベリブのみ",
+        "qty": 1
+      },
+      "ingredients": {
+        "a": {
+          "name": "ピュアなオイル",
+          "qty": [
+            1,
+            2,
+            4
+          ]
+        },
+        "b": {
+          "name": "げきからハーブ",
+          "qty": [
+            2,
+            3
+          ]
+        },
+        "c": null
+      },
+      "main_skill": "料理パワーアップS",
+      "base_assist_seconds": 5800,
+      "food_drop_rate": 18.12,
+      "main_skill_rate": 6.4
+    },
+    {
+      "dex_no": "0082",
+      "species_name": "レアコイル",
+      "sleep_type": "ぐっすり",
+      "specialty": "スキル",
+      "berry": {
+        "name": "ベリブのみ",
+        "qty": 1
+      },
+      "ingredients": {
+        "a": {
+          "name": "ピュアなオイル",
+          "qty": [
+            1,
+            2,
+            4
+          ]
+        },
+        "b": {
+          "name": "げきからハーブ",
+          "qty": [
+            2,
+            3
+          ]
+        },
+        "c": null
+      },
+      "main_skill": "料理パワーアップS",
+      "base_assist_seconds": 4000,
+      "food_drop_rate": 18.21,
+      "main_skill_rate": 6.29
+    },
+    {
+      "dex_no": "0083",
+      "species_name": "カモネギ",
+      "sleep_type": "ぐっすり",
+      "specialty": "食材",
+      "berry": {
+        "name": "シーヤのみ",
+        "qty": 1
+      },
+      "ingredients": {
+        "a": {
+          "name": "ふといながねぎ",
+          "qty": [
+            2,
+            5,
+            7
+          ]
+        },
+        "b": {
+          "name": "マメミート",
+          "qty": [
+            8,
+            13
+          ]
+        },
+        "c": {
+          "name": "あったかジンジャー",
+          "qty": [
+            12
+          ]
+        }
+      },
+      "main_skill": "エナジーチャージS",
+      "base_assist_seconds": 3000,
+      "food_drop_rate": 16.0,
+      "main_skill_rate": 4.3
+    },
+    {
+      "dex_no": "0084",
+      "species_name": "ドードー",
+      "sleep_type": "ぐっすり",
+      "specialty": "きのみ",
+      "berry": {
+        "name": "シーヤのみ",
+        "qty": 2
+      },
+      "ingredients": {
+        "a": {
+          "name": "ワカクサ大豆",
+          "qty": [
+            1,
+            2,
+            4
+          ]
+        },
+        "b": {
+          "name": "リラックスカカオ",
+          "qty": [
+            1,
+            2
+          ]
+        },
+        "c": {
+          "name": "マメミート",
+          "qty": [
+            3
+          ]
+        }
+      },
+      "main_skill": "げんきチャージS",
+      "base_assist_seconds": 3800,
+      "food_drop_rate": 18.4,
+      "main_skill_rate": 2.0
+    },
+    {
+      "dex_no": "0085",
+      "species_name": "ドードリオ",
+      "sleep_type": "ぐっすり",
+      "specialty": "きのみ",
+      "berry": {
+        "name": "シーヤのみ",
+        "qty": 2
+      },
+      "ingredients": {
+        "a": {
+          "name": "ワカクサ大豆",
+          "qty": [
+            1,
+            2,
+            4
+          ]
+        },
+        "b": {
+          "name": "リラックスカカオ",
+          "qty": [
+            1,
+            2
+          ]
+        },
+        "c": {
+          "name": "マメミート",
+          "qty": [
+            3
+          ]
+        }
+      },
+      "main_skill": "げんきチャージS",
+      "base_assist_seconds": 2300,
+      "food_drop_rate": 18.4,
+      "main_skill_rate": 2.0
+    },
+    {
+      "dex_no": "0092",
+      "species_name": "ゴース",
+      "sleep_type": "うとうと",
+      "specialty": "食材",
+      "berry": {
+        "name": "ブリーのみ",
+        "qty": 1
+      },
+      "ingredients": {
+        "a": {
+          "name": "げきからハーブ",
+          "qty": [
+            2,
+            5,
+            7
+          ]
+        },
+        "b": {
+          "name": "あじわいキノコ",
+          "qty": [
+            4,
+            6
+          ]
+        },
+        "c": {
+          "name": "ピュアなオイル",
+          "qty": [
+            8
+          ]
+        }
+      },
+      "main_skill": "エナジーチャージS(ランダム)",
+      "base_assist_seconds": 3800,
+      "food_drop_rate": 14.38,
+      "main_skill_rate": 1.48
+    },
+    {
+      "dex_no": "0093",
+      "species_name": "ゴースト",
+      "sleep_type": "うとうと",
+      "specialty": "食材",
+      "berry": {
+        "name": "ブリーのみ",
+        "qty": 1
+      },
+      "ingredients": {
+        "a": {
+          "name": "げきからハーブ",
+          "qty": [
+            2,
+            5,
+            7
+          ]
+        },
+        "b": {
+          "name": "あじわいキノコ",
+          "qty": [
+            4,
+            6
+          ]
+        },
+        "c": {
+          "name": "ピュアなオイル",
+          "qty": [
+            8
+          ]
+        }
+      },
+      "main_skill": "エナジーチャージS(ランダム)",
+      "base_assist_seconds": 3000,
+      "food_drop_rate": 15.67,
+      "main_skill_rate": 2.19
+    },
+    {
+      "dex_no": "0094",
+      "species_name": "ゲンガー",
+      "sleep_type": "うとうと",
+      "specialty": "食材",
+      "berry": {
+        "name": "ブリーのみ",
+        "qty": 1
+      },
+      "ingredients": {
+        "a": {
+          "name": "げきからハーブ",
+          "qty": [
+            2,
+            5,
+            7
+          ]
+        },
+        "b": {
+          "name": "あじわいキノコ",
+          "qty": [
+            4,
+            6
+          ]
+        },
+        "c": {
+          "name": "ピュアなオイル",
+          "qty": [
+            8
+          ]
+        }
+      },
+      "main_skill": "エナジーチャージS(ランダム)",
+      "base_assist_seconds": 2200,
+      "food_drop_rate": 16.08,
+      "main_skill_rate": 2.39
+    },
+    {
+      "dex_no": "0095",
+      "species_name": "イワーク",
+      "sleep_type": "ぐっすり",
+      "specialty": "きのみ",
+      "berry": {
+        "name": "オボンのみ",
+        "qty": 2
+      },
+      "ingredients": {
+        "a": {
+          "name": "あんみんトマト",
+          "qty": [
+            1,
+            2,
+            4
+          ]
+        },
+        "b": {
+          "name": "マメミート",
+          "qty": [
+            2,
+            4
+          ]
+        },
+        "c": {
+          "name": "ほっこりポテト",
+          "qty": [
+            3
+          ]
+        }
+      },
+      "main_skill": "食材ゲットS",
+      "base_assist_seconds": 3100,
+      "food_drop_rate": 13.2,
+      "main_skill_rate": 2.3
+    },
+    {
+      "dex_no": "0104",
+      "species_name": "カラカラ",
+      "sleep_type": "ぐっすり",
+      "specialty": "きのみ",
+      "berry": {
+        "name": "フィラのみ",
+        "qty": 2
+      },
+      "ingredients": {
+        "a": {
+          "name": "あったかジンジャー",
+          "qty": [
+            1,
+            2,
+            4
+          ]
+        },
+        "b": {
+          "name": "リラックスカカオ",
+          "qty": [
+            2,
+            3
+          ]
+        },
+        "c": null
+      },
+      "main_skill": "げんきチャージS",
+      "base_assist_seconds": 4800,
+      "food_drop_rate": 22.27,
+      "main_skill_rate": 4.39
+    },
+    {
+      "dex_no": "0105",
+      "species_name": "ガラガラ",
+      "sleep_type": "ぐっすり",
+      "specialty": "きのみ",
+      "berry": {
+        "name": "フィラのみ",
+        "qty": 2
+      },
+      "ingredients": {
+        "a": {
+          "name": "あったかジンジャー",
+          "qty": [
+            1,
+            2,
+            4
+          ]
+        },
+        "b": {
+          "name": "リラックスカカオ",
+          "qty": [
+            2,
+            3
+          ]
+        },
+        "c": null
+      },
+      "main_skill": "げんきチャージS",
+      "base_assist_seconds": 3300,
+      "food_drop_rate": 22.47,
+      "main_skill_rate": 4.5
+    },
+    {
+      "dex_no": "0113",
+      "species_name": "ラッキー",
+      "sleep_type": "すやすや",
+      "specialty": "食材",
+      "berry": {
+        "name": "キーのみ",
+        "qty": 1
+      },
+      "ingredients": {
+        "a": {
+          "name": "とくせんエッグ",
+          "qty": [
+            2,
+            5,
+            7
+          ]
+        },
+        "b": {
+          "name": "ほっこりポテト",
+          "qty": [
+            4,
+            7
+          ]
+        },
+        "c": {
+          "name": "あまいミツ",
+          "qty": [
+            8
+          ]
+        }
+      },
+      "main_skill": "げんきオールS",
+      "base_assist_seconds": 3300,
+      "food_drop_rate": 23.6,
+      "main_skill_rate": 2.3
+    },
+    {
+      "dex_no": "0115",
+      "species_name": "ガルーラ",
+      "sleep_type": "すやすや",
+      "specialty": "食材",
+      "berry": {
+        "name": "キーのみ",
+        "qty": 1
+      },
+      "ingredients": {
+        "a": {
+          "name": "あったかジンジャー",
+          "qty": [
+            2,
+            5,
+            7
+          ]
+        },
+        "b": {
+          "name": "ほっこりポテト",
+          "qty": [
+            4,
+            6
+          ]
+        },
+        "c": {
+          "name": "ワカクサ大豆",
+          "qty": [
+            8
+          ]
+        }
+      },
+      "main_skill": "食材ゲットS",
+      "base_assist_seconds": 2650,
+      "food_drop_rate": 22.16,
+      "main_skill_rate": 1.7
+    },
+    {
+      "dex_no": "0122",
+      "species_name": "バリヤード",
+      "sleep_type": "すやすや",
+      "specialty": "食材",
+      "berry": {
+        "name": "マゴのみ",
+        "qty": 1
+      },
+      "ingredients": {
+        "a": {
+          "name": "あんみんトマト",
+          "qty": [
+            2,
+            5,
+            7
+          ]
+        },
+        "b": {
+          "name": "ほっこりポテト",
+          "qty": [
+            4,
+            6
+          ]
+        },
+        "c": {
+          "name": "ふといながねぎ",
+          "qty": [
+            4
+          ]
+        }
+      },
+      "main_skill": "ものまね(スキルコピー)",
+      "base_assist_seconds": 2800,
+      "food_drop_rate": 21.6,
+      "main_skill_rate": 3.9
+    },
+    {
+      "dex_no": "0127",
+      "species_name": "カイロス",
+      "sleep_type": "うとうと",
+      "specialty": "食材",
+      "berry": {
+        "name": "ラムのみ",
+        "qty": 1
+      },
+      "ingredients": {
+        "a": {
+          "name": "あまいミツ",
+          "qty": [
+            2,
+            5,
+            7
+          ]
+        },
+        "b": {
+          "name": "とくせんリンゴ",
+          "qty": [
+            5,
+            8
+          ]
+        },
+        "c": {
+          "name": "マメミート",
+          "qty": [
+            7
+          ]
+        }
+      },
+      "main_skill": "エナジーチャージM",
+      "base_assist_seconds": 2400,
+      "food_drop_rate": 20.6,
+      "main_skill_rate": 3.1
+    },
+    {
+      "dex_no": "0132",
+      "species_name": "メタモン",
+      "sleep_type": "すやすや",
+      "specialty": "食材",
+      "berry": {
+        "name": "キーのみ",
+        "qty": 1
+      },
+      "ingredients": {
+        "a": {
+          "name": "ピュアなオイル",
+          "qty": [
+            2,
+            5,
+            7
+          ]
+        },
+        "b": {
+          "name": "ふといながねぎ",
+          "qty": [
+            3,
+            5
+          ]
+        },
+        "c": {
+          "name": "おいしいシッポ",
+          "qty": [
+            3
+          ]
+        }
+      },
+      "main_skill": "へんしん(スキルコピー)",
+      "base_assist_seconds": 3500,
+      "food_drop_rate": 20.05,
+      "main_skill_rate": 3.6
+    },
+    {
+      "dex_no": "0133",
+      "species_name": "イーブイ",
+      "sleep_type": "すやすや",
+      "specialty": "スキル",
+      "berry": {
+        "name": "キーのみ",
+        "qty": 1
+      },
+      "ingredients": {
+        "a": {
+          "name": "モーモーミルク",
+          "qty": [
+            1,
+            2,
+            4
+          ]
+        },
+        "b": {
+          "name": "リラックスカカオ",
+          "qty": [
+            1,
+            2
+          ]
+        },
+        "c": {
+          "name": "マメミート",
+          "qty": [
+            3
+          ]
+        }
+      },
+      "main_skill": "食材ゲットS",
+      "base_assist_seconds": 3700,
+      "food_drop_rate": 19.2,
+      "main_skill_rate": 5.5
+    },
+    {
+      "dex_no": "0133",
+      "species_name": "イーブイ(ハロウィン)",
+      "sleep_type": "すやすや",
+      "specialty": "スキル",
+      "berry": {
+        "name": "キーのみ",
+        "qty": 1
+      },
+      "ingredients": {
+        "a": {
+          "name": "ずっしりカボチャ",
+          "qty": [
+            1,
+            2,
+            4
+          ]
+        },
+        "b": {
+          "name": "リラックスカカオ",
+          "qty": [
+            4,
+            6
+          ]
+        },
+        "c": {
+          "name": "モーモーミルク",
+          "qty": [
+            9
+          ]
+        }
+      },
+      "main_skill": "食材ゲットS",
+      "base_assist_seconds": 3200,
+      "food_drop_rate": 12.0,
+      "main_skill_rate": 4.6
+    },
+    {
+      "dex_no": "0133",
+      "species_name": "イーブイ(ホリデー)",
+      "sleep_type": "すやすや",
+      "specialty": "きのみ",
+      "berry": {
+        "name": "キーのみ",
+        "qty": 2
+      },
+      "ingredients": {
+        "a": {
+          "name": "モーモーミルク",
+          "qty": [
+            1,
+            2,
+            4
+          ]
+        },
+        "b": {
+          "name": "リラックスカカオ",
+          "qty": [
+            1,
+            2
+          ]
+        },
+        "c": {
+          "name": "マメミート",
+          "qty": [
+            3
+          ]
+        }
+      },
+      "main_skill": "ゆめのかけらゲットS",
+      "base_assist_seconds": 3100,
+      "food_drop_rate": 15.6,
+      "main_skill_rate": 3.2
+    },
+    {
+      "dex_no": "0134",
+      "species_name": "シャワーズ",
+      "sleep_type": "ぐっすり",
+      "specialty": "スキル",
+      "berry": {
+        "name": "オレンのみ",
+        "qty": 1
+      },
+      "ingredients": {
+        "a": {
+          "name": "モーモーミルク",
+          "qty": [
+            1,
+            2,
+            4
+          ]
+        },
+        "b": {
+          "name": "リラックスカカオ",
+          "qty": [
+            1,
+            2
+          ]
+        },
+        "c": {
+          "name": "マメミート",
+          "qty": [
+            3
+          ]
+        }
+      },
+      "main_skill": "食材ゲットS",
+      "base_assist_seconds": 3100,
+      "food_drop_rate": 21.1,
+      "main_skill_rate": 6.1
+    },
+    {
+      "dex_no": "0135",
+      "species_name": "サンダース",
+      "sleep_type": "すやすや",
+      "specialty": "スキル",
+      "berry": {
+        "name": "ウブのみ",
+        "qty": 1
+      },
+      "ingredients": {
+        "a": {
+          "name": "モーモーミルク",
+          "qty": [
+            1,
+            2,
+            4
+          ]
+        },
+        "b": {
+          "name": "リラックスカカオ",
+          "qty": [
+            1,
+            2
+          ]
+        },
+        "c": {
+          "name": "マメミート",
+          "qty": [
+            3
+          ]
+        }
+      },
+      "main_skill": "おてつだいサポートS",
+      "base_assist_seconds": 2200,
+      "food_drop_rate": 15.11,
+      "main_skill_rate": 3.9
+    },
+    {
+      "dex_no": "0136",
+      "species_name": "ブースター",
+      "sleep_type": "すやすや",
+      "specialty": "スキル",
+      "berry": {
+        "name": "ヒメリのみ",
+        "qty": 1
+      },
+      "ingredients": {
+        "a": {
+          "name": "モーモーミルク",
+          "qty": [
+            1,
+            2,
+            4
+          ]
+        },
+        "b": {
+          "name": "リラックスカカオ",
+          "qty": [
+            1,
+            2
+          ]
+        },
+        "c": {
+          "name": "マメミート",
+          "qty": [
+            3
+          ]
+        }
+      },
+      "main_skill": "料理パワーアップS",
+      "base_assist_seconds": 2700,
+      "food_drop_rate": 18.55,
+      "main_skill_rate": 5.19
+    },
+    {
+      "dex_no": "0147",
+      "species_name": "ミニリュウ",
+      "sleep_type": "うとうと",
+      "specialty": "食材",
+      "berry": {
+        "name": "ヤチェのみ",
+        "qty": 1
+      },
+      "ingredients": {
+        "a": {
+          "name": "げきからハーブ",
+          "qty": [
+            2,
+            5,
+            7
+          ]
+        },
+        "b": {
+          "name": "ワカクサコーン",
+          "qty": [
+            4,
+            7
+          ]
+        },
+        "c": {
+          "name": "ピュアなオイル",
+          "qty": [
+            8
+          ]
+        }
+      },
+      "main_skill": "げんきチャージS",
+      "base_assist_seconds": 5000,
+      "food_drop_rate": 24.99,
+      "main_skill_rate": 2.0
+    },
+    {
+      "dex_no": "0148",
+      "species_name": "ハクリュー",
+      "sleep_type": "うとうと",
+      "specialty": "食材",
+      "berry": {
+        "name": "ヤチェのみ",
+        "qty": 1
+      },
+      "ingredients": {
+        "a": {
+          "name": "げきからハーブ",
+          "qty": [
+            2,
+            5,
+            7
+          ]
+        },
+        "b": {
+          "name": "ワカクサコーン",
+          "qty": [
+            4,
+            7
+          ]
+        },
+        "c": {
+          "name": "ピュアなオイル",
+          "qty": [
+            8
+          ]
+        }
+      },
+      "main_skill": "げんきチャージS",
+      "base_assist_seconds": 3800,
+      "food_drop_rate": 26.19,
+      "main_skill_rate": 2.5
+    },
+    {
+      "dex_no": "0149",
+      "species_name": "カイリュー",
+      "sleep_type": "うとうと",
+      "specialty": "食材",
+      "berry": {
+        "name": "ヤチェのみ",
+        "qty": 1
+      },
+      "ingredients": {
+        "a": {
+          "name": "げきからハーブ",
+          "qty": [
+            2,
+            5,
+            7
+          ]
+        },
+        "b": {
+          "name": "ワカクサコーン",
+          "qty": [
+            4,
+            7
+          ]
+        },
+        "c": {
+          "name": "ピュアなオイル",
+          "qty": [
+            8
+          ]
+        }
+      },
+      "main_skill": "げんきチャージS",
+      "base_assist_seconds": 2600,
+      "food_drop_rate": 26.4,
+      "main_skill_rate": 2.6
+    },
+    {
+      "dex_no": "0151",
+      "species_name": "ミュウ",
+      "sleep_type": "すやすや",
+      "specialty": "オール",
+      "berry": {
+        "name": "マゴのみ",
+        "qty": 2
+      },
+      "ingredients": {
+        "a": {
+          "name": "とくせんエッグ",
+          "qty": [
+            2,
+            6
+          ]
+        },
+        "b": {
+          "name": "げきからハーブ",
+          "qty": [
+            4,
+            6
+          ]
+        },
+        "c": null
+      },
+      "main_skill": "オールマイティー",
+      "base_assist_seconds": 2900,
+      "food_drop_rate": null,
+      "main_skill_rate": null
+    },
+    {
+      "dex_no": "0152",
+      "species_name": "チコリータ",
+      "sleep_type": "うとうと",
+      "specialty": "きのみ",
+      "berry": {
+        "name": "ドリのみ",
+        "qty": 2
+      },
+      "ingredients": {
+        "a": {
+          "name": "リラックスカカオ",
+          "qty": [
+            1,
+            2,
+            4
+          ]
+        },
+        "b": {
+          "name": "あまいミツ",
+          "qty": [
+            3,
+            5
+          ]
+        },
+        "c": {
+          "name": "ふといながねぎ",
+          "qty": [
+            3
+          ]
+        }
+      },
+      "main_skill": "エナジーチャージS(ランダム)",
+      "base_assist_seconds": 4400,
+      "food_drop_rate": 16.89,
+      "main_skill_rate": 3.9
+    },
+    {
+      "dex_no": "0153",
+      "species_name": "ベイリーフ",
+      "sleep_type": "うとうと",
+      "specialty": "きのみ",
+      "berry": {
+        "name": "ドリのみ",
+        "qty": 2
+      },
+      "ingredients": {
+        "a": {
+          "name": "リラックスカカオ",
+          "qty": [
+            1,
+            2,
+            4
+          ]
+        },
+        "b": {
+          "name": "あまいミツ",
+          "qty": [
+            3,
+            5
+          ]
+        },
+        "c": {
+          "name": "ふといながねぎ",
+          "qty": [
+            3
+          ]
+        }
+      },
+      "main_skill": "エナジーチャージS(ランダム)",
+      "base_assist_seconds": 3300,
+      "food_drop_rate": 16.81,
+      "main_skill_rate": 3.8
+    },
+    {
+      "dex_no": "0154",
+      "species_name": "メガニウム",
+      "sleep_type": "うとうと",
+      "specialty": "きのみ",
+      "berry": {
+        "name": "ドリのみ",
+        "qty": 2
+      },
+      "ingredients": {
+        "a": {
+          "name": "リラックスカカオ",
+          "qty": [
+            1,
+            2,
+            4
+          ]
+        },
+        "b": {
+          "name": "あまいミツ",
+          "qty": [
+            3,
+            5
+          ]
+        },
+        "c": {
+          "name": "ふといながねぎ",
+          "qty": [
+            3
+          ]
+        }
+      },
+      "main_skill": "エナジーチャージS(ランダム)",
+      "base_assist_seconds": 2800,
+      "food_drop_rate": 17.44,
+      "main_skill_rate": 4.6
+    },
+    {
+      "dex_no": "0155",
+      "species_name": "ヒノアラシ",
+      "sleep_type": "すやすや",
+      "specialty": "きのみ",
+      "berry": {
+        "name": "ヒメリのみ",
+        "qty": 2
+      },
+      "ingredients": {
+        "a": {
+          "name": "あったかジンジャー",
+          "qty": [
+            1,
+            2,
+            4
+          ]
+        },
+        "b": {
+          "name": "げきからハーブ",
+          "qty": [
+            2,
+            3
+          ]
+        },
+        "c": {
+          "name": "ピュアなオイル",
+          "qty": [
+            3
+          ]
+        }
+      },
+      "main_skill": "エナジーチャージS(ランダム)",
+      "base_assist_seconds": 3500,
+      "food_drop_rate": 18.53,
+      "main_skill_rate": 2.09
+    },
+    {
+      "dex_no": "0156",
+      "species_name": "マグマラシ",
+      "sleep_type": "すやすや",
+      "specialty": "きのみ",
+      "berry": {
+        "name": "ヒメリのみ",
+        "qty": 2
+      },
+      "ingredients": {
+        "a": {
+          "name": "あったかジンジャー",
+          "qty": [
+            1,
+            2,
+            4
+          ]
+        },
+        "b": {
+          "name": "げきからハーブ",
+          "qty": [
+            2,
+            3
+          ]
+        },
+        "c": {
+          "name": "ピュアなオイル",
+          "qty": [
+            3
+          ]
+        }
+      },
+      "main_skill": "エナジーチャージS(ランダム)",
+      "base_assist_seconds": 3000,
+      "food_drop_rate": 21.1,
+      "main_skill_rate": 4.09
+    },
+    {
+      "dex_no": "0157",
+      "species_name": "バクフーン",
+      "sleep_type": "すやすや",
+      "specialty": "きのみ",
+      "berry": {
+        "name": "ヒメリのみ",
+        "qty": 2
+      },
+      "ingredients": {
+        "a": {
+          "name": "あったかジンジャー",
+          "qty": [
+            1,
+            2,
+            4
+          ]
+        },
+        "b": {
+          "name": "げきからハーブ",
+          "qty": [
+            2,
+            3
+          ]
+        },
+        "c": {
+          "name": "ピュアなオイル",
+          "qty": [
+            3
+          ]
+        }
+      },
+      "main_skill": "エナジーチャージS(ランダム)",
+      "base_assist_seconds": 2400,
+      "food_drop_rate": 20.55,
+      "main_skill_rate": 3.9
+    },
+    {
+      "dex_no": "0158",
+      "species_name": "ワニノコ",
+      "sleep_type": "ぐっすり",
+      "specialty": "きのみ",
+      "berry": {
+        "name": "オレンのみ",
+        "qty": 2
+      },
+      "ingredients": {
+        "a": {
+          "name": "マメミート",
+          "qty": [
+            1,
+            2,
+            4
+          ]
+        },
+        "b": {
+          "name": "ピュアなオイル",
+          "qty": [
+            2,
+            3
+          ]
+        },
+        "c": null
+      },
+      "main_skill": "エナジーチャージS(ランダム)",
+      "base_assist_seconds": 4500,
+      "food_drop_rate": 25.3,
+      "main_skill_rate": 5.2
+    },
+    {
+      "dex_no": "0159",
+      "species_name": "アリゲイツ",
+      "sleep_type": "ぐっすり",
+      "specialty": "きのみ",
+      "berry": {
+        "name": "オレンのみ",
+        "qty": 2
+      },
+      "ingredients": {
+        "a": {
+          "name": "マメミート",
+          "qty": [
+            1,
+            2,
+            4
+          ]
+        },
+        "b": {
+          "name": "ピュアなオイル",
+          "qty": [
+            2,
+            3
+          ]
+        },
+        "c": null
+      },
+      "main_skill": "エナジーチャージS(ランダム)",
+      "base_assist_seconds": 3400,
+      "food_drop_rate": 25.7,
+      "main_skill_rate": 5.19
+    },
+    {
+      "dex_no": "0160",
+      "species_name": "オーダイル",
+      "sleep_type": "ぐっすり",
+      "specialty": "きのみ",
+      "berry": {
+        "name": "オレンのみ",
+        "qty": 2
+      },
+      "ingredients": {
+        "a": {
+          "name": "マメミート",
+          "qty": [
+            1,
+            2,
+            4
+          ]
+        },
+        "b": {
+          "name": "ピュアなオイル",
+          "qty": [
+            2,
+            3
+          ]
+        },
+        "c": null
+      },
+      "main_skill": "エナジーチャージS(ランダム)",
+      "base_assist_seconds": 2800,
+      "food_drop_rate": 25.7,
+      "main_skill_rate": 5.5
+    },
+    {
+      "dex_no": "0172",
+      "species_name": "ピチュー",
+      "sleep_type": "ぐっすり",
+      "specialty": "きのみ",
+      "berry": {
+        "name": "ウブのみ",
+        "qty": 2
+      },
+      "ingredients": {
+        "a": {
+          "name": "とくせんリンゴ",
+          "qty": [
+            1,
+            2,
+            4
+          ]
+        },
+        "b": {
+          "name": "あったかジンジャー",
+          "qty": [
+            2,
+            3
+          ]
+        },
+        "c": {
+          "name": "とくせんエッグ",
+          "qty": [
+            3
+          ]
+        }
+      },
+      "main_skill": "エナジーチャージS",
+      "base_assist_seconds": 4300,
+      "food_drop_rate": 20.95,
+      "main_skill_rate": 2.29
+    },
+    {
+      "dex_no": "0173",
+      "species_name": "ピィ",
+      "sleep_type": "ぐっすり",
+      "specialty": "きのみ",
+      "berry": {
+        "name": "モモンのみ",
+        "qty": 2
+      },
+      "ingredients": {
+        "a": {
+          "name": "とくせんリンゴ",
+          "qty": [
+            1,
+            2,
+            4
+          ]
+        },
+        "b": {
+          "name": "あまいミツ",
+          "qty": [
+            2,
+            3
+          ]
+        },
+        "c": {
+          "name": "ワカクサ大豆",
+          "qty": [
+            3
+          ]
+        }
+      },
+      "main_skill": "ゆびをふる",
+      "base_assist_seconds": 5600,
+      "food_drop_rate": 16.34,
+      "main_skill_rate": 3.4
+    },
+    {
+      "dex_no": "0174",
+      "species_name": "ププリン",
+      "sleep_type": "ぐっすり",
+      "specialty": "スキル",
+      "berry": {
+        "name": "モモンのみ",
+        "qty": 1
+      },
+      "ingredients": {
+        "a": {
+          "name": "あまいミツ",
+          "qty": [
+            1,
+            2,
+            4
+          ]
+        },
+        "b": {
+          "name": "ピュアなオイル",
+          "qty": [
+            2,
+            3
+          ]
+        },
+        "c": {
+          "name": "リラックスカカオ",
+          "qty": [
+            2
+          ]
+        }
+      },
+      "main_skill": "げんきオールS",
+      "base_assist_seconds": 5200,
+      "food_drop_rate": 16.97,
+      "main_skill_rate": 3.8
+    },
+    {
+      "dex_no": "0175",
+      "species_name": "トゲピー",
+      "sleep_type": "ぐっすり",
+      "specialty": "スキル",
+      "berry": {
+        "name": "モモンのみ",
+        "qty": 1
+      },
+      "ingredients": {
+        "a": {
+          "name": "とくせんエッグ",
+          "qty": [
+            1,
+            2,
+            4
+          ]
+        },
+        "b": {
+          "name": "あったかジンジャー",
+          "qty": [
+            2,
+            4
+          ]
+        },
+        "c": {
+          "name": "リラックスカカオ",
+          "qty": [
+            3
+          ]
+        }
+      },
+      "main_skill": "ゆびをふる",
+      "base_assist_seconds": 4800,
+      "food_drop_rate": 15.03,
+      "main_skill_rate": 4.9
+    },
+    {
+      "dex_no": "0176",
+      "species_name": "トゲチック",
+      "sleep_type": "すやすや",
+      "specialty": "スキル",
+      "berry": {
+        "name": "モモンのみ",
+        "qty": 1
+      },
+      "ingredients": {
+        "a": {
+          "name": "とくせんエッグ",
+          "qty": [
+            1,
+            2,
+            4
+          ]
+        },
+        "b": {
+          "name": "あったかジンジャー",
+          "qty": [
+            2,
+            4
+          ]
+        },
+        "c": {
+          "name": "リラックスカカオ",
+          "qty": [
+            3
+          ]
+        }
+      },
+      "main_skill": "ゆびをふる",
+      "base_assist_seconds": 3800,
+      "food_drop_rate": 16.32,
+      "main_skill_rate": 5.59
+    },
+    {
+      "dex_no": "0177",
+      "species_name": "ネイティ",
+      "sleep_type": "すやすや",
+      "specialty": "きのみ",
+      "berry": {
+        "name": "マゴのみ",
+        "qty": 2
+      },
+      "ingredients": {
+        "a": {
+          "name": "とくせんエッグ",
+          "qty": [
+            1,
+            2,
+            4
+          ]
+        },
+        "b": {
+          "name": "リラックスカカオ",
+          "qty": [
+            2,
+            3
+          ]
+        },
+        "c": {
+          "name": "とくせんリンゴ",
+          "qty": [
+            5
+          ]
+        }
+      },
+      "main_skill": "食材ゲットS",
+      "base_assist_seconds": 4500,
+      "food_drop_rate": 18.5,
+      "main_skill_rate": 1.6
+    },
+    {
+      "dex_no": "0178",
+      "species_name": "ネイティオ",
+      "sleep_type": "すやすや",
+      "specialty": "きのみ",
+      "berry": {
+        "name": "マゴのみ",
+        "qty": 2
+      },
+      "ingredients": {
+        "a": {
+          "name": "とくせんエッグ",
+          "qty": [
+            1,
+            2,
+            4
+          ]
+        },
+        "b": {
+          "name": "リラックスカカオ",
+          "qty": [
+            2,
+            3
+          ]
+        },
+        "c": {
+          "name": "とくせんリンゴ",
+          "qty": [
+            5
+          ]
+        }
+      },
+      "main_skill": "食材ゲットS",
+      "base_assist_seconds": 2500,
+      "food_drop_rate": 19.1,
+      "main_skill_rate": 2.5
+    },
+    {
+      "dex_no": "0179",
+      "species_name": "メリープ",
+      "sleep_type": "すやすや",
+      "specialty": "スキル",
+      "berry": {
+        "name": "ウブのみ",
+        "qty": 1
+      },
+      "ingredients": {
+        "a": {
+          "name": "げきからハーブ",
+          "qty": [
+            1,
+            2,
+            4
+          ]
+        },
+        "b": {
+          "name": "とくせんエッグ",
+          "qty": [
+            3,
+            4
+          ]
+        },
+        "c": null
+      },
+      "main_skill": "エナジーチャージM",
+      "base_assist_seconds": 4600,
+      "food_drop_rate": 12.72,
+      "main_skill_rate": 4.7
+    },
+    {
+      "dex_no": "0180",
+      "species_name": "モココ",
+      "sleep_type": "すやすや",
+      "specialty": "スキル",
+      "berry": {
+        "name": "ウブのみ",
+        "qty": 1
+      },
+      "ingredients": {
+        "a": {
+          "name": "げきからハーブ",
+          "qty": [
+            1,
+            2,
+            4
+          ]
+        },
+        "b": {
+          "name": "とくせんエッグ",
+          "qty": [
+            3,
+            4
+          ]
+        },
+        "c": null
+      },
+      "main_skill": "エナジーチャージM",
+      "base_assist_seconds": 3300,
+      "food_drop_rate": 12.66,
+      "main_skill_rate": 4.6
+    },
+    {
+      "dex_no": "0181",
+      "species_name": "デンリュウ",
+      "sleep_type": "すやすや",
+      "specialty": "スキル",
+      "berry": {
+        "name": "ウブのみ",
+        "qty": 1
+      },
+      "ingredients": {
+        "a": {
+          "name": "げきからハーブ",
+          "qty": [
+            1,
+            2,
+            4
+          ]
+        },
+        "b": {
+          "name": "とくせんエッグ",
+          "qty": [
+            3,
+            4
+          ]
+        },
+        "c": null
+      },
+      "main_skill": "エナジーチャージM",
+      "base_assist_seconds": 2500,
+      "food_drop_rate": 13.0,
+      "main_skill_rate": 4.7
+    },
+    {
+      "dex_no": "0185",
+      "species_name": "ウソッキー",
+      "sleep_type": "ぐっすり",
+      "specialty": "スキル",
+      "berry": {
+        "name": "オボンのみ",
+        "qty": 1
+      },
+      "ingredients": {
+        "a": {
+          "name": "あんみんトマト",
+          "qty": [
+            1,
+            2,
+            4
+          ]
+        },
+        "b": {
+          "name": "ワカクサ大豆",
+          "qty": [
+            2,
+            4
+          ]
+        },
+        "c": {
+          "name": "あじわいキノコ",
+          "qty": [
+            2
+          ]
+        }
+      },
+      "main_skill": "エナジーチャージM",
+      "base_assist_seconds": 4000,
+      "food_drop_rate": 21.7,
+      "main_skill_rate": 7.2
+    },
+    {
+      "dex_no": "0194",
+      "species_name": "ウパー",
+      "sleep_type": "ぐっすり",
+      "specialty": "食材",
+      "berry": {
+        "name": "オレンのみ",
+        "qty": 1
+      },
+      "ingredients": {
+        "a": {
+          "name": "あじわいキノコ",
+          "qty": [
+            2,
+            5,
+            7
+          ]
+        },
+        "b": {
+          "name": "ほっこりポテト",
+          "qty": [
+            6,
+            10
+          ]
+        },
+        "c": {
+          "name": "マメミート",
+          "qty": [
+            12
+          ]
+        }
+      },
+      "main_skill": "げんきチャージS",
+      "base_assist_seconds": 5900,
+      "food_drop_rate": 20.1,
+      "main_skill_rate": 3.8
+    },
+    {
+      "dex_no": "0194",
+      "species_name": "ウパー(パルデア)",
+      "sleep_type": "うとうと",
+      "specialty": "食材",
+      "berry": {
+        "name": "カゴのみ",
+        "qty": 1
+      },
+      "ingredients": {
+        "a": {
+          "name": "リラックスカカオ",
+          "qty": [
+            2,
+            5,
+            7
+          ]
+        },
+        "b": {
+          "name": "めざましコーヒー",
+          "qty": [
+            4,
+            7
+          ]
+        },
+        "c": {
+          "name": "ほっこりポテト",
+          "qty": [
+            9
+          ]
+        }
+      },
+      "main_skill": "げんきチャージS",
+      "base_assist_seconds": 6400,
+      "food_drop_rate": 20.9,
+      "main_skill_rate": 5.6
+    },
+    {
+      "dex_no": "0195",
+      "species_name": "ヌオー",
+      "sleep_type": "ぐっすり",
+      "specialty": "食材",
+      "berry": {
+        "name": "オレンのみ",
+        "qty": 1
+      },
+      "ingredients": {
+        "a": {
+          "name": "あじわいキノコ",
+          "qty": [
+            2,
+            5,
+            7
+          ]
+        },
+        "b": {
+          "name": "ほっこりポテト",
+          "qty": [
+            6,
+            10
+          ]
+        },
+        "c": {
+          "name": "マメミート",
+          "qty": [
+            12
+          ]
+        }
+      },
+      "main_skill": "げんきチャージS",
+      "base_assist_seconds": 3400,
+      "food_drop_rate": 19.0,
+      "main_skill_rate": 3.2
+    },
+    {
+      "dex_no": "0196",
+      "species_name": "エーフィ",
+      "sleep_type": "すやすや",
+      "specialty": "スキル",
+      "berry": {
+        "name": "マゴのみ",
+        "qty": 1
+      },
+      "ingredients": {
+        "a": {
+          "name": "モーモーミルク",
+          "qty": [
+            1,
+            2,
+            4
+          ]
+        },
+        "b": {
+          "name": "リラックスカカオ",
+          "qty": [
+            1,
+            2
+          ]
+        },
+        "c": {
+          "name": "マメミート",
+          "qty": [
+            3
+          ]
+        }
+      },
+      "main_skill": "エナジーチャージM",
+      "base_assist_seconds": 2400,
+      "food_drop_rate": 16.33,
+      "main_skill_rate": 4.4
+    },
+    {
+      "dex_no": "0197",
+      "species_name": "ブラッキー",
+      "sleep_type": "うとうと",
+      "specialty": "スキル",
+      "berry": {
+        "name": "ウイのみ",
+        "qty": 1
+      },
+      "ingredients": {
+        "a": {
+          "name": "モーモーミルク",
+          "qty": [
+            1,
+            2,
+            4
+          ]
+        },
+        "b": {
+          "name": "リラックスカカオ",
+          "qty": [
+            1,
+            2
+          ]
+        },
+        "c": {
+          "name": "マメミート",
+          "qty": [
+            3
+          ]
+        }
+      },
+      "main_skill": "つきのひかり(げんきチャージS)",
+      "base_assist_seconds": 3200,
+      "food_drop_rate": 21.9,
+      "main_skill_rate": 10.1
+    },
+    {
+      "dex_no": "0198",
+      "species_name": "ヤミカラス",
+      "sleep_type": "うとうと",
+      "specialty": "スキル",
+      "berry": {
+        "name": "ウイのみ",
+        "qty": 1
+      },
+      "ingredients": {
+        "a": {
+          "name": "めざましコーヒー",
+          "qty": [
+            1,
+            2,
+            4
+          ]
+        },
+        "b": {
+          "name": "ワカクサ大豆",
+          "qty": [
+            3,
+            6
+          ]
+        },
+        "c": {
+          "name": "げきからハーブ",
+          "qty": [
+            4
+          ]
+        }
+      },
+      "main_skill": "きょううん(食材セレクトS)",
+      "base_assist_seconds": 3600,
+      "food_drop_rate": 14.1,
+      "main_skill_rate": 6.2
+    },
+    {
+      "dex_no": "0199",
+      "species_name": "ヤドキング",
+      "sleep_type": "すやすや",
+      "specialty": "スキル",
+      "berry": {
+        "name": "オレンのみ",
+        "qty": 1
+      },
+      "ingredients": {
+        "a": {
+          "name": "リラックスカカオ",
+          "qty": [
+            1,
+            2,
+            4
+          ]
+        },
+        "b": {
+          "name": "おいしいシッポ",
+          "qty": [
+            1,
+            2
+          ]
+        },
+        "c": {
+          "name": "あんみんトマト",
+          "qty": [
+            5
+          ]
+        }
+      },
+      "main_skill": "げんきエールS",
+      "base_assist_seconds": 3400,
+      "food_drop_rate": 16.6,
+      "main_skill_rate": 7.4
+    },
+    {
+      "dex_no": "0202",
+      "species_name": "ソーナンス",
+      "sleep_type": "すやすや",
+      "specialty": "スキル",
+      "berry": {
+        "name": "マゴのみ",
+        "qty": 1
+      },
+      "ingredients": {
+        "a": {
+          "name": "とくせんリンゴ",
+          "qty": [
+            1,
+            2,
+            4
+          ]
+        },
+        "b": {
+          "name": "あじわいキノコ",
+          "qty": [
+            1,
+            2
+          ]
+        },
+        "c": {
+          "name": "ピュアなオイル",
+          "qty": [
+            3
+          ]
+        }
+      },
+      "main_skill": "げんきエールS",
+      "base_assist_seconds": 3500,
+      "food_drop_rate": 21.1,
+      "main_skill_rate": 7.0
+    },
+    {
+      "dex_no": "0208",
+      "species_name": "ハガネール",
+      "sleep_type": "ぐっすり",
+      "specialty": "きのみ",
+      "berry": {
+        "name": "ベリブのみ",
+        "qty": 2
+      },
+      "ingredients": {
+        "a": {
+          "name": "あんみんトマト",
+          "qty": [
+            1,
+            2,
+            4
+          ]
+        },
+        "b": {
+          "name": "マメミート",
+          "qty": [
+            2,
+            4
+          ]
+        },
+        "c": {
+          "name": "ほっこりポテト",
+          "qty": [
+            3
+          ]
+        }
+      },
+      "main_skill": "食材ゲットS",
+      "base_assist_seconds": 3000,
+      "food_drop_rate": 15.4,
+      "main_skill_rate": 3.2
+    },
+    {
+      "dex_no": "0213",
+      "species_name": "ツボツボ",
+      "sleep_type": "うとうと",
+      "specialty": "スキル",
+      "berry": {
+        "name": "ラムのみ",
+        "qty": 1
+      },
+      "ingredients": {
+        "a": {
+          "name": "ピュアなオイル",
+          "qty": [
+            1,
+            2,
+            4
+          ]
+        },
+        "b": {
+          "name": "めざましコーヒー",
+          "qty": [
+            2,
+            3
+          ]
+        },
+        "c": {
+          "name": "あまいミツ",
+          "qty": [
+            4
+          ]
+        }
+      },
+      "main_skill": "きのみジュース(げんきオールS)",
+      "base_assist_seconds": 3600,
+      "food_drop_rate": 20.5,
+      "main_skill_rate": 5.9
+    },
+    {
+      "dex_no": "0214",
+      "species_name": "ヘラクロス",
+      "sleep_type": "うとうと",
+      "specialty": "スキル",
+      "berry": {
+        "name": "ラムのみ",
+        "qty": 1
+      },
+      "ingredients": {
+        "a": {
+          "name": "あまいミツ",
+          "qty": [
+            1,
+            2,
+            4
+          ]
+        },
+        "b": {
+          "name": "あじわいキノコ",
+          "qty": [
+            1,
+            2
+          ]
+        },
+        "c": {
+          "name": "マメミート",
+          "qty": [
+            4
+          ]
+        }
+      },
+      "main_skill": "ビルドアップ(料理アシストS",
+      "base_assist_seconds": 2300,
+      "food_drop_rate": 15.8,
+      "main_skill_rate": 4.5
+    },
+    {
+      "dex_no": "0215",
+      "species_name": "ニューラ",
+      "sleep_type": "うとうと",
+      "specialty": "きのみ",
+      "berry": {
+        "name": "ウイのみ",
+        "qty": 2
+      },
+      "ingredients": {
+        "a": {
+          "name": "マメミート",
+          "qty": [
+            1,
+            2,
+            4
+          ]
+        },
+        "b": {
+          "name": "とくせんエッグ",
+          "qty": [
+            2,
+            3
+          ]
+        },
+        "c": {
+          "name": "ワカクサ大豆",
+          "qty": [
+            4
+          ]
+        }
+      },
+      "main_skill": "料理チャンスS",
+      "base_assist_seconds": 3200,
+      "food_drop_rate": 25.5,
+      "main_skill_rate": 1.9
+    },
+    {
+      "dex_no": "0225",
+      "species_name": "デリバード",
+      "sleep_type": "うとうと",
+      "specialty": "食材",
+      "berry": {
+        "name": "シーヤのみ",
+        "qty": 1
+      },
+      "ingredients": {
+        "a": {
+          "name": "とくせんエッグ",
+          "qty": [
+            2,
+            5,
+            7
+          ]
+        },
+        "b": {
+          "name": "とくせんリンゴ",
+          "qty": [
+            6,
+            9
+          ]
+        },
+        "c": {
+          "name": "リラックスカカオ",
+          "qty": [
+            5
+          ]
+        }
+      },
+      "main_skill": "プレゼント(食材ゲットS)",
+      "base_assist_seconds": 2500,
+      "food_drop_rate": 18.8,
+      "main_skill_rate": 1.5
+    },
+    {
+      "dex_no": "0228",
+      "species_name": "デルビル",
+      "sleep_type": "うとうと",
+      "specialty": "きのみ",
+      "berry": {
+        "name": "ウイのみ",
+        "qty": 2
+      },
+      "ingredients": {
+        "a": {
+          "name": "げきからハーブ",
+          "qty": [
+            1,
+            2,
+            4
+          ]
+        },
+        "b": {
+          "name": "あったかジンジャー",
+          "qty": [
+            3,
+            4
+          ]
+        },
+        "c": {
+          "name": "ふといながねぎ",
+          "qty": [
+            3
+          ]
+        }
+      },
+      "main_skill": "エナジーチャージM",
+      "base_assist_seconds": 4900,
+      "food_drop_rate": 20.1,
+      "main_skill_rate": 3.7
+    },
+    {
+      "dex_no": "0229",
+      "species_name": "ヘルガー",
+      "sleep_type": "うとうと",
+      "specialty": "きのみ",
+      "berry": {
+        "name": "ウイのみ",
+        "qty": 2
+      },
+      "ingredients": {
+        "a": {
+          "name": "げきからハーブ",
+          "qty": [
+            1,
+            2,
+            4
+          ]
+        },
+        "b": {
+          "name": "あったかジンジャー",
+          "qty": [
+            3,
+            4
+          ]
+        },
+        "c": {
+          "name": "ふといながねぎ",
+          "qty": [
+            3
+          ]
+        }
+      },
+      "main_skill": "エナジーチャージM",
+      "base_assist_seconds": 3300,
+      "food_drop_rate": 20.3,
+      "main_skill_rate": 4.0
+    },
+    {
+      "dex_no": "0242",
+      "species_name": "ハピナス",
+      "sleep_type": "すやすや",
+      "specialty": "食材",
+      "berry": {
+        "name": "キーのみ",
+        "qty": 1
+      },
+      "ingredients": {
+        "a": {
+          "name": "とくせんエッグ",
+          "qty": [
+            2,
+            5,
+            7
+          ]
+        },
+        "b": {
+          "name": "ほっこりポテト",
+          "qty": [
+            4,
+            7
+          ]
+        },
+        "c": {
+          "name": "あまいミツ",
+          "qty": [
+            8
+          ]
+        }
+      },
+      "main_skill": "げんきオールS",
+      "base_assist_seconds": 3100,
+      "food_drop_rate": 23.8,
+      "main_skill_rate": 2.3
+    },
+    {
+      "dex_no": "0243",
+      "species_name": "ライコウ",
+      "sleep_type": "すやすや",
+      "specialty": "スキル",
+      "berry": {
+        "name": "ウブのみ",
+        "qty": 1
+      },
+      "ingredients": {
+        "a": {
+          "name": "マメミート",
+          "qty": [
+            1,
+            2,
+            4
+          ]
+        },
+        "b": {
+          "name": "げきからハーブ",
+          "qty": [
+            2,
+            3
+          ]
+        },
+        "c": {
+          "name": "ふといながねぎ",
+          "qty": [
+            2
+          ]
+        }
+      },
+      "main_skill": "おてつだいブースト(でんき)",
+      "base_assist_seconds": 2100,
+      "food_drop_rate": 19.12,
+      "main_skill_rate": 1.9
+    },
+    {
+      "dex_no": "0244",
+      "species_name": "エンテイ",
+      "sleep_type": "すやすや",
+      "specialty": "スキル",
+      "berry": {
+        "name": "ヒメリのみ",
+        "qty": 1
+      },
+      "ingredients": {
+        "a": {
+          "name": "ピュアなオイル",
+          "qty": [
+            1,
+            2,
+            4
+          ]
+        },
+        "b": {
+          "name": "あんみんトマト",
+          "qty": [
+            2,
+            4
+          ]
+        },
+        "c": {
+          "name": "あじわいキノコ",
+          "qty": [
+            3
+          ]
+        }
+      },
+      "main_skill": "おてつだいブースト(ほのお)",
+      "base_assist_seconds": 2400,
+      "food_drop_rate": 18.69,
+      "main_skill_rate": 2.3
+    },
+    {
+      "dex_no": "0245",
+      "species_name": "スイクン",
+      "sleep_type": "ぐっすり",
+      "specialty": "スキル",
+      "berry": {
+        "name": "オレンのみ",
+        "qty": 1
+      },
+      "ingredients": {
+        "a": {
+          "name": "とくせんリンゴ",
+          "qty": [
+            1,
+            2,
+            4
+          ]
+        },
+        "b": {
+          "name": "ピュアなオイル",
+          "qty": [
+            2,
+            3
+          ]
+        },
+        "c": {
+          "name": "ワカクサコーン",
+          "qty": [
+            2
+          ]
+        }
+      },
+      "main_skill": "おてつだいブースト(みず)",
+      "base_assist_seconds": 2700,
+      "food_drop_rate": 27.7,
+      "main_skill_rate": 2.6
+    },
+    {
+      "dex_no": "0246",
+      "species_name": "ヨーギラス",
+      "sleep_type": "ぐっすり",
+      "specialty": "食材",
+      "berry": {
+        "name": "オボンのみ",
+        "qty": 1
+      },
+      "ingredients": {
+        "a": {
+          "name": "あったかジンジャー",
+          "qty": [
+            2,
+            5,
+            7
+          ]
+        },
+        "b": {
+          "name": "ワカクサ大豆",
+          "qty": [
+            5,
+            8
+          ]
+        },
+        "c": {
+          "name": "マメミート",
+          "qty": [
+            8
+          ]
+        }
+      },
+      "main_skill": "げんきチャージS",
+      "base_assist_seconds": 4800,
+      "food_drop_rate": 23.71,
+      "main_skill_rate": 4.1
+    },
+    {
+      "dex_no": "0247",
+      "species_name": "サナギラス",
+      "sleep_type": "ぐっすり",
+      "specialty": "食材",
+      "berry": {
+        "name": "オボンのみ",
+        "qty": 1
+      },
+      "ingredients": {
+        "a": {
+          "name": "あったかジンジャー",
+          "qty": [
+            2,
+            5,
+            7
+          ]
+        },
+        "b": {
+          "name": "ワカクサ大豆",
+          "qty": [
+            5,
+            8
+          ]
+        },
+        "c": {
+          "name": "マメミート",
+          "qty": [
+            8
+          ]
+        }
+      },
+      "main_skill": "げんきチャージS",
+      "base_assist_seconds": 3600,
+      "food_drop_rate": 24.66,
+      "main_skill_rate": 4.49
+    },
+    {
+      "dex_no": "0248",
+      "species_name": "バンギラス",
+      "sleep_type": "うとうと",
+      "specialty": "食材",
+      "berry": {
+        "name": "ウイのみ",
+        "qty": 1
+      },
+      "ingredients": {
+        "a": {
+          "name": "あったかジンジャー",
+          "qty": [
+            2,
+            5,
+            7
+          ]
+        },
+        "b": {
+          "name": "ワカクサ大豆",
+          "qty": [
+            5,
+            8
+          ]
+        },
+        "c": {
+          "name": "マメミート",
+          "qty": [
+            8
+          ]
+        }
+      },
+      "main_skill": "げんきチャージS",
+      "base_assist_seconds": 2700,
+      "food_drop_rate": 26.55,
+      "main_skill_rate": 5.19
+    },
+    {
+      "dex_no": "0252",
+      "species_name": "キモリ",
+      "sleep_type": "うとうと",
+      "specialty": "スキル",
+      "berry": {
+        "name": "ドリのみ",
+        "qty": 1
+      },
+      "ingredients": {
+        "a": {
+          "name": "とくせんエッグ",
+          "qty": [
+            1,
+            2,
+            4
+          ]
+        },
+        "b": {
+          "name": "めざましコーヒー",
+          "qty": [
+            2,
+            3
+          ]
+        },
+        "c": {
+          "name": "ふといながねぎ",
+          "qty": [
+            2
+          ]
+        }
+      },
+      "main_skill": "きのみバースト",
+      "base_assist_seconds": 4500,
+      "food_drop_rate": 17.2,
+      "main_skill_rate": 3.5
+    },
+    {
+      "dex_no": "0253",
+      "species_name": "ジュプトル",
+      "sleep_type": "うとうと",
+      "specialty": "スキル",
+      "berry": {
+        "name": "ドリのみ",
+        "qty": 1
+      },
+      "ingredients": {
+        "a": {
+          "name": "とくせんエッグ",
+          "qty": [
+            1,
+            2,
+            4
+          ]
+        },
+        "b": {
+          "name": "めざましコーヒー",
+          "qty": [
+            2,
+            3
+          ]
+        },
+        "c": {
+          "name": "ふといながねぎ",
+          "qty": [
+            2
+          ]
+        }
+      },
+      "main_skill": "きのみバースト",
+      "base_assist_seconds": 3300,
+      "food_drop_rate": 15.0,
+      "main_skill_rate": 3.5
+    },
+    {
+      "dex_no": "0254",
+      "species_name": "ジュカイン",
+      "sleep_type": "うとうと",
+      "specialty": "スキル",
+      "berry": {
+        "name": "ドリのみ",
+        "qty": 1
+      },
+      "ingredients": {
+        "a": {
+          "name": "とくせんエッグ",
+          "qty": [
+            1,
+            2,
+            4
+          ]
+        },
+        "b": {
+          "name": "めざましコーヒー",
+          "qty": [
+            2,
+            3
+          ]
+        },
+        "c": {
+          "name": "ふといながねぎ",
+          "qty": [
+            2
+          ]
+        }
+      },
+      "main_skill": "きのみバースト",
+      "base_assist_seconds": 2300,
+      "food_drop_rate": 10.7,
+      "main_skill_rate": 3.0
+    },
+    {
+      "dex_no": "0255",
+      "species_name": "アチャモ",
+      "sleep_type": "すやすや",
+      "specialty": "きのみ",
+      "berry": {
+        "name": "ヒメリのみ",
+        "qty": 2
+      },
+      "ingredients": {
+        "a": {
+          "name": "あじわいキノコ",
+          "qty": [
+            1,
+            2,
+            4
+          ]
+        },
+        "b": {
+          "name": "ワカクサ大豆",
+          "qty": [
+            4,
+            6
+          ]
+        },
+        "c": {
+          "name": "ピュアなオイル",
+          "qty": [
+            5
+          ]
+        }
+      },
+      "main_skill": "げんきチャージS",
+      "base_assist_seconds": 4300,
+      "food_drop_rate": 17.0,
+      "main_skill_rate": 4.4
+    },
+    {
+      "dex_no": "0256",
+      "species_name": "ワカシャモ",
+      "sleep_type": "ぐっすり",
+      "specialty": "きのみ",
+      "berry": {
+        "name": "クラボのみ",
+        "qty": 2
+      },
+      "ingredients": {
+        "a": {
+          "name": "あじわいキノコ",
+          "qty": [
+            1,
+            2,
+            4
+          ]
+        },
+        "b": {
+          "name": "ワカクサ大豆",
+          "qty": [
+            4,
+            6
+          ]
+        },
+        "c": {
+          "name": "ピュアなオイル",
+          "qty": [
+            5
+          ]
+        }
+      },
+      "main_skill": "げんきチャージS",
+      "base_assist_seconds": 3400,
+      "food_drop_rate": 17.0,
+      "main_skill_rate": 5.2
+    },
+    {
+      "dex_no": "0257",
+      "species_name": "バシャーモ",
+      "sleep_type": "ぐっすり",
+      "specialty": "きのみ",
+      "berry": {
+        "name": "クラボのみ",
+        "qty": 2
+      },
+      "ingredients": {
+        "a": {
+          "name": "あじわいキノコ",
+          "qty": [
+            1,
+            2,
+            4
+          ]
+        },
+        "b": {
+          "name": "ワカクサ大豆",
+          "qty": [
+            4,
+            6
+          ]
+        },
+        "c": {
+          "name": "ピュアなオイル",
+          "qty": [
+            5
+          ]
+        }
+      },
+      "main_skill": "げんきチャージS",
+      "base_assist_seconds": 2600,
+      "food_drop_rate": 15.3,
+      "main_skill_rate": 4.9
+    },
+    {
+      "dex_no": "0258",
+      "species_name": "ミズゴロウ",
+      "sleep_type": "ぐっすり",
+      "specialty": "きのみ",
+      "berry": {
+        "name": "オレンのみ",
+        "qty": 2
+      },
+      "ingredients": {
+        "a": {
+          "name": "ワカクサコーン",
+          "qty": [
+            1,
+            2,
+            4
+          ]
+        },
+        "b": {
+          "name": "モーモーミルク",
+          "qty": [
+            3,
+            5
+          ]
+        },
+        "c": {
+          "name": "あじわいキノコ",
+          "qty": [
+            3
+          ]
+        }
+      },
+      "main_skill": "料理チャンスS",
+      "base_assist_seconds": 4700,
+      "food_drop_rate": 19.2,
+      "main_skill_rate": 2.4
+    },
+    {
+      "dex_no": "0259",
+      "species_name": "ヌマクロー",
+      "sleep_type": "ぐっすり",
+      "specialty": "きのみ",
+      "berry": {
+        "name": "フィラのみ",
+        "qty": 2
+      },
+      "ingredients": {
+        "a": {
+          "name": "ワカクサコーン",
+          "qty": [
+            1,
+            2,
+            4
+          ]
+        },
+        "b": {
+          "name": "モーモーミルク",
+          "qty": [
+            3,
+            5
+          ]
+        },
+        "c": {
+          "name": "あじわいキノコ",
+          "qty": [
+            3
+          ]
+        }
+      },
+      "main_skill": "料理チャンスS",
+      "base_assist_seconds": 3500,
+      "food_drop_rate": 16.8,
+      "main_skill_rate": 2.8
+    },
+    {
+      "dex_no": "0260",
+      "species_name": "ラグラージ",
+      "sleep_type": "ぐっすり",
+      "specialty": "きのみ",
+      "berry": {
+        "name": "フィラのみ",
+        "qty": 2
+      },
+      "ingredients": {
+        "a": {
+          "name": "ワカクサコーン",
+          "qty": [
+            1,
+            2,
+            4
+          ]
+        },
+        "b": {
+          "name": "モーモーミルク",
+          "qty": [
+            3,
+            5
+          ]
+        },
+        "c": {
+          "name": "あじわいキノコ",
+          "qty": [
+            3
+          ]
+        }
+      },
+      "main_skill": "料理チャンスS",
+      "base_assist_seconds": 2800,
+      "food_drop_rate": 14.6,
+      "main_skill_rate": 3.4
+    },
+    {
+      "dex_no": "0280",
+      "species_name": "ラルトス",
+      "sleep_type": "すやすや",
+      "specialty": "スキル",
+      "berry": {
+        "name": "マゴのみ",
+        "qty": 1
+      },
+      "ingredients": {
+        "a": {
+          "name": "とくせんリンゴ",
+          "qty": [
+            1,
+            2,
+            4
+          ]
+        },
+        "b": {
+          "name": "ワカクサコーン",
+          "qty": [
+            1,
+            2
+          ]
+        },
+        "c": {
+          "name": "ふといながねぎ",
+          "qty": [
+            2
+          ]
+        }
+      },
+      "main_skill": "げんきオールS",
+      "base_assist_seconds": 4800,
+      "food_drop_rate": 14.56,
+      "main_skill_rate": 4.3
+    },
+    {
+      "dex_no": "0281",
+      "species_name": "キルリア",
+      "sleep_type": "すやすや",
+      "specialty": "スキル",
+      "berry": {
+        "name": "マゴのみ",
+        "qty": 1
+      },
+      "ingredients": {
+        "a": {
+          "name": "とくせんリンゴ",
+          "qty": [
+            1,
+            2,
+            4
+          ]
+        },
+        "b": {
+          "name": "ワカクサコーン",
+          "qty": [
+            1,
+            2
+          ]
+        },
+        "c": {
+          "name": "ふといながねぎ",
+          "qty": [
+            2
+          ]
+        }
+      },
+      "main_skill": "げんきオールS",
+      "base_assist_seconds": 3500,
+      "food_drop_rate": 14.6,
+      "main_skill_rate": 4.3
+    },
+    {
+      "dex_no": "0282",
+      "species_name": "サーナイト",
+      "sleep_type": "すやすや",
+      "specialty": "スキル",
+      "berry": {
+        "name": "マゴのみ",
+        "qty": 1
+      },
+      "ingredients": {
+        "a": {
+          "name": "とくせんリンゴ",
+          "qty": [
+            1,
+            2,
+            4
+          ]
+        },
+        "b": {
+          "name": "ワカクサコーン",
+          "qty": [
+            1,
+            2
+          ]
+        },
+        "c": {
+          "name": "ふといながねぎ",
+          "qty": [
+            2
+          ]
+        }
+      },
+      "main_skill": "げんきオールS",
+      "base_assist_seconds": 2400,
+      "food_drop_rate": 14.39,
+      "main_skill_rate": 4.2
+    },
+    {
+      "dex_no": "0287",
+      "species_name": "ナマケロ",
+      "sleep_type": "すやすや",
+      "specialty": "きのみ",
+      "berry": {
+        "name": "キーのみ",
+        "qty": 2
+      },
+      "ingredients": {
+        "a": {
+          "name": "あんみんトマト",
+          "qty": [
+            1,
+            2,
+            4
+          ]
+        },
+        "b": {
+          "name": "あまいミツ",
+          "qty": [
+            2,
+            4
+          ]
+        },
+        "c": {
+          "name": "とくせんリンゴ",
+          "qty": [
+            4
+          ]
+        }
+      },
+      "main_skill": "食材ゲットS",
+      "base_assist_seconds": 4900,
+      "food_drop_rate": 21.35,
+      "main_skill_rate": 1.9
+    },
+    {
+      "dex_no": "0288",
+      "species_name": "ヤルキモノ",
+      "sleep_type": "うとうと",
+      "specialty": "きのみ",
+      "berry": {
+        "name": "キーのみ",
+        "qty": 2
+      },
+      "ingredients": {
+        "a": {
+          "name": "あんみんトマト",
+          "qty": [
+            1,
+            2,
+            4
+          ]
+        },
+        "b": {
+          "name": "あまいミツ",
+          "qty": [
+            2,
+            4
+          ]
+        },
+        "c": {
+          "name": "とくせんリンゴ",
+          "qty": [
+            4
+          ]
+        }
+      },
+      "main_skill": "食材ゲットS",
+      "base_assist_seconds": 3200,
+      "food_drop_rate": 20.35,
+      "main_skill_rate": 1.5
+    },
+    {
+      "dex_no": "0289",
+      "species_name": "ケッキング",
+      "sleep_type": "すやすや",
+      "specialty": "きのみ",
+      "berry": {
+        "name": "キーのみ",
+        "qty": 2
+      },
+      "ingredients": {
+        "a": {
+          "name": "あんみんトマト",
+          "qty": [
+            1,
+            2,
+            4
+          ]
+        },
+        "b": {
+          "name": "あまいミツ",
+          "qty": [
+            2,
+            4
+          ]
+        },
+        "c": {
+          "name": "とくせんリンゴ",
+          "qty": [
+            4
+          ]
+        }
+      },
+      "main_skill": "食材ゲットS",
+      "base_assist_seconds": 3600,
+      "food_drop_rate": 33.95,
+      "main_skill_rate": 6.7
+    },
+    {
+      "dex_no": "0302",
+      "species_name": "ヤミラミ",
+      "sleep_type": "うとうと",
+      "specialty": "スキル",
+      "berry": {
+        "name": "ウイのみ",
+        "qty": 1
+      },
+      "ingredients": {
+        "a": {
+          "name": "ピュアなオイル",
+          "qty": [
+            1,
+            2,
+            4
+          ]
+        },
+        "b": {
+          "name": "あじわいキノコ",
+          "qty": [
+            2,
+            3
+          ]
+        },
+        "c": {
+          "name": "リラックスカカオ",
+          "qty": [
+            3
+          ]
+        }
+      },
+      "main_skill": "ゆめのかけらゲットS(ランダム)",
+      "base_assist_seconds": 3600,
+      "food_drop_rate": 18.8,
+      "main_skill_rate": 6.8
+    },
+    {
+      "dex_no": "0303",
+      "species_name": "クチート",
+      "sleep_type": "ぐっすり",
+      "specialty": "食材",
+      "berry": {
+        "name": "ベリブのみ",
+        "qty": 1
+      },
+      "ingredients": {
+        "a": {
+          "name": "ピュアなオイル",
+          "qty": [
+            2,
+            5,
+            7
+          ]
+        },
+        "b": {
+          "name": "ワカクサコーン",
+          "qty": [
+            4,
+            6
+          ]
+        },
+        "c": {
+          "name": "あんみんトマト",
+          "qty": [
+            8
+          ]
+        }
+      },
+      "main_skill": "かいりきバサミ(食材セレクトS)",
+      "base_assist_seconds": 3200,
+      "food_drop_rate": 20.4,
+      "main_skill_rate": 3.8
+    },
+    {
+      "dex_no": "0304",
+      "species_name": "ココドラ",
+      "sleep_type": "ぐっすり",
+      "specialty": "食材",
+      "berry": {
+        "name": "ベリブのみ",
+        "qty": 1
+      },
+      "ingredients": {
+        "a": {
+          "name": "マメミート",
+          "qty": [
+            2,
+            5,
+            7
+          ]
+        },
+        "b": {
+          "name": "めざましコーヒー",
+          "qty": [
+            3,
+            5
+          ]
+        },
+        "c": {
+          "name": "ワカクサ大豆",
+          "qty": [
+            7
+          ]
+        }
+      },
+      "main_skill": "げんきチャージS",
+      "base_assist_seconds": 5700,
+      "food_drop_rate": 27.3,
+      "main_skill_rate": 4.6
+    },
+    {
+      "dex_no": "0305",
+      "species_name": "コドラ",
+      "sleep_type": "ぐっすり",
+      "specialty": "食材",
+      "berry": {
+        "name": "ベリブのみ",
+        "qty": 1
+      },
+      "ingredients": {
+        "a": {
+          "name": "マメミート",
+          "qty": [
+            2,
+            5,
+            7
+          ]
+        },
+        "b": {
+          "name": "めざましコーヒー",
+          "qty": [
+            3,
+            5
+          ]
+        },
+        "c": {
+          "name": "ワカクサ大豆",
+          "qty": [
+            7
+          ]
+        }
+      },
+      "main_skill": "げんきチャージS",
+      "base_assist_seconds": 4200,
+      "food_drop_rate": 27.7,
+      "main_skill_rate": 4.8
+    },
+    {
+      "dex_no": "0306",
+      "species_name": "ボスゴドラ",
+      "sleep_type": "ぐっすり",
+      "specialty": "食材",
+      "berry": {
+        "name": "ベリブのみ",
+        "qty": 1
+      },
+      "ingredients": {
+        "a": {
+          "name": "マメミート",
+          "qty": [
+            2,
+            5,
+            7
+          ]
+        },
+        "b": {
+          "name": "めざましコーヒー",
+          "qty": [
+            3,
+            5
+          ]
+        },
+        "c": {
+          "name": "ワカクサ大豆",
+          "qty": [
+            7
+          ]
+        }
+      },
+      "main_skill": "げんきチャージS",
+      "base_assist_seconds": 3000,
+      "food_drop_rate": 28.5,
+      "main_skill_rate": 5.2
+    },
+    {
+      "dex_no": "0311",
+      "species_name": "プラスル",
+      "sleep_type": "すやすや",
+      "specialty": "スキル",
+      "berry": {
+        "name": "ウブのみ",
+        "qty": 1
+      },
+      "ingredients": {
+        "a": {
+          "name": "めざましコーヒー",
+          "qty": [
+            1,
+            2,
+            4
+          ]
+        },
+        "b": {
+          "name": "ふといながねぎ",
+          "qty": [
+            2,
+            3
+          ]
+        },
+        "c": {
+          "name": "モーモーミルク",
+          "qty": [
+            6
+          ]
+        }
+      },
+      "main_skill": "プラス(食材ゲットS)",
+      "base_assist_seconds": 2400,
+      "food_drop_rate": 10.3,
+      "main_skill_rate": 4.9
+    },
+    {
+      "dex_no": "0312",
+      "species_name": "マイナン",
+      "sleep_type": "すやすや",
+      "specialty": "スキル",
+      "berry": {
+        "name": "ウブのみ",
+        "qty": 1
+      },
+      "ingredients": {
+        "a": {
+          "name": "あまいミツ",
+          "qty": [
+            1,
+            2,
+            4
+          ]
+        },
+        "b": {
+          "name": "とくせんエッグ",
+          "qty": [
+            2,
+            3
+          ]
+        },
+        "c": {
+          "name": "モーモーミルク",
+          "qty": [
+            4
+          ]
+        }
+      },
+      "main_skill": "マイナス(料理パワーアップS)",
+      "base_assist_seconds": 2400,
+      "food_drop_rate": 17.4,
+      "main_skill_rate": 4.9
+    },
+    {
+      "dex_no": "0316",
+      "species_name": "ゴクリン",
+      "sleep_type": "うとうと",
+      "specialty": "スキル",
+      "berry": {
+        "name": "カゴのみ",
+        "qty": 1
+      },
+      "ingredients": {
+        "a": {
+          "name": "ワカクサ大豆",
+          "qty": [
+            1,
+            2,
+            4
+          ]
+        },
+        "b": {
+          "name": "あじわいキノコ",
+          "qty": [
+            1,
+            2
+          ]
+        },
+        "c": {
+          "name": "あまいミツ",
+          "qty": [
+            4
+          ]
+        }
+      },
+      "main_skill": "ゆめのかけらゲットS(ランダム)",
+      "base_assist_seconds": 5900,
+      "food_drop_rate": 21.39,
+      "main_skill_rate": 6.29
+    },
+    {
+      "dex_no": "0317",
+      "species_name": "マルノーム",
+      "sleep_type": "うとうと",
+      "specialty": "スキル",
+      "berry": {
+        "name": "カゴのみ",
+        "qty": 1
+      },
+      "ingredients": {
+        "a": {
+          "name": "ワカクサ大豆",
+          "qty": [
+            1,
+            2,
+            4
+          ]
+        },
+        "b": {
+          "name": "あじわいキノコ",
+          "qty": [
+            1,
+            2
+          ]
+        },
+        "c": {
+          "name": "あまいミツ",
+          "qty": [
+            4
+          ]
+        }
+      },
+      "main_skill": "ゆめのかけらゲットS(ランダム)",
+      "base_assist_seconds": 3500,
+      "food_drop_rate": 21.0,
+      "main_skill_rate": 7.0
+    },
+    {
+      "dex_no": "0328",
+      "species_name": "ナックラー",
+      "sleep_type": "ぐっすり",
+      "specialty": "食材",
+      "berry": {
+        "name": "フィラのみ",
+        "qty": 1
+      },
+      "ingredients": {
+        "a": {
+          "name": "つやつやアボカド",
+          "qty": [
+            2,
+            5,
+            7
+          ]
+        },
+        "b": {
+          "name": "げきからハーブ",
+          "qty": [
+            6,
+            9
+          ]
+        },
+        "c": {
+          "name": "ワカクサ大豆",
+          "qty": [
+            12
+          ]
+        }
+      },
+      "main_skill": "エナジーチャージS",
+      "base_assist_seconds": 5000,
+      "food_drop_rate": 15.2,
+      "main_skill_rate": 3.1
+    },
+    {
+      "dex_no": "0329",
+      "species_name": "ビブラーバ",
+      "sleep_type": "ぐっすり",
+      "specialty": "食材",
+      "berry": {
+        "name": "フィラのみ",
+        "qty": 1
+      },
+      "ingredients": {
+        "a": {
+          "name": "つやつやアボカド",
+          "qty": [
+            2,
+            5,
+            7
+          ]
+        },
+        "b": {
+          "name": "げきからハーブ",
+          "qty": [
+            6,
+            9
+          ]
+        },
+        "c": {
+          "name": "ワカクサ大豆",
+          "qty": [
+            12
+          ]
+        }
+      },
+      "main_skill": "エナジーチャージS",
+      "base_assist_seconds": 3700,
+      "food_drop_rate": 15.5,
+      "main_skill_rate": 3.4
+    },
+    {
+      "dex_no": "0330",
+      "species_name": "フライゴン",
+      "sleep_type": "ぐっすり",
+      "specialty": "食材",
+      "berry": {
+        "name": "フィラのみ",
+        "qty": 1
+      },
+      "ingredients": {
+        "a": {
+          "name": "つやつやアボカド",
+          "qty": [
+            2,
+            5,
+            7
+          ]
+        },
+        "b": {
+          "name": "げきからハーブ",
+          "qty": [
+            6,
+            9
+          ]
+        },
+        "c": {
+          "name": "ワカクサ大豆",
+          "qty": [
+            12
+          ]
+        }
+      },
+      "main_skill": "エナジーチャージS",
+      "base_assist_seconds": 2700,
+      "food_drop_rate": 1702.0,
+      "main_skill_rate": 3.9
+    },
+    {
+      "dex_no": "0333",
+      "species_name": "チルット",
+      "sleep_type": "ぐっすり",
+      "specialty": "きのみ",
+      "berry": {
+        "name": "シーヤのみ",
+        "qty": 2
+      },
+      "ingredients": {
+        "a": {
+          "name": "とくせんエッグ",
+          "qty": [
+            1,
+            2,
+            4
+          ]
+        },
+        "b": {
+          "name": "ワカクサ大豆",
+          "qty": [
+            3,
+            4
+          ]
+        },
+        "c": {
+          "name": "とくせんリンゴ",
+          "qty": [
+            5
+          ]
+        }
+      },
+      "main_skill": "げんきチャージS",
+      "base_assist_seconds": 4200,
+      "food_drop_rate": 17.57,
+      "main_skill_rate": 3.2
+    },
+    {
+      "dex_no": "0334",
+      "species_name": "チルタリス",
+      "sleep_type": "うとうと",
+      "specialty": "きのみ",
+      "berry": {
+        "name": "ヤチェのみ",
+        "qty": 2
+      },
+      "ingredients": {
+        "a": {
+          "name": "とくせんエッグ",
+          "qty": [
+            1,
+            2,
+            4
+          ]
+        },
+        "b": {
+          "name": "ワカクサ大豆",
+          "qty": [
+            3,
+            4
+          ]
+        },
+        "c": {
+          "name": "とくせんリンゴ",
+          "qty": [
+            5
+          ]
+        }
+      },
+      "main_skill": "げんきチャージS",
+      "base_assist_seconds": 3500,
+      "food_drop_rate": 25.8,
+      "main_skill_rate": 6.1
+    },
+    {
+      "dex_no": "0353",
+      "species_name": "カゲボウズ",
+      "sleep_type": "うとうと",
+      "specialty": "きのみ",
+      "berry": {
+        "name": "ブリーのみ",
+        "qty": 2
+      },
+      "ingredients": {
+        "a": {
+          "name": "ピュアなオイル",
+          "qty": [
+            1,
+            2,
+            4
+          ]
+        },
+        "b": {
+          "name": "あったかジンジャー",
+          "qty": [
+            2,
+            4
+          ]
+        },
+        "c": {
+          "name": "あじわいキノコ",
+          "qty": [
+            3
+          ]
+        }
+      },
+      "main_skill": "エナジーチャージS(ランダム)",
+      "base_assist_seconds": 3900,
+      "food_drop_rate": 17.07,
+      "main_skill_rate": 2.59
+    },
+    {
+      "dex_no": "0354",
+      "species_name": "ジュペッタ",
+      "sleep_type": "うとうと",
+      "specialty": "きのみ",
+      "berry": {
+        "name": "ブリーのみ",
+        "qty": 2
+      },
+      "ingredients": {
+        "a": {
+          "name": "ピュアなオイル",
+          "qty": [
+            1,
+            2,
+            4
+          ]
+        },
+        "b": {
+          "name": "あったかジンジャー",
+          "qty": [
+            2,
+            4
+          ]
+        },
+        "c": {
+          "name": "あじわいキノコ",
+          "qty": [
+            3
+          ]
+        }
+      },
+      "main_skill": "エナジーチャージS(ランダム)",
+      "base_assist_seconds": 2600,
+      "food_drop_rate": 17.9,
+      "main_skill_rate": 3.3
+    },
+    {
+      "dex_no": "0359",
+      "species_name": "アブソル",
+      "sleep_type": "うとうと",
+      "specialty": "食材",
+      "berry": {
+        "name": "ウイのみ",
+        "qty": 1
+      },
+      "ingredients": {
+        "a": {
+          "name": "リラックスカカオ",
+          "qty": [
+            2,
+            5,
+            7
+          ]
+        },
+        "b": {
+          "name": "とくせんリンゴ",
+          "qty": [
+            8,
+            12
+          ]
+        },
+        "c": {
+          "name": "あじわいキノコ",
+          "qty": [
+            7
+          ]
+        }
+      },
+      "main_skill": "エナジーチャージM",
+      "base_assist_seconds": 2950,
+      "food_drop_rate": 17.76,
+      "main_skill_rate": 3.8
+    },
+    {
+      "dex_no": "0360",
+      "species_name": "ソーナノ",
+      "sleep_type": "ぐっすり",
+      "specialty": "スキル",
+      "berry": {
+        "name": "マゴのみ",
+        "qty": 1
+      },
+      "ingredients": {
+        "a": {
+          "name": "とくせんリンゴ",
+          "qty": [
+            1,
+            2,
+            4
+          ]
+        },
+        "b": {
+          "name": "あじわいキノコ",
+          "qty": [
+            1,
+            2
+          ]
+        },
+        "c": {
+          "name": "ピュアなオイル",
+          "qty": [
+            3
+          ]
+        }
+      },
+      "main_skill": "げんきエールS",
+      "base_assist_seconds": 5800,
+      "food_drop_rate": 21.04,
+      "main_skill_rate": 5.91
+    },
+    {
+      "dex_no": "0363",
+      "species_name": "タマザラシ",
+      "sleep_type": "ぐっすり",
+      "specialty": "きのみ",
+      "berry": {
+        "name": "チーゴのみ",
+        "qty": 2
+      },
+      "ingredients": {
+        "a": {
+          "name": "ピュアなオイル",
+          "qty": [
+            1,
+            2,
+            4
+          ]
+        },
+        "b": {
+          "name": "マメミート",
+          "qty": [
+            3,
+            4
+          ]
+        },
+        "c": {
+          "name": "あったかジンジャー",
+          "qty": [
+            4
+          ]
+        }
+      },
+      "main_skill": "食材ゲットS",
+      "base_assist_seconds": 5600,
+      "food_drop_rate": 22.35,
+      "main_skill_rate": 2.29
+    },
+    {
+      "dex_no": "0363",
+      "species_name": "タマザラシ(ホリデー)",
+      "sleep_type": "ぐっすり",
+      "specialty": "スキル",
+      "berry": {
+        "name": "チーゴのみ",
+        "qty": 1
+      },
+      "ingredients": {
+        "a": {
+          "name": "ピュアなオイル",
+          "qty": [
+            1,
+            2,
+            4
+          ]
+        },
+        "b": {
+          "name": "マメミート",
+          "qty": [
+            3,
+            4
+          ]
+        },
+        "c": {
+          "name": "あったかジンジャー",
+          "qty": [
+            4
+          ]
+        }
+      },
+      "main_skill": "料理チャンスS",
+      "base_assist_seconds": 3300,
+      "food_drop_rate": 21.4,
+      "main_skill_rate": 5.0
+    },
+    {
+      "dex_no": "0364",
+      "species_name": "トドグラー",
+      "sleep_type": "ぐっすり",
+      "specialty": "きのみ",
+      "berry": {
+        "name": "チーゴのみ",
+        "qty": 2
+      },
+      "ingredients": {
+        "a": {
+          "name": "ピュアなオイル",
+          "qty": [
+            1,
+            2,
+            4
+          ]
+        },
+        "b": {
+          "name": "マメミート",
+          "qty": [
+            3,
+            4
+          ]
+        },
+        "c": {
+          "name": "あったかジンジャー",
+          "qty": [
+            4
+          ]
+        }
+      },
+      "main_skill": "食材ゲットS",
+      "base_assist_seconds": 4000,
+      "food_drop_rate": 22.05,
+      "main_skill_rate": 2.09
+    },
+    {
+      "dex_no": "0365",
+      "species_name": "トドゼルガ",
+      "sleep_type": "ぐっすり",
+      "specialty": "きのみ",
+      "berry": {
+        "name": "チーゴのみ",
+        "qty": 2
+      },
+      "ingredients": {
+        "a": {
+          "name": "ピュアなオイル",
+          "qty": [
+            1,
+            2,
+            4
+          ]
+        },
+        "b": {
+          "name": "マメミート",
+          "qty": [
+            3,
+            4
+          ]
+        },
+        "c": {
+          "name": "あったかジンジャー",
+          "qty": [
+            4
+          ]
+        }
+      },
+      "main_skill": "食材ゲットS",
+      "base_assist_seconds": 3000,
+      "food_drop_rate": 22.4,
+      "main_skill_rate": 2.2
+    },
+    {
+      "dex_no": "0371",
+      "species_name": "タツベイ",
+      "sleep_type": "うとうと",
+      "specialty": "きのみ",
+      "berry": {
+        "name": "ヤチェのみ",
+        "qty": 2
+      },
+      "ingredients": {
+        "a": {
+          "name": "ほっこりポテト",
+          "qty": [
+            1,
+            2,
+            4
+          ]
+        },
+        "b": {
+          "name": "あったかジンジャー",
+          "qty": [
+            3,
+            4
+          ]
+        },
+        "c": {
+          "name": "マメミート",
+          "qty": [
+            4
+          ]
+        }
+      },
+      "main_skill": "料理パワーアップS",
+      "base_assist_seconds": 5300,
+      "food_drop_rate": 20.9,
+      "main_skill_rate": 2.7
+    },
+    {
+      "dex_no": "0372",
+      "species_name": "コモルー",
+      "sleep_type": "うとうと",
+      "specialty": "きのみ",
+      "berry": {
+        "name": "ヤチェのみ",
+        "qty": 2
+      },
+      "ingredients": {
+        "a": {
+          "name": "ほっこりポテト",
+          "qty": [
+            1,
+            2,
+            4
+          ]
+        },
+        "b": {
+          "name": "あったかジンジャー",
+          "qty": [
+            3,
+            4
+          ]
+        },
+        "c": {
+          "name": "マメミート",
+          "qty": [
+            4
+          ]
+        }
+      },
+      "main_skill": "料理パワーアップS",
+      "base_assist_seconds": 3800,
+      "food_drop_rate": 20.6,
+      "main_skill_rate": 2.7
+    },
+    {
+      "dex_no": "0373",
+      "species_name": "ボーマンダ",
+      "sleep_type": "うとうと",
+      "specialty": "きのみ",
+      "berry": {
+        "name": "ヤチェのみ",
+        "qty": 2
+      },
+      "ingredients": {
+        "a": {
+          "name": "ほっこりポテト",
+          "qty": [
+            1,
+            2,
+            4
+          ]
+        },
+        "b": {
+          "name": "あったかジンジャー",
+          "qty": [
+            3,
+            4
+          ]
+        },
+        "c": {
+          "name": "マメミート",
+          "qty": [
+            4
+          ]
+        }
+      },
+      "main_skill": "料理パワーアップS",
+      "base_assist_seconds": 2800,
+      "food_drop_rate": 21.7,
+      "main_skill_rate": 3.4
+    },
+    {
+      "dex_no": "0380",
+      "species_name": "ラティアス",
+      "sleep_type": "うとうと",
+      "specialty": "スキル",
+      "berry": {
+        "name": "ヤチェのみ",
+        "qty": 1
+      },
+      "ingredients": {
+        "a": {
+          "name": "あんみんトマト",
+          "qty": [
+            1,
+            2,
+            4
+          ]
+        },
+        "b": {
+          "name": "ずっしりカボチャ",
+          "qty": [
+            1,
+            2
+          ]
+        },
+        "c": {
+          "name": "あじわいキノコ",
+          "qty": [
+            2
+          ]
+        }
+      },
+      "main_skill": "いやしのはどう(げんきエールS)",
+      "base_assist_seconds": 2800,
+      "food_drop_rate": null,
+      "main_skill_rate": null
+    },
+    {
+      "dex_no": "0403",
+      "species_name": "コリンク",
+      "sleep_type": "すやすや",
+      "specialty": "食材",
+      "berry": {
+        "name": "ウブのみ",
+        "qty": 1
+      },
+      "ingredients": {
+        "a": {
+          "name": "あんみんトマト",
+          "qty": [
+            2,
+            5,
+            7
+          ]
+        },
+        "b": {
+          "name": "ピュアなオイル",
+          "qty": [
+            4,
+            7
+          ]
+        },
+        "c": {
+          "name": "めざましコーヒー",
+          "qty": [
+            5
+          ]
+        }
+      },
+      "main_skill": "料理パワーアップS",
+      "base_assist_seconds": 4400,
+      "food_drop_rate": 18.1,
+      "main_skill_rate": 1.8
+    },
+    {
+      "dex_no": "0404",
+      "species_name": "ルクシオ",
+      "sleep_type": "すやすや",
+      "specialty": "食材",
+      "berry": {
+        "name": "ウブのみ",
+        "qty": 1
+      },
+      "ingredients": {
+        "a": {
+          "name": "あんみんトマト",
+          "qty": [
+            2,
+            5,
+            7
+          ]
+        },
+        "b": {
+          "name": "ピュアなオイル",
+          "qty": [
+            4,
+            7
+          ]
+        },
+        "c": {
+          "name": "めざましコーヒー",
+          "qty": [
+            5
+          ]
+        }
+      },
+      "main_skill": "料理パワーアップS",
+      "base_assist_seconds": 3200,
+      "food_drop_rate": 18.2,
+      "main_skill_rate": 1.8
+    },
+    {
+      "dex_no": "0405",
+      "species_name": "レントラー",
+      "sleep_type": "すやすや",
+      "specialty": "食材",
+      "berry": {
+        "name": "ウブのみ",
+        "qty": 1
+      },
+      "ingredients": {
+        "a": {
+          "name": "あんみんトマト",
+          "qty": [
+            2,
+            5,
+            7
+          ]
+        },
+        "b": {
+          "name": "ピュアなオイル",
+          "qty": [
+            4,
+            7
+          ]
+        },
+        "c": {
+          "name": "めざましコーヒー",
+          "qty": [
+            5
+          ]
+        }
+      },
+      "main_skill": "料理パワーアップS",
+      "base_assist_seconds": 2400,
+      "food_drop_rate": 20.0,
+      "main_skill_rate": 2.3
+    },
+    {
+      "dex_no": "0425",
+      "species_name": "フワンテ",
+      "sleep_type": "うとうと",
+      "specialty": "スキル",
+      "berry": {
+        "name": "ブリーのみ",
+        "qty": 1
+      },
+      "ingredients": {
+        "a": {
+          "name": "ワカクサコーン",
+          "qty": [
+            1,
+            2,
+            4
+          ]
+        },
+        "b": {
+          "name": "ピュアなオイル",
+          "qty": [
+            3,
+            4
+          ]
+        },
+        "c": {
+          "name": "ほっこりポテト",
+          "qty": [
+            4
+          ]
+        }
+      },
+      "main_skill": "たくわえる(エナジーチャージS)",
+      "base_assist_seconds": 4800,
+      "food_drop_rate": 13.7,
+      "main_skill_rate": 6.9
+    },
+    {
+      "dex_no": "0426",
+      "species_name": "フワライド",
+      "sleep_type": "うとうと",
+      "specialty": "スキル",
+      "berry": {
+        "name": "ブリーのみ",
+        "qty": 1
+      },
+      "ingredients": {
+        "a": {
+          "name": "ワカクサコーン",
+          "qty": [
+            1,
+            2,
+            4
+          ]
+        },
+        "b": {
+          "name": "ピュアなオイル",
+          "qty": [
+            3,
+            4
+          ]
+        },
+        "c": {
+          "name": "ほっこりポテト",
+          "qty": [
+            4
+          ]
+        }
+      },
+      "main_skill": "たくわえる(エナジーチャージS)",
+      "base_assist_seconds": 2500,
+      "food_drop_rate": 12.8,
+      "main_skill_rate": 6.1
+    },
+    {
+      "dex_no": "0430",
+      "species_name": "ドンカラス",
+      "sleep_type": "うとうと",
+      "specialty": "スキル",
+      "berry": {
+        "name": "ウイのみ",
+        "qty": 1
+      },
+      "ingredients": {
+        "a": {
+          "name": "めざましコーヒー",
+          "qty": [
+            1,
+            2,
+            4
+          ]
+        },
+        "b": {
+          "name": "ワカクサ大豆",
+          "qty": [
+            3,
+            6
+          ]
+        },
+        "c": {
+          "name": "げきからハーブ",
+          "qty": [
+            4
+          ]
+        }
+      },
+      "main_skill": "きょううん(食材セレクトS)",
+      "base_assist_seconds": 3200,
+      "food_drop_rate": 14.3,
+      "main_skill_rate": 6.7
+    },
+    {
+      "dex_no": "0438",
+      "species_name": "ウソハチ",
+      "sleep_type": "ぐっすり",
+      "specialty": "スキル",
+      "berry": {
+        "name": "オボンのみ",
+        "qty": 1
+      },
+      "ingredients": {
+        "a": {
+          "name": "あんみんトマト",
+          "qty": [
+            1,
+            2,
+            4
+          ]
+        },
+        "b": {
+          "name": "ワカクサ大豆",
+          "qty": [
+            2,
+            4
+          ]
+        },
+        "c": {
+          "name": "あじわいキノコ",
+          "qty": [
+            2
+          ]
+        }
+      },
+      "main_skill": "エナジーチャージM",
+      "base_assist_seconds": 6300,
+      "food_drop_rate": 18.85,
+      "main_skill_rate": 6.1
+    },
+    {
+      "dex_no": "0439",
+      "species_name": "マネネ",
+      "sleep_type": "ぐっすり",
+      "specialty": "食材",
+      "berry": {
+        "name": "マゴのみ",
+        "qty": 1
+      },
+      "ingredients": {
+        "a": {
+          "name": "あんみんトマト",
+          "qty": [
+            2,
+            5,
+            7
+          ]
+        },
+        "b": {
+          "name": "ほっこりポテト",
+          "qty": [
+            4,
+            6
+          ]
+        },
+        "c": {
+          "name": "ふといながねぎ",
+          "qty": [
+            4
+          ]
+        }
+      },
+      "main_skill": "ものまね(スキルコピー)",
+      "base_assist_seconds": 4300,
+      "food_drop_rate": 20.04,
+      "main_skill_rate": 3.19
+    },
+    {
+      "dex_no": "0440",
+      "species_name": "ピンプク",
+      "sleep_type": "ぐっすり",
+      "specialty": "食材",
+      "berry": {
+        "name": "キーのみ",
+        "qty": 1
+      },
+      "ingredients": {
+        "a": {
+          "name": "とくせんエッグ",
+          "qty": [
+            2,
+            5,
+            7
+          ]
+        },
+        "b": {
+          "name": "ほっこりポテト",
+          "qty": [
+            4,
+            7
+          ]
+        },
+        "c": {
+          "name": "あまいミツ",
+          "qty": [
+            8
+          ]
+        }
+      },
+      "main_skill": "げんきオールS",
+      "base_assist_seconds": 5400,
+      "food_drop_rate": 21.0,
+      "main_skill_rate": 1.3
+    },
+    {
+      "dex_no": "0442",
+      "species_name": "ミカルゲ",
+      "sleep_type": "うとうと",
+      "specialty": "食材",
+      "berry": {
+        "name": "ウイのみ",
+        "qty": 1
+      },
+      "ingredients": {
+        "a": {
+          "name": "あじわいキノコ",
+          "qty": [
+            2,
+            5,
+            7
+          ]
+        },
+        "b": {
+          "name": "ずっしりカボチャ",
+          "qty": [
+            3,
+            5
+          ]
+        },
+        "c": {
+          "name": "ふといながねぎ",
+          "qty": [
+            6
+          ]
+        }
+      },
+      "main_skill": "おてつだいサポートS",
+      "base_assist_seconds": 3500,
+      "food_drop_rate": 19.8,
+      "main_skill_rate": 3.6
+    },
+    {
+      "dex_no": "0447",
+      "species_name": "リオル",
+      "sleep_type": "ぐっすり",
+      "specialty": "スキル",
+      "berry": {
+        "name": "クラボのみ",
+        "qty": 1
+      },
+      "ingredients": {
+        "a": {
+          "name": "ピュアなオイル",
+          "qty": [
+            1,
+            2,
+            4
+          ]
+        },
+        "b": {
+          "name": "ほっこりポテト",
+          "qty": [
+            2,
+            4
+          ]
+        },
+        "c": {
+          "name": "とくせんエッグ",
+          "qty": [
+            4
+          ]
+        }
+      },
+      "main_skill": "ゆめのかけらゲットS",
+      "base_assist_seconds": 4200,
+      "food_drop_rate": 12.56,
+      "main_skill_rate": 3.8
+    },
+    {
+      "dex_no": "0448",
+      "species_name": "ルカリオ",
+      "sleep_type": "ぐっすり",
+      "specialty": "スキル",
+      "berry": {
+        "name": "クラボのみ",
+        "qty": 1
+      },
+      "ingredients": {
+        "a": {
+          "name": "ピュアなオイル",
+          "qty": [
+            1,
+            2,
+            4
+          ]
+        },
+        "b": {
+          "name": "ほっこりポテト",
+          "qty": [
+            2,
+            4
+          ]
+        },
+        "c": {
+          "name": "とくせんエッグ",
+          "qty": [
+            4
+          ]
+        }
+      },
+      "main_skill": "ゆめのかけらゲットS",
+      "base_assist_seconds": 2600,
+      "food_drop_rate": 15.0,
+      "main_skill_rate": 5.1
+    },
+    {
+      "dex_no": "0453",
+      "species_name": "グレッグル",
+      "sleep_type": "うとうと",
+      "specialty": "食材",
+      "berry": {
+        "name": "カゴのみ",
+        "qty": 1
+      },
+      "ingredients": {
+        "a": {
+          "name": "ピュアなオイル",
+          "qty": [
+            2,
+            5,
+            7
+          ]
+        },
+        "b": {
+          "name": "マメミート",
+          "qty": [
+            5,
+            8
+          ]
+        },
+        "c": null
+      },
+      "main_skill": "エナジーチャージS",
+      "base_assist_seconds": 5600,
+      "food_drop_rate": 22.71,
+      "main_skill_rate": 4.2
+    },
+    {
+      "dex_no": "0454",
+      "species_name": "ドクロッグ",
+      "sleep_type": "うとうと",
+      "specialty": "食材",
+      "berry": {
+        "name": "カゴのみ",
+        "qty": 1
+      },
+      "ingredients": {
+        "a": {
+          "name": "ピュアなオイル",
+          "qty": [
+            2,
+            5,
+            7
+          ]
+        },
+        "b": {
+          "name": "マメミート",
+          "qty": [
+            5,
+            8
+          ]
+        },
+        "c": null
+      },
+      "main_skill": "エナジーチャージS",
+      "base_assist_seconds": 3400,
+      "food_drop_rate": 22.9,
+      "main_skill_rate": 4.3
+    },
+    {
+      "dex_no": "0459",
+      "species_name": "ユキカブリ",
+      "sleep_type": "ぐっすり",
+      "specialty": "食材",
+      "berry": {
+        "name": "チーゴのみ",
+        "qty": 1
+      },
+      "ingredients": {
+        "a": {
+          "name": "あんみんトマト",
+          "qty": [
+            2,
+            5,
+            7
+          ]
+        },
+        "b": {
+          "name": "とくせんエッグ",
+          "qty": [
+            4,
+            7
+          ]
+        },
+        "c": {
+          "name": "あじわいキノコ",
+          "qty": [
+            5
+          ]
+        }
+      },
+      "main_skill": "エナジーチャージS(ランダム)",
+      "base_assist_seconds": 5600,
+      "food_drop_rate": 25.1,
+      "main_skill_rate": 4.4
+    },
+    {
+      "dex_no": "0460",
+      "species_name": "ユキノオー",
+      "sleep_type": "ぐっすり",
+      "specialty": "食材",
+      "berry": {
+        "name": "チーゴのみ",
+        "qty": 1
+      },
+      "ingredients": {
+        "a": {
+          "name": "あんみんトマト",
+          "qty": [
+            2,
+            5,
+            7
+          ]
+        },
+        "b": {
+          "name": "とくせんエッグ",
+          "qty": [
+            4,
+            7
+          ]
+        },
+        "c": {
+          "name": "あじわいキノコ",
+          "qty": [
+            5
+          ]
+        }
+      },
+      "main_skill": "エナジーチャージS(ランダム)",
+      "base_assist_seconds": 3000,
+      "food_drop_rate": 25.0,
+      "main_skill_rate": 4.4
+    },
+    {
+      "dex_no": "0461",
+      "species_name": "マニューラ",
+      "sleep_type": "うとうと",
+      "specialty": "きのみ",
+      "berry": {
+        "name": "ウイのみ",
+        "qty": 2
+      },
+      "ingredients": {
+        "a": {
+          "name": "マメミート",
+          "qty": [
+            1,
+            2,
+            4
+          ]
+        },
+        "b": {
+          "name": "とくせんエッグ",
+          "qty": [
+            2,
+            3
+          ]
+        },
+        "c": {
+          "name": "ワカクサ大豆",
+          "qty": [
+            4
+          ]
+        }
+      },
+      "main_skill": "料理チャンスS",
+      "base_assist_seconds": 2700,
+      "food_drop_rate": 25.1,
+      "main_skill_rate": 1.8
+    },
+    {
+      "dex_no": "0462",
+      "species_name": "ジバコイル",
+      "sleep_type": "ぐっすり",
+      "specialty": "スキル",
+      "berry": {
+        "name": "ベリブのみ",
+        "qty": 1
+      },
+      "ingredients": {
+        "a": {
+          "name": "ピュアなオイル",
+          "qty": [
+            1,
+            2,
+            4
+          ]
+        },
+        "b": {
+          "name": "げきからハーブ",
+          "qty": [
+            2,
+            3
+          ]
+        },
+        "c": null
+      },
+      "main_skill": "料理パワーアップS",
+      "base_assist_seconds": 3100,
+      "food_drop_rate": 18.0,
+      "main_skill_rate": 6.19
+    },
+    {
+      "dex_no": "0468",
+      "species_name": "トゲキッス",
+      "sleep_type": "すやすや",
+      "specialty": "スキル",
+      "berry": {
+        "name": "モモンのみ",
+        "qty": 1
+      },
+      "ingredients": {
+        "a": {
+          "name": "とくせんエッグ",
+          "qty": [
+            1,
+            2,
+            4
+          ]
+        },
+        "b": {
+          "name": "あったかジンジャー",
+          "qty": [
+            2,
+            4
+          ]
+        },
+        "c": {
+          "name": "リラックスカカオ",
+          "qty": [
+            3
+          ]
+        }
+      },
+      "main_skill": "ゆびをふる",
+      "base_assist_seconds": 2600,
+      "food_drop_rate": 15.8,
+      "main_skill_rate": 5.29
+    },
+    {
+      "dex_no": "0470",
+      "species_name": "リーフィア",
+      "sleep_type": "うとうと",
+      "specialty": "スキル",
+      "berry": {
+        "name": "ドリのみ",
+        "qty": 1
+      },
+      "ingredients": {
+        "a": {
+          "name": "モーモーミルク",
+          "qty": [
+            1,
+            2,
+            4
+          ]
+        },
+        "b": {
+          "name": "リラックスカカオ",
+          "qty": [
+            1,
+            2
+          ]
+        },
+        "c": {
+          "name": "マメミート",
+          "qty": [
+            3
+          ]
+        }
+      },
+      "main_skill": "げんきエールS",
+      "base_assist_seconds": 3000,
+      "food_drop_rate": 20.57,
+      "main_skill_rate": 5.9
+    },
+    {
+      "dex_no": "0471",
+      "species_name": "グレイシア",
+      "sleep_type": "ぐっすり",
+      "specialty": "スキル",
+      "berry": {
+        "name": "チーゴのみ",
+        "qty": 1
+      },
+      "ingredients": {
+        "a": {
+          "name": "モーモーミルク",
+          "qty": [
+            1,
+            2,
+            4
+          ]
+        },
+        "b": {
+          "name": "リラックスカカオ",
+          "qty": [
+            1,
+            2
+          ]
+        },
+        "c": {
+          "name": "マメミート",
+          "qty": [
+            3
+          ]
+        }
+      },
+      "main_skill": "料理パワーアップS",
+      "base_assist_seconds": 3200,
+      "food_drop_rate": 21.87,
+      "main_skill_rate": 6.3
+    },
+    {
+      "dex_no": "0475",
+      "species_name": "エルレイド",
+      "sleep_type": "ぐっすり",
+      "specialty": "スキル",
+      "berry": {
+        "name": "クラボのみ",
+        "qty": 1
+      },
+      "ingredients": {
+        "a": {
+          "name": "とくせんリンゴ",
+          "qty": [
+            1,
+            2,
+            4
+          ]
+        },
+        "b": {
+          "name": "ワカクサコーン",
+          "qty": [
+            1,
+            2
+          ]
+        },
+        "c": {
+          "name": "ふといながねぎ",
+          "qty": [
+            2
+          ]
+        }
+      },
+      "main_skill": "おてつだいサポートS",
+      "base_assist_seconds": 2400,
+      "food_drop_rate": 14.7,
+      "main_skill_rate": 5.4
+    },
+    {
+      "dex_no": "0488",
+      "species_name": "クレセリア",
+      "sleep_type": "すやすや",
+      "specialty": "スキル",
+      "berry": {
+        "name": "マゴのみ",
+        "qty": 1
+      },
+      "ingredients": {
+        "a": {
+          "name": "あったかジンジャー",
+          "qty": [
+            1,
+            2,
+            4
+          ]
+        },
+        "b": {
+          "name": "リラックスカカオ",
+          "qty": [
+            2,
+            3
+          ]
+        },
+        "c": {
+          "name": "あんみんトマト",
+          "qty": [
+            4
+          ]
+        }
+      },
+      "main_skill": "みかづきのいのり(げんきオールS)",
+      "base_assist_seconds": 2300,
+      "food_drop_rate": 23.9,
+      "main_skill_rate": 4.1
+    },
+    {
+      "dex_no": "0491",
+      "species_name": "ダークライ",
+      "sleep_type": "うとうと",
+      "specialty": "オール",
+      "berry": {
+        "name": "ウイのみ",
+        "qty": 2
+      },
+      "ingredients": {
+        "a": {
+          "name": "マメミート",
+          "qty": [
+            2,
+            7
+          ]
+        },
+        "b": null,
+        "c": null
+      },
+      "main_skill": "ナイトメア(エナジーチャージM)",
+      "base_assist_seconds": 2900,
+      "food_drop_rate": 19.2,
+      "main_skill_rate": 2.3
+    },
+    {
+      "dex_no": "0517",
+      "species_name": "ムンナ",
+      "sleep_type": "すやすや",
+      "specialty": "きのみ",
+      "berry": {
+        "name": "マゴのみ",
+        "qty": 2
+      },
+      "ingredients": {
+        "a": {
+          "name": "モーモーミルク",
+          "qty": [
+            1,
+            2,
+            4
+          ]
+        },
+        "b": {
+          "name": "あまいミツ",
+          "qty": [
+            2,
+            3
+          ]
+        },
+        "c": {
+          "name": "めざましコーヒー",
+          "qty": [
+            2
+          ]
+        }
+      },
+      "main_skill": "ゆめのかけらゲットS(ランダム)",
+      "base_assist_seconds": 5700,
+      "food_drop_rate": 19.7,
+      "main_skill_rate": 4.3
+    },
+    {
+      "dex_no": "0518",
+      "species_name": "ムシャーナ",
+      "sleep_type": "すやすや",
+      "specialty": "きのみ",
+      "berry": {
+        "name": "マゴのみ",
+        "qty": 2
+      },
+      "ingredients": {
+        "a": {
+          "name": "モーモーミルク",
+          "qty": [
+            1,
+            2,
+            4
+          ]
+        },
+        "b": {
+          "name": "あまいミツ",
+          "qty": [
+            2,
+            3
+          ]
+        },
+        "c": {
+          "name": "めざましコーヒー",
+          "qty": [
+            2
+          ]
+        }
+      },
+      "main_skill": "ゆめのかけらゲットS(ランダム)",
+      "base_assist_seconds": 2800,
+      "food_drop_rate": 18.8,
+      "main_skill_rate": 4.1
+    },
+    {
+      "dex_no": "0557",
+      "species_name": "イシズマイ",
+      "sleep_type": "うとうと",
+      "specialty": "スキル",
+      "berry": {
+        "name": "ラムのみ",
+        "qty": 1
+      },
+      "ingredients": {
+        "a": {
+          "name": "つやつやアボカド",
+          "qty": [
+            1,
+            2,
+            4
+          ]
+        },
+        "b": {
+          "name": "ほっこりポテト",
+          "qty": [
+            3,
+            5
+          ]
+        },
+        "c": {
+          "name": "ピュアなオイル",
+          "qty": [
+            5
+          ]
+        }
+      },
+      "main_skill": "食材セレクトS",
+      "base_assist_seconds": 4300,
+      "food_drop_rate": 17.5,
+      "main_skill_rate": 5.4
+    },
+    {
+      "dex_no": "0558",
+      "species_name": "イワパレス",
+      "sleep_type": "うとうと",
+      "specialty": "スキル",
+      "berry": {
+        "name": "ラムのみ",
+        "qty": 1
+      },
+      "ingredients": {
+        "a": {
+          "name": "つやつやアボカド",
+          "qty": [
+            1,
+            2,
+            4
+          ]
+        },
+        "b": {
+          "name": "ほっこりポテト",
+          "qty": [
+            3,
+            5
+          ]
+        },
+        "c": {
+          "name": "ピュアなオイル",
+          "qty": [
+            5
+          ]
+        }
+      },
+      "main_skill": "食材セレクトS",
+      "base_assist_seconds": 3200,
+      "food_drop_rate": 23.9,
+      "main_skill_rate": 6.4
+    },
+    {
+      "dex_no": "0627",
+      "species_name": "ワシボン",
+      "sleep_type": "ぐっすり",
+      "specialty": "スキル",
+      "berry": {
+        "name": "シーヤのみ",
+        "qty": 1
+      },
+      "ingredients": {
+        "a": {
+          "name": "マメミート",
+          "qty": [
+            1,
+            2,
+            4
+          ]
+        },
+        "b": {
+          "name": "ワカクサコーン",
+          "qty": [
+            2,
+            3
+          ]
+        },
+        "c": {
+          "name": "めざましコーヒー",
+          "qty": [
+            2
+          ]
+        }
+      },
+      "main_skill": "きのみバースト",
+      "base_assist_seconds": 3800,
+      "food_drop_rate": 12.5,
+      "main_skill_rate": 3.1
+    },
+    {
+      "dex_no": "0628",
+      "species_name": "ウォーグル",
+      "sleep_type": "ぐっすり",
+      "specialty": "スキル",
+      "berry": {
+        "name": "シーヤのみ",
+        "qty": 1
+      },
+      "ingredients": {
+        "a": {
+          "name": "マメミート",
+          "qty": [
+            1,
+            2,
+            4
+          ]
+        },
+        "b": {
+          "name": "ワカクサコーン",
+          "qty": [
+            2,
+            3
+          ]
+        },
+        "c": {
+          "name": "めざましコーヒー",
+          "qty": [
+            2
+          ]
+        }
+      },
+      "main_skill": "きのみバースト",
+      "base_assist_seconds": 2400,
+      "food_drop_rate": 12.1,
+      "main_skill_rate": 3.2
+    },
+    {
+      "dex_no": "0700",
+      "species_name": "ニンフィア",
+      "sleep_type": "すやすや",
+      "specialty": "スキル",
+      "berry": {
+        "name": "モモンのみ",
+        "qty": 1
+      },
+      "ingredients": {
+        "a": {
+          "name": "モーモーミルク",
+          "qty": [
+            1,
+            2,
+            4
+          ]
+        },
+        "b": {
+          "name": "リラックスカカオ",
+          "qty": [
+            1,
+            2
+          ]
+        },
+        "c": {
+          "name": "マメミート",
+          "qty": [
+            3
+          ]
+        }
+      },
+      "main_skill": "げんきオールS",
+      "base_assist_seconds": 2600,
+      "food_drop_rate": 17.77,
+      "main_skill_rate": 4.0
+    },
+    {
+      "dex_no": "0702",
+      "species_name": "デデンネ",
+      "sleep_type": "すやすや",
+      "specialty": "スキル",
+      "berry": {
+        "name": "ウブのみ",
+        "qty": 1
+      },
+      "ingredients": {
+        "a": {
+          "name": "とくせんリンゴ",
+          "qty": [
+            1,
+            2,
+            4
+          ]
+        },
+        "b": {
+          "name": "リラックスカカオ",
+          "qty": [
+            1,
+            2
+          ]
+        },
+        "c": {
+          "name": "ワカクサコーン",
+          "qty": [
+            2
+          ]
+        }
+      },
+      "main_skill": "料理チャンスS",
+      "base_assist_seconds": 2500,
+      "food_drop_rate": 17.7,
+      "main_skill_rate": 4.5
+    },
+    {
+      "dex_no": "0710",
+      "species_name": "バケッチャ(おおだま)",
+      "sleep_type": "うとうと",
+      "specialty": "食材",
+      "berry": {
+        "name": "ブリーのみ",
+        "qty": 1
+      },
+      "ingredients": {
+        "a": {
+          "name": "ずっしりカボチャ",
+          "qty": [
+            2,
+            5,
+            7
+          ]
+        },
+        "b": {
+          "name": "ワカクサ大豆",
+          "qty": [
+            11,
+            18
+          ]
+        },
+        "c": {
+          "name": "ほっこりポテト",
+          "qty": [
+            15
+          ]
+        }
+      },
+      "main_skill": "エナジーチャージS",
+      "base_assist_seconds": 5500,
+      "food_drop_rate": 12.0,
+      "main_skill_rate": 4.9
+    },
+    {
+      "dex_no": "0710",
+      "species_name": "バケッチャ(こだま)",
+      "sleep_type": "うとうと",
+      "specialty": "食材",
+      "berry": {
+        "name": "ブリーのみ",
+        "qty": 1
+      },
+      "ingredients": {
+        "a": {
+          "name": "ずっしりカボチャ",
+          "qty": [
+            2,
+            5,
+            7
+          ]
+        },
+        "b": {
+          "name": "ワカクサ大豆",
+          "qty": [
+            11,
+            18
+          ]
+        },
+        "c": {
+          "name": "ほっこりポテト",
+          "qty": [
+            15
+          ]
+        }
+      },
+      "main_skill": "エナジーチャージS",
+      "base_assist_seconds": 5300,
+      "food_drop_rate": 12.0,
+      "main_skill_rate": 4.9
+    },
+    {
+      "dex_no": "0710",
+      "species_name": "バケッチャ(ちゅうだま)",
+      "sleep_type": "うとうと",
+      "specialty": "食材",
+      "berry": {
+        "name": "ブリーのみ",
+        "qty": 1
+      },
+      "ingredients": {
+        "a": {
+          "name": "ずっしりカボチャ",
+          "qty": [
+            2,
+            5,
+            7
+          ]
+        },
+        "b": {
+          "name": "ワカクサ大豆",
+          "qty": [
+            11,
+            18
+          ]
+        },
+        "c": {
+          "name": "ほっこりポテト",
+          "qty": [
+            15
+          ]
+        }
+      },
+      "main_skill": "エナジーチャージS",
+      "base_assist_seconds": 5400,
+      "food_drop_rate": 12.0,
+      "main_skill_rate": 4.9
+    },
+    {
+      "dex_no": "0710",
+      "species_name": "バケッチャ(ギガだま)",
+      "sleep_type": "うとうと",
+      "specialty": "食材",
+      "berry": {
+        "name": "ブリーのみ",
+        "qty": 1
+      },
+      "ingredients": {
+        "a": {
+          "name": "ずっしりカボチャ",
+          "qty": [
+            2,
+            5,
+            7
+          ]
+        },
+        "b": {
+          "name": "ワカクサ大豆",
+          "qty": [
+            11,
+            18
+          ]
+        },
+        "c": {
+          "name": "ほっこりポテト",
+          "qty": [
+            15
+          ]
+        }
+      },
+      "main_skill": "エナジーチャージS",
+      "base_assist_seconds": 5600,
+      "food_drop_rate": 12.0,
+      "main_skill_rate": 4.9
+    },
+    {
+      "dex_no": "0711",
+      "species_name": "パンプジン(おおだま)",
+      "sleep_type": "うとうと",
+      "specialty": "食材",
+      "berry": {
+        "name": "ブリーのみ",
+        "qty": 1
+      },
+      "ingredients": {
+        "a": {
+          "name": "ずっしりカボチャ",
+          "qty": [
+            2,
+            5,
+            7
+          ]
+        },
+        "b": {
+          "name": "ワカクサ大豆",
+          "qty": [
+            11,
+            18
+          ]
+        },
+        "c": {
+          "name": "ほっこりポテト",
+          "qty": [
+            15
+          ]
+        }
+      },
+      "main_skill": "エナジーチャージS",
+      "base_assist_seconds": 3300,
+      "food_drop_rate": 13.0,
+      "main_skill_rate": 4.9
+    },
+    {
+      "dex_no": "0711",
+      "species_name": "パンプジン(こだま)",
+      "sleep_type": "うとうと",
+      "specialty": "食材",
+      "berry": {
+        "name": "ブリーのみ",
+        "qty": 1
+      },
+      "ingredients": {
+        "a": {
+          "name": "ずっしりカボチャ",
+          "qty": [
+            2,
+            5,
+            7
+          ]
+        },
+        "b": {
+          "name": "ワカクサ大豆",
+          "qty": [
+            11,
+            18
+          ]
+        },
+        "c": {
+          "name": "ほっこりポテト",
+          "qty": [
+            15
+          ]
+        }
+      },
+      "main_skill": "エナジーチャージS",
+      "base_assist_seconds": 3100,
+      "food_drop_rate": 13.0,
+      "main_skill_rate": 4.9
+    },
+    {
+      "dex_no": "0711",
+      "species_name": "パンプジン(ちゅうだま)",
+      "sleep_type": "うとうと",
+      "specialty": "食材",
+      "berry": {
+        "name": "ブリーのみ",
+        "qty": 1
+      },
+      "ingredients": {
+        "a": {
+          "name": "ずっしりカボチャ",
+          "qty": [
+            2,
+            5,
+            7
+          ]
+        },
+        "b": {
+          "name": "ワカクサ大豆",
+          "qty": [
+            11,
+            18
+          ]
+        },
+        "c": {
+          "name": "ほっこりポテト",
+          "qty": [
+            15
+          ]
+        }
+      },
+      "main_skill": "エナジーチャージS",
+      "base_assist_seconds": 3200,
+      "food_drop_rate": 13.0,
+      "main_skill_rate": 4.9
+    },
+    {
+      "dex_no": "0711",
+      "species_name": "パンプジン(ギガだま)",
+      "sleep_type": "うとうと",
+      "specialty": "食材",
+      "berry": {
+        "name": "ブリーのみ",
+        "qty": 1
+      },
+      "ingredients": {
+        "a": {
+          "name": "ずっしりカボチャ",
+          "qty": [
+            2,
+            5,
+            7
+          ]
+        },
+        "b": {
+          "name": "ワカクサ大豆",
+          "qty": [
+            11,
+            18
+          ]
+        },
+        "c": {
+          "name": "ほっこりポテト",
+          "qty": [
+            15
+          ]
+        }
+      },
+      "main_skill": "エナジーチャージS",
+      "base_assist_seconds": 3400,
+      "food_drop_rate": 13.0,
+      "main_skill_rate": 4.9
+    },
+    {
+      "dex_no": "0714",
+      "species_name": "オンバット",
+      "sleep_type": "うとうと",
+      "specialty": "スキル",
+      "berry": {
+        "name": "ヤチェのみ",
+        "qty": 1
+      },
+      "ingredients": {
+        "a": {
+          "name": "とくせんリンゴ",
+          "qty": [
+            1,
+            2,
+            4
+          ]
+        },
+        "b": {
+          "name": "ふといながねぎ",
+          "qty": [
+            1,
+            2
+          ]
+        },
+        "c": {
+          "name": "マメミート",
+          "qty": [
+            3
+          ]
+        }
+      },
+      "main_skill": "エナジーチャージM",
+      "base_assist_seconds": 5100,
+      "food_drop_rate": null,
+      "main_skill_rate": null
+    },
+    {
+      "dex_no": "0715",
+      "species_name": "オンバーン",
+      "sleep_type": "うとうと",
+      "specialty": "スキル",
+      "berry": {
+        "name": "ヤチェのみ",
+        "qty": 1
+      },
+      "ingredients": {
+        "a": {
+          "name": "とくせんリンゴ",
+          "qty": [
+            1,
+            2,
+            4
+          ]
+        },
+        "b": {
+          "name": "ふといながねぎ",
+          "qty": [
+            1,
+            2
+          ]
+        },
+        "c": {
+          "name": "マメミート",
+          "qty": [
+            3
+          ]
+        }
+      },
+      "main_skill": "エナジーチャージM",
+      "base_assist_seconds": 2700,
+      "food_drop_rate": null,
+      "main_skill_rate": null
+    },
+    {
+      "dex_no": "0736",
+      "species_name": "アゴジムシ",
+      "sleep_type": "うとうと",
+      "specialty": "食材",
+      "berry": {
+        "name": "ラムのみ",
+        "qty": 1
+      },
+      "ingredients": {
+        "a": {
+          "name": "めざましコーヒー",
+          "qty": [
+            2,
+            5,
+            7
+          ]
+        },
+        "b": {
+          "name": "あじわいキノコ",
+          "qty": [
+            4,
+            7
+          ]
+        },
+        "c": {
+          "name": "あまいミツ",
+          "qty": [
+            11
+          ]
+        }
+      },
+      "main_skill": "エナジーチャージS",
+      "base_assist_seconds": 4600,
+      "food_drop_rate": 15.5,
+      "main_skill_rate": 2.9
+    },
+    {
+      "dex_no": "0737",
+      "species_name": "デンヂムシ",
+      "sleep_type": "うとうと",
+      "specialty": "食材",
+      "berry": {
+        "name": "ラムのみ",
+        "qty": 1
+      },
+      "ingredients": {
+        "a": {
+          "name": "めざましコーヒー",
+          "qty": [
+            2,
+            5,
+            7
+          ]
+        },
+        "b": {
+          "name": "あじわいキノコ",
+          "qty": [
+            4,
+            7
+          ]
+        },
+        "c": {
+          "name": "あまいミツ",
+          "qty": [
+            11
+          ]
+        }
+      },
+      "main_skill": "エナジーチャージS",
+      "base_assist_seconds": 3300,
+      "food_drop_rate": 15.4,
+      "main_skill_rate": 2.8
+    },
+    {
+      "dex_no": "0738",
+      "species_name": "クワガノン",
+      "sleep_type": "うとうと",
+      "specialty": "食材",
+      "berry": {
+        "name": "ラムのみ",
+        "qty": 1
+      },
+      "ingredients": {
+        "a": {
+          "name": "めざましコーヒー",
+          "qty": [
+            2,
+            5,
+            7
+          ]
+        },
+        "b": {
+          "name": "あじわいキノコ",
+          "qty": [
+            4,
+            7
+          ]
+        },
+        "c": {
+          "name": "あまいミツ",
+          "qty": [
+            11
+          ]
+        }
+      },
+      "main_skill": "エナジーチャージS",
+      "base_assist_seconds": 2800,
+      "food_drop_rate": 19.4,
+      "main_skill_rate": 5.1
+    },
+    {
+      "dex_no": "0742",
+      "species_name": "アブリー",
+      "sleep_type": "すやすや",
+      "specialty": "食材",
+      "berry": {
+        "name": "モモンのみ",
+        "qty": 1
+      },
+      "ingredients": {
+        "a": {
+          "name": "あまいミツ",
+          "qty": [
+            2,
+            5,
+            7
+          ]
+        },
+        "b": {
+          "name": "ピュアなオイル",
+          "qty": [
+            4,
+            6
+          ]
+        },
+        "c": {
+          "name": "ワカクサコーン",
+          "qty": [
+            5
+          ]
+        }
+      },
+      "main_skill": "食材セレクトS",
+      "base_assist_seconds": 4500,
+      "food_drop_rate": null,
+      "main_skill_rate": null
+    },
+    {
+      "dex_no": "0743",
+      "species_name": "アブリボン",
+      "sleep_type": "すやすや",
+      "specialty": "食材",
+      "berry": {
+        "name": "モモンのみ",
+        "qty": 1
+      },
+      "ingredients": {
+        "a": {
+          "name": "あまいミツ",
+          "qty": [
+            2,
+            5,
+            7
+          ]
+        },
+        "b": {
+          "name": "ピュアなオイル",
+          "qty": [
+            4,
+            6
+          ]
+        },
+        "c": {
+          "name": "ワカクサコーン",
+          "qty": [
+            5
+          ]
+        }
+      },
+      "main_skill": "食材セレクトS",
+      "base_assist_seconds": 2300,
+      "food_drop_rate": null,
+      "main_skill_rate": null
+    },
+    {
+      "dex_no": "0759",
+      "species_name": "ヌイコグマ",
+      "sleep_type": "ぐっすり",
+      "specialty": "食材",
+      "berry": {
+        "name": "クラボのみ",
+        "qty": 1
+      },
+      "ingredients": {
+        "a": {
+          "name": "ワカクサコーン",
+          "qty": [
+            2,
+            5,
+            7
+          ]
+        },
+        "b": {
+          "name": "マメミート",
+          "qty": [
+            6,
+            10
+          ]
+        },
+        "c": {
+          "name": "とくせんエッグ",
+          "qty": [
+            9
+          ]
+        }
+      },
+      "main_skill": "エナジーチャージS(ランダム)",
+      "base_assist_seconds": 4100,
+      "food_drop_rate": 22.49,
+      "main_skill_rate": 1.1
+    },
+    {
+      "dex_no": "0760",
+      "species_name": "キテルグマ",
+      "sleep_type": "ぐっすり",
+      "specialty": "食材",
+      "berry": {
+        "name": "クラボのみ",
+        "qty": 1
+      },
+      "ingredients": {
+        "a": {
+          "name": "ワカクサコーン",
+          "qty": [
+            2,
+            5,
+            7
+          ]
+        },
+        "b": {
+          "name": "マメミート",
+          "qty": [
+            6,
+            10
+          ]
+        },
+        "c": {
+          "name": "とくせんエッグ",
+          "qty": [
+            9
+          ]
+        }
+      },
+      "main_skill": "エナジーチャージS(ランダム)",
+      "base_assist_seconds": 2800,
+      "food_drop_rate": 22.9,
+      "main_skill_rate": 1.3
+    },
+    {
+      "dex_no": "0764",
+      "species_name": "キュワワー",
+      "sleep_type": "すやすや",
+      "specialty": "食材",
+      "berry": {
+        "name": "モモンのみ",
+        "qty": 1
+      },
+      "ingredients": {
+        "a": {
+          "name": "ワカクサコーン",
+          "qty": [
+            2,
+            5,
+            7
+          ]
+        },
+        "b": {
+          "name": "あったかジンジャー",
+          "qty": [
+            6,
+            9
+          ]
+        },
+        "c": {
+          "name": "リラックスカカオ",
+          "qty": [
+            7
+          ]
+        }
+      },
+      "main_skill": "げんきエールS",
+      "base_assist_seconds": 2500,
+      "food_drop_rate": 16.7,
+      "main_skill_rate": 3.0
+    },
+    {
+      "dex_no": "0777",
+      "species_name": "トゲデマル",
+      "sleep_type": "ぐっすり",
+      "specialty": "スキル",
+      "berry": {
+        "name": "ベリブのみ",
+        "qty": 1
+      },
+      "ingredients": {
+        "a": {
+          "name": "モーモーミルク",
+          "qty": [
+            1,
+            2,
+            4
+          ]
+        },
+        "b": {
+          "name": "つやつやアボカド",
+          "qty": [
+            1,
+            2
+          ]
+        },
+        "c": {
+          "name": "リラックスカカオ",
+          "qty": [
+            2
+          ]
+        }
+      },
+      "main_skill": "ほっぺすりすり(げんきエールS)",
+      "base_assist_seconds": 2700,
+      "food_drop_rate": 16.9,
+      "main_skill_rate": 5.4
+    },
+    {
+      "dex_no": "0778",
+      "species_name": "ミミッキュ",
+      "sleep_type": "うとうと",
+      "specialty": "スキル",
+      "berry": {
+        "name": "ブリーのみ",
+        "qty": 1
+      },
+      "ingredients": {
+        "a": {
+          "name": "とくせんリンゴ",
+          "qty": [
+            1,
+            2,
+            4
+          ]
+        },
+        "b": {
+          "name": "めざましコーヒー",
+          "qty": [
+            1,
+            2
+          ]
+        },
+        "c": {
+          "name": "あじわいキノコ",
+          "qty": [
+            2
+          ]
+        }
+      },
+      "main_skill": "ばけのかわ(きのみバースト)",
+      "base_assist_seconds": 2500,
+      "food_drop_rate": 15.3,
+      "main_skill_rate": 3.3
+    },
+    {
+      "dex_no": "0845",
+      "species_name": "ウッウ",
+      "sleep_type": "ぐっすり",
+      "specialty": "食材",
+      "berry": {
+        "name": "シーヤのみ",
+        "qty": 1
+      },
+      "ingredients": {
+        "a": {
+          "name": "ピュアなオイル",
+          "qty": [
+            2,
+            5,
+            7
+          ]
+        },
+        "b": {
+          "name": "ほっこりポテト",
+          "qty": [
+            4,
+            7
+          ]
+        },
+        "c": {
+          "name": "とくせんエッグ",
+          "qty": [
+            8
+          ]
+        }
+      },
+      "main_skill": "料理チャンスS",
+      "base_assist_seconds": 2700,
+      "food_drop_rate": 16.48,
+      "main_skill_rate": 3.9
+    },
+    {
+      "dex_no": "0848",
+      "species_name": "エレズン",
+      "sleep_type": "ぐっすり",
+      "specialty": "スキル",
+      "berry": {
+        "name": "カゴのみ",
+        "qty": 1
+      },
+      "ingredients": {
+        "a": {
+          "name": "モーモーミルク",
+          "qty": [
+            1,
+            2,
+            4
+          ]
+        },
+        "b": {
+          "name": "とくせんリンゴ",
+          "qty": [
+            2,
+            4
+          ]
+        },
+        "c": {
+          "name": "ふといながねぎ",
+          "qty": [
+            2
+          ]
+        }
+      },
+      "main_skill": "食材ゲットS",
+      "base_assist_seconds": 5600,
+      "food_drop_rate": 20.9,
+      "main_skill_rate": 4.8
+    },
+    {
+      "dex_no": "0849",
+      "species_name": "ストリンダー(ハイ)",
+      "sleep_type": "うとうと",
+      "specialty": "スキル",
+      "berry": {
+        "name": "カゴのみ",
+        "qty": 1
+      },
+      "ingredients": {
+        "a": {
+          "name": "モーモーミルク",
+          "qty": [
+            1,
+            2,
+            4
+          ]
+        },
+        "b": {
+          "name": "とくせんリンゴ",
+          "qty": [
+            2,
+            4
+          ]
+        },
+        "c": {
+          "name": "ふといながねぎ",
+          "qty": [
+            2
+          ]
+        }
+      },
+      "main_skill": "プラス(食材ゲットS)",
+      "base_assist_seconds": 3100,
+      "food_drop_rate": 23.9,
+      "main_skill_rate": 6.4
+    },
+    {
+      "dex_no": "0849",
+      "species_name": "ストリンダー(ロー)",
+      "sleep_type": "うとうと",
+      "specialty": "スキル",
+      "berry": {
+        "name": "カゴのみ",
+        "qty": 1
+      },
+      "ingredients": {
+        "a": {
+          "name": "モーモーミルク",
+          "qty": [
+            1,
+            2,
+            4
+          ]
+        },
+        "b": {
+          "name": "とくせんリンゴ",
+          "qty": [
+            2,
+            4
+          ]
+        },
+        "c": {
+          "name": "ふといながねぎ",
+          "qty": [
+            2
+          ]
+        }
+      },
+      "main_skill": "マイナス(料理パワーアップS)",
+      "base_assist_seconds": 3100,
+      "food_drop_rate": 23.9,
+      "main_skill_rate": 6.4
+    },
+    {
+      "dex_no": "0906",
+      "species_name": "ニャオハ",
+      "sleep_type": "うとうと",
+      "specialty": "食材",
+      "berry": {
+        "name": "ドリのみ",
+        "qty": 1
+      },
+      "ingredients": {
+        "a": {
+          "name": "ほっこりポテト",
+          "qty": [
+            2,
+            5,
+            7
+          ]
+        },
+        "b": {
+          "name": "モーモーミルク",
+          "qty": [
+            6,
+            9
+          ]
+        },
+        "c": {
+          "name": "あったかジンジャー",
+          "qty": [
+            8
+          ]
+        }
+      },
+      "main_skill": "料理パワーアップS",
+      "base_assist_seconds": 4600,
+      "food_drop_rate": 20.79,
+      "main_skill_rate": 2.3
+    },
+    {
+      "dex_no": "0907",
+      "species_name": "ニャローテ",
+      "sleep_type": "うとうと",
+      "specialty": "食材",
+      "berry": {
+        "name": "ドリのみ",
+        "qty": 1
+      },
+      "ingredients": {
+        "a": {
+          "name": "ほっこりポテト",
+          "qty": [
+            2,
+            5,
+            7
+          ]
+        },
+        "b": {
+          "name": "モーモーミルク",
+          "qty": [
+            6,
+            9
+          ]
+        },
+        "c": {
+          "name": "あったかジンジャー",
+          "qty": [
+            8
+          ]
+        }
+      },
+      "main_skill": "料理パワーアップS",
+      "base_assist_seconds": 3500,
+      "food_drop_rate": 20.91,
+      "main_skill_rate": 2.29
+    },
+    {
+      "dex_no": "0908",
+      "species_name": "マスカーニャ",
+      "sleep_type": "うとうと",
+      "specialty": "食材",
+      "berry": {
+        "name": "ウイのみ",
+        "qty": 1
+      },
+      "ingredients": {
+        "a": {
+          "name": "ほっこりポテト",
+          "qty": [
+            2,
+            5,
+            7
+          ]
+        },
+        "b": {
+          "name": "モーモーミルク",
+          "qty": [
+            6,
+            9
+          ]
+        },
+        "c": {
+          "name": "あったかジンジャー",
+          "qty": [
+            8
+          ]
+        }
+      },
+      "main_skill": "料理パワーアップS",
+      "base_assist_seconds": 2600,
+      "food_drop_rate": 19.0,
+      "main_skill_rate": 2.2
+    },
+    {
+      "dex_no": "0909",
+      "species_name": "ホゲータ",
+      "sleep_type": "すやすや",
+      "specialty": "食材",
+      "berry": {
+        "name": "ヒメリのみ",
+        "qty": 1
+      },
+      "ingredients": {
+        "a": {
+          "name": "とくせんリンゴ",
+          "qty": [
+            2,
+            5,
+            7
+          ]
+        },
+        "b": {
+          "name": "マメミート",
+          "qty": [
+            4,
+            6
+          ]
+        },
+        "c": {
+          "name": "げきからハーブ",
+          "qty": [
+            5
+          ]
+        }
+      },
+      "main_skill": "げんきチャージS",
+      "base_assist_seconds": 4200,
+      "food_drop_rate": 25.33,
+      "main_skill_rate": 5.31
+    },
+    {
+      "dex_no": "0910",
+      "species_name": "アチゲータ",
+      "sleep_type": "すやすや",
+      "specialty": "食材",
+      "berry": {
+        "name": "ヒメリのみ",
+        "qty": 1
+      },
+      "ingredients": {
+        "a": {
+          "name": "とくせんリンゴ",
+          "qty": [
+            2,
+            5,
+            7
+          ]
+        },
+        "b": {
+          "name": "マメミート",
+          "qty": [
+            4,
+            6
+          ]
+        },
+        "c": {
+          "name": "げきからハーブ",
+          "qty": [
+            5
+          ]
+        }
+      },
+      "main_skill": "げんきチャージS",
+      "base_assist_seconds": 3100,
+      "food_drop_rate": 24.68,
+      "main_skill_rate": 5.0
+    },
+    {
+      "dex_no": "0911",
+      "species_name": "ラウドボーン",
+      "sleep_type": "うとうと",
+      "specialty": "食材",
+      "berry": {
+        "name": "ブリーのみ",
+        "qty": 1
+      },
+      "ingredients": {
+        "a": {
+          "name": "とくせんリンゴ",
+          "qty": [
+            2,
+            5,
+            7
+          ]
+        },
+        "b": {
+          "name": "マメミート",
+          "qty": [
+            4,
+            6
+          ]
+        },
+        "c": {
+          "name": "げきからハーブ",
+          "qty": [
+            5
+          ]
+        }
+      },
+      "main_skill": "げんきチャージS",
+      "base_assist_seconds": 2700,
+      "food_drop_rate": 26.8,
+      "main_skill_rate": 6.2
+    },
+    {
+      "dex_no": "0912",
+      "species_name": "クワッス",
+      "sleep_type": "ぐっすり",
+      "specialty": "食材",
+      "berry": {
+        "name": "オレンのみ",
+        "qty": 1
+      },
+      "ingredients": {
+        "a": {
+          "name": "ワカクサ大豆",
+          "qty": [
+            2,
+            5,
+            7
+          ]
+        },
+        "b": {
+          "name": "ふといながねぎ",
+          "qty": [
+            2,
+            4
+          ]
+        },
+        "c": {
+          "name": "ピュアなオイル",
+          "qty": [
+            6
+          ]
+        }
+      },
+      "main_skill": "エナジーチャージM",
+      "base_assist_seconds": 4800,
+      "food_drop_rate": 26.1,
+      "main_skill_rate": 2.79
+    },
+    {
+      "dex_no": "0913",
+      "species_name": "ウェルカモ",
+      "sleep_type": "ぐっすり",
+      "specialty": "食材",
+      "berry": {
+        "name": "オレンのみ",
+        "qty": 1
+      },
+      "ingredients": {
+        "a": {
+          "name": "ワカクサ大豆",
+          "qty": [
+            2,
+            5,
+            7
+          ]
+        },
+        "b": {
+          "name": "ふといながねぎ",
+          "qty": [
+            2,
+            4
+          ]
+        },
+        "c": {
+          "name": "ピュアなオイル",
+          "qty": [
+            6
+          ]
+        }
+      },
+      "main_skill": "エナジーチャージM",
+      "base_assist_seconds": 3600,
+      "food_drop_rate": 25.91,
+      "main_skill_rate": 2.7
+    },
+    {
+      "dex_no": "0914",
+      "species_name": "ウェーニバル",
+      "sleep_type": "ぐっすり",
+      "specialty": "食材",
+      "berry": {
+        "name": "クラボのみ",
+        "qty": 1
+      },
+      "ingredients": {
+        "a": {
+          "name": "ワカクサ大豆",
+          "qty": [
+            2,
+            5,
+            7
+          ]
+        },
+        "b": {
+          "name": "ふといながねぎ",
+          "qty": [
+            2,
+            4
+          ]
+        },
+        "c": {
+          "name": "ピュアなオイル",
+          "qty": [
+            6
+          ]
+        }
+      },
+      "main_skill": "エナジーチャージM",
+      "base_assist_seconds": 2600,
+      "food_drop_rate": 23.21,
+      "main_skill_rate": 2.4
+    },
+    {
+      "dex_no": "0921",
+      "species_name": "パモ",
+      "sleep_type": "すやすや",
+      "specialty": "スキル",
+      "berry": {
+        "name": "ウブのみ",
+        "qty": 1
+      },
+      "ingredients": {
+        "a": {
+          "name": "リラックスカカオ",
+          "qty": [
+            1,
+            2,
+            4
+          ]
+        },
+        "b": {
+          "name": "モーモーミルク",
+          "qty": [
+            3,
+            6
+          ]
+        },
+        "c": {
+          "name": "とくせんエッグ",
+          "qty": [
+            5
+          ]
+        }
+      },
+      "main_skill": "げんきオールS",
+      "base_assist_seconds": 4600,
+      "food_drop_rate": 11.1,
+      "main_skill_rate": 3.6
+    },
+    {
+      "dex_no": "0922",
+      "species_name": "パモット",
+      "sleep_type": "すやすや",
+      "specialty": "スキル",
+      "berry": {
+        "name": "ウブのみ",
+        "qty": 1
+      },
+      "ingredients": {
+        "a": {
+          "name": "リラックスカカオ",
+          "qty": [
+            1,
+            2,
+            4
+          ]
+        },
+        "b": {
+          "name": "モーモーミルク",
+          "qty": [
+            3,
+            6
+          ]
+        },
+        "c": {
+          "name": "とくせんエッグ",
+          "qty": [
+            5
+          ]
+        }
+      },
+      "main_skill": "げんきオールS",
+      "base_assist_seconds": 3300,
+      "food_drop_rate": 10.9,
+      "main_skill_rate": 3.6
+    },
+    {
+      "dex_no": "0923",
+      "species_name": "パーモット",
+      "sleep_type": "すやすや",
+      "specialty": "スキル",
+      "berry": {
+        "name": "ウブのみ",
+        "qty": 1
+      },
+      "ingredients": {
+        "a": {
+          "name": "リラックスカカオ",
+          "qty": [
+            1,
+            2,
+            4
+          ]
+        },
+        "b": {
+          "name": "モーモーミルク",
+          "qty": [
+            3,
+            6
+          ]
+        },
+        "c": {
+          "name": "とくせんエッグ",
+          "qty": [
+            5
+          ]
+        }
+      },
+      "main_skill": "げんきオールS",
+      "base_assist_seconds": 2400,
+      "food_drop_rate": 14.1,
+      "main_skill_rate": 3.9
+    },
+    {
+      "dex_no": "0974",
+      "species_name": "アルクジラ",
+      "sleep_type": "ぐっすり",
+      "specialty": "食材",
+      "berry": {
+        "name": "チーゴのみ",
+        "qty": 1
+      },
+      "ingredients": {
+        "a": {
+          "name": "ほっこりポテト",
+          "qty": [
+            2,
+            5,
+            7
+          ]
+        },
+        "b": {
+          "name": "マメミート",
+          "qty": [
+            5,
+            9
+          ]
+        },
+        "c": {
+          "name": "ずっしりカボチャ",
+          "qty": [
+            4
+          ]
+        }
+      },
+      "main_skill": "げんきチャージS",
+      "base_assist_seconds": 5100,
+      "food_drop_rate": 22.3,
+      "main_skill_rate": 4.2
+    },
+    {
+      "dex_no": "0975",
+      "species_name": "ハルクジラ",
+      "sleep_type": "ぐっすり",
+      "specialty": "食材",
+      "berry": {
+        "name": "チーゴのみ",
+        "qty": 1
+      },
+      "ingredients": {
+        "a": {
+          "name": "ほっこりポテト",
+          "qty": [
+            2,
+            5,
+            7
+          ]
+        },
+        "b": {
+          "name": "マメミート",
+          "qty": [
+            5,
+            9
+          ]
+        },
+        "c": {
+          "name": "ずっしりカボチャ",
+          "qty": [
+            4
+          ]
+        }
+      },
+      "main_skill": "げんきチャージS",
+      "base_assist_seconds": 2800,
+      "food_drop_rate": 20.9,
+      "main_skill_rate": 4.2
+    },
+    {
+      "dex_no": "0980",
+      "species_name": "ドオー",
+      "sleep_type": "うとうと",
+      "specialty": "食材",
+      "berry": {
+        "name": "カゴのみ",
+        "qty": 1
+      },
+      "ingredients": {
+        "a": {
+          "name": "リラックスカカオ",
+          "qty": [
+            2,
+            5,
+            7
+          ]
+        },
+        "b": {
+          "name": "めざましコーヒー",
+          "qty": [
+            4,
+            7
+          ]
+        },
+        "c": {
+          "name": "ほっこりポテト",
+          "qty": [
+            9
+          ]
+        }
+      },
+      "main_skill": "げんきチャージS",
+      "base_assist_seconds": 3500,
+      "food_drop_rate": 20.8,
+      "main_skill_rate": 5.5
+    }
+  ],
+  "_meta": {
+    "count": 228,
+    "skipped_duplicates": [
+      "ピカチュウ(ハロウィン)"
+    ],
+    "probability_matched": 220,
+    "probability_master_missing": [
+      "サンド",
+      "サンドパン",
+      "ミュウ",
+      "ラティアス",
+      "オンバット",
+      "オンバーン",
+      "アブリー",
+      "アブリボン"
+    ],
+    "probability_unmatched": [],
+    "probability_warnings": []
+  }
+}

@@ -1,0 +1,127 @@
+{
+  "records": [
+    {
+      "stage": 1,
+      "hours": 200,
+      "icon": "おやすみリボン1.png",
+      "increment": {
+        "inventory": 1,
+        "time_reduction_pct": {
+          "0": 0,
+          "1": 0,
+          "2": 0
+        }
+      },
+      "cumulative": {
+        "inventory": 1,
+        "time_reduction_pct": {
+          "0": 0,
+          "1": 0,
+          "2": 0
+        },
+        "time_multiplier": {
+          "0": 1.0,
+          "1": 1.0,
+          "2": 1.0
+        }
+      },
+      "extras": []
+    },
+    {
+      "stage": 2,
+      "hours": 500,
+      "icon": "おやすみリボン2.png",
+      "increment": {
+        "inventory": 2,
+        "time_reduction_pct": {
+          "0": 0,
+          "1": 5,
+          "2": 11
+        }
+      },
+      "cumulative": {
+        "inventory": 3,
+        "time_reduction_pct": {
+          "0": 0,
+          "1": 5,
+          "2": 11
+        },
+        "time_multiplier": {
+          "0": 1.0,
+          "1": 0.95,
+          "2": 0.89
+        }
+      },
+      "extras": []
+    },
+    {
+      "stage": 3,
+      "hours": 1000,
+      "icon": "おやすみリボン3.png",
+      "increment": {
+        "inventory": 3,
+        "time_reduction_pct": {
+          "0": 0,
+          "1": 0,
+          "2": 0
+        }
+      },
+      "cumulative": {
+        "inventory": 6,
+        "time_reduction_pct": {
+          "0": 0,
+          "1": 5,
+          "2": 11
+        },
+        "time_multiplier": {
+          "0": 1.0,
+          "1": 0.95,
+          "2": 0.89
+        }
+      },
+      "extras": [
+        "プロフィールアイコン獲得"
+      ]
+    },
+    {
+      "stage": 4,
+      "hours": 2000,
+      "icon": "おやすみリボン4.png",
+      "increment": {
+        "inventory": 2,
+        "time_reduction_pct": {
+          "0": 0,
+          "1": 7,
+          "2": 14
+        }
+      },
+      "cumulative": {
+        "inventory": 8,
+        "time_reduction_pct": {
+          "0": 0,
+          "1": 12,
+          "2": 25
+        },
+        "time_multiplier": {
+          "0": 1.0,
+          "1": 0.88,
+          "2": 0.75
+        }
+      },
+      "extras": []
+    }
+  ],
+  "_meta": {
+    "count": 4,
+    "remaining_evolution_keys": {
+      "0": "最終進化形（時間短縮なし、所持数のみ）",
+      "1": "あと1回進化可能",
+      "2": "あと2回進化可能"
+    },
+    "stacking_rule": "おやすみリボンの時間短縮は性格・サブスキルとは別軸で乗算する。例: ピチュー(進化残2) × リボン4(0.75) × おてつだいスピードM(0.86) × いじっぱり(0.9) = 0.58倍",
+    "inventory_rule": "段階を達成するごとに increment.inventory が加算され、cumulative.inventory が現在の合計上昇値",
+    "extras_rule": "stage3 でプロフィールアイコン獲得（おてつだい能力には影響しない演出効果）",
+    "version": "Ver.1.10.0実装",
+    "source": "貼り付けデータ集/おやすみリボン.txt"
+  }
+}

@@ -1,0 +1,832 @@
+# 食材期待値キャリブレーション
+#
+# utils/food_expectation.py の出力を、ネット上の既存ツールの計算結果と突き合わせる。
+# 評価器の「だいふく評価キャリブレーション」と同じ運用パターン。
+#
+# 使い方:
+#   1. _meta.source_tool に既存ツールの名前/URLを書く
+#   2. _meta.play_context_* を既存ツールに入力するプレイヤー設定と一致させる
+#      （平日睡眠時間・休日睡眠時間・RR）
+#   3. ケースごとに [[case]] ブロックを追加
+#      - 既存ツールに同じ条件（種族・Lv・性格・サブスキル・食材枠・リボン段階）を入力
+#      - 既存ツールの出力（食材名→1日 or 1週の獲得個数）を expected_ingredients に書く
+#   4. 検算: python -m scripts.calibrate_food_expectation
+#
+# サブスキル名は constants.py の正規表記に揃える:
+#   おてつだいスピードS / おてつだいスピードM / おてつだいボーナス
+#   食材確率アップS / 食材確率アップM
+#   スキル確率アップS / スキル確率アップM
+#   スキルレベルアップS / スキルレベルアップM
+#   きのみの数S / げんき回復ボーナス / 睡眠EXPボーナス / リサーチEXPボーナス
+#   ゆめのかけらボーナス
+#   最大所持数アップS / 最大所持数アップM / 最大所持数アップL
+#
+# 食材名は data/ingredient.json の name と完全一致させる（例: "とくせんリンゴ"）
+
+# ─────────────────────────────────────────────────────────────
+[_meta]
+source_tool = "だいふく 期待値チェッカー https://www.pokemonsleepdaifuku.com/checker/expected/"
+acquired_at = "2026-05-08"
+note = "v0.2 ベースキャリブレーション。リザードン中心＋プクリン1ケース。daifukuは24h前提・げんき変動加味モデル。"
+# 既存ツールに揃えるプレイヤー設定。同名キーが PlayContext を上書きする。
+play_context_research_rank = 65
+play_context_pot_capacity = 69
+play_context_sleep_weekday_hours = 7.5     # v0.2 以降は使用しない（DAILY_EFFECTIVE_ASSIST_SECONDS でげんき変動を一括加味）
+play_context_sleep_weekend_hours = 9.0
+
+# ─────────────────────────────────────────────────────────────
+# ケーステンプレ（コピーして使う）
+# ─────────────────────────────────────────────────────────────
+# [[case]]
+# id = "001"
+# species_name = "グレッグル"        # data/pokemon_master.json の name
+# nickname = ""                       # 任意、表示用
+# level = 15                          # current_level 相当
+# nature = "まじめ"                   # data/nature.json の name、無補正性格でも明示
+# subskills = []                      # 例: ["おてつだいスピードS", "食材確率アップM"]
+# ingredient_1 = "シアーノオイル"     # 個体の食材枠1（a枠から選択）
+# ingredient_2 = ""                   # Lv30未開放なら空文字
+# ingredient_3 = ""                   # Lv60未開放なら空文字
+# ribbon_stage = 0                    # 0=なし、1〜4
+# expected_unit = "per_day"           # "per_day" | "per_week"
+# expected_weekend = false            # 平日想定なら false、休日想定なら true
+# expected_ingredients = { "シアーノオイル" = 7.0 }
+# note = ""
+#
+# 同じ個体で複数の条件（平日/休日、リボン段階違いなど）を測りたい場合は
+# id を変えて複数ケースとして登録する。
+
+# ─────────────────────────────────────────────────────────────
+# 実ケース（ここに追加していく）
+# ─────────────────────────────────────────────────────────────
+
+# ─────────────────────────────────────────────────────────────
+# case 001: リザードン Lv60 サブスキルなし 性格きまぐれ（無補正）
+# ─────────────────────────────────────────────────────────────
+# 既存ツール出力（生）:
+#   スキル名: 食材ゲットS / スキル効果 11個 / スキル発動回数 1.01回 / スキル効果合計 11個
+#   きのみエナジー 11377.78 / 合計食材数 66 / 第一9.4 / 第二23.6 / 第三33
+#   メインスキルLv 3 / 最大所持数 29 / 好みのきのみ ON / EXモード OFF
+#   フィールドボーナス OFF / キャンプチケット OFF
+[[case]]
+id = "001"
+species_name = "リザードン"
+nickname = ""
+level = 60
+nature = "きまぐれ"
+subskills = []
+# 既存ツール側で「AAA」入力 = 3枠ともマメミートを選択
+ingredient_1 = "マメミート"
+ingredient_2 = "マメミート"
+ingredient_3 = "マメミート"
+ribbon_stage = 0
+expected_unit = "per_day"
+expected_weekend = false
+# 既存ツール出力 第一9.4 + 第二23.6 + 第三33 = 66 を全部マメミートとして合算
+expected_ingredients = { "マメミート" = 66.0 }
+expected_skill_activations = 1.01    # 1日のスキル発動回数（参考記録、現状未使用）
+expected_skill_effect = "11個"        # スキル1回あたりの効果（参考記録）
+expected_berry_energy = 11377.78      # 1日のきのみエナジー（参考記録）
+note = "AAA編成（3枠ともマメミート）。メインスキルLv3、内訳9.4/23.6/33、合計66、きのみエナジー11377.78"
+
+# =============================================================================
+# 第2弾（2026-05-08）: 補正係数とげんき周りの検証
+#
+# 取得依頼内容:
+#   下記 case 002〜012 の条件を https://www.pokemonsleepdaifuku.com/checker/expected/
+#   に入力し、出力（合計食材数・第一/第二/第三食材・スキル発動回数・きのみエナジー）を
+#   各 [[case]] 内の expected_* フィールドに転記する。
+#
+#   入力時の固定設定:
+#     - メインスキルLv: case 002〜008, 011, 012 はリザードン → 食材ゲットS Lv 3（case 001 と同じ）
+#     - メインスキルLv: case 009, 010 はプクリン → げんきオールS Lv 6 (max)
+#     - 進化回数: 0
+#     - おてつだいボーナス持ちチーム数: 0
+#     - 好みのきのみ: ON
+#     - EXモード: OFF
+#     - キャンプチケット: OFF
+#     - フィールドボーナス: 0%
+#     - げんき回復スキル/げんき補正オプション: OFF（自身げんき回復ループは daifuku デフォルトに任せる）
+#
+#   各ケースのリザードン編成は基本「AAA」（3枠ともマメミート）。E群（case 012）だけ ABC。
+#
+# A群: サブスキル単独装着（リザードン Lv60 性格まじめ AAA） — 補正係数の検証
+# B群: 性格補正（リザードン Lv60 サブなし AAA）
+# C群: げんき回復系メインスキル持ち（プクリン Lv60）— げんきループ補正の検証
+# D群: おやすみリボン段階4（リザードン Lv60 サブなし AAA）
+# E群: 食材枠 ABC編成（リザードン Lv60 サブなし）
+# =============================================================================
+
+
+# ───────── A群 サブスキル単独 ─────────
+
+# case 002: + おてつだいスピードS（時間短縮 -7%）
+[[case]]
+id = "002"
+species_name = "リザードン"
+level = 60
+nature = "きまぐれ"
+subskills = ["おてつだいスピードS"]
+ingredient_1 = "マメミート"
+ingredient_2 = "マメミート"
+ingredient_3 = "マメミート"
+ribbon_stage = 0
+expected_unit = "per_day"
+expected_weekend = false
+expected_ingredients = { "マメミート" = 70.2 }
+expected_skill_activations = 1.08
+expected_skill_effect = "11個"
+expected_skill_total = "12個"
+expected_berry_energy = 12272.13
+note = "A群 おてスピS。内訳10/25.1/35.1"
+
+# case 003: + おてつだいスピードM（時間短縮 -14%）
+[[case]]
+id = "003"
+species_name = "リザードン"
+level = 60
+nature = "きまぐれ"
+subskills = ["おてつだいスピードM"]
+ingredient_1 = "マメミート"
+ingredient_2 = "マメミート"
+ingredient_3 = "マメミート"
+ribbon_stage = 0
+expected_unit = "per_day"
+expected_weekend = false
+expected_ingredients = { "マメミート" = 74.6 }
+expected_skill_activations = 1.14
+expected_skill_effect = "11個"
+expected_skill_total = "13個"
+expected_berry_energy = 13338.26
+note = "A群 おてスピM。内訳10.7/26.6/37.3"
+
+# case 004: + おてつだいボーナス（時間短縮 -5% 想定 / 評価器の現値 ×1.05）
+[[case]]
+id = "004"
+species_name = "リザードン"
+level = 60
+nature = "きまぐれ"
+subskills = ["おてつだいボーナス"]
+ingredient_1 = "マメミート"
+ingredient_2 = "マメミート"
+ingredient_3 = "マメミート"
+ribbon_stage = 0
+expected_unit = "per_day"
+expected_weekend = false
+expected_ingredients = { "マメミート" = 69.1 }
+expected_skill_activations = 1.06
+expected_skill_effect = "11個"
+expected_skill_total = "12個"
+expected_berry_energy = 11996.37
+note = "A群 おてつだいボーナス。内訳9.9/24.7/34.5"
+
+# case 005: + 食材確率アップS（食材率 +18%）
+[[case]]
+id = "005"
+species_name = "リザードン"
+level = 60
+nature = "きまぐれ"
+subskills = ["食材確率アップS"]
+ingredient_1 = "マメミート"
+ingredient_2 = "マメミート"
+ingredient_3 = "マメミート"
+ribbon_stage = 0
+expected_unit = "per_day"
+expected_weekend = false
+expected_ingredients = { "マメミート" = 77.0 }
+expected_skill_activations = 1.01            # 元データ「オン」表示。スキル効果合計11個から逆算
+expected_skill_effect = "11個"
+expected_skill_total = "11個"
+expected_berry_energy = 10834.17
+note = "A群 食確S。内訳11/27.5/38.5。⚠ daifuku 出力 4列目が「オン」と表示されていた点要確認"
+
+# case 006: + 食材確率アップM（食材率 +36%）
+[[case]]
+id = "006"
+species_name = "リザードン"
+level = 60
+nature = "きまぐれ"
+subskills = ["食材確率アップM"]
+ingredient_1 = "マメミート"
+ingredient_2 = "マメミート"
+ingredient_3 = "マメミート"
+ribbon_stage = 0
+expected_unit = "per_day"
+expected_weekend = false
+expected_ingredients = { "マメミート" = 87.2 }
+expected_skill_activations = 0.98
+expected_skill_effect = "11個"
+expected_skill_total = "11個"
+expected_berry_energy = 10323.65
+note = "A群 食確M。内訳12.5/31.2/43.6"
+
+
+# ───────── B群 性格補正 ─────────
+
+# case 007: 性格 ひかえめ（食材↑1.20 / おてスピ↓0.93）
+[[case]]
+id = "007"
+species_name = "リザードン"
+level = 60
+nature = "ひかえめ"
+subskills = []
+ingredient_1 = "マメミート"
+ingredient_2 = "マメミート"
+ingredient_3 = "マメミート"
+ribbon_stage = 0
+expected_unit = "per_day"
+expected_weekend = false
+expected_ingredients = { "マメミート" = 73.7 }
+expected_skill_activations = 0.94
+expected_skill_effect = "11個"
+expected_skill_total = "10個"
+expected_berry_energy = 9974.0
+note = "B群 ひかえめ（食材↑/おてスピ↓）。内訳10.5/26.3/36.8"
+
+# case 008: 性格 さみしがり（おてスピ↑1.11 / げんき↓0.88）
+[[case]]
+id = "008"
+species_name = "リザードン"
+level = 60
+nature = "さみしがり"
+subskills = []
+ingredient_1 = "マメミート"
+ingredient_2 = "マメミート"
+ingredient_3 = "マメミート"
+ribbon_stage = 0
+expected_unit = "per_day"
+expected_weekend = false
+expected_ingredients = { "マメミート" = 68.4 }
+expected_skill_activations = 1.05
+expected_skill_effect = "11個"
+expected_skill_total = "12個"
+expected_berry_energy = 11817.7
+note = "B群 さみしがり（おてスピ↑/げんき↓）。内訳9.8/24.4/34.2"
+
+
+# ───────── C群 げんき回復系メインスキル持ち ─────────
+
+# case 009: プクリン Lv60 サブなし AAA（=3枠ともあまいミツ）
+# プクリン: specialty=スキル, main_skill=げんきオールS, rate=4.0%, base=2900s, food_drop=17.26%
+# a枠: あまいミツ [1,2,4] / b枠: ピュアなオイル [2,3] / c枠: リラックスカカオ [2]
+[[case]]
+id = "009"
+species_name = "プクリン"
+level = 60
+nature = "きまぐれ"
+subskills = []
+ingredient_1 = "あまいミツ"
+ingredient_2 = "あまいミツ"
+ingredient_3 = "あまいミツ"
+ribbon_stage = 0
+expected_unit = "per_day"
+expected_weekend = false
+expected_ingredients = { "あまいミツ" = 22.7 }
+expected_skill_activations = 2.25
+expected_skill_effect = "9 回復"
+expected_skill_total = "101 チーム回復"
+expected_berry_energy = 10405.37
+note = "C群 プクリン baseline。msl=3 と推定（最大所持数23）。内訳3.2/6.5/13。げんきオールS=自身げんき回復ループ込み"
+
+# case 010: プクリン + おてつだいボーナス
+[[case]]
+id = "010"
+species_name = "プクリン"
+level = 60
+nature = "きまぐれ"
+subskills = ["おてつだいボーナス"]
+ingredient_1 = "あまいミツ"
+ingredient_2 = "あまいミツ"
+ingredient_3 = "あまいミツ"
+ribbon_stage = 0
+expected_unit = "per_day"
+expected_weekend = false
+expected_ingredients = { "あまいミツ" = 23.9 }
+expected_skill_activations = 2.37
+expected_skill_effect = "9 回復"
+expected_skill_total = "107 チーム回復"
+expected_berry_energy = 10953.02
+note = "C群 プクリン + おてボ。msl=3 と推定。内訳3.4/6.8/13.6"
+
+
+# ───────── D群 複合補正（おてスピM × 食確M） ─────────
+# ※ 当初 リボン段階4 を計画していたが daifuku 期待値チェッカーにリボン入力欄が無い。
+# 　代わりにサブスキル積乗の検証に差し替え。
+
+# case 011: リザードン + おてスピM + 食確M（補正の積乗検証）
+[[case]]
+id = "011"
+species_name = "リザードン"
+level = 60
+nature = "きまぐれ"
+subskills = ["おてつだいスピードM", "食材確率アップM"]
+ingredient_1 = "マメミート"
+ingredient_2 = "マメミート"
+ingredient_3 = "マメミート"
+ribbon_stage = 0
+expected_unit = "per_day"
+expected_weekend = false
+expected_ingredients = { "マメミート" = 98.3 }
+expected_skill_activations = 1.11
+expected_skill_effect = "11個"
+expected_skill_total = "12個"
+expected_berry_energy = 12161.61
+note = "D群 おてスピM × 食確M（積乗検証）。内訳14/35.1/49.1"
+
+
+# ───────── E群 ABC編成（実ゲーム標準） ─────────
+
+# case 012: リザードン ABC編成（a=マメミート / b=あったかジンジャー / c=げきからハーブ）
+# qty: a枠で 2 / b枠で 4 / c枠で 6 → 期待 14.08 × 1/3 × (2+4+6) = 56.32
+[[case]]
+id = "012"
+species_name = "リザードン"
+level = 60
+nature = "きまぐれ"
+subskills = []
+ingredient_1 = "マメミート"
+ingredient_2 = "あったかジンジャー"
+ingredient_3 = "げきからハーブ"
+ribbon_stage = 0
+expected_unit = "per_day"
+expected_weekend = false
+expected_ingredients = { "マメミート" = 9.4, "あったかジンジャー" = 18.9, "げきからハーブ" = 28.3 }
+expected_skill_activations = 1.01
+expected_skill_effect = "11個"
+expected_skill_total = "11個"
+expected_berry_energy = 11377.78
+note = "E群 ABC編成。a=2,b=4,c=6 → 比率1:2:3 で内訳9.4/18.9/28.3 ✓"
+
+
+# ───────── F群 別種族 baseline ─────────
+
+# case 013: フシギバナ baseline（AAA編成=3枠ともあまいミツ）
+# 種族: specialty=食材, main_skill=食材ゲットS, rate=2.1%, base=2800s, food_drop=26.6%
+# a枠: あまいミツ [2,5,7] / b枠: あんみんトマト [4,7] / c枠: ほっこりポテト [6]
+# daifuku 出力: スキル効果11個 / 発動1.14回 / 効果合計13個 / 合計67.2 / 9.6/24/33.6 / きのみE 10251.12
+[[case]]
+id = "013"
+species_name = "フシギバナ"
+level = 60
+nature = "まじめ"
+subskills = []
+ingredient_1 = "あまいミツ"
+ingredient_2 = "あまいミツ"
+ingredient_3 = "あまいミツ"
+ribbon_stage = 0
+expected_unit = "per_day"
+expected_weekend = false
+expected_ingredients = { "あまいミツ" = 67.2 }
+expected_skill_activations = 1.14
+expected_skill_effect = "11個"
+expected_berry_energy = 10251.12
+note = "F群 別種族 baseline。フシギバナ Lv60 メインスキルLv3 サブなし まじめ AAA編成。内訳9.6/24/33.6"
+
+
+# ───────── G群 種族多様 baseline ─────────
+# daifuku 入力時のメインスキルLv: 各種族の MAX を採用（最大ポテンシャル評価）
+# 食材編成: AAA（3枠とも a枠デフォルト食材）
+
+# case 014: ライチュウ baseline（きのみタイプ）
+# specialty=きのみ, main_skill=エナジーチャージS, max_lv=7, rate=3.2%, base=2200s, drop=22.41%
+# a枠: とくせんリンゴ [1,2,4]
+[[case]]
+id = "014"
+species_name = "ライチュウ"
+level = 60
+nature = "まじめ"
+subskills = []
+ingredient_1 = "とくせんリンゴ"
+ingredient_2 = "とくせんリンゴ"
+ingredient_3 = "とくせんリンゴ"
+ribbon_stage = 0
+expected_unit = "per_day"
+expected_weekend = false
+expected_ingredients = { "とくせんリンゴ" = 35.0 }
+expected_skill_activations = 2.14
+expected_skill_effect = "3210 エナジー"
+expected_skill_total = "6884 エナジー"
+expected_berry_energy = 23162.54
+note = "G群 ライチュウ baseline (きのみ)。daifuku msl=7 (max) AAA編成。内訳5/10/20。とくせんリンゴ qty=[1,2,4] 比率と一致"
+
+# case 015: ウソッキー baseline（スキルタイプ、エナチャM）
+# specialty=スキル, main_skill=エナジーチャージM, max_lv=7, rate=7.2%, base=4000s, drop=21.7%
+# a枠: あんみんトマト
+[[case]]
+id = "015"
+species_name = "ウソッキー"
+level = 60
+nature = "まじめ"
+subskills = []
+ingredient_1 = "あんみんトマト"
+ingredient_2 = "あんみんトマト"
+ingredient_3 = "あんみんトマト"
+ribbon_stage = 0
+expected_unit = "per_day"
+expected_weekend = false
+expected_ingredients = { "あんみんトマト" = 19.2 }
+expected_skill_activations = 2.71
+expected_skill_effect = "6858 エナジー"
+expected_skill_total = "18603 エナジー"
+expected_berry_energy = 7653.58
+note = "G群 ウソッキー baseline (スキル, エナチャM)。daifuku msl=7 AAA。内訳2.7/5.5/11。最大所持16=サブなしベース"
+
+# case 016: サーナイト baseline（げんきオールS、別種族再現）
+# specialty=スキル, main_skill=げんきオールS, max_lv=6, rate=4.2%, base=2400s, drop=14.39%
+# a枠: とくせんリンゴ
+[[case]]
+id = "016"
+species_name = "サーナイト"
+level = 60
+nature = "まじめ"
+subskills = []
+ingredient_1 = "とくせんリンゴ"
+ingredient_2 = "とくせんリンゴ"
+ingredient_3 = "とくせんリンゴ"
+ribbon_stage = 0
+expected_unit = "per_day"
+expected_weekend = false
+expected_ingredients = { "とくせんリンゴ" = 25.4 }
+expected_skill_activations = 3.18
+expected_skill_effect = "18 回復"
+expected_skill_total = "286 チーム回復"
+expected_berry_energy = 14465.41
+note = "G群 サーナイト baseline (げんきオールS)。daifuku msl=6 AAA。内訳3.6/7.3/14.5。最大所持28=サブなしベース"
+
+# case 017: ペルシアン baseline（ゆめのかけらゲットS、c枠なし種族）
+# specialty=スキル, main_skill=ゆめのかけらゲットS, max_lv=8, rate=4.4%, base=2800s, drop=16.9%
+# a枠: モーモーミルク [1,2,4] / b枠: マメミート [2,3] / c枠: なし
+# → c枠なし種族でも、第三スロットには a/b 枠の食材が入る（実ゲーム仕様）
+#   今回 daifuku 入力時は3スロットとも a枠のモーモーミルク（AAA）で取得
+[[case]]
+id = "017"
+species_name = "ペルシアン"
+level = 60
+nature = "まじめ"
+subskills = []
+ingredient_1 = "モーモーミルク"
+ingredient_2 = "モーモーミルク"
+ingredient_3 = "モーモーミルク"   # c枠なしだが第三スロットでも a枠食材が選択可（モーモーミルク qty[2]=4）
+ribbon_stage = 0
+expected_unit = "per_day"
+expected_weekend = false
+expected_ingredients = { "モーモーミルク" = 21.3 }
+expected_skill_activations = 2.38
+expected_skill_effect = "2500 個"
+expected_skill_total = "5962 個"
+expected_berry_energy = 10831.42
+note = "G群 ペルシアン baseline (ゆめかけら、c枠なし種族)。daifuku msl=8 AAA編成（3枠ともモーモーミルク）。内訳3/6.1/12.2 → モーモーミルクqty[1,2,4]比と一致 ✓"
+
+# case 018: ジュカイン baseline（きのみバースト、berry flavor検証）
+# specialty=スキル, main_skill=きのみバースト, max_lv=?, rate=3.0%, base=2300s, drop=10.7%
+# a枠: とくせんエッグ
+[[case]]
+id = "018"
+species_name = "ジュカイン"
+level = 60
+nature = "まじめ"
+subskills = []
+ingredient_1 = "とくせんエッグ"
+ingredient_2 = "とくせんエッグ"
+ingredient_3 = "とくせんエッグ"
+ribbon_stage = 0
+expected_unit = "per_day"
+expected_weekend = false
+expected_ingredients = { "とくせんエッグ" = 16.5 }
+expected_skill_activations = 1.98
+expected_skill_effect = "50 個"
+expected_skill_total = "99 個"
+expected_berry_energy = 15174.71
+note = "G群 ジュカイン baseline (きのみバースト)。daifuku msl=7 AAA。内訳2.4/4.7/9.4。⚠ data/main_skill.json は max_lv=6 だが daifuku 上は msl=7 まで入力可（要確認・データ修正候補）"
+
+
+# ───────── H群 補正組み合わせ（種族横断） ─────────
+
+# case 019: ライチュウ + 食材確率アップM（きのみタイプの食材軸検証）
+# きのみタイプは food_drop_rate が低めの想定だが、食材確率アップが効くか
+[[case]]
+id = "019"
+species_name = "ライチュウ"
+level = 60
+nature = "まじめ"
+subskills = ["食材確率アップM"]
+ingredient_1 = "とくせんリンゴ"
+ingredient_2 = "とくせんリンゴ"
+ingredient_3 = "とくせんリンゴ"
+ribbon_stage = 0
+expected_unit = "per_day"
+expected_weekend = false
+expected_ingredients = { "とくせんリンゴ" = 47.5 }
+expected_skill_activations = 2.14
+expected_skill_effect = "785 エナジー"
+expected_skill_total = "1679 エナジー"
+expected_berry_energy = 20866.85
+note = "H群 ライチュウ + 食確M。⚠ daifuku 入力時 msl=3 で取得（指示の msl=7 と異なる、食材計算には影響しない）。内訳6.8/13.6/27.2"
+
+# case 020: リザードン ひかえめ + 食材確率アップM（性格 × サブスキルの積乗）
+# 食材確率: ひかえめ ×1.20 / 食確M ×1.36 → 積乗 ×1.632 想定
+[[case]]
+id = "020"
+species_name = "リザードン"
+level = 60
+nature = "ひかえめ"
+subskills = ["食材確率アップM"]
+ingredient_1 = "マメミート"
+ingredient_2 = "マメミート"
+ingredient_3 = "マメミート"
+ribbon_stage = 0
+expected_unit = "per_day"
+expected_weekend = false
+expected_ingredients = { "マメミート" = 96.8 }
+expected_skill_activations = 0.91
+expected_skill_effect = "11個"
+expected_skill_total = "10個"
+expected_berry_energy = 8827.03
+note = "H群 性格 ひかえめ × 食確M（積乗検証）。内訳13.8/34.6/48.4"
+
+
+# ───────── I群 チームおてつだいボーナス（team-buff、重ねがけ検証） ─────────
+# 自身のサブスキルに「おてつだいボーナス」を装着するのではなく、チームに
+# 「おてつだいボーナス持ち他メンバー」を 1〜4体配置した時の team-buff 効果。
+# daifuku の入力欄「おてつだいボーナス持ちポケモン数」で 0〜4 を切り替えて検証。
+# baseline は case 001（リザードン Lv60 サブなし まじめ AAA、チーム0）と同条件。
+# v0.2 では team-buff 未対応 → 我々の予測値はチーム0 と同じ（=65.71）になる想定。
+
+# case 021: リザードン baseline + チームおてつだいボーナス持ち 1
+[[case]]
+id = "021"
+species_name = "リザードン"
+level = 60
+nature = "きまぐれ"
+subskills = []
+ingredient_1 = "マメミート"
+ingredient_2 = "マメミート"
+ingredient_3 = "マメミート"
+ribbon_stage = 0
+team_help_bonus_count = 1
+expected_unit = "per_day"
+expected_weekend = false
+expected_ingredients = { "マメミート" = 69.1 }
+expected_skill_activations = 1.06
+expected_skill_effect = "11個"
+expected_skill_total = "12個"
+expected_berry_energy = 11996.37
+note = "I群 チームおてボ×1。内訳9.9/24.7/34.5。倍率 +4.7% (=自身装着 case 004 と同値、+5%/人線形仮定で整合)"
+
+# case 022: リザードン baseline + チームおてつだいボーナス持ち 2
+[[case]]
+id = "022"
+species_name = "リザードン"
+level = 60
+nature = "きまぐれ"
+subskills = []
+ingredient_1 = "マメミート"
+ingredient_2 = "マメミート"
+ingredient_3 = "マメミート"
+ribbon_stage = 0
+team_help_bonus_count = 2
+expected_unit = "per_day"
+expected_weekend = false
+expected_ingredients = { "マメミート" = 72.0 }
+expected_skill_activations = 1.10
+expected_skill_effect = "11個"
+expected_skill_total = "12個"
+expected_berry_energy = 12708.73
+note = "I群 チームおてボ×2。内訳10.3/25.7/36。倍率 +9.1%（線形 +5%×2=+10% に近い）"
+
+# case 023: リザードン baseline + チームおてつだいボーナス持ち 3
+[[case]]
+id = "023"
+species_name = "リザードン"
+level = 60
+nature = "きまぐれ"
+subskills = []
+ingredient_1 = "マメミート"
+ingredient_2 = "マメミート"
+ingredient_3 = "マメミート"
+ribbon_stage = 0
+team_help_bonus_count = 3
+expected_unit = "per_day"
+expected_weekend = false
+expected_ingredients = { "マメミート" = 75.3 }
+expected_skill_activations = 1.15
+expected_skill_effect = "11個"
+expected_skill_total = "13個"
+expected_berry_energy = 13504.9
+note = "I群 チームおてボ×3。内訳10.8/26.9/37.6。倍率 +14.1%（線形 +15% に近い）"
+
+# case 024: リザードン baseline + チームおてつだいボーナス持ち 4（最大）
+[[case]]
+id = "024"
+species_name = "リザードン"
+level = 60
+nature = "きまぐれ"
+subskills = []
+ingredient_1 = "マメミート"
+ingredient_2 = "マメミート"
+ingredient_3 = "マメミート"
+ribbon_stage = 0
+team_help_bonus_count = 4
+expected_unit = "per_day"
+expected_weekend = false
+expected_ingredients = { "マメミート" = 78.9 }
+expected_skill_activations = 1.21
+expected_skill_effect = "11個"
+expected_skill_total = "13個"
+expected_berry_energy = 14400.59
+note = "I群 チームおてボ×4（最大）。内訳11.3/28.2/39.5。倍率 +19.5%（線形 +20% にほぼ一致）→ team-buff は線形 +5%/人モデルで近似可"
+
+
+# ───────── J群 げんき補正オプション（独立チェックボックス2種の3組合せ） ─────────
+# daifuku UI には独立したチェックボックスが2つある:
+#   1. 「自身のげんき回復を外す」 — 自身がげんき回復系メインスキル持ちの場合、自身回復は除外
+#   2. 「げんきを常に80」          — げんきが常に80以上 (=最高速帯×0.45) と仮定
+# これまで（case 001〜024）は両方OFF。今回は以下3パターンで挙動差分を取る:
+#   case 025: 自身回復除外 ON のみ
+#   case 026: げんき常に80 ON のみ
+#   case 027: 両方 ON
+# baseline は case 001 と同条件（リザードン Lv60 サブなし まじめ AAA）。
+#
+# 注: リザードンは食材ゲットS（自身回復なし）なので case 025 は case 001 と同値の想定。
+#     case 026/027 はげんき80帯固定で計算 → おてつだい速度↑ → 食材獲得↑ の予想。
+
+# case 025: 自身のげんき回復を外す ON のみ（げんき常に80 OFF）
+[[case]]
+id = "025"
+species_name = "リザードン"
+level = 60
+nature = "きまぐれ"
+subskills = []
+ingredient_1 = "マメミート"
+ingredient_2 = "マメミート"
+ingredient_3 = "マメミート"
+ribbon_stage = 0
+team_help_bonus_count = 0
+exclude_self_genki_recovery = true
+genki_always_80 = false
+expected_unit = "per_day"
+expected_weekend = false
+expected_ingredients = { "マメミート" = 66.0 }
+expected_skill_activations = 1.01
+expected_skill_effect = "11個"
+expected_skill_total = "11個"
+expected_berry_energy = 11377.78
+note = "J群-1 自身げんき回復外すONのみ。case 001 と完全同値 ✓（リザードンは自身回復スキル持たないので「除外」はno-op、想定通り）"
+
+# case 026: げんきを常に80 ON のみ（自身回復除外 OFF）
+[[case]]
+id = "026"
+species_name = "リザードン"
+level = 60
+nature = "きまぐれ"
+subskills = []
+ingredient_1 = "マメミート"
+ingredient_2 = "マメミート"
+ingredient_3 = "マメミート"
+ribbon_stage = 0
+team_help_bonus_count = 0
+exclude_self_genki_recovery = false
+genki_always_80 = true
+expected_unit = "per_day"
+expected_weekend = false
+expected_ingredients = { "マメミート" = 77.8 }
+expected_skill_activations = 1.19
+expected_skill_effect = "11個"
+expected_skill_total = "13個"
+expected_berry_energy = 17159.02
+note = "J群-2 げんき常に80 ON のみ。case 001 比 ×1.179（おてつだい時間が daifuku 内部式で短縮）。きのみエナジーは ×1.508（食材より大きく増加）"
+
+# case 027: 両方 ON（自身げんき回復外す + げんき常に80）
+[[case]]
+id = "027"
+species_name = "リザードン"
+level = 60
+nature = "きまぐれ"
+subskills = []
+ingredient_1 = "マメミート"
+ingredient_2 = "マメミート"
+ingredient_3 = "マメミート"
+ribbon_stage = 0
+team_help_bonus_count = 0
+exclude_self_genki_recovery = true
+genki_always_80 = true
+expected_unit = "per_day"
+expected_weekend = false
+expected_ingredients = { "マメミート" = 77.8 }
+expected_skill_activations = 1.19
+expected_skill_effect = "11個"
+expected_skill_total = "13個"
+expected_berry_energy = 17159.02
+note = "J群-3 両方ON。case 026 と完全同値 ✓（リザードンに自身回復ないので「除外」が効かない、想定通り）"
+
+
+# ───────── K群 好きなきのみ ON/OFF 比較 ─────────
+# case 001〜027 は全部「好きなきのみ ON（好物倍率×2）」で取得済み。
+# 食材獲得は好物倍率の影響を受けないことが確認できたが、参考としてOFF版も保持。
+
+# case 028: case 001 と同条件 + 好きなきのみ OFF
+[[case]]
+id = "028"
+species_name = "リザードン"
+level = 60
+nature = "きまぐれ"
+subskills = []
+ingredient_1 = "マメミート"
+ingredient_2 = "マメミート"
+ingredient_3 = "マメミート"
+ribbon_stage = 0
+team_help_bonus_count = 0
+favorite_berry_on = false              # 唯一 OFF
+expected_unit = "per_day"
+expected_weekend = false
+expected_ingredients = { "マメミート" = 66.0 }
+expected_skill_activations = 1.01
+expected_skill_effect = "11個"
+expected_skill_total = "11個"
+expected_berry_energy = 5688.89        # 好物OFF → ×1（好物ON時の半分）
+note = "K群 好物OFF baseline。食材数=66 (case 001 と完全同値 ✓)、きのみエナジー=5688.89 (case 001 の半分)。食材計算は好物倍率の影響を受けない確認"
+
+
+# ───────── L群 プクリンで J群同様 3パターン（自身げんき回復ループの効果検証）─────────
+# プクリン: specialty=スキル / げんきオールS（自身を含むチーム回復）持ち。
+# 自身げんき回復が daifuku の「自身げんき回復を外す」チェックでどう変わるかが見える。
+# baseline は case 009 と同条件（プクリン Lv60 サブなし まじめ AAA / msl=3 / 好物 ON）。
+#
+# 予想:
+#   case 029 (自身回復除外 ON のみ) → 自身回復ループが消える → 食材が case 009 より「減る」
+#   case 030 (げんき常に80 ON のみ) → げんき80帯固定で食材が「増える」
+#   case 031 (両方 ON)             → 自身回復除外で減るが、げんき80で増える、合算結果は実測待ち
+#
+# 我々の予測値は全て 20.92（case 009 と同じ、げんきループ＋げんき80 共に未対応）
+
+# case 029: プクリン baseline + 自身げんき回復を外す ON のみ
+[[case]]
+id = "029"
+species_name = "プクリン"
+level = 60
+nature = "きまぐれ"
+subskills = []
+ingredient_1 = "あまいミツ"
+ingredient_2 = "あまいミツ"
+ingredient_3 = "あまいミツ"
+ribbon_stage = 0
+team_help_bonus_count = 0
+exclude_self_genki_recovery = true
+genki_always_80 = false
+favorite_berry_on = true
+expected_unit = "per_day"
+expected_weekend = false
+expected_ingredients = { "あまいミツ" = 21.1 }
+expected_skill_activations = 2.09
+expected_skill_effect = "9 回復"
+expected_skill_total = "94 チーム回復"
+expected_berry_energy = 9664.21
+note = "L群-1 プクリン + 自身回復除外ON。case 009 (22.7) → 21.1 で -7.05%。我々の式 20.92 と +0.85% の誤差で一致 → 自身回復ループの効果量が逆算できた"
+
+# case 030: プクリン baseline + げんき常に80 ON のみ
+[[case]]
+id = "030"
+species_name = "プクリン"
+level = 60
+nature = "きまぐれ"
+subskills = []
+ingredient_1 = "あまいミツ"
+ingredient_2 = "あまいミツ"
+ingredient_3 = "あまいミツ"
+ribbon_stage = 0
+team_help_bonus_count = 0
+exclude_self_genki_recovery = false
+genki_always_80 = true
+favorite_berry_on = true
+expected_unit = "per_day"
+expected_weekend = false
+expected_ingredients = { "あまいミツ" = 27.1 }
+expected_skill_activations = 2.69
+expected_skill_effect = "9 回復"
+expected_skill_total = "121 チーム回復"
+expected_berry_energy = 14165.55
+note = "L群-2 プクリン + げんき常に80ON。case 009 (22.7) → 27.1 で ×1.194。リザードン case 026 の ×1.179 とほぼ同倍率 → げんき常に80 の食材倍率は ×1.18 で種族非依存"
+
+# case 031: プクリン baseline + 両方 ON
+[[case]]
+id = "031"
+species_name = "プクリン"
+level = 60
+nature = "きまぐれ"
+subskills = []
+ingredient_1 = "あまいミツ"
+ingredient_2 = "あまいミツ"
+ingredient_3 = "あまいミツ"
+ribbon_stage = 0
+team_help_bonus_count = 0
+exclude_self_genki_recovery = true
+genki_always_80 = true
+favorite_berry_on = true
+expected_unit = "per_day"
+expected_weekend = false
+expected_ingredients = { "あまいミツ" = 27.1 }
+expected_skill_activations = 2.69
+expected_skill_effect = "9 回復"
+expected_skill_total = "121 チーム回復"
+expected_berry_energy = 14165.55
+note = "L群-3 プクリン + 両方ON。case 030 と完全同値 ✓。げんき常に80 ON のとき自身回復除外は無効果（げんきが既に上限なので回復ループが意味ない）"

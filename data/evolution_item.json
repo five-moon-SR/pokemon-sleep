@@ -1,0 +1,100 @@
+{
+  "records": [
+    {
+      "name": "つながりのヒモ",
+      "icon": "つながりのヒモ.png",
+      "category": "connection",
+      "description": ""
+    },
+    {
+      "name": "ほのおのいし",
+      "icon": "ほのおのいし.png",
+      "category": "stone",
+      "description": ""
+    },
+    {
+      "name": "みずのいし",
+      "icon": "みずのいし.png",
+      "category": "stone",
+      "description": ""
+    },
+    {
+      "name": "かみなりのいし",
+      "icon": "かみなりのいし.png",
+      "category": "stone",
+      "description": ""
+    },
+    {
+      "name": "リーフのいし",
+      "icon": "リーフのいし.png",
+      "category": "stone",
+      "description": ""
+    },
+    {
+      "name": "こおりのいし",
+      "icon": "こおりのいし.png",
+      "category": "stone",
+      "description": ""
+    },
+    {
+      "name": "つきのいし",
+      "icon": "つきのいし.png",
+      "category": "stone",
+      "description": ""
+    },
+    {
+      "name": "ひかりのいし",
+      "icon": "ひかりのいし.png",
+      "category": "stone",
+      "description": ""
+    },
+    {
+      "name": "やみのいし",
+      "icon": "やみのいし.png",
+      "category": "stone",
+      "description": ""
+    },
+    {
+      "name": "おうじゃのしるし",
+      "icon": "おうじゃのしるし.png",
+      "category": "seal",
+      "description": ""
+    },
+    {
+      "name": "メタルコート",
+      "icon": "メタルコート.png",
+      "category": "coat",
+      "description": ""
+    },
+    {
+      "name": "めざめいし",
+      "icon": "めざめいし.png",
+      "category": "stone",
+      "description": ""
+    },
+    {
+      "name": "するどいツメ",
+      "icon": "するどいツメ.png",
+      "category": "claw",
+      "description": ""
+    },
+    {
+      "name": "まんまるいし",
+      "icon": "まんまるいし.png",
+      "category": "round",
+      "description": ""
+    }
+  ],
+  "_meta": {
+    "count": 14,
+    "categories": {
+      "connection": "進化リンク用（通信進化代替）",
+      "stone": "○○のいし系（タイプ進化）",
+      "seal": "おうじゃのしるし",
+      "coat": "メタルコート",
+      "claw": "するどいツメ",
+      "round": "まんまるいし"
+    },
+    "source": "貼り付けデータ集/基本データ.txt L289-307"
+  }
+}

@@ -1,0 +1,2058 @@
+{
+  "records": [
+    {
+      "no": 0,
+      "category": "curry_stew",
+      "name": "ごちゃまぜカレー",
+      "icon": "mixedcurry.png",
+      "ingredients": [],
+      "total_ingredients": null,
+      "energy_lv1": 0,
+      "energy_lv30": 0,
+      "energy_lv60": 0,
+      "energy_max_pot69": 23598,
+      "energy_max_pot507": 173394,
+      "description": ""
+    },
+    {
+      "no": 1,
+      "category": "curry_stew",
+      "name": "とくせんリンゴカレー",
+      "icon": "fancyapplecurry.png",
+      "ingredients": [
+        {
+          "name": "とくせんリンゴ",
+          "count": 7
+        }
+      ],
+      "total_ingredients": 7,
+      "energy_lv1": 748,
+      "energy_lv30": 1204,
+      "energy_lv60": 2266,
+      "energy_max_pot69": 23470,
+      "energy_max_pot507": 173266,
+      "description": "りんごの自然な甘みを感じるシンプルなカレー。"
+    },
+    {
+      "no": 2,
+      "category": "curry_stew",
+      "name": "あぶりテールカレー",
+      "icon": "grilledtailcurry.png",
+      "ingredients": [
+        {
+          "name": "おいしいシッポ",
+          "count": 8
+        },
+        {
+          "name": "げきからハーブ",
+          "count": 25
+        }
+      ],
+      "total_ingredients": 33,
+      "energy_lv1": 7483,
+      "energy_lv30": 12047,
+      "energy_lv60": 22673,
+      "energy_max_pot69": 34985,
+      "energy_max_pot507": 184781,
+      "description": "テールのうまみがルーをワンランク上の味に。"
+    },
+    {
+      "no": 3,
+      "category": "curry_stew",
+      "name": "サンパワートマトカレー",
+      "icon": "solarpowertomatocurry.png",
+      "ingredients": [
+        {
+          "name": "あんみんトマト",
+          "count": 10
+        },
+        {
+          "name": "げきからハーブ",
+          "count": 5
+        }
+      ],
+      "total_ingredients": 15,
+      "energy_lv1": 2078,
+      "energy_lv30": 3345,
+      "energy_lv60": 6296,
+      "energy_max_pot69": 24764,
+      "energy_max_pot507": 174560,
+      "description": "太陽の光で真っ赤に育ったトマトでつくったカレー。"
+    },
+    {
+      "no": 4,
+      "category": "curry_stew",
+      "name": "ぜったいねむりバターカレー",
+      "icon": "dreameaterbuttercurry.png",
+      "ingredients": [
+        {
+          "name": "ほっこりポテト",
+          "count": 18
+        },
+        {
+          "name": "あんみんトマト",
+          "count": 15
+        },
+        {
+          "name": "リラックスカカオ",
+          "count": 12
+        },
+        {
+          "name": "モーモーミルク",
+          "count": 10
+        }
+      ],
+      "total_ingredients": 55,
+      "energy_lv1": 9010,
+      "energy_lv30": 14506,
+      "energy_lv60": 27300,
+      "energy_max_pot69": 32088,
+      "energy_max_pot507": 181884,
+      "description": "深いねむりをテーマに食材を選んだカレー。"
+    },
+    {
+      "no": 5,
+      "category": "curry_stew",
+      "name": "からくちネギもりカレー",
+      "icon": "spicyleekcurry.png",
+      "ingredients": [
+        {
+          "name": "ふといながねぎ",
+          "count": 14
+        },
+        {
+          "name": "あったかジンジャー",
+          "count": 10
+        },
+        {
+          "name": "げきからハーブ",
+          "count": 8
+        }
+      ],
+      "total_ingredients": 32,
+      "energy_lv1": 5900,
+      "energy_lv30": 9499,
+      "energy_lv60": 17877,
+      "energy_max_pot69": 30531,
+      "energy_max_pot507": 180327,
+      "description": "香ばしく焼いたネギは果実のように甘く、ルーの辛さと絶妙のバランス。"
+    },
+    {
+      "no": 6,
+      "category": "curry_stew",
+      "name": "キノコのほうしカレー",
+      "icon": "sporemushroomcurry.png",
+      "ingredients": [
+        {
+          "name": "あじわいキノコ",
+          "count": 14
+        },
+        {
+          "name": "ほっこりポテト",
+          "count": 9
+        }
+      ],
+      "total_ingredients": 23,
+      "energy_lv1": 4162,
+      "energy_lv30": 6700,
+      "energy_lv60": 12610,
+      "energy_max_pot69": 28342,
+      "energy_max_pot507": 178138,
+      "description": "キノコのほうしを浴びたかのように眠れるカレー。"
+    },
+    {
+      "no": 7,
+      "category": "curry_stew",
+      "name": "おやこあいカレー",
+      "icon": "eggbombcurry.png",
+      "ingredients": [
+        {
+          "name": "あまいミツ",
+          "count": 12
+        },
+        {
+          "name": "とくせんリンゴ",
+          "count": 11
+        },
+        {
+          "name": "とくせんエッグ",
+          "count": 8
+        },
+        {
+          "name": "ほっこりポテト",
+          "count": 4
+        }
+      ],
+      "total_ingredients": 35,
+      "energy_lv1": 4523,
+      "energy_lv30": 7282,
+      "energy_lv60": 13704,
+      "energy_max_pot69": 25332,
+      "energy_max_pot507": 175128,
+      "description": "子供にやさしい食材だけでつくった愛情たっぷりカレー。"
+    },
+    {
+      "no": 8,
+      "category": "curry_stew",
+      "name": "満腹チーズバーグカレー",
+      "icon": "heartycheeseburgercurry.png",
+      "ingredients": [
+        {
+          "name": "モーモーミルク",
+          "count": 8
+        },
+        {
+          "name": "マメミート",
+          "count": 8
+        }
+      ],
+      "total_ingredients": 16,
+      "energy_lv1": 1910,
+      "energy_lv30": 3075,
+      "energy_lv60": 5787,
+      "energy_max_pot69": 23913,
+      "energy_max_pot507": 173709,
+      "description": "ボリュームたっぷり。カビゴンもびっくり大きなカレー。"
+    },
+    {
+      "no": 9,
+      "category": "curry_stew",
+      "name": "ほっこりホワイトシチュー",
+      "icon": "softpotatochowder.png",
+      "ingredients": [
+        {
+          "name": "モーモーミルク",
+          "count": 10
+        },
+        {
+          "name": "ほっこりポテト",
+          "count": 8
+        },
+        {
+          "name": "あじわいキノコ",
+          "count": 4
+        }
+      ],
+      "total_ingredients": 22,
+      "energy_lv1": 3181,
+      "energy_lv30": 5121,
+      "energy_lv60": 9638,
+      "energy_max_pot69": 25712,
+      "energy_max_pot507": 175508,
+      "description": "とけてなくなる寸前までポテトを煮込んだトロトロシチュー。"
+    },
+    {
+      "no": 10,
+      "category": "curry_stew",
+      "name": "たんじゅんホワイトシチュー",
+      "icon": "simplechowder.png",
+      "ingredients": [
+        {
+          "name": "モーモーミルク",
+          "count": 7
+        }
+      ],
+      "total_ingredients": 7,
+      "energy_lv1": 814,
+      "energy_lv30": 1310,
+      "energy_lv60": 2466,
+      "energy_max_pot69": 23670,
+      "energy_max_pot507": 173466,
+      "description": "ミルクのうまみを感じるシンプルシチュー。"
+    },
+    {
+      "no": 11,
+      "category": "curry_stew",
+      "name": "マメバーグカレー",
+      "icon": "beanburgercurry.png",
+      "ingredients": [
+        {
+          "name": "マメミート",
+          "count": 7
+        }
+      ],
+      "total_ingredients": 7,
+      "energy_lv1": 856,
+      "energy_lv30": 1378,
+      "energy_lv60": 2593,
+      "energy_max_pot69": 23797,
+      "energy_max_pot507": 173593,
+      "description": "マメでつくったやわらかハンバーグが主役。"
+    },
+    {
+      "no": 12,
+      "category": "curry_stew",
+      "name": "ベイビィハニーカレー",
+      "icon": "mildhoneycurry.png",
+      "ingredients": [
+        {
+          "name": "あまいミツ",
+          "count": 7
+        }
+      ],
+      "total_ingredients": 7,
+      "energy_lv1": 839,
+      "energy_lv30": 1350,
+      "energy_lv60": 2542,
+      "energy_max_pot69": 23746,
+      "energy_max_pot507": 173542,
+      "description": "子供でも食べられる、ミツたっぷりの甘口カレー。"
+    },
+    {
+      "no": 13,
+      "category": "curry_stew",
+      "name": "ニンジャカレー",
+      "icon": "ninjacurry.png",
+      "ingredients": [
+        {
+          "name": "ワカクサ大豆",
+          "count": 24
+        },
+        {
+          "name": "マメミート",
+          "count": 9
+        },
+        {
+          "name": "ふといながねぎ",
+          "count": 12
+        },
+        {
+          "name": "あじわいキノコ",
+          "count": 5
+        }
+      ],
+      "total_ingredients": 50,
+      "energy_lv1": 9445,
+      "energy_lv30": 15206,
+      "energy_lv60": 28618,
+      "energy_max_pot69": 35116,
+      "energy_max_pot507": 184912,
+      "description": "ニンジャが好んで食べたと言い伝えられているとうふのカレー。"
+    },
+    {
+      "no": 14,
+      "category": "curry_stew",
+      "name": "ひでりカツレツカレー",
+      "icon": "droughtkatsucurry.png",
+      "ingredients": [
+        {
+          "name": "マメミート",
+          "count": 10
+        },
+        {
+          "name": "ピュアなオイル",
+          "count": 5
+        }
+      ],
+      "total_ingredients": 15,
+      "energy_lv1": 1942,
+      "energy_lv30": 3126,
+      "energy_lv60": 5884,
+      "energy_max_pot69": 24352,
+      "energy_max_pot507": 174148,
+      "description": "揚げたてのカツがキラッと光る。"
+    },
+    {
+      "no": 15,
+      "category": "curry_stew",
+      "name": "とけるオムカレー",
+      "icon": "meltyomelettecurry.png",
+      "ingredients": [
+        {
+          "name": "とくせんエッグ",
+          "count": 10
+        },
+        {
+          "name": "あんみんトマト",
+          "count": 6
+        }
+      ],
+      "total_ingredients": 16,
+      "energy_lv1": 2150,
+      "energy_lv30": 3461,
+      "energy_lv60": 6514,
+      "energy_max_pot69": 24640,
+      "energy_max_pot507": 174436,
+      "description": "絶妙な火入れで仕上げたオムレツが舌の上でとけるカレー。"
+    },
+    {
+      "no": 16,
+      "category": "curry_stew",
+      "name": "ビルドアップマメカレー",
+      "icon": "bulkupbeancurry.png",
+      "ingredients": [
+        {
+          "name": "ワカクサ大豆",
+          "count": 12
+        },
+        {
+          "name": "マメミート",
+          "count": 6
+        },
+        {
+          "name": "げきからハーブ",
+          "count": 4
+        },
+        {
+          "name": "とくせんエッグ",
+          "count": 4
+        }
+      ],
+      "total_ingredients": 26,
+      "energy_lv1": 3372,
+      "energy_lv30": 5428,
+      "energy_lv60": 10217,
+      "energy_max_pot69": 24923,
+      "energy_max_pot507": 174719,
+      "description": "身体づくりに必要な栄養をたっぷりつめこんだボリュームカレー。"
+    },
+    {
+      "no": 17,
+      "category": "curry_stew",
+      "name": "じゅうなんコーンシチュー",
+      "icon": "limbercornstew.png",
+      "ingredients": [
+        {
+          "name": "ワカクサコーン",
+          "count": 14
+        },
+        {
+          "name": "モーモーミルク",
+          "count": 8
+        },
+        {
+          "name": "ほっこりポテト",
+          "count": 8
+        }
+      ],
+      "total_ingredients": 30,
+      "energy_lv1": 4670,
+      "energy_lv30": 7518,
+      "energy_lv60": 14150,
+      "energy_max_pot69": 27488,
+      "energy_max_pot507": 177284,
+      "description": "ミルクとコーンのやわらかい甘みがやさしいホワイトシチュー。"
+    },
+    {
+      "no": 18,
+      "category": "curry_stew",
+      "name": "れんごくコーンキーマカレー",
+      "icon": "infernocornkeemacurry.png",
+      "ingredients": [
+        {
+          "name": "げきからハーブ",
+          "count": 27
+        },
+        {
+          "name": "マメミート",
+          "count": 24
+        },
+        {
+          "name": "ワカクサコーン",
+          "count": 14
+        },
+        {
+          "name": "あったかジンジャー",
+          "count": 12
+        }
+      ],
+      "total_ingredients": 77,
+      "energy_lv1": 13690,
+      "energy_lv30": 22040,
+      "energy_lv60": 41480,
+      "energy_max_pot69": null,
+      "energy_max_pot507": 188540,
+      "description": "コーンの甘みの後にはれんごくのような辛さがやってくる。"
+    },
+    {
+      "no": 19,
+      "category": "curry_stew",
+      "name": "ピヨピヨパンチ辛口カレー",
+      "icon": "dizzypunchspicycurry_1.png",
+      "ingredients": [
+        {
+          "name": "めざましコーヒー",
+          "count": 11
+        },
+        {
+          "name": "げきからハーブ",
+          "count": 11
+        },
+        {
+          "name": "あまいミツ",
+          "count": 11
+        }
+      ],
+      "total_ingredients": 33,
+      "energy_lv1": 5702,
+      "energy_lv30": 9180,
+      "energy_lv60": 17277,
+      "energy_max_pot69": 29589,
+      "energy_max_pot507": 179385,
+      "description": "リズミカルに甘みと辛みが広がり最後に苦みが訪れる。"
+    },
+    {
+      "no": 20,
+      "category": "curry_stew",
+      "name": "めざめるパワーシチュー",
+      "icon": "hiddenpower",
+      "ingredients": [
+        {
+          "name": "ワカクサ大豆",
+          "count": 28
+        },
+        {
+          "name": "あんみんトマト",
+          "count": 25
+        },
+        {
+          "name": "あじわいキノコ",
+          "count": 23
+        },
+        {
+          "name": "めざましコーヒー",
+          "count": 16
+        }
+      ],
+      "total_ingredients": 92,
+      "energy_lv1": 19061,
+      "energy_lv30": 30688,
+      "energy_lv60": 57754,
+      "energy_max_pot69": null,
+      "energy_max_pot507": 199684,
+      "description": "目覚めを豪華に彩る具だくさんのトマトシチュー。"
+    },
+    {
+      "no": 21,
+      "category": "curry_stew",
+      "name": "いあいぎりすき焼きカレー",
+      "icon": "cutsukiyakicurry.png",
+      "ingredients": [
+        {
+          "name": "ふといながねぎ",
+          "count": 27
+        },
+        {
+          "name": "マメミート",
+          "count": 26
+        },
+        {
+          "name": "あまいミツ",
+          "count": 26
+        },
+        {
+          "name": "とくせんエッグ",
+          "count": 22
+        }
+      ],
+      "total_ingredients": 101,
+      "energy_lv1": 20655,
+      "energy_lv30": 33255,
+      "energy_lv60": 62585,
+      "energy_max_pot69": null,
+      "energy_max_pot507": 201437,
+      "description": "甘じょっぱく味付けされたカレーザクッと切られたネギとトロトロ半熟タマゴを添えて。"
+    },
+    {
+      "no": 22,
+      "category": "curry_stew",
+      "name": "なりきりバケッチャシチュー",
+      "icon": "roleplaypumpkaboostew.png",
+      "ingredients": [
+        {
+          "name": "ずっしりカボチャ",
+          "count": 10
+        },
+        {
+          "name": "マメミート",
+          "count": 16
+        },
+        {
+          "name": "ほっこりポテト",
+          "count": 18
+        },
+        {
+          "name": "あじわいキノコ",
+          "count": 25
+        }
+      ],
+      "total_ingredients": 69,
+      "energy_lv1": 15621,
+      "energy_lv30": null,
+      "energy_lv60": null,
+      "energy_max_pot69": null,
+      "energy_max_pot507": null,
+      "description": "見た目がかわいいだけでなく、栄養バランスもばつぐんのシチュー。"
+    },
+    {
+      "no": 23,
+      "category": "curry_stew",
+      "name": "しんりょくアボカドグラタン",
+      "icon": "overgrowavocadogratin.png",
+      "ingredients": [
+        {
+          "name": "つやつやアボカド",
+          "count": 22
+        },
+        {
+          "name": "ほっこりポテト",
+          "count": 20
+        },
+        {
+          "name": "モーモーミルク",
+          "count": 41
+        },
+        {
+          "name": "ピュアなオイル",
+          "count": 32
+        }
+      ],
+      "total_ingredients": 115,
+      "energy_lv1": 24802,
+      "energy_lv30": null,
+      "energy_lv60": null,
+      "energy_max_pot69": null,
+      "energy_max_pot507": null,
+      "description": "コクのあるホワイトソースとクリーミーなアボカドが相性ばつぐん。"
+    },
+    {
+      "no": 0,
+      "category": "salad",
+      "name": "ごちゃまぜサラダ",
+      "icon": "mixedsalad.png",
+      "ingredients": [],
+      "total_ingredients": null,
+      "energy_lv1": 0,
+      "energy_lv30": 0,
+      "energy_lv60": 0,
+      "energy_max_pot69": 23598,
+      "energy_max_pot507": 173394,
+      "description": ""
+    },
+    {
+      "no": 1,
+      "category": "salad",
+      "name": "ヤドンテールのペッパーサラダ",
+      "icon": "slowpoketailpeppersalad.png",
+      "ingredients": [
+        {
+          "name": "おいしいシッポ",
+          "count": 10
+        },
+        {
+          "name": "げきからハーブ",
+          "count": 10
+        },
+        {
+          "name": "ピュアなオイル",
+          "count": 15
+        }
+      ],
+      "total_ingredients": 35,
+      "energy_lv1": 8169,
+      "energy_lv30": 13152,
+      "energy_lv60": 24752,
+      "energy_max_pot69": 36380,
+      "energy_max_pot507": 186176,
+      "description": "ピリッと辛いスパイスがテールのあまみをより際立たせる。"
+    },
+    {
+      "no": 2,
+      "category": "salad",
+      "name": "キノコのほうしサラダ",
+      "icon": "sporemushroomsalad.png",
+      "ingredients": [
+        {
+          "name": "あじわいキノコ",
+          "count": 17
+        },
+        {
+          "name": "あんみんトマト",
+          "count": 8
+        },
+        {
+          "name": "ピュアなオイル",
+          "count": 8
+        }
+      ],
+      "total_ingredients": 33,
+      "energy_lv1": 5859,
+      "energy_lv30": 9432,
+      "energy_lv60": 17752,
+      "energy_max_pot69": 30064,
+      "energy_max_pot507": 179860,
+      "description": "睡眠に良い成分がふんだんに入ったサラダ。"
+    },
+    {
+      "no": 3,
+      "category": "salad",
+      "name": "ゆきかきシーザーサラダ",
+      "icon": "snowcloakcaesarsalad.png",
+      "ingredients": [
+        {
+          "name": "モーモーミルク",
+          "count": 10
+        },
+        {
+          "name": "マメミート",
+          "count": 6
+        }
+      ],
+      "total_ingredients": 16,
+      "energy_lv1": 1898,
+      "energy_lv30": 3055,
+      "energy_lv60": 5750,
+      "energy_max_pot69": 23876,
+      "energy_max_pot507": 173672,
+      "description": "雪のようにふりかけたチーズをかきわけて食べるベーコンサラダ。"
+    },
+    {
+      "no": 4,
+      "category": "salad",
+      "name": "くいしんぼうポテトサラダ",
+      "icon": "gluttonypotatosalad.png",
+      "ingredients": [
+        {
+          "name": "ほっこりポテト",
+          "count": 14
+        },
+        {
+          "name": "とくせんエッグ",
+          "count": 9
+        },
+        {
+          "name": "マメミート",
+          "count": 7
+        },
+        {
+          "name": "とくせんリンゴ",
+          "count": 6
+        }
+      ],
+      "total_ingredients": 36,
+      "energy_lv1": 5040,
+      "energy_lv30": 8114,
+      "energy_lv60": 15271,
+      "energy_max_pot69": 26557,
+      "energy_max_pot507": 176353,
+      "description": "とくせんリンゴが隠し味のポテトサラダ。"
+    },
+    {
+      "no": 5,
+      "category": "salad",
+      "name": "うるおいとうふサラダ",
+      "icon": "waterveiltofusalad.png",
+      "ingredients": [
+        {
+          "name": "ワカクサ大豆",
+          "count": 15
+        },
+        {
+          "name": "あんみんトマト",
+          "count": 9
+        }
+      ],
+      "total_ingredients": 24,
+      "energy_lv1": 3113,
+      "energy_lv30": 5011,
+      "energy_lv60": 9432,
+      "energy_max_pot69": 24822,
+      "energy_max_pot507": 174618,
+      "description": "ぷるっとしたとうふがのったサラダ。"
+    },
+    {
+      "no": 6,
+      "category": "salad",
+      "name": "ばかぢからワイルドサラダ",
+      "icon": "superpowerextremesalad.png",
+      "ingredients": [
+        {
+          "name": "マメミート",
+          "count": 9
+        },
+        {
+          "name": "あったかジンジャー",
+          "count": 6
+        },
+        {
+          "name": "とくせんエッグ",
+          "count": 5
+        },
+        {
+          "name": "ほっこりポテト",
+          "count": 3
+        }
+      ],
+      "total_ingredients": 23,
+      "energy_lv1": 3046,
+      "energy_lv30": 4904,
+      "energy_lv60": 9229,
+      "energy_max_pot69": 24961,
+      "energy_max_pot507": 174757,
+      "description": "これ1つで1日分の栄養がとれるボリュームサラダ。"
+    },
+    {
+      "no": 7,
+      "category": "salad",
+      "name": "マメハムサラダ",
+      "icon": "beanhamsalad.png",
+      "ingredients": [
+        {
+          "name": "マメミート",
+          "count": 8
+        }
+      ],
+      "total_ingredients": 8,
+      "energy_lv1": 978,
+      "energy_lv30": 1574,
+      "energy_lv60": 2963,
+      "energy_max_pot69": 23825,
+      "energy_max_pot507": 173621,
+      "description": "マメミートでつくったハムのシンプルサラダ。"
+    },
+    {
+      "no": 8,
+      "category": "salad",
+      "name": "あんみんトマトサラダ",
+      "icon": "snoozytomatosalad.png",
+      "ingredients": [
+        {
+          "name": "あんみんトマト",
+          "count": 8
+        }
+      ],
+      "total_ingredients": 8,
+      "energy_lv1": 1045,
+      "energy_lv30": 1682,
+      "energy_lv60": 3166,
+      "energy_max_pot69": 24028,
+      "energy_max_pot507": 173824,
+      "description": "あんみんトマトの成分でねむりを助けるシンプルサラダ。"
+    },
+    {
+      "no": 9,
+      "category": "salad",
+      "name": "モーモーカプレーゼ",
+      "icon": "moomoocapresesalad.png",
+      "ingredients": [
+        {
+          "name": "モーモーミルク",
+          "count": 12
+        },
+        {
+          "name": "あんみんトマト",
+          "count": 6
+        },
+        {
+          "name": "ピュアなオイル",
+          "count": 5
+        }
+      ],
+      "total_ingredients": 23,
+      "energy_lv1": 2942,
+      "energy_lv30": 4736,
+      "energy_lv60": 8914,
+      "energy_max_pot69": 24646,
+      "energy_max_pot507": 174442,
+      "description": "チーズとトマトにオイルをかけただけのシンプルサラダ。"
+    },
+    {
+      "no": 10,
+      "category": "salad",
+      "name": "ムラっけチョコミートサラダ",
+      "icon": "contrarychocolatemeatsalad.png",
+      "ingredients": [
+        {
+          "name": "リラックスカカオ",
+          "count": 14
+        },
+        {
+          "name": "マメミート",
+          "count": 9
+        }
+      ],
+      "total_ingredients": 23,
+      "energy_lv1": 3665,
+      "energy_lv30": 5900,
+      "energy_lv60": 11104,
+      "energy_max_pot69": 26836,
+      "energy_max_pot507": 176632,
+      "description": "しょっぱいソースとあまいチョコソースの味の変化が楽しめる。"
+    },
+    {
+      "no": 11,
+      "category": "salad",
+      "name": "オーバーヒートサラダ",
+      "icon": "overheatgingersalad.png",
+      "ingredients": [
+        {
+          "name": "げきからハーブ",
+          "count": 17
+        },
+        {
+          "name": "あったかジンジャー",
+          "count": 10
+        },
+        {
+          "name": "あんみんトマト",
+          "count": 8
+        }
+      ],
+      "total_ingredients": 35,
+      "energy_lv1": 5225,
+      "energy_lv30": 8412,
+      "energy_lv60": 15831,
+      "energy_max_pot69": 27459,
+      "energy_max_pot507": 177255,
+      "description": "特製のしょうがドレッシングがからだを熱くさせる。"
+    },
+    {
+      "no": 12,
+      "category": "salad",
+      "name": "とくせんリンゴサラダ",
+      "icon": "fancyapplesalad.png",
+      "ingredients": [
+        {
+          "name": "とくせんリンゴ",
+          "count": 8
+        }
+      ],
+      "total_ingredients": 8,
+      "energy_lv1": 855,
+      "energy_lv30": 1376,
+      "energy_lv60": 2590,
+      "energy_max_pot69": 23452,
+      "energy_max_pot507": 173248,
+      "description": "リンゴをすりつぶして作ったドレッシングのシンプルサラダ。"
+    },
+    {
+      "no": 13,
+      "category": "salad",
+      "name": "めんえきねぎサラダ",
+      "icon": "immunityleeksalad.png",
+      "ingredients": [
+        {
+          "name": "ふといながねぎ",
+          "count": 10
+        },
+        {
+          "name": "あったかジンジャー",
+          "count": 5
+        }
+      ],
+      "total_ingredients": 15,
+      "energy_lv1": 2845,
+      "energy_lv30": 4580,
+      "energy_lv60": 8620,
+      "energy_max_pot69": 27088,
+      "energy_max_pot507": 176884,
+      "description": "シャキっと食感のねぎでめんえき力が上がるサラダ。"
+    },
+    {
+      "no": 14,
+      "category": "salad",
+      "name": "メロメロりんごのチーズサラダ",
+      "icon": "dazzlingapplecheesesalad.png",
+      "ingredients": [
+        {
+          "name": "とくせんリンゴ",
+          "count": 15
+        },
+        {
+          "name": "モーモーミルク",
+          "count": 5
+        },
+        {
+          "name": "ピュアなオイル",
+          "count": 3
+        }
+      ],
+      "total_ingredients": 23,
+      "energy_lv1": 2655,
+      "energy_lv30": 4274,
+      "energy_lv60": 8044,
+      "energy_max_pot69": 23776,
+      "energy_max_pot507": 173572,
+      "description": "相性ばつぐんの食材を活かすため、味付けはシンプルに。"
+    },
+    {
+      "no": 15,
+      "category": "salad",
+      "name": "ニンジャサラダ",
+      "icon": "ninjasalad.png",
+      "ingredients": [
+        {
+          "name": "ふといながねぎ",
+          "count": 15
+        },
+        {
+          "name": "ワカクサ大豆",
+          "count": 19
+        },
+        {
+          "name": "あじわいキノコ",
+          "count": 12
+        },
+        {
+          "name": "あったかジンジャー",
+          "count": 11
+        }
+      ],
+      "total_ingredients": 57,
+      "energy_lv1": 11659,
+      "energy_lv30": 18770,
+      "energy_lv60": 35326,
+      "energy_max_pot69": 39430,
+      "energy_max_pot507": 189226,
+      "description": "とうふを使ったニンジャ好みの味付けで、素早く食べられる。"
+    },
+    {
+      "no": 16,
+      "category": "salad",
+      "name": "ねっぷうとうふサラダ",
+      "icon": "heatwavetofusalad.png",
+      "ingredients": [
+        {
+          "name": "ワカクサ大豆",
+          "count": 10
+        },
+        {
+          "name": "げきからハーブ",
+          "count": 6
+        }
+      ],
+      "total_ingredients": 16,
+      "energy_lv1": 2114,
+      "energy_lv30": 3403,
+      "energy_lv60": 6405,
+      "energy_max_pot69": 24531,
+      "energy_max_pot507": 174327,
+      "description": "真っ赤な辛いソースのとうふサラダ。"
+    },
+    {
+      "no": 17,
+      "category": "salad",
+      "name": "ワカクササラダ",
+      "icon": "greengrasssalad.png",
+      "ingredients": [
+        {
+          "name": "ピュアなオイル",
+          "count": 22
+        },
+        {
+          "name": "ワカクサコーン",
+          "count": 17
+        },
+        {
+          "name": "あんみんトマト",
+          "count": 14
+        },
+        {
+          "name": "ほっこりポテト",
+          "count": 9
+        }
+      ],
+      "total_ingredients": 62,
+      "energy_lv1": 11393,
+      "energy_lv30": 18342,
+      "energy_lv60": 34520,
+      "energy_max_pot69": 36914,
+      "energy_max_pot507": 186710,
+      "description": "ワカクサの島でとれた新鮮野菜だけをつかったサラダ。"
+    },
+    {
+      "no": 18,
+      "category": "salad",
+      "name": "めいそうスイートサラダ",
+      "icon": "calmmindfruitsalad.png",
+      "ingredients": [
+        {
+          "name": "とくせんリンゴ",
+          "count": 21
+        },
+        {
+          "name": "あまいミツ",
+          "count": 16
+        },
+        {
+          "name": "ワカクサコーン",
+          "count": 12
+        }
+      ],
+      "total_ingredients": 49,
+      "energy_lv1": 7675,
+      "energy_lv30": 12356,
+      "energy_lv60": 23255,
+      "energy_max_pot69": 30095,
+      "energy_max_pot507": 179891,
+      "description": "さわやかな甘みがこころを落ち着かせる。"
+    },
+    {
+      "no": 19,
+      "category": "salad",
+      "name": "みだれづきコーンサラダ",
+      "icon": "furyattackcornsalad.png",
+      "ingredients": [
+        {
+          "name": "ワカクサコーン",
+          "count": 9
+        },
+        {
+          "name": "ピュアなオイル",
+          "count": 8
+        }
+      ],
+      "total_ingredients": 17,
+      "energy_lv1": 2785,
+      "energy_lv30": 4483,
+      "energy_lv60": 8438,
+      "energy_max_pot69": 26222,
+      "energy_max_pot507": 176018,
+      "description": "山盛りのコーンを突いて食べるサラダ。"
+    },
+    {
+      "no": 20,
+      "category": "salad",
+      "name": "クロスチョップドサラダ",
+      "icon": "crosschopsalad_0.png",
+      "ingredients": [
+        {
+          "name": "とくせんエッグ",
+          "count": 20
+        },
+        {
+          "name": "マメミート",
+          "count": 15
+        },
+        {
+          "name": "ワカクサコーン",
+          "count": 11
+        },
+        {
+          "name": "あんみんトマト",
+          "count": 10
+        }
+      ],
+      "total_ingredients": 56,
+      "energy_lv1": 8755,
+      "energy_lv30": 14095,
+      "energy_lv60": 26527,
+      "energy_max_pot69": 30973,
+      "energy_max_pot507": 180769,
+      "description": "チョップを重ねて細かくつくったチョップドサラダ。"
+    },
+    {
+      "no": 21,
+      "category": "salad",
+      "name": "まけんきコーヒーサラダ",
+      "icon": "defiantcoffee-dressedsalad_0.png",
+      "ingredients": [
+        {
+          "name": "めざましコーヒー",
+          "count": 28
+        },
+        {
+          "name": "マメミート",
+          "count": 28
+        },
+        {
+          "name": "ピュアなオイル",
+          "count": 22
+        },
+        {
+          "name": "ほっこりポテト",
+          "count": 22
+        }
+      ],
+      "total_ingredients": 100,
+      "energy_lv1": 20218,
+      "energy_lv30": 32550,
+      "energy_lv60": 61260,
+      "energy_max_pot69": null,
+      "energy_max_pot507": 200454,
+      "description": "負けん気で何度も挑戦しついに完成したコーヒーソースのサラダ。"
+    },
+    {
+      "no": 22,
+      "category": "salad",
+      "name": "はなふぶきミモザサラダ",
+      "icon": "petalblizzardlayeredsalad.png",
+      "ingredients": [
+        {
+          "name": "とくせんエッグ",
+          "count": 25
+        },
+        {
+          "name": "ピュアなオイル",
+          "count": 17
+        },
+        {
+          "name": "ほっこりポテト",
+          "count": 15
+        },
+        {
+          "name": "マメミート",
+          "count": 12
+        }
+      ],
+      "total_ingredients": 69,
+      "energy_lv1": 11881,
+      "energy_lv30": 19128,
+      "energy_lv60": 35999,
+      "energy_max_pot69": null,
+      "energy_max_pot507": 185795,
+      "description": "花のようなふんわりパラパラのタマゴがやさしい食感を生み出す"
+    },
+    {
+      "no": 23,
+      "category": "salad",
+      "name": "りんごさんヨーグルトサラダ",
+      "icon": "appleacidyogurt-dressedsalad.png",
+      "ingredients": [
+        {
+          "name": "とくせんエッグ",
+          "count": 35
+        },
+        {
+          "name": "とくせんリンゴ",
+          "count": 28
+        },
+        {
+          "name": "あんみんトマト",
+          "count": 23
+        },
+        {
+          "name": "モーモーミルク",
+          "count": 18
+        }
+      ],
+      "total_ingredients": 104,
+      "energy_lv1": 19293,
+      "energy_lv30": 31062,
+      "energy_lv60": 58458,
+      "energy_max_pot69": null,
+      "energy_max_pot507": 196284,
+      "description": "りんごビネガーとヨーグルトの酸味に食欲をそそられるビッグなボウルサラダ"
+    },
+    {
+      "no": 24,
+      "category": "salad",
+      "name": "くだけるアボカドサラダ",
+      "icon": "lusciousavocadosalad.png",
+      "ingredients": [
+        {
+          "name": "つやつやアボカド",
+          "count": 14
+        },
+        {
+          "name": "ワカクサ大豆",
+          "count": 18
+        },
+        {
+          "name": "ピュアなオイル",
+          "count": 10
+        }
+      ],
+      "total_ingredients": 42,
+      "energy_lv1": 7125,
+      "energy_lv30": null,
+      "energy_lv60": null,
+      "energy_max_pot69": null,
+      "energy_max_pot507": null,
+      "description": "柔らかな材料が口の中で優しくくだける。"
+    },
+    {
+      "no": 25,
+      "category": "salad",
+      "name": "じならしワカモレチップス",
+      "icon": "bulldozeguacamoleandchips.png",
+      "ingredients": [
+        {
+          "name": "つやつやアボカド",
+          "count": 28
+        },
+        {
+          "name": "ワカクサコーン",
+          "count": 25
+        },
+        {
+          "name": "げきからハーブ",
+          "count": 30
+        },
+        {
+          "name": "ワカクサ大豆",
+          "count": 22
+        }
+      ],
+      "total_ingredients": 105,
+      "energy_lv1": 25162,
+      "energy_lv30": null,
+      "energy_lv60": null,
+      "energy_max_pot69": null,
+      "energy_max_pot507": null,
+      "description": "パリッと香ばしいコーンチップスとならしたソースの触感が楽しい一品。"
+    },
+    {
+      "no": 26,
+      "category": "salad",
+      "name": "ごろごろねっとうサラダ",
+      "icon": null,
+      "ingredients": [
+        {
+          "name": "ずっしりカボチャ",
+          "count": 20
+        },
+        {
+          "name": "ほっこりポテト",
+          "count": 30
+        },
+        {
+          "name": "ワカクサコーン",
+          "count": 18
+        },
+        {
+          "name": "あじわいキノコ",
+          "count": 27
+        }
+      ],
+      "total_ingredients": 95,
+      "energy_lv1": 25356,
+      "energy_lv30": null,
+      "energy_lv60": null,
+      "energy_max_pot69": null,
+      "energy_max_pot507": null,
+      "description": ""
+    },
+    {
+      "no": 0,
+      "category": "drink_dessert",
+      "name": "ごちゃまぜジュース",
+      "icon": "mixedjuice.png",
+      "ingredients": [],
+      "total_ingredients": null,
+      "energy_lv1": 0,
+      "energy_lv30": 0,
+      "energy_lv60": 0,
+      "energy_max_pot69": 23598,
+      "energy_max_pot507": 173394,
+      "description": ""
+    },
+    {
+      "no": 1,
+      "category": "drink_dessert",
+      "name": "じゅくせいスイートポテト",
+      "icon": "fluffysweetpotatoes.png",
+      "ingredients": [
+        {
+          "name": "ほっこりポテト",
+          "count": 9
+        },
+        {
+          "name": "モーモーミルク",
+          "count": 5
+        }
+      ],
+      "total_ingredients": 14,
+      "energy_lv1": 1907,
+      "energy_lv30": 3070,
+      "energy_lv60": 5778,
+      "energy_max_pot69": 24588,
+      "energy_max_pot507": 174384,
+      "description": "ポテトをうまく熟成させることでミツいらずの甘さに。"
+    },
+    {
+      "no": 2,
+      "category": "drink_dessert",
+      "name": "ふくつのジンジャークッキー",
+      "icon": "steadfastgingercookies.png",
+      "ingredients": [
+        {
+          "name": "あまいミツ",
+          "count": 14
+        },
+        {
+          "name": "あったかジンジャー",
+          "count": 12
+        },
+        {
+          "name": "リラックスカカオ",
+          "count": 5
+        },
+        {
+          "name": "とくせんエッグ",
+          "count": 4
+        }
+      ],
+      "total_ingredients": 35,
+      "energy_lv1": 4921,
+      "energy_lv30": 7922,
+      "energy_lv60": 14910,
+      "energy_max_pot69": 26538,
+      "energy_max_pot507": 176334,
+      "description": "大変なことがあってもくじけずに頑張るパワーをくれるクッキー。"
+    },
+    {
+      "no": 3,
+      "category": "drink_dessert",
+      "name": "とくせんリンゴジュース",
+      "icon": "fancyapplejuice.png",
+      "ingredients": [
+        {
+          "name": "とくせんリンゴ",
+          "count": 8
+        }
+      ],
+      "total_ingredients": 8,
+      "energy_lv1": 855,
+      "energy_lv30": 1376,
+      "energy_lv60": 2590,
+      "energy_max_pot69": 23452,
+      "energy_max_pot507": 173248,
+      "description": "選びぬかれたリンゴだけでつくった濃厚なジュース。"
+    },
+    {
+      "no": 4,
+      "category": "drink_dessert",
+      "name": "クラフトサイコソーダ",
+      "icon": "craftsodapop.png",
+      "ingredients": [
+        {
+          "name": "あまいミツ",
+          "count": 9
+        }
+      ],
+      "total_ingredients": 9,
+      "energy_lv1": 1079,
+      "energy_lv30": 1737,
+      "energy_lv60": 3269,
+      "energy_max_pot69": 23789,
+      "energy_max_pot507": 173585,
+      "description": "シュワっとはじける手作りソーダ。"
+    },
+    {
+      "no": 5,
+      "category": "drink_dessert",
+      "name": "ひのこのジンジャーティー",
+      "icon": "embergingertea.png",
+      "ingredients": [
+        {
+          "name": "あったかジンジャー",
+          "count": 9
+        },
+        {
+          "name": "とくせんリンゴ",
+          "count": 7
+        }
+      ],
+      "total_ingredients": 16,
+      "energy_lv1": 1913,
+      "energy_lv30": 3079,
+      "energy_lv60": 5796,
+      "energy_max_pot69": 23922,
+      "energy_max_pot507": 173718,
+      "description": "辛いジンジャーにリンゴを合わせることで飲みやすくなった。"
+    },
+    {
+      "no": 6,
+      "category": "drink_dessert",
+      "name": "プリンのプリンアラモード",
+      "icon": "jigglypuff'sfruityflan.png",
+      "ingredients": [
+        {
+          "name": "あまいミツ",
+          "count": 20
+        },
+        {
+          "name": "とくせんエッグ",
+          "count": 15
+        },
+        {
+          "name": "モーモーミルク",
+          "count": 10
+        },
+        {
+          "name": "とくせんリンゴ",
+          "count": 10
+        }
+      ],
+      "total_ingredients": 55,
+      "energy_lv1": 7594,
+      "energy_lv30": 12226,
+      "energy_lv60": 23009,
+      "energy_max_pot69": 27797,
+      "energy_max_pot507": 177593,
+      "description": "ふうせんのような張りをもつ特製プリン。"
+    },
+    {
+      "no": 7,
+      "category": "drink_dessert",
+      "name": "あくまのキッスフルーツオレ",
+      "icon": "lovelykisssmoothie.png",
+      "ingredients": [
+        {
+          "name": "とくせんリンゴ",
+          "count": 11
+        },
+        {
+          "name": "モーモーミルク",
+          "count": 9
+        },
+        {
+          "name": "あまいミツ",
+          "count": 7
+        },
+        {
+          "name": "リラックスカカオ",
+          "count": 8
+        }
+      ],
+      "total_ingredients": 35,
+      "energy_lv1": 4734,
+      "energy_lv30": 7621,
+      "energy_lv60": 14344,
+      "energy_max_pot69": 25972,
+      "energy_max_pot507": 175768,
+      "description": "つかれた体を癒やし、眠りにみちびくリラックスドリンク。"
+    },
+    {
+      "no": 8,
+      "category": "drink_dessert",
+      "name": "ねがいごとアップルパイ",
+      "icon": "luckychantapplepie.png",
+      "ingredients": [
+        {
+          "name": "とくせんリンゴ",
+          "count": 12
+        },
+        {
+          "name": "モーモーミルク",
+          "count": 4
+        }
+      ],
+      "total_ingredients": 16,
+      "energy_lv1": 1748,
+      "energy_lv30": 2814,
+      "energy_lv60": 5296,
+      "energy_max_pot69": 23422,
+      "energy_max_pot507": 173218,
+      "description": "ゴロっとしたリンゴの部分に当たるとラッキー。"
+    },
+    {
+      "no": 9,
+      "category": "drink_dessert",
+      "name": "ネロリのデトックスティー",
+      "icon": "neroli'srestorativetea.png",
+      "ingredients": [
+        {
+          "name": "あったかジンジャー",
+          "count": 11
+        },
+        {
+          "name": "とくせんリンゴ",
+          "count": 15
+        },
+        {
+          "name": "あじわいキノコ",
+          "count": 9
+        }
+      ],
+      "total_ingredients": 35,
+      "energy_lv1": 5065,
+      "energy_lv30": 8164,
+      "energy_lv60": 15346,
+      "energy_max_pot69": 26974,
+      "energy_max_pot507": 176770,
+      "description": "博士特製のデトックスティー。"
+    },
+    {
+      "no": 10,
+      "category": "drink_dessert",
+      "name": "あまいかおりチョコケーキ",
+      "icon": "sweetscentchocolatecake.png",
+      "ingredients": [
+        {
+          "name": "あまいミツ",
+          "count": 9
+        },
+        {
+          "name": "リラックスカカオ",
+          "count": 8
+        },
+        {
+          "name": "モーモーミルク",
+          "count": 7
+        }
+      ],
+      "total_ingredients": 24,
+      "energy_lv1": 3378,
+      "energy_lv30": 5438,
+      "energy_lv60": 10235,
+      "energy_max_pot69": 25625,
+      "energy_max_pot507": 175421,
+      "description": "あまいかおりには人もポケモンも引き寄せられる。"
+    },
+    {
+      "no": 11,
+      "category": "drink_dessert",
+      "name": "モーモーホットミルク",
+      "icon": "warmmoomoomilk.png",
+      "ingredients": [
+        {
+          "name": "モーモーミルク",
+          "count": 7
+        }
+      ],
+      "total_ingredients": 7,
+      "energy_lv1": 814,
+      "energy_lv30": 1310,
+      "energy_lv60": 2466,
+      "energy_max_pot69": 23670,
+      "energy_max_pot507": 173466,
+      "description": "温めることで甘みが増したモーモーミルク。"
+    },
+    {
+      "no": 12,
+      "category": "drink_dessert",
+      "name": "かるわざソイケーキ",
+      "icon": "cloudninesoycake.png",
+      "ingredients": [
+        {
+          "name": "とくせんエッグ",
+          "count": 8
+        },
+        {
+          "name": "ワカクサ大豆",
+          "count": 7
+        }
+      ],
+      "total_ingredients": 15,
+      "energy_lv1": 1924,
+      "energy_lv30": 3097,
+      "energy_lv60": 5829,
+      "energy_max_pot69": 24297,
+      "energy_max_pot507": 174093,
+      "description": "かるい口当たりに仕上げたソイケーキ。"
+    },
+    {
+      "no": 13,
+      "category": "drink_dessert",
+      "name": "はりきりプロテインスムージー",
+      "icon": "hustleproteinsmoothie.png",
+      "ingredients": [
+        {
+          "name": "ワカクサ大豆",
+          "count": 15
+        },
+        {
+          "name": "リラックスカカオ",
+          "count": 8
+        }
+      ],
+      "total_ingredients": 23,
+      "energy_lv1": 3263,
+      "energy_lv30": 5253,
+      "energy_lv60": 9886,
+      "energy_max_pot69": 25618,
+      "energy_max_pot507": 175414,
+      "description": "トレーニング後のごほうびの甘い一杯。"
+    },
+    {
+      "no": 14,
+      "category": "drink_dessert",
+      "name": "マイペースやさいジュース",
+      "icon": "stalwartvegetablejuice.png",
+      "ingredients": [
+        {
+          "name": "あんみんトマト",
+          "count": 9
+        },
+        {
+          "name": "とくせんリンゴ",
+          "count": 7
+        }
+      ],
+      "total_ingredients": 16,
+      "energy_lv1": 1924,
+      "energy_lv30": 3097,
+      "energy_lv60": 5829,
+      "energy_max_pot69": 23955,
+      "energy_max_pot507": 173751,
+      "description": "自然な甘みと酸味のかんたんなジュース。"
+    },
+    {
+      "no": 15,
+      "category": "drink_dessert",
+      "name": "おおきいマラサダ",
+      "icon": "bigmalasada.png",
+      "ingredients": [
+        {
+          "name": "ピュアなオイル",
+          "count": 10
+        },
+        {
+          "name": "モーモーミルク",
+          "count": 7
+        },
+        {
+          "name": "あまいミツ",
+          "count": 6
+        }
+      ],
+      "total_ingredients": 23,
+      "energy_lv1": 3015,
+      "energy_lv30": 4854,
+      "energy_lv60": 9135,
+      "energy_max_pot69": 24867,
+      "energy_max_pot507": 174663,
+      "description": "アローラのレシピを取り寄せ再現した特別なあげパン。"
+    },
+    {
+      "no": 16,
+      "category": "drink_dessert",
+      "name": "ちからもちソイドーナッツ",
+      "icon": "hugepowersoydonuts.png",
+      "ingredients": [
+        {
+          "name": "ピュアなオイル",
+          "count": 12
+        },
+        {
+          "name": "ワカクサ大豆",
+          "count": 16
+        },
+        {
+          "name": "リラックスカカオ",
+          "count": 7
+        }
+      ],
+      "total_ingredients": 35,
+      "energy_lv1": 5547,
+      "energy_lv30": 8930,
+      "energy_lv60": 16807,
+      "energy_max_pot69": 28435,
+      "energy_max_pot507": 178231,
+      "description": "サクっとあげたソイドーナッツ。からだづくりのお供に。"
+    },
+    {
+      "no": 17,
+      "category": "drink_dessert",
+      "name": "だいばくはつポップコーン",
+      "icon": "explosionpopcorn.png",
+      "ingredients": [
+        {
+          "name": "ワカクサコーン",
+          "count": 15
+        },
+        {
+          "name": "ピュアなオイル",
+          "count": 14
+        },
+        {
+          "name": "モーモーミルク",
+          "count": 7
+        }
+      ],
+      "total_ingredients": 36,
+      "energy_lv1": 6048,
+      "energy_lv30": 9737,
+      "energy_lv60": 18325,
+      "energy_max_pot69": 29611,
+      "energy_max_pot507": 179407,
+      "description": "だいばくはつするほどの火力で一瞬で仕上げた。"
+    },
+    {
+      "no": 18,
+      "category": "drink_dessert",
+      "name": "おちゃかいコーンスコーン",
+      "icon": "teatimecornscones.png",
+      "ingredients": [
+        {
+          "name": "とくせんリンゴ",
+          "count": 20
+        },
+        {
+          "name": "あったかジンジャー",
+          "count": 20
+        },
+        {
+          "name": "ワカクサコーン",
+          "count": 18
+        },
+        {
+          "name": "モーモーミルク",
+          "count": 9
+        }
+      ],
+      "total_ingredients": 67,
+      "energy_lv1": 10925,
+      "energy_lv30": 17589,
+      "energy_lv60": 33102,
+      "energy_max_pot69": 33786,
+      "energy_max_pot507": 183582,
+      "description": "サクサク食感のスコーンとアップルジンジャーのジャムを1対1で。"
+    },
+    {
+      "no": 19,
+      "category": "drink_dessert",
+      "name": "はなびらのまいチョコタルト",
+      "icon": "petaldancechocolatetart.png",
+      "ingredients": [
+        {
+          "name": "リラックスカカオ",
+          "count": 11
+        },
+        {
+          "name": "とくせんリンゴ",
+          "count": 11
+        }
+      ],
+      "total_ingredients": 22,
+      "energy_lv1": 3314,
+      "energy_lv30": 5335,
+      "energy_lv60": 10041,
+      "energy_max_pot69": 26115,
+      "energy_max_pot507": 175911,
+      "description": "食べるとリンゴの花びらが舞うやんちゃなタルト。"
+    },
+    {
+      "no": 20,
+      "category": "drink_dessert",
+      "name": "フラワーギフトマカロン",
+      "icon": "flowergiftmacarons.png",
+      "ingredients": [
+        {
+          "name": "リラックスカカオ",
+          "count": 25
+        },
+        {
+          "name": "とくせんエッグ",
+          "count": 25
+        },
+        {
+          "name": "あまいミツ",
+          "count": 17
+        },
+        {
+          "name": "モーモーミルク",
+          "count": 10
+        }
+      ],
+      "total_ingredients": 77,
+      "energy_lv1": 13834,
+      "energy_lv30": 22272,
+      "energy_lv60": 41917,
+      "energy_max_pot69": null,
+      "energy_max_pot507": 188977,
+      "description": "おくりものにぴったりな笑顔咲くマカロン。"
+    },
+    {
+      "no": 21,
+      "category": "drink_dessert",
+      "name": "はやおきコーヒーゼリー",
+      "icon": "earlybirdcoffeejelly_0.png",
+      "ingredients": [
+        {
+          "name": "めざましコーヒー",
+          "count": 16
+        },
+        {
+          "name": "モーモーミルク",
+          "count": 14
+        },
+        {
+          "name": "あまいミツ",
+          "count": 12
+        }
+      ],
+      "total_ingredients": 42,
+      "energy_lv1": 6793,
+      "energy_lv30": 10936,
+      "energy_lv60": 20582,
+      "energy_max_pot69": 29816,
+      "energy_max_pot507": 179612,
+      "description": "目覚めを加速させる苦めのコーヒーゼリー。"
+    },
+    {
+      "no": 22,
+      "category": "drink_dessert",
+      "name": "スパークスパイスコーラ",
+      "icon": "zingzapspicedcola_0.png",
+      "ingredients": [
+        {
+          "name": "とくせんリンゴ",
+          "count": 35
+        },
+        {
+          "name": "あったかジンジャー",
+          "count": 20
+        },
+        {
+          "name": "ふといながねぎ",
+          "count": 20
+        },
+        {
+          "name": "めざましコーヒー",
+          "count": 12
+        }
+      ],
+      "total_ingredients": 87,
+      "energy_lv1": 17494,
+      "energy_lv30": 28165,
+      "energy_lv60": 53006,
+      "energy_max_pot69": null,
+      "energy_max_pot507": 196646,
+      "description": "スカッと目が覚める刺激の強いコーラ。"
+    },
+    {
+      "no": 23,
+      "category": "drink_dessert",
+      "name": "かたやぶりコーンティラミス",
+      "icon": "moldbreakercorntiramisu.png",
+      "ingredients": [
+        {
+          "name": "めざましコーヒー",
+          "count": 14
+        },
+        {
+          "name": "ワカクサコーン",
+          "count": 14
+        },
+        {
+          "name": "モーモーミルク",
+          "count": 12
+        }
+      ],
+      "total_ingredients": 40,
+      "energy_lv1": 7125,
+      "energy_lv30": 11471,
+      "energy_lv60": 21589,
+      "energy_max_pot69": 31507,
+      "energy_max_pot507": 181303,
+      "description": "コーンの甘味だけで勝負するかたやぶりな製法のティラミス。"
+    },
+    {
+      "no": 24,
+      "category": "drink_dessert",
+      "name": "ドオーのエクレア",
+      "icon": "clodsireeclair.png",
+      "ingredients": [
+        {
+          "name": "リラックスカカオ",
+          "count": 30
+        },
+        {
+          "name": "モーモーミルク",
+          "count": 26
+        },
+        {
+          "name": "めざましコーヒー",
+          "count": 24
+        },
+        {
+          "name": "あまいミツ",
+          "count": 22
+        }
+      ],
+      "total_ingredients": 102,
+      "energy_lv1": 20885,
+      "energy_lv30": 33625,
+      "energy_lv60": 63282,
+      "energy_max_pot69": null,
+      "energy_max_pot507": 201792,
+      "description": "ドオーの形がうれしいビターなエクレア。中身もずっしり詰まっている。"
+    },
+    {
+      "no": 25,
+      "category": "drink_dessert",
+      "name": "ドキドキこわいかおパンケーキ",
+      "icon": "scaryfacepancakes.png",
+      "ingredients": [
+        {
+          "name": "ずっしりカボチャ",
+          "count": 18
+        },
+        {
+          "name": "とくせんエッグ",
+          "count": 24
+        },
+        {
+          "name": "あまいミツ",
+          "count": 32
+        },
+        {
+          "name": "あんみんトマト",
+          "count": 29
+        }
+      ],
+      "total_ingredients": 103,
+      "energy_lv1": 24354,
+      "energy_lv30": null,
+      "energy_lv60": null,
+      "energy_max_pot69": null,
+      "energy_max_pot507": null,
+      "description": "野菜の甘みが嬉しいけれど目が合うとドキッとしてしまう。"
+    },
+    {
+      "no": 26,
+      "category": "drink_dessert",
+      "name": "グラスミキサースムージー",
+      "icon": "leaftornadosmoothie.png",
+      "ingredients": [
+        {
+          "name": "つやつやアボカド",
+          "count": 18
+        },
+        {
+          "name": "あんみんトマト",
+          "count": 16
+        },
+        {
+          "name": "モーモーミルク",
+          "count": 14
+        }
+      ],
+      "total_ingredients": 48,
+      "energy_lv1": 8165,
+      "energy_lv30": null,
+      "energy_lv60": null,
+      "energy_max_pot69": null,
+      "energy_max_pot507": null,
+      "description": "太陽の恵みをたっぷりで栄養満点。朝食にもピッタリ。"
+    },
+    {
+      "no": 27,
+      "category": "drink_dessert",
+      "name": "みつあつめチョコワッフル",
+      "icon": "honeygatherchocolatewaffles.png",
+      "ingredients": [
+        {
+          "name": "あまいミツ",
+          "count": 38
+        },
+        {
+          "name": "ワカクサコーン",
+          "count": 28
+        },
+        {
+          "name": "ピュアなオイル",
+          "count": 28
+        },
+        {
+          "name": "リラックスカカオ",
+          "count": 21
+        }
+      ],
+      "total_ingredients": 115,
+      "energy_lv1": 25484,
+      "energy_lv30": null,
+      "energy_lv60": null,
+      "energy_max_pot69": null,
+      "energy_max_pot507": null,
+      "description": "カカオを練り込んだビターな生地にたっぷりのミツをかけた甘いごほうび"
+    }
+  ],
+  "_meta": {
+    "count": 79,
+    "merged_with_plus": 71
+  }
+}

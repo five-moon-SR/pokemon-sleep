@@ -1,0 +1,245 @@
+{
+  "records": [
+    {
+      "name": "ふといながねぎ",
+      "icon": "largeleek.png",
+      "base_energy": 185,
+      "max_bonus_pct": 61,
+      "max_bonus_recipes": [
+        "いあいぎりすき焼きカレー",
+        "スパークスパイスコーラ"
+      ],
+      "effective_max_energy": 995,
+      "dream_shard_price": 7,
+      "description": "カモネギが好む植物のクキなのかは謎。"
+    },
+    {
+      "name": "あじわいキノコ",
+      "icon": "tastymushroom.png",
+      "base_energy": 167,
+      "max_bonus_pct": 61,
+      "max_bonus_recipes": [
+        "めざめるパワーシチュー"
+      ],
+      "effective_max_energy": 898,
+      "dream_shard_price": 7,
+      "description": "旨味あふれるジューシーなキノコ。"
+    },
+    {
+      "name": "とくせんエッグ",
+      "icon": "fancyegg.png",
+      "base_energy": 115,
+      "max_bonus_pct": 78,
+      "max_bonus_recipes": [
+        "りんごさんヨーグルトサラダ",
+        "ドキドキこわいかおパンケーキ"
+      ],
+      "effective_max_energy": 684,
+      "dream_shard_price": 5,
+      "description": "さまざまな味付けで楽しめる栄養価の高い食材。"
+    },
+    {
+      "name": "ほっこりポテト",
+      "icon": "softpotato.png",
+      "base_energy": 124,
+      "max_bonus_pct": 78,
+      "max_bonus_recipes": [
+        "しんりょくアボカドグラタン"
+      ],
+      "effective_max_energy": 737,
+      "dream_shard_price": 5,
+      "description": "まろやかな口当たりで身も心もほっこりする。"
+    },
+    {
+      "name": "とくせんリンゴ",
+      "icon": "fancyapple.png",
+      "base_energy": 90,
+      "max_bonus_pct": 78,
+      "max_bonus_recipes": [
+        "りんごさんヨーグルトサラダ"
+      ],
+      "effective_max_energy": 536,
+      "dream_shard_price": 4,
+      "description": "選び抜かれたリンゴは形もよく光り輝く。"
+    },
+    {
+      "name": "げきからハーブ",
+      "icon": "fieryherb.png",
+      "base_energy": 130,
+      "max_bonus_pct": 78,
+      "max_bonus_recipes": [
+        "じならしワカモレチップス"
+      ],
+      "effective_max_energy": 773,
+      "dream_shard_price": 5,
+      "description": "目が覚める辛さをもつ真っ赤なハーブ。"
+    },
+    {
+      "name": "マメミート",
+      "icon": "beansausage.png",
+      "base_energy": 103,
+      "max_bonus_pct": 61,
+      "max_bonus_recipes": [
+        "いあいぎりすき焼きカレー",
+        "まけんきコーヒーサラダ"
+      ],
+      "effective_max_energy": 554,
+      "dream_shard_price": 4,
+      "description": "ポケモンが好むマメからつくったヘルシーなお肉。"
+    },
+    {
+      "name": "モーモーミルク",
+      "icon": "moomoomilk.png",
+      "base_energy": 98,
+      "max_bonus_pct": 78,
+      "max_bonus_recipes": [
+        "りんごさんヨーグルトサラダ",
+        "しんりょくアボカドグラタン"
+      ],
+      "effective_max_energy": 582,
+      "dream_shard_price": 4,
+      "description": "飲むとポケモンが元気になる栄養満点のミルク。"
+    },
+    {
+      "name": "あまいミツ",
+      "icon": "honey.png",
+      "base_energy": 101,
+      "max_bonus_pct": 78,
+      "max_bonus_recipes": [
+        "ドキドキこわいかおパンケーキ"
+      ],
+      "effective_max_energy": 600,
+      "dream_shard_price": 4,
+      "description": "ポケモンが集めたあまいにおいがするミツ。"
+    },
+    {
+      "name": "ピュアなオイル",
+      "icon": "pureoil.png",
+      "base_energy": 121,
+      "max_bonus_pct": 78,
+      "max_bonus_recipes": [
+        "しんりょくアボカドグラタン"
+      ],
+      "effective_max_energy": 719,
+      "dream_shard_price": 5,
+      "description": "どんな調理法にも合う万能なオイル。"
+    },
+    {
+      "name": "あったかジンジャー",
+      "icon": "warmingginger.png",
+      "base_energy": 109,
+      "max_bonus_pct": 61,
+      "max_bonus_recipes": [
+        "スパークスパイスコーラ"
+      ],
+      "effective_max_energy": 586,
+      "dream_shard_price": 4,
+      "description": "どの食材よりも身体をあたためる辛みのある食材。"
+    },
+    {
+      "name": "あんみんトマト",
+      "icon": "snoozytomato.png",
+      "base_energy": 110,
+      "max_bonus_pct": 78,
+      "max_bonus_recipes": [
+        "りんごさんヨーグルトサラダ",
+        "ドキドキこわいかおパンケーキ"
+      ],
+      "effective_max_energy": 653,
+      "dream_shard_price": 4,
+      "description": "食べるとよくねむれる真っ赤なトマト。"
+    },
+    {
+      "name": "リラックスカカオ",
+      "icon": "soothingcacao.png",
+      "base_energy": 151,
+      "max_bonus_pct": 61,
+      "max_bonus_recipes": [
+        "ドオーのエクレア"
+      ],
+      "effective_max_energy": 811,
+      "dream_shard_price": 6,
+      "description": "加工は手間だが、それに見合うだけのリラックス効果が得られる。"
+    },
+    {
+      "name": "おいしいシッポ",
+      "icon": "slowpoketail.png",
+      "base_energy": 342,
+      "max_bonus_pct": 25,
+      "max_bonus_recipes": [
+        "あぶりテールカレー",
+        "ヤドンテールのペッパーサラダ"
+      ],
+      "effective_max_energy": 1428,
+      "dream_shard_price": 14,
+      "description": "とても美味しいなにかのシッポ。そのシッポは抜けてもすぐ生え変わる。"
+    },
+    {
+      "name": "ワカクサ大豆",
+      "icon": "greengrasssoybeans.png",
+      "base_energy": 100,
+      "max_bonus_pct": 78,
+      "max_bonus_recipes": [
+        "じならしワカモレチップス"
+      ],
+      "effective_max_energy": 595,
+      "dream_shard_price": 4,
+      "description": "トレーニングと相性の良い、加工しやすいワカクサ特産品。"
+    },
+    {
+      "name": "ワカクサコーン",
+      "icon": "greengrasscorn.png",
+      "base_energy": 140,
+      "max_bonus_pct": 78,
+      "max_bonus_recipes": [
+        "じならしワカモレチップス"
+      ],
+      "effective_max_energy": 832,
+      "dream_shard_price": 6,
+      "description": "生でも食べられる。甘みが際立つワカクサ特産品。"
+    },
+    {
+      "name": "めざましコーヒー",
+      "icon": "めざましコーヒー.png",
+      "base_energy": 153,
+      "max_bonus_pct": 61,
+      "max_bonus_recipes": [
+        "めざめるパワーシチュー",
+        "まけんきコーヒーサラダ",
+        "ドオーのエクレア",
+        "スパークスパイスコーラ"
+      ],
+      "effective_max_energy": 823,
+      "dream_shard_price": 6,
+      "description": "摂りすぎると眠れなくなる。目覚めをよくするときには便利。"
+    },
+    {
+      "name": "ずっしりカボチャ",
+      "icon": "ずっしりカボチャ.png",
+      "base_energy": 250,
+      "max_bonus_pct": 78,
+      "max_bonus_recipes": [
+        "ドキドキこわいかおパンケーキ"
+      ],
+      "effective_max_energy": 1486,
+      "dream_shard_price": 10,
+      "description": "ずっしりと実の詰まった大きなカボチャ。"
+    },
+    {
+      "name": "つやつやアボカド",
+      "icon": "つやつやアボカド.png",
+      "base_energy": 162,
+      "max_bonus_pct": 78,
+      "max_bonus_recipes": [
+        "しんりょくアボカドグラタン",
+        "じならしワカモレチップス"
+      ],
+      "effective_max_energy": 963,
+      "dream_shard_price": 6,
+      "description": "つやっと輝くみどりがとれたて新鮮のあかし。"
+    }
+  ],
+  "_meta": {
+    "count": 19
+  }
+}

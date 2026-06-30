@@ -1,0 +1,165 @@
+{
+  "records": [
+    {
+      "no": 1,
+      "type": "normal",
+      "name": "ワカクサ本島",
+      "icon": "ワカクサ本島.png",
+      "unlock_condition": "なし",
+      "favorite_berries_random": true,
+      "favorite_berries": [],
+      "recommended_sp_min": 1400
+    },
+    {
+      "no": 2,
+      "type": "normal",
+      "name": "シアンの砂浜",
+      "icon": "シアンの砂浜.png",
+      "unlock_condition": "20種類",
+      "favorite_berries_random": false,
+      "favorite_berries": [
+        {
+          "name": "オレンのみ",
+          "type": "みず"
+        },
+        {
+          "name": "モモンのみ",
+          "type": "フェアリー"
+        },
+        {
+          "name": "シーヤのみ",
+          "type": "ひこう"
+        }
+      ],
+      "recommended_sp_min": 2500
+    },
+    {
+      "no": 3,
+      "type": "normal",
+      "name": "トープ洞窟",
+      "icon": "トープ洞窟.png",
+      "unlock_condition": "70種類",
+      "favorite_berries_random": false,
+      "favorite_berries": [
+        {
+          "name": "ヒメリのみ",
+          "type": "ほのお"
+        },
+        {
+          "name": "フィラのみ",
+          "type": "じめん"
+        },
+        {
+          "name": "オボンのみ",
+          "type": "いわ"
+        }
+      ],
+      "recommended_sp_min": 4000
+    },
+    {
+      "no": 4,
+      "type": "normal",
+      "name": "ウノハナ雪原",
+      "icon": "ウノハナ雪原.png",
+      "unlock_condition": "150種類",
+      "favorite_berries_random": false,
+      "favorite_berries": [
+        {
+          "name": "チーゴのみ",
+          "type": "こおり"
+        },
+        {
+          "name": "キーのみ",
+          "type": "ノーマル"
+        },
+        {
+          "name": "ウイのみ",
+          "type": "あく"
+        }
+      ],
+      "recommended_sp_min": 6400
+    },
+    {
+      "no": 5,
+      "type": "normal",
+      "name": "ラピスラズリ湖畔",
+      "icon": "ラピスラズリ湖畔.png",
+      "unlock_condition": "240種類",
+      "favorite_berries_random": false,
+      "favorite_berries": [
+        {
+          "name": "ドリのみ",
+          "type": "くさ"
+        },
+        {
+          "name": "マゴのみ",
+          "type": "エスパー"
+        },
+        {
+          "name": "クラボのみ",
+          "type": "かくとう"
+        }
+      ],
+      "recommended_sp_min": 10000
+    },
+    {
+      "no": 6,
+      "type": "normal",
+      "name": "ゴールド旧発電所",
+      "icon": "ゴールド旧発電所.png",
+      "unlock_condition": "340種類",
+      "favorite_berries_random": false,
+      "favorite_berries": [
+        {
+          "name": "ウブのみ",
+          "type": "でんき"
+        },
+        {
+          "name": "ベリブのみ",
+          "type": "はがね"
+        },
+        {
+          "name": "ブリーのみ",
+          "type": "ゴースト"
+        }
+      ],
+      "recommended_sp_min": 15000
+    },
+    {
+      "no": 7,
+      "type": "normal",
+      "name": "アンバー渓谷",
+      "icon": "アンバー渓谷.png",
+      "unlock_condition": "450種類",
+      "favorite_berries_random": false,
+      "favorite_berries": [
+        {
+          "name": "カゴのみ",
+          "type": "どく"
+        },
+        {
+          "name": "ラムのみ",
+          "type": "むし"
+        },
+        {
+          "name": "ヤチェのみ",
+          "type": "ドラゴン"
+        }
+      ],
+      "recommended_sp_min": 20000
+    },
+    {
+      "no": 1,
+      "type": "ex",
+      "name": "ワカクサ本島 EX",
+      "icon": "ワカクサ本島EX.png",
+      "unlock_condition": "ワカクサ本島でマスターランク18到達",
+      "favorite_berries_random": true,
+      "favorite_berries": [],
+      "recommended_sp_min": 23000
+    }
+  ],
+  "_meta": {
+    "count": 8
+  }
+}

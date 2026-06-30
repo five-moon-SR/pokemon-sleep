@@ -1,0 +1,78 @@
+*概要 [#se568bf2]
+せいかくはポケモンが生まれつきひとつ持っている要素で25種類ある。
+本作ではせいかくによっておてつだいスピード、げんき回復量、食材おてつだい確率、メインスキル発生確率、EXP獲得量にプラスあるいはマイナスの補正がかかる。
+おてつだいスピード、食材、メインスキルの上昇補正は[[サブスキル]]にも同じ効果のものが存在するが、食材とメインスキルは『食材確率アップ』、『スキル発生確率アップ』と少し端折られている。
+
+入手機会は限られるが、どうぐ「[[まっしろミント>どうぐ/まっしろミント]]」を使うことで、せいかくによる能力の特徴を無くすことができる。詳細は当該項目を参照。
+
+#fold(せいかくのバランス調整履歴){{
+[[''Ver.2.6.0 アップデート''>アップデート#ver2_6_0]]
+-ポケモンのせいかくによる補正で「おてつだいスピード▼▼」マイナスの効果を小さく
+おてつだい時間1.1倍 → ''1.075''倍
+（おてつだいスピード0.91倍 → ''0.93''倍）
+
+[[''Ver.1.1.0 アップデート''>アップデート#ver1_1_0]]
+-ポケモンのせいかくによる補正で「げんき▼▼」マイナスの効果を小さく
+0.8倍 → ''0.88''倍
+}}
+
+
+*補正がかかる項目について [#ub17bbac]
+|~項目|~説明|>|~倍率|
+|~|~|~上昇&color(tomato){▲};|~下降&color(dodgerblue){▼};|
+|おてつだいスピード|[[おてつだい時間>おてつだい/おてつだい時間]]の逆数|1.11((正確にはおてつだい時間が0.9倍))|0.93((正確にはおてつだい時間が1.075倍))|
+|げんき回復量|[[睡眠>ゲーム内用語一覧#j4ca833b]]、ボックス内回復、[[メインスキル]]、げんきマクラ((上昇補正のみ))での[[げんき]]回復量|1.2|0.88|
+|食材おてつだい確率|[[食材]]を[[おてつだい>ゲーム内用語一覧#b19bf48b]]で入手する確率|1.2((要検証))|0.8((要検証))|
+|メインスキル発生確率|[[メインスキル]]が発生する確率|1.2((要検証))|0.8((要検証))|
+|EXP獲得量|[[アメ]]・[[睡眠リサーチ>育成/レベル#q3c7cf6a]]によるEXP獲得量、ポケモンレベル上限ボーナス((レベル上限のポケモンと寝たときに貰えるボーナス。[[こちら>育成/レベル#caa6c6db]]を参照))|1.18|0.82|
+
+
+*せいかくの一覧表 [#q8359cb6]
+#nobr{{
+|CENTER:|>|>|>|>|CENTER:100|c
+//ポケモン本編の性格による好みのきのみの味（からい、すっぱい、しぶい、にがい、あまい）に合わせた表配色にしています。
+|RIGHT:&color(dodgerblue){下降▼▼};|BGCOLOR(#F7D0C7):''おてつだい&br;スピード''|BGCOLOR(#F9EEB8):''げんき回復量''|BGCOLOR(#C5DFF3):''食材おてつだい&br;確率''|BGCOLOR(#CAF5B2):''メインスキル&br;発生確率''|BGCOLOR(#FBD4DF):''EXP獲得量''|
+|LEFT:&color(tomato){▲▲上昇};|~|~|~|~|~|
+|BGCOLOR(#F7D0C7):''おてつだい&br;スピード''|BGCOLOR(#F5F5F5):がんばりや※|さみしがり|いじっぱり|やんちゃ|ゆうかん|
+|BGCOLOR(#F9EEB8):''げんき&br;回復量''|ずぶとい|BGCOLOR(#F5F5F5):すなお※|わんぱく|のうてんき|のんき|
+|BGCOLOR(#C5DFF3):''食材おてつだい&br;確率''|ひかえめ|おっとり|BGCOLOR(#F5F5F5):てれや※|うっかりや|れいせい|
+|BGCOLOR(#CAF5B2):''メインスキル&br;発生確率''|おだやか|おとなしい|しんちょう|BGCOLOR(#F5F5F5):きまぐれ※|なまいき|
+|BGCOLOR(#FBD4DF):''EXP&br;獲得量''|おくびょう|せっかち|ようき|むじゃき|BGCOLOR(#F5F5F5):まじめ※|
+}}
+※上昇と下降が同じ箇所になっているものは相殺されて無補正（せいかくによる特徴なし）になる
+#fold(ソート一覧表){{{{
+#nobr{{{
+#tablesort{{
+||>|180|c
+|~せいかく|~上昇|~下降|h
+|さみしがり|&color(,#F48E77){&nbsp;}; おてつだいスピ&#12540;ド&color(tomato){▲};|&color(,#F1D962){&nbsp;}; げんき回復量&color(dodgerblue){▼};|
+|いじっぱり|&color(,#F48E77){&nbsp;}; おてつだいスピ&#12540;ド&color(tomato){▲};|&color(,#7EBFF1){&nbsp;}; 食材おてつだい確率&color(dodgerblue){▼};|
+|やんちゃ|&color(,#F48E77){&nbsp;}; おてつだいスピ&#12540;ド&color(tomato){▲};|&color(,#9CF16E){&nbsp;}; メインスキル発生確率&color(dodgerblue){▼};|
+|ゆうかん|&color(,#F48E77){&nbsp;}; おてつだいスピ&#12540;ド&color(tomato){▲};|&color(,#F8B9CB){&nbsp;}; EXP獲得量&color(dodgerblue){▼};|
+|ずぶとい|&color(,#F1D962){&nbsp;}; げんき回復量&color(tomato){▲};|&color(,#F48E77){&nbsp;}; おてつだいスピ&#12540;ド&color(dodgerblue){▼};|
+|わんぱく|&color(,#F1D962){&nbsp;}; げんき回復量&color(tomato){▲};|&color(,#7EBFF1){&nbsp;}; 食材おてつだい確率&color(dodgerblue){▼};|
+|のうてんき|&color(,#F1D962){&nbsp;}; げんき回復量&color(tomato){▲};|&color(,#9CF16E){&nbsp;}; メインスキル発生確率&color(dodgerblue){▼};|
+|のんき|&color(,#F1D962){&nbsp;}; げんき回復量&color(tomato){▲};|&color(,#F8B9CB){&nbsp;}; EXP獲得量&color(dodgerblue){▼};|
+|ひかえめ|&color(,#7EBFF1){&nbsp;}; 食材おてつだい確率&color(tomato){▲};|&color(,#F48E77){&nbsp;}; おてつだいスピ&#12540;ド&color(dodgerblue){▼};|
+|おっとり|&color(,#7EBFF1){&nbsp;}; 食材おてつだい確率&color(tomato){▲};|&color(,#F1D962){&nbsp;}; げんき回復量&color(dodgerblue){▼};|
+|うっかりや|&color(,#7EBFF1){&nbsp;}; 食材おてつだい確率&color(tomato){▲};|&color(,#9CF16E){&nbsp;}; メインスキル発生確率&color(dodgerblue){▼};|
+|れいせい|&color(,#7EBFF1){&nbsp;}; 食材おてつだい確率&color(tomato){▲};|&color(,#F8B9CB){&nbsp;}; EXP獲得量&color(dodgerblue){▼};|
+|おだやか|&color(,#9CF16E){&nbsp;}; メインスキル発生確率&color(tomato){▲};|&color(,#F48E77){&nbsp;}; おてつだいスピ&#12540;ド&color(dodgerblue){▼};|
+|おとなしい|&color(,#9CF16E){&nbsp;}; メインスキル発生確率&color(tomato){▲};|&color(,#F1D962){&nbsp;}; げんき回復量&color(dodgerblue){▼};|
+|しんちょう|&color(,#9CF16E){&nbsp;}; メインスキル発生確率&color(tomato){▲};|&color(,#7EBFF1){&nbsp;}; 食材おてつだい確率&color(dodgerblue){▼};|
+|なまいき|&color(,#9CF16E){&nbsp;}; メインスキル発生確率&color(tomato){▲};|&color(,#F8B9CB){&nbsp;}; EXP獲得量&color(dodgerblue){▼};|
+|おくびょう|&color(,#F8B9CB){&nbsp;}; EXP獲得量&color(tomato){▲};|&color(,#F48E77){&nbsp;}; おてつだいスピ&#12540;ド&color(dodgerblue){▼};|
+|せっかち|&color(,#F8B9CB){&nbsp;}; EXP獲得量&color(tomato){▲};|&color(,#F1D962){&nbsp;}; げんき回復量&color(dodgerblue){▼};|
+|ようき|&color(,#F8B9CB){&nbsp;}; EXP獲得量&color(tomato){▲};|&color(,#7EBFF1){&nbsp;}; 食材おてつだい確率&color(dodgerblue){▼};|
+|むじゃき|&color(,#F8B9CB){&nbsp;}; EXP獲得量&color(tomato){▲};|&color(,#9CF16E){&nbsp;}; メインスキル発生確率&color(dodgerblue){▼};|
+||>|BGCOLOR(#F5F5F5):|c
+|がんばりや|無補正|無補正|
+|すなお|無補正|無補正|
+|てれや|無補正|無補正|
+|きまぐれ|無補正|無補正|
+|まじめ|無補正|無補正|
+}}
+}}}
+}}}}
+
+

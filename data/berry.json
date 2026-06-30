@@ -1,0 +1,151 @@
+{
+  "records": [
+    {
+      "name": "キーのみ",
+      "type": "ノーマル",
+      "base_energy": 28,
+      "preferred_field": "ウノハナ雪原",
+      "icon": "persimberry.png",
+      "description": "降り注ぐ太陽のエネルギーを吸収すればするほど色鮮やかに成長する。"
+    },
+    {
+      "name": "ヒメリのみ",
+      "type": "ほのお",
+      "base_energy": 27,
+      "preferred_field": "トープ洞窟",
+      "icon": "leppaberry.png",
+      "description": "クラボなどに比べると少し成長するのが遅い。実が小さいものほどおいしい。"
+    },
+    {
+      "name": "オレンのみ",
+      "type": "みず",
+      "base_energy": 31,
+      "preferred_field": "シアンの砂浜",
+      "icon": "oranberry.png",
+      "description": "自然の恵み一つになって口の中でいろいろな味が広がる不思議なおいしさ。"
+    },
+    {
+      "name": "ウブのみ",
+      "type": "でんき",
+      "base_energy": 25,
+      "preferred_field": "ゴールド旧発電所",
+      "icon": "grepaberry.png",
+      "description": "とても柔らかくガブリとかじると甘さと酸っぱさが口いっぱいに広がる。"
+    },
+    {
+      "name": "ドリのみ",
+      "type": "くさ",
+      "base_energy": 30,
+      "preferred_field": "ラピスラズリ湖畔",
+      "icon": "durinberry.png",
+      "description": "とんでもなく苦いきのみでこれひとかじりでしゃっくりも一瞬で止まる。"
+    },
+    {
+      "name": "チーゴのみ",
+      "type": "こおり",
+      "base_energy": 32,
+      "preferred_field": "ウノハナ雪原",
+      "icon": "rawstberry.png",
+      "description": "他のものより葉っぱが長く丸まっているやつはすこし苦みが強い。"
+    },
+    {
+      "name": "クラボのみ",
+      "type": "かくとう",
+      "base_energy": 27,
+      "preferred_field": "ラピスラズリ湖畔",
+      "icon": "cheriberry.png",
+      "description": "真っ赤な実はたいへん辛くて刺激的な味がする。とてもかわいい花が咲く。"
+    },
+    {
+      "name": "カゴのみ",
+      "type": "どく",
+      "base_energy": 32,
+      "preferred_field": "アンバー渓谷",
+      "icon": "chestoberry.png",
+      "description": "カゴのみは外側も中身も全部硬くて渋いけれどちゃんと全部食べられる。"
+    },
+    {
+      "name": "フィラのみ",
+      "type": "じめん",
+      "base_energy": 29,
+      "preferred_field": "トープ洞窟",
+      "icon": "figyberry.png",
+      "description": "丸いきのみをかじったような形をしているがその中には辛い成分が詰まっている。"
+    },
+    {
+      "name": "シーヤのみ",
+      "type": "ひこう",
+      "base_energy": 24,
+      "preferred_field": "シアンの砂浜",
+      "icon": "pamtreberry.png",
+      "description": "遠い海から漂ってきたが今ではこの島でも栽培ができるようになった。"
+    },
+    {
+      "name": "マゴのみ",
+      "type": "エスパー",
+      "base_energy": 26,
+      "preferred_field": "ラピスラズリ湖畔",
+      "icon": "magoberry.png",
+      "description": "だんだんと成長するにつれてきのみの形が曲がっていく。曲がり方が大きいほど甘い。"
+    },
+    {
+      "name": "ラムのみ",
+      "type": "むし",
+      "base_energy": 24,
+      "preferred_field": "アンバー渓谷",
+      "icon": "lumberry.png",
+      "description": "ポケモンの体にいい成分を内部にじっくりたくわえるので育つまでに時間がかかる。"
+    },
+    {
+      "name": "オボンのみ",
+      "type": "いわ",
+      "base_energy": 30,
+      "preferred_field": "トープ洞窟",
+      "icon": "sitrusberry.png",
+      "description": "もともとはオレンのみと同じ種類から別れてできた。オレンより大きくまろやか。"
+    },
+    {
+      "name": "ブリーのみ",
+      "type": "ゴースト",
+      "base_energy": 26,
+      "preferred_field": "ゴールド旧発電所",
+      "icon": "blukberry.png",
+      "description": "柔らかい皮に包まれた小さな青い粒は食べると口の中を黒く染めてしまう。"
+    },
+    {
+      "name": "ヤチェのみ",
+      "type": "ドラゴン",
+      "base_energy": 35,
+      "preferred_field": "アンバー渓谷",
+      "icon": "yacheberry.png",
+      "description": "渋さと酸っぱさがほどよく調和した爽やかな味。冷やすとよりおいしくなる。"
+    },
+    {
+      "name": "ウイのみ",
+      "type": "あく",
+      "base_energy": 31,
+      "preferred_field": "ウノハナ雪原",
+      "icon": "wikiberry.png",
+      "description": "繁殖範囲を広げるためポケモンが持ちやすいようにまわりのイボイボができたという。"
+    },
+    {
+      "name": "ベリブのみ",
+      "type": "はがね",
+      "base_energy": 33,
+      "preferred_field": "ゴールド旧発電所",
+      "icon": "belueberry.png",
+      "description": "見るからにおいしそうな色と艶をしているが食べてみるとものすごく酸っぱい。"
+    },
+    {
+      "name": "モモンのみ",
+      "type": "フェアリー",
+      "base_energy": 26,
+      "preferred_field": "シアンの砂浜",
+      "icon": "pechaberry.png",
+      "description": "中に空洞があるので食べられる部分は少ないがとても甘くておいしい"
+    }
+  ],
+  "_meta": {
+    "count": 18
+  }
+}

@@ -1,0 +1,132 @@
+*概要 [#n04abd0b]
+レシピごとに、獲得できるエナジー効率は異なる。
+各レシピレベルで、料理でどれくらいのエナジーが獲得できるのかを概観できるようにした。
+
+なお、「レシピレベル60+シッポ追加」とは、通常のなべの最大容量である69個に各種のなべ追加拡張手段を利用したとき((ウィークエンドボーナス・料理パワーアップ・いいキャンプチケットの3種すべて))の限界容量507個(((容量分69×ウィークエンドボーナス2倍＋料理パワーアップ分200)×いいキャンプチケット分1.5倍 = 507))まで、すべておいしいシッポを追加食材として投入した際のエナジーとなる。
+おいしいシッポは全食材でもとびぬけて基礎エナジーが高く、なべの空きを埋める食材としては最大の効率を誇っており、「レシピレベル60+シッポ追加」の数値は、各料理が現状で叶えられる最大のエナジー量となっている((通常、料理を成立させながらおいしいシッポを大量追加投入し続けることは難しく、基本的にはあくまで理論上の数字であることには注意))。
+2025年6月現在、食材100個分に最大倍率が掛かるまけんきコーヒーサラダ、ドオーのエクレア、いあいぎりすき焼きカレーは、''大成功なし・フィールドボーナス抜きでも20万エナジーを稼ぐ''ポテンシャルを持つ料理となっている。
+
+追加食材には料理によるボーナスがかからないため、なべを拡張せずに食材69個を使用したときに、ある2つの料理の間についていたエナジー差は、なべを拡張して食材507個を使用したとしても変わらず残っている。
+当然ながらエナジー順位も逆転することはない。ただし、レシピレベル上限が開放されるたびに、またレシピごとのエナジー調整が入るたびに、料理そのものの順位が入れ替わる可能性はある。
+
+ごちゃまぜ料理は、レシピレベルの恩恵に肖れないため相対的にエナジーが伸びづらい。
+2024年8月のレシピレベル60開放時点で、最終到達エナジーがかなり下位に移動している。
+一応、追加食材のおいしいシッポさえ確保できるなら、レシピレベルに関係なく最初から火力を出せるという差別化点もある。
+
+他方、いわゆるニンジャ系レシピは、個別でのレシピ強化およびレシピレベル開放の二重の強化を受けて大きく躍進している。
+追加食材を無視すれば、なべ容量の拡張が不要な点も心強い。
+
+おいしいシッポを追加投入していくと、目的としていたレシピによっては、『あぶりテールカレー』『ヤドンテールのペッパーサラダ』にレシピが切り替わる場合がある。
+これは、2種以上の料理が成立する組み合わせの食材を使用しているとき、高効率な料理であればそちらに切り替わってしまう仕様があるためで、純粋なエナジーの観点では、名義が変わるだけで損をすることはない。
+
+
+**カレー・シチュー [#curry_stew]
+#nobr{{{
+#cssbox(width: fit-content; padding-right: 10px; margin-bottom: -10px; background: #F1F1EA; border-radius: 8px 8px 0 0;){{
+&color(#A4A48F){&size(13){''　カレ&#12540;・シチュ&#12540;　''};| [[&color(#F1F1EA){%%%&color(#528BB9){サラ&#12480; &fa(fa-solid fa-caret-down fa-sm);};%%%};>#salad]] | [[&color(#F1F1EA){%%%&color(#528BB9){デザー&#12488;・ドリン&#12463; &fa(fa-solid fa-caret-down fa-sm);};%%%};>#drink_dessert]]};
+}}
+}}}
+#tablesort{{
+|RIGHT:|CENTER:||160|RIGHT:|RIGHT:|RIGHT:|RIGHT:|RIGHT:|c
+|~ |~画像|~料理名|~食材|~計|>|>|>|>|~エナジ&#8212;|h
+|~|~|~|~|~|>|>|CENTER:レシピレベル|>|CENTER:レシピレベル60&br;+シッポ追加|h
+|~|~|~|~|~|CENTER:Lv1&br;1.00倍|CENTER:Lv30&br;1.61倍|CENTER:Lv60&br;3.03倍|CENTER:69-|CENTER:507-|h
+|-|&ref(料理/レシピの一覧/mixedcurry.png,20%);|ごちゃまぜカレー|他のレシピに該当しない&br;組み合わせ|-|0|0|0|23598|173394|
+|1|&ref(料理/レシピの一覧/fancyapplecurry.png,20%);|とくせんリンゴカレー&tooltip(&tip;){りんごの自然な甘みを感じる&br;シンプルなカレー。};|&size(11){とくせんリンゴ};&ref(料理/レシピの一覧/fancyapple.png,nolink,15%);×7|7|748|1204|2266|23470|173266|
+|2|&ref(料理/レシピの一覧/grilledtailcurry.png,20%);|あぶりテールカレー&tooltip(&tip;){テールのうまみが&br;ルーをワンランク上の味に。};|&size(11){おいしいシッポ};&ref(料理/レシピの一覧/slowpoketail.png,nolink,15%);×8&br;&size(11){げきからハーブ};&ref(料理/レシピの一覧/fieryherb.png,nolink,15%);×25|33|7483|12047|22673|34985|184781|
+|3|&ref(料理/レシピの一覧/solarpowertomatocurry.png,20%);|サンパワートマトカレー&tooltip(&tip;){太陽の光で真っ赤に育ったトマトで&br;つくったカレー。};|&size(11){あんみんトマト};&ref(料理/レシピの一覧/snoozytomato.png,nolink,15%);×10&br;&size(11){げきからハーブ};&ref(料理/レシピの一覧/fieryherb.png,nolink,15%);×5|15|2078|3345|6296|24764|174560|
+|4|&ref(料理/レシピの一覧/dreameaterbuttercurry.png,20%);|ぜったいねむりバターカレー&tooltip(&tip;){深いねむりをテーマに&br;食材を選んだカレー。};|&size(11){ほっこりポテト};&ref(料理/レシピの一覧/softpotato.png,nolink,15%);×18&br;&size(9){リラックスカカオ};&ref(料理/レシピの一覧/soothingcacao.png,nolink,15%);×12&br;&size(11){あんみんトマト};&ref(料理/レシピの一覧/snoozytomato.png,nolink,15%);×15&br;&size(11){モーモーミルク};&ref(料理/レシピの一覧/moomoomilk.png,nolink,15%);×10|55|9010|14506|27300|32088|181884|
+|5|&ref(料理/レシピの一覧/spicyleekcurry.png,20%);|からくちネギもりカレー&tooltip(&tip;){香ばしく焼いたネギは果実のように甘く、&br;ルーの辛さと絶妙のバランス。};|&size(11){ふといながねぎ};&ref(料理/レシピの一覧/largeleek.png,nolink,15%);×14&br;&size(8){あったかジンジャー};&ref(料理/レシピの一覧/warmingginger.png,nolink,15%);×10&br;&size(11){げきからハーブ};&ref(料理/レシピの一覧/fieryherb.png,nolink,15%);×8|32|5900|9499|17877|30531|180327|
+|6|&ref(料理/レシピの一覧/sporemushroomcurry.png,20%);|キノコのほうしカレー&tooltip(&tip;){キノコのほうしを浴びたかのように&br;眠れるカレー。};|&size(11){あじわいキノコ};&ref(料理/レシピの一覧/tastymushroom.png,nolink,15%);×14&br;&size(11){ほっこりポテト};&ref(料理/レシピの一覧/softpotato.png,nolink,15%);×9|23|4162|6700|12610|28342|178138|
+|7|&ref(料理/レシピの一覧/eggbombcurry.png,20%);|おやこあいカレー&tooltip(&tip;){子供にやさしい食材だけでつくった&br;愛情たっぷりカレー。};|あまいミツ&ref(料理/レシピの一覧/honey.png,nolink,15%);×12&br;&size(11){とくせんエッグ};&ref(料理/レシピの一覧/fancyegg.png,nolink,15%);×8&br;&size(11){とくせんリンゴ};&ref(料理/レシピの一覧/fancyapple.png,nolink,15%);×11&br;&size(11){ほっこりポテト};&ref(料理/レシピの一覧/softpotato.png,nolink,15%);×4|35|4523|7282|13704|25332|175128|
+|8|&ref(料理/レシピの一覧/heartycheeseburgercurry.png,20%);|満腹チーズバーグカレー&tooltip(&tip;){ボリュームたっぷり。&br;カビゴンもびっくり大きなカレー。};|&size(11){モーモーミルク};&ref(料理/レシピの一覧/moomoomilk.png,nolink,15%);×8&br;マメミート&ref(料理/レシピの一覧/beansausage.png,nolink,15%);×8|16|1910|3075|5787|23913|173709|
+|9|&ref(料理/レシピの一覧/softpotatochowder.png,20%);|ほっこりホワイトシチュー&tooltip(&tip;){とけてなくなる寸前まで&br;ポテトを煮込んだトロトロシチュー。};|&size(11){モーモーミルク};&ref(料理/レシピの一覧/moomoomilk.png,nolink,15%);×10&br;&size(11){ほっこりポテト};&ref(料理/レシピの一覧/softpotato.png,nolink,15%);×8&br;&size(11){あじわいキノコ};&ref(料理/レシピの一覧/tastymushroom.png,nolink,15%);×4|22|3181|5121|9638|25712|175508|
+|10|&ref(料理/レシピの一覧/simplechowder.png,20%);|たんじゅんホワイトシチュー&tooltip(&tip;){ミルクのうまみを感じるシンプルシチュー。};|&size(11){モーモーミルク};&ref(料理/レシピの一覧/moomoomilk.png,nolink,15%);×7|7|814|1310|2466|23670|173466|
+|11|&ref(料理/レシピの一覧/beanburgercurry.png,20%);|マメバーグカレー&tooltip(&tip;){マメでつくったやわらかハンバーグが主役。};|マメミート&ref(料理/レシピの一覧/beansausage.png,nolink,15%);×7|7|856|1378|2593|23797|173593|
+|12|&ref(料理/レシピの一覧/mildhoneycurry.png,20%);|ベイビィハニーカレー&tooltip(&tip;){子供でも食べられる、&br;ミツたっぷりの甘口カレー。};|あまいミツ&ref(料理/レシピの一覧/honey.png,nolink,15%);×7|7|839|1350|2542|23746|173542|
+|13|&ref(料理/レシピの一覧/ninjacurry.png,20%);|ニンジャカレー&tooltip(&tip;){ニンジャが好んで食べたと&br;言い伝えられているとうふのカレー。};|ワカクサ大豆&ref(料理/レシピの一覧/greengrasssoybeans.png,nolink,15%);×24&br;&size(11){ふといながねぎ};&ref(料理/レシピの一覧/largeleek.png,nolink,15%);×12&br;マメミート&ref(料理/レシピの一覧/beansausage.png,nolink,15%);×9&br;&size(11){あじわいキノコ};&ref(料理/レシピの一覧/tastymushroom.png,nolink,15%);×5|50|9445|15206|28618|35116|184912|
+|14|&ref(料理/レシピの一覧/droughtkatsucurry.png,20%);|ひでりカツレツカレー&tooltip(&tip;){揚げたてのカツがキラッと光る。};|マメミート&ref(料理/レシピの一覧/beansausage.png,nolink,15%);×10&br;&size(11){ピュアなオイル};&ref(料理/レシピの一覧/pureoil.png,nolink,15%);×5|15|1942|3126|5884|24352|174148|
+|15|&ref(料理/レシピの一覧/meltyomelettecurry.png,20%);|とけるオムカレー&tooltip(&tip;){絶妙な火入れで仕上げたオムレツが&br;舌の上でとけるカレー。};|&size(11){とくせんエッグ};&ref(料理/レシピの一覧/fancyegg.png,nolink,15%);×10&br;&size(11){あんみんトマト};&ref(料理/レシピの一覧/snoozytomato.png,nolink,15%);×6|16|2150|3461|6514|24640|174436|
+|16|&ref(料理/レシピの一覧/bulkupbeancurry.png,20%);|ビルドアップマメカレー&tooltip(&tip;){身体づくりに必要な栄養を&br;たっぷりつめこんだボリュームカレー。};|ワカクサ大豆&ref(料理/レシピの一覧/greengrasssoybeans.png,nolink,15%);×12&br;マメミート&ref(料理/レシピの一覧/beansausage.png,nolink,15%);×6&br;&size(11){とくせんエッグ};&ref(料理/レシピの一覧/fancyegg.png,nolink,15%);×4&br;&size(11){げきからハーブ};&ref(料理/レシピの一覧/fieryherb.png,nolink,15%);×4|26|3372|5428|10217|24923|174719|
+|17|&ref(料理/レシピの一覧/limbercornstew.png,20%);|じゅうなんコーンシチュー&tooltip(&tip;){ミルクとコーンのやわらかい甘みが&br;やさしいホワイトシチュー。};|&size(11){ワカクサコーン};&ref(料理/レシピの一覧/greengrasscorn.png,nolink,15%);×14&br;&size(11){モーモーミルク};&ref(料理/レシピの一覧/moomoomilk.png,nolink,15%);×8&br;&size(11){ほっこりポテト};&ref(料理/レシピの一覧/softpotato.png,nolink,15%);×8|30|4670|7518|14150|27488|177284|
+|18|&ref(料理/レシピの一覧/infernocornkeemacurry.png,20%);|れんごくコーンキーマカレー&tooltip(&tip;){コーンの甘みの後には&br;れんごくのような辛さがやってくる。};|&size(11){げきからハーブ};&ref(料理/レシピの一覧/fieryherb.png,nolink,15%);×27&br;マメミート&ref(料理/レシピの一覧/beansausage.png,nolink,15%);×24&br;&size(11){ワカクサコーン};&ref(料理/レシピの一覧/greengrasscorn.png,nolink,15%);×14&br;&size(8){あったかジンジャー};&ref(料理/レシピの一覧/warmingginger.png,nolink,15%);×12|77|13690|22040|41480|-|188540|
+|19|&ref(料理/レシピの一覧/hiddenpower perk-upstew_0.png,20%);|めざめるパワーシチュー&tooltip(&tip;){目覚めを豪華に彩る&br;具だくさんのトマトシチュー。};|ワカクサ大豆&icon(20,ワカクサ大豆);×28&br;&size(11){あんみんトマト};&icon(20,あんみんトマト);×25&br;&size(11){あじわいキノコ};&icon(20,あじわいキノコ);×23&br;&size(9){めざましコーヒー};&icon(20,めざましコーヒー);×16|92|19061|30688|57754|-|199684|
+|20|&ref(料理/レシピの一覧/dizzypunchspicycurry_1.png,20%);|ピヨピヨパンチ辛口カレー&tooltip(&tip;){リズミカルに甘みと辛みが広がり&br;最後に苦みが訪れる。};|&size(9){めざましコーヒー};&icon(20,めざましコーヒー);×11&br;&size(11){げきからハーブ};&icon(20,げきからハーブ);×11&br;あまいミツ&icon(20,あまいミツ);×11|33|5702|9180|17277|29589|179385|
+|21|&ref(料理/レシピの一覧/cutsukiyakicurry.png,20%);|いあいぎりすき焼きカレー&tooltip(&tip;){甘じょっぱく味付けされたカレー&br;ザクッと切られたネギと&br;トロトロ半熟タマゴを添えて。};|&size(11){ふといながねぎ};&icon(20,ふといながねぎ);×27&br;マメミート&icon(20,マメミート);×26&br;あまいミツ&icon(20,あまいミツ);×26&br;&size(11){とくせんエッグ};&icon(20,とくせんエッグ);×22|101|20655|33255|62585|-|201437|
+}}
+
+**サラダ [#salad]
+#nobr{{{
+#cssbox(width: fit-content; padding-right: 10px; margin-bottom: -10px; background: #F1F1EA; border-radius: 8px 8px 0 0;){{
+[[&color(#F1F1EA){%%%&color(#528BB9){　カレ&#12540;・シチュ&#12540; &fa(fa-solid fa-caret-up fa-sm);};%%%};>#curry_stew]] &color(#A4A48F){|&size(13){''　サラ&#12480;　''};};&color(#A4A48F){|}; [[&color(#F1F1EA){%%%&color(#528BB9){デザー&#12488;・ドリン&#12463; &fa(fa-solid fa-caret-down fa-sm);};%%%};>#drink_dessert]]
+}}
+}}}
+#tablesort{{
+|RIGHT:|CENTER:||160|RIGHT:|RIGHT:|RIGHT:|RIGHT:|RIGHT:|c
+|~ |~画像|~料理名|~食材|~計|>|>|>|>|~エナジ&#8212;|h
+|~|~|~|~|~|>|>|CENTER:レシピレベル|>|CENTER:レシピレベル60&br;+シッポ追加|h
+|~|~|~|~|~|CENTER:Lv1&br;1.00倍|CENTER:Lv30&br;1.61倍|CENTER:Lv60&br;3.03倍|CENTER:69-|CENTER:507-|h
+|-|&ref(料理/レシピの一覧/mixedsalad.png,20%);|ごちゃまぜサラダ|他のレシピに該当しない&br;組み合わせ|-|0|0|0|23598|173394|
+|1|&ref(料理/レシピの一覧/slowpoketailpeppersalad.png,20%);|ヤドンテールのペッパーサラダ&tooltip(&tip;){ピリッと辛いスパイスが&br;テールのあまみをより際立たせる。};|&size(11){げきからハーブ};&ref(料理/レシピの一覧/fieryherb.png,nolink,15%);×10&br;&size(11){ピュアなオイル};&ref(料理/レシピの一覧/pureoil.png,nolink,15%);×15&br;&size(11){おいしいシッポ};&ref(料理/レシピの一覧/slowpoketail.png,nolink,15%);×10|35|8169|13152|24752|36380|186176|
+|2|&ref(料理/レシピの一覧/sporemushroomsalad.png,20%);|キノコのほうしサラダ&tooltip(&tip;){睡眠に良い成分がふんだんに入ったサラダ。};|&size(11){あじわいキノコ};&ref(料理/レシピの一覧/tastymushroom.png,nolink,15%);×17&br;&size(11){ピュアなオイル};&ref(料理/レシピの一覧/pureoil.png,nolink,15%);×8&br;&size(11){あんみんトマト};&ref(料理/レシピの一覧/snoozytomato.png,nolink,15%);×8|33|5859|9432|17752|30064|179860|
+|3|&ref(料理/レシピの一覧/snowcloakcaesarsalad.png,20%);|ゆきかきシーザーサラダ&tooltip(&tip;){雪のようにふりかけたチーズを&br;かきわけて食べるベーコンサラダ。};|&size(11){モーモーミルク};&ref(料理/レシピの一覧/moomoomilk.png,nolink,15%);×10&br;マメミート&ref(料理/レシピの一覧/beansausage.png,nolink,15%);×6|16|1898|3055|5750|23876|173672|
+|4|&ref(料理/レシピの一覧/gluttonypotatosalad.png,nolink,20%);|くいしんぼうポテトサラダ&tooltip(&tip;){とくせんリンゴが隠し味のポテトサラダ。};|&size(11){ほっこりポテト};&ref(料理/レシピの一覧/softpotato.png,nolink,15%);×14&br;&size(11){とくせんエッグ};&ref(料理/レシピの一覧/fancyegg.png,nolink,15%);×9&br;マメミート&ref(料理/レシピの一覧/beansausage.png,nolink,15%);×7&br;&size(11){とくせんリンゴ};&ref(料理/レシピの一覧/fancyapple.png,nolink,15%);×6|36|5040|8114|15271|26557|176353|
+|5|&ref(料理/レシピの一覧/waterveiltofusalad.png,20%);|うるおいとうふサラダ&tooltip(&tip;){ぷるっとしたとうふがのったサラダ。};|ワカクサ大豆&ref(料理/レシピの一覧/greengrasssoybeans.png,nolink,15%);×15&br;&size(11){あんみんトマト};&ref(料理/レシピの一覧/snoozytomato.png,nolink,15%);×9|24|3113|5011|9432|24822|174618|
+|6|&ref(料理/レシピの一覧/superpowerextremesalad.png,20%);|ばかぢからワイルドサラダ&tooltip(&tip;){これ1つで1日分の栄養がとれる&br;ボリュームサラダ。};|マメミート&ref(料理/レシピの一覧/beansausage.png,nolink,15%);×9&br;&size(8){あったかジンジャー};&ref(料理/レシピの一覧/warmingginger.png,nolink,15%);×6&br;&size(11){とくせんエッグ};&ref(料理/レシピの一覧/fancyegg.png,nolink,15%);×5&br;&size(11){ほっこりポテト};&ref(料理/レシピの一覧/softpotato.png,nolink,15%);×3|23|3046|4904|9229|24961|174757|
+|7|&ref(料理/レシピの一覧/beanhamsalad.png,20%);|マメハムサラダ&tooltip(&tip;){マメミートでつくった&br;ハムのシンプルサラダ。};|マメミート&ref(料理/レシピの一覧/beansausage.png,nolink,15%);×8|8|978|1574|2963|23825|173621|
+|8|&ref(料理/レシピの一覧/snoozytomatosalad.png,20%);|あんみんトマトサラダ&tooltip(&tip;){あんみんトマトの成分で&br;ねむりを助けるシンプルサラダ。};|&size(11){あんみんトマト};&ref(料理/レシピの一覧/snoozytomato.png,nolink,15%);×8|8|1045|1682|3166|24028|173824|
+|9|&ref(料理/レシピの一覧/moomoocapresesalad.png,20%);|モーモーカプレーゼ&tooltip(&tip;){チーズとトマトにオイルをかけただけの&br;シンプルサラダ。};|&size(11){モーモーミルク};&ref(料理/レシピの一覧/moomoomilk.png,nolink,15%);×12&br;&size(11){あんみんトマト};&ref(料理/レシピの一覧/snoozytomato.png,nolink,15%);×6&br;&size(11){ピュアなオイル};&ref(料理/レシピの一覧/pureoil.png,nolink,15%);×5|23|2942|4736|8914|24646|174442|
+|10|&ref(料理/レシピの一覧/contrarychocolatemeatsalad.png,20%);|ムラっけチョコミートサラダ&tooltip(&tip;){しょっぱいソースとあまいチョコソースの&br;味の変化が楽しめる。};|&size(9){リラックスカカオ};&ref(料理/レシピの一覧/soothingcacao.png,nolink,15%);×14&br;マメミート&ref(料理/レシピの一覧/beansausage.png,nolink,15%);×9&br;|23|3665|5900|11104|26836|176632|
+|11|&ref(料理/レシピの一覧/overheatgingersalad.png,20%);|オーバーヒートサラダ&tooltip(&tip;){特製のしょうがドレッシングが&br;からだを熱くさせる。};|&size(11){げきからハーブ};&ref(料理/レシピの一覧/fieryherb.png,nolink,15%);×17&br;&size(8){あったかジンジャー};&ref(料理/レシピの一覧/warmingginger.png,nolink,15%);×10&br;&size(11){あんみんトマト};&ref(料理/レシピの一覧/snoozytomato.png,nolink,15%);×8|35|5225|8412|15831|27459|177255|
+|12|&ref(料理/レシピの一覧/fancyapplesalad.png,20%);|とくせんリンゴサラダ&tooltip(&tip;){リンゴをすりつぶして作った&br;ドレッシングのシンプルサラダ。};|&size(11){とくせんリンゴ};&ref(料理/レシピの一覧/fancyapple.png,nolink,15%);×8|8|855|1376|2590|23452|173248|
+|13|&ref(料理/レシピの一覧/immunityleeksalad.png,20%);|めんえきねぎサラダ&tooltip(&tip;){シャキっと食感のねぎで&br;めんえき力が上がるサラダ。};|&size(8){あったかジンジャー};&ref(料理/レシピの一覧/warmingginger.png,nolink,15%);×5&br;&size(11){ふといながねぎ};&ref(料理/レシピの一覧/largeleek.png,nolink,15%);×10|15|2845|4580|8620|27088|176884|
+|14|&ref(料理/レシピの一覧/dazzlingapplecheesesalad.png,20%);|メロメロりんごのチーズサラダ&tooltip(&tip;){相性ばつぐんの食材を活かすため、&br;味付けはシンプルに。};|&size(11){とくせんリンゴ};&ref(料理/レシピの一覧/fancyapple.png,nolink,15%);×15&br;&size(11){モーモーミルク};&ref(料理/レシピの一覧/moomoomilk.png,nolink,15%);×5&br;&size(11){ピュアなオイル};&ref(料理/レシピの一覧/pureoil.png,nolink,15%);×3|23|2655|4274|8044|23776|173572|
+|15|&ref(料理/レシピの一覧/ninjasalad.png,20%);|ニンジャサラダ&tooltip(&tip;){とうふを使ったニンジャ好みの味付けで、&br;素早く食べられる。};|&size(8){あったかジンジャー};&ref(料理/レシピの一覧/warmingginger.png,nolink,15%);×11&br;ワカクサ大豆&ref(料理/レシピの一覧/greengrasssoybeans.png,nolink,15%);×19&br;&size(11){あじわいキノコ};&ref(料理/レシピの一覧/tastymushroom.png,nolink,15%);×12&br;&size(11){ふといながねぎ};&ref(料理/レシピの一覧/largeleek.png,nolink,15%);×15|57|11659|18770|35326|39430|189226|
+|16|&ref(料理/レシピの一覧/heatwavetofusalad.png,20%);|ねっぷうとうふサラダ&tooltip(&tip;){真っ赤な辛いソースのとうふサラダ。};|&size(11){げきからハーブ};&ref(料理/レシピの一覧/fieryherb.png,nolink,15%);×6&br;ワカクサ大豆&ref(料理/レシピの一覧/greengrasssoybeans.png,nolink,15%);×10|16|2114|3403|6405|24531|174327|
+|17|&ref(料理/レシピの一覧/greengrasssalad.png,20%);|ワカクササラダ&tooltip(&tip;){ワカクサの島でとれた&br;新鮮野菜だけをつかったサラダ。};|&size(11){ピュアなオイル};&ref(料理/レシピの一覧/pureoil.png,nolink,15%);×22&br;&size(11){ワカクサコーン};&ref(料理/レシピの一覧/greengrasscorn.png,nolink,15%);×17&br;&size(11){あんみんトマト};&ref(料理/レシピの一覧/snoozytomato.png,nolink,15%);×14&br;&size(11){ほっこりポテト};&ref(料理/レシピの一覧/softpotato.png,nolink,15%);×9|62|11393|18342|34520|36914|186710|
+|18|&ref(料理/レシピの一覧/calmmindfruitsalad.png,20%);|めいそうスイートサラダ&tooltip(&tip;){さわやかな甘みがこころを落ち着かせる。};|&size(11){とくせんリンゴ};&ref(料理/レシピの一覧/fancyapple.png,nolink,15%);×21&br;あまいミツ&ref(料理/レシピの一覧/honey.png,nolink,15%);×16&br;&size(11){ワカクサコーン};&ref(料理/レシピの一覧/greengrasscorn.png,nolink,15%);×12|49|7675|12356|23255|30095|179891|
+|19|&ref(料理/レシピの一覧/furyattackcornsalad.png,20%);|みだれづきコーンサラダ&tooltip(&tip;){山盛りのコーンを突いて食べるサラダ。};|&size(11){ワカクサコーン};&ref(料理/レシピの一覧/greengrasscorn.png,nolink,15%);×9&br;&size(11){ピュアなオイル};&ref(料理/レシピの一覧/pureoil.png,nolink,15%);×8|17|2785|4483|8438|26222|176018|
+|20|&ref(料理/レシピの一覧/defiantcoffee-dressedsalad_0.png,20%);|まけんきコーヒーサラダ&tooltip(&tip;){負けん気で何度も挑戦し&br;ついに完成したコーヒーソースのサラダ。};|&size(9){めざましコーヒー};&icon(20,めざましコーヒー);×28&br;マメミート&icon(20,マメミート);×28&br;&size(11){ピュアなオイル};&icon(20,ピュアなオイル);×22&br;&size(11){ほっこりポテト};&icon(20,ほっこりポテト);×22|100|20218|32550|61260|-|200454|
+|21|&ref(料理/レシピの一覧/crosschopsalad_0.png,20%);|クロスチョップドサラダ&tooltip(&tip;){チョップを重ねて細かく&br;つくったチョップドサラダ。};|&size(11){とくせんエッグ};&icon(20,とくせんエッグ);×20&br;マメミート&icon(20,マメミート);×15&br;&size(11){ワカクサコーン};&icon(20,ワカクサコーン);×11&br;あんみんトマト&icon(20,あんみんトマト);×10|56|8755|14095|26527|30973|180769|
+|22|&ref(料理/レシピの一覧/petalblizzardlayeredsalad.png,20%);|はなふぶきミモザサラダ&tooltip(&tip;){花のようなふんわりパラパラの&br;タマゴがやさしい食感を生み出す};|&size(11){とくせんエッグ};&icon(20,とくせんエッグ);×25&br;&size(11){ピュアなオイル};&icon(20,ピュアなオイル);×17&br;&size(11){ほっこりポテト};&icon(20,ほっこりポテト);×15&br;マメミート&icon(20,マメミート);×12|69|11881|19128|35999|-|185795|
+|23|&ref(料理/レシピの一覧/appleacidyogurt-dressedsalad.png,20%);|りんごさんヨーグルトサラダ&tooltip(&tip;){りんごビネガーとヨーグルトの酸味に&br;食欲をそそられるビッグなボウルサラダ};|&size(11){とくせんエッグ};&icon(20,とくせんエッグ);×35&br;&size(11){とくせんリンゴ};&icon(20,とくせんリンゴ);×28&br;&size(11){あんみんトマト};&icon(20,あんみんトマト);×23&br;&size(11){モーモーミルク};&icon(20,モーモーミルク);×18|104|19293|31062|58458|-|196284|
+}}
+
+
+**デザート・ドリンク [#drink_dessert]
+#nobr{{{
+#cssbox(width: fit-content; padding-right: 10px; margin-bottom: -10px; background: #F1F1EA; border-radius: 8px 8px 0 0;){{
+[[&color(#F1F1EA){%%%&color(#528BB9){　カレ&#12540;・シチュ&#12540; &fa(fa-solid fa-caret-up fa-sm);};%%%};>#curry_stew]] &color(#A4A48F){|}; [[&color(#F1F1EA){%%%&color(#528BB9){サラ&#12480; &fa(fa-solid fa-caret-up fa-sm);};%%%};>#salad]] &color(#A4A48F){ |&size(13){''　デザー&#12488;・ドリン&#12463;　''};};
+}}
+}}}
+#tablesort{{
+|RIGHT:|CENTER:||160|RIGHT:|RIGHT:|RIGHT:|RIGHT:|RIGHT:|c
+|~ |~画像|~料理名|~食材|~計|>|>|>|>|~エナジ&#8212;|h
+|~|~|~|~|~|>|>|CENTER:レシピレベル|>|CENTER:レシピレベル60&br;+シッポ追加|h
+|~|~|~|~|~|CENTER:Lv1&br;1.00倍|CENTER:Lv30&br;1.61倍|CENTER:Lv60&br;3.03倍|CENTER:69-|CENTER:507-|h
+|-|&ref(料理/レシピの一覧/mixedjuice.png,20%);|ごちゃまぜジュース|他のレシピに該当しない&br;組み合わせ|-|0|0|0|23598|173394|
+|1|&ref(料理/レシピの一覧/fluffysweetpotatoes.png,20%);|じゅくせいスイートポテト&tooltip(&tip;){ポテトをうまく熟成させることで&br;ミツいらずの甘さに。};|&size(11){ほっこりポテト};&ref(料理/レシピの一覧/softpotato.png,nolink,15%);×9&br;&size(11){モーモーミルク};&ref(料理/レシピの一覧/moomoomilk.png,nolink,15%);×5|14|1907|3070|5778|24588|174384|
+|2|&ref(料理/レシピの一覧/steadfastgingercookies.png,20%);|ふくつのジンジャークッキー&tooltip(&tip;){大変なことがあってもくじけずに&br;頑張るパワーをくれるクッキー。};|あまいミツ&ref(料理/レシピの一覧/honey.png,nolink,15%);×14&br;&size(8){あったかジンジャー};&ref(料理/レシピの一覧/warmingginger.png,nolink,15%);×12&br;&size(9){リラックスカカオ};&ref(料理/レシピの一覧/soothingcacao.png,nolink,15%);×5&br;&size(11){とくせんエッグ};&ref(料理/レシピの一覧/fancyegg.png,nolink,15%);×4&br;|35|4921|7922|14910|26538|176334|
+|3|&ref(料理/レシピの一覧/fancyapplejuice.png,20%);|とくせんリンゴジュース&tooltip(&tip;){選びぬかれたリンゴだけでつくった&br;濃厚なジュース。};|&size(11){とくせんリンゴ};&ref(料理/レシピの一覧/fancyapple.png,nolink,15%);×8|8|855|1376|2590|23452|173248|
+|4|&ref(料理/レシピの一覧/craftsodapop.png,20%);|クラフトサイコソーダ&tooltip(&tip;){シュワっとはじける手作りソーダ。};|あまいミツ&ref(料理/レシピの一覧/honey.png,nolink,15%);×9|9|1079|1737|3269|23789|173585|
+|5|&ref(料理/レシピの一覧/embergingertea.png,20%);|ひのこのジンジャーティー&tooltip(&tip;){辛いジンジャーにリンゴを合わせることで&br;飲みやすくなった。};|&size(11){とくせんリンゴ};&ref(料理/レシピの一覧/fancyapple.png,nolink,15%);×7&br;&size(8){あったかジンジャー};&ref(料理/レシピの一覧/warmingginger.png,nolink,15%);×9|16|1913|3079|5796|23922|173718|
+|6|&ref(料理/レシピの一覧/jigglypuff'sfruityflan.png,20%);|プリンのプリンアラモード&tooltip(&tip;){ふうせんのような張りをもつ特製プリン。};|あまいミツ&ref(料理/レシピの一覧/honey.png,nolink,15%);×20&br;&size(11){とくせんエッグ};&ref(料理/レシピの一覧/fancyegg.png,nolink,15%);×15&br;&size(11){とくせんリンゴ};&ref(料理/レシピの一覧/fancyapple.png,nolink,15%);×10&br;&size(11){モーモーミルク};&ref(料理/レシピの一覧/moomoomilk.png,nolink,15%);×10|55|7594|12226|23009|27797|177593|
+|7|&ref(料理/レシピの一覧/lovelykisssmoothie.png,20%);|あくまのキッスフルーツオレ&tooltip(&tip;){つかれた体を癒やし、眠りにみちびく&br;リラックスドリンク。};|&size(11){とくせんリンゴ};&ref(料理/レシピの一覧/fancyapple.png,nolink,15%);×11&br;&size(11){モーモーミルク};&ref(料理/レシピの一覧/moomoomilk.png,nolink,15%);×9&br;あまいミツ&ref(料理/レシピの一覧/honey.png,nolink,15%);×7&br;&size(9){リラックスカカオ};&ref(料理/レシピの一覧/soothingcacao.png,nolink,15%);×8|35|4734|7621|14344|25972|175768|
+|8|&ref(料理/レシピの一覧/luckychantapplepie.png,20%);|ねがいごとアップルパイ&tooltip(&tip;){ゴロっとしたリンゴの部分に&br;当たるとラッキー。};|&size(11){とくせんリンゴ};&ref(料理/レシピの一覧/fancyapple.png,nolink,15%);×12&br;&size(11){モーモーミルク};&ref(料理/レシピの一覧/moomoomilk.png,nolink,15%);×4|16|1748|2814|5296|23422|173218|
+|9|&ref(料理/レシピの一覧/neroli'srestorativetea.png,20%);|ネロリのデトックスティー&tooltip(&tip;){博士特製のデトックスティー。};|&size(8){あったかジンジャー};&ref(料理/レシピの一覧/warmingginger.png,nolink,15%);×11&br;&size(11){とくせんリンゴ};&ref(料理/レシピの一覧/fancyapple.png,nolink,15%);×15&br;&size(11){あじわいキノコ};&ref(料理/レシピの一覧/tastymushroom.png,nolink,15%);×9|35|5065|8164|15346|26974|176770|
+|10|&ref(料理/レシピの一覧/sweetscentchocolatecake.png,20%);|あまいかおりチョコケーキ&tooltip(&tip;){あまいかおりには&br;人もポケモンも引き寄せられる。};|あまいミツ&ref(料理/レシピの一覧/honey.png,nolink,15%);×9&br;&size(9){リラックスカカオ};&ref(料理/レシピの一覧/soothingcacao.png,nolink,15%);×8&br;&size(11){モーモーミルク};&ref(料理/レシピの一覧/moomoomilk.png,nolink,15%);×7|24|3378|5438|10235|25625|175421|
+|11|&ref(料理/レシピの一覧/warmmoomoomilk.png,20%);|モーモーホットミルク&tooltip(&tip;){温めることで甘みが増したモーモーミルク。};|&size(11){モーモーミルク};&ref(料理/レシピの一覧/moomoomilk.png,nolink,15%);×7|7|814|1310|2466|23670|173466|
+|12|&ref(料理/レシピの一覧/cloudninesoycake.png,20%);|かるわざソイケーキ&tooltip(&tip;){かるい口当たりに仕上げたソイケーキ。};|&size(11){とくせんエッグ};&ref(料理/レシピの一覧/fancyegg.png,nolink,15%);×8&br;ワカクサ大豆&ref(料理/レシピの一覧/greengrasssoybeans.png,nolink,15%);×7|15|1924|3097|5829|24297|174093|
+|13|&ref(料理/レシピの一覧/hustleproteinsmoothie.png,20%);|はりきりプロテインスムージー&tooltip(&tip;){トレーニング後のごほうびの甘い一杯。};|ワカクサ大豆&ref(料理/レシピの一覧/greengrasssoybeans.png,nolink,15%);×15&br;&size(9){リラックスカカオ};&ref(料理/レシピの一覧/soothingcacao.png,nolink,15%);×8&br;|23|3263|5253|9886|25618|175414|
+|14|&ref(料理/レシピの一覧/stalwartvegetablejuice.png,20%);|マイペースやさいジュース&tooltip(&tip;){自然な甘みと酸味のかんたんなジュース。};|&size(11){とくせんリンゴ};&ref(料理/レシピの一覧/fancyapple.png,nolink,15%);×7&br;&size(11){あんみんトマト};&ref(料理/レシピの一覧/snoozytomato.png,nolink,15%);×9|16|1924|3097|5829|23955|173751|
+|15|&ref(料理/レシピの一覧/bigmalasada.png,20%);|おおきいマラサダ&tooltip(&tip;){アローラのレシピを取り寄せ再現した&br;特別なあげパン。};|&size(11){ピュアなオイル};&ref(料理/レシピの一覧/pureoil.png,nolink,15%);×10&br;&size(11){モーモーミルク};&ref(料理/レシピの一覧/moomoomilk.png,nolink,15%);×7&br;あまいミツ&ref(料理/レシピの一覧/honey.png,nolink,15%);×6|23|3015|4854|9135|24867|174663|
+|16|&ref(料理/レシピの一覧/hugepowersoydonuts.png,20%);|ちからもちソイドーナッツ&tooltip(&tip;){サクっとあげたソイドーナッツ。&br;からだづくりのお供に。};|&size(11){ピュアなオイル};&ref(料理/レシピの一覧/pureoil.png,nolink,15%);×12&br;&size(9){リラックスカカオ};&ref(料理/レシピの一覧/soothingcacao.png,nolink,15%);×7&br;ワカクサ大豆&ref(料理/レシピの一覧/greengrasssoybeans.png,nolink,15%);×16|35|5547|8930|16807|28435|178231|
+|17|&ref(料理/レシピの一覧/explosionpopcorn.png,20%);|だいばくはつポップコーン&tooltip(&tip;){だいばくはつするほどの火力で一瞬で仕上げた。};|&size(11){ワカクサコーン};&ref(料理/レシピの一覧/greengrasscorn.png,nolink,15%);×15&br;&size(11){ピュアなオイル};&ref(料理/レシピの一覧/pureoil.png,nolink,15%);×14&br;&size(11){モーモーミルク};&ref(料理/レシピの一覧/moomoomilk.png,nolink,15%);×7|36|6048|9737|18325|29611|179407|
+|18|&ref(料理/レシピの一覧/teatimecornscones.png,20%);|おちゃかいコーンスコーン&tooltip(&tip;){サクサク食感のスコーンと&br;アップルジンジャーのジャムを1対1で。};|&size(11){とくせんリンゴ};&ref(料理/レシピの一覧/fancyapple.png,nolink,15%);×20&br;&size(8){あったかジンジャー};&ref(料理/レシピの一覧/warmingginger.png,nolink,15%);×20&br;&size(11){ワカクサコーン};&ref(料理/レシピの一覧/greengrasscorn.png,nolink,15%);×18&br;&size(11){モーモーミルク};&ref(料理/レシピの一覧/moomoomilk.png,nolink,15%);×9|67|10925|17589|33102|33786|183582|
+|19|&ref(料理/レシピの一覧/petaldancechocolatetart.png,20%);|はなびらのまいチョコタルト&tooltip(&tip;){食べるとリンゴの花びらが舞う&br;やんちゃなタルト。};|&size(9){リラックスカカオ};&ref(料理/レシピの一覧/soothingcacao.png,nolink,15%);×11&br;&size(11){とくせんリンゴ};&ref(料理/レシピの一覧/fancyapple.png,nolink,15%);×11|22|3314|5335|10041|26115|175911|
+|20|&ref(料理/レシピの一覧/flowergiftmacarons.png,20%);|フラワーギフトマカロン&tooltip(&tip;){おくりものにぴったりな笑顔咲くマカロン。};|&size(9){リラックスカカオ};&ref(料理/レシピの一覧/soothingcacao.png,nolink,15%);×25&br;&size(11){とくせんエッグ};&ref(料理/レシピの一覧/fancyegg.png,nolink,15%);×25&br;あまいミツ&ref(料理/レシピの一覧/honey.png,nolink,15%);×17&br;&size(11){モーモーミルク};&ref(料理/レシピの一覧/moomoomilk.png,nolink,15%);×10|77|13834|22272|41917|-|188977|
+|21|&ref(料理/レシピの一覧/zingzapspicedcola_0.png,20%);|スパークスパイスコーラ&tooltip(&tip;){スカッと目が覚める刺激の強いコーラ。};|&size(11){とくせんリンゴ};&icon(20,とくせんリンゴ);×35&br;&size(9){あったかジンジャー};&icon(20,あったかジンジャー);×20&br;&size(11){ふといながねぎ};&icon(20,ふといながねぎ);×20&br;&size(9){めざましコーヒー};&icon(20,めざましコーヒー);×12|87|17494|28165|53006|-|196646|
+|22|&ref(料理/レシピの一覧/earlybirdcoffeejelly_0.png,20%);|はやおきコーヒーゼリー&tooltip(&tip;){目覚めを加速させる&br;苦めのコーヒーゼリー。};|&size(9){めざましコーヒー};&icon(20,めざましコーヒー);×16&br;&size(11){モーモーミルク};&icon(20,モーモーミルク);×14&br;あまいミツ&icon(20,あまいミツ);×12|42|6793|10936|20582|29816|179612|
+|23|&ref(料理/レシピの一覧/moldbreakercorntiramisu.png,20%);|かたやぶりコーンティラミス&tooltip(&tip;){コーンの甘味だけで勝負する&br;かたやぶりな製法のティラミス。};|&size(9){めざましコーヒー};&icon(20,めざましコーヒー);×14&br;&size(11){ワカクサコーン};&icon(20,ワカクサコーン);×14&br;&size(11){モーモーミルク};&icon(20,モーモーミルク);×12|40|7125|11471|21589|31507|181303|
+|24|&ref(料理/レシピの一覧/clodsireeclair.png,20%);|ドオーのエクレア&tooltip(&tip;){ドオーの形がうれしいビターなエクレア。&br;中身もずっしり詰まっている。};|&size(9){リラックスカカオ};&icon(20,リラックスカカオ);×30&br;&size(11){モーモーミルク};&icon(20,モーモーミルク);×26&br;&size(9){めざましコーヒー};&icon(20,めざましコーヒー);×24&br;あまいミツ&icon(20,あまいミツ);×22|102|20885|33625|63282|-|201792|
+}}

@@ -1,0 +1,224 @@
+{
+  "records": [
+    {
+      "category": "エナジーチャージS",
+      "category_icon": "エナジーチャージ.png",
+      "name": "エナジーチャージS",
+      "description": "カビゴンのエナジーをN増やす",
+      "max_level": 7
+    },
+    {
+      "category": "エナジーチャージS",
+      "category_icon": "エナジーチャージ.png",
+      "name": "たくわえる",
+      "description": "たくわえる、はきだす、どちらかが選ばれはきだす発生時、\nたくわえた回数に応じてカビゴンのエナジーを増やす",
+      "max_level": 7
+    },
+    {
+      "category": "エナジーチャージM",
+      "category_icon": "エナジーチャージ.png",
+      "name": "エナジーチャージM",
+      "description": "カビゴンのエナジーをN増やす",
+      "max_level": 7
+    },
+    {
+      "category": "エナジーチャージM",
+      "category_icon": "エナジーチャージ.png",
+      "name": "ナイトメア",
+      "description": "カビゴンのエナジーをN増やす\n同時に、おてつだいチームのあくタイプ以外のポケモンのげんきが12下がる",
+      "max_level": 7
+    },
+    {
+      "category": "ゆめのかけらゲットS",
+      "category_icon": "ゆめのかけらゲット.png",
+      "name": "ゆめのかけらゲットS",
+      "description": "ゆめのかけらをNゲットする",
+      "max_level": 8
+    },
+    {
+      "category": "げんきエールS",
+      "category_icon": "げんきエール.png",
+      "name": "げんきエールS",
+      "description": "ランダムでチームのポケモン1匹のげんきをN回復する",
+      "max_level": 6
+    },
+    {
+      "category": "げんきエールS",
+      "category_icon": "げんきエール.png",
+      "name": "ほっぺすりすり",
+      "description": "ランダムでチームのポケモン1匹のげんきをN回復する\n運が良ければそのポケモンがメインスキル発動可能ボーナスを得る",
+      "max_level": 6
+    },
+    {
+      "category": "げんきエールS",
+      "category_icon": "げんきエール.png",
+      "name": "いやしのはどう",
+      "description": "ランダムでチームのポケモン2匹のげんきをN回復し、\nおてつだいをM回分すぐに完了させる。特定の条件を満たすとさらに効果アップ",
+      "max_level": 6
+    },
+    {
+      "category": "げんきチャージS",
+      "category_icon": "げんきチャージ.png",
+      "name": "げんきチャージS",
+      "description": "自分のげんきをN回復する",
+      "max_level": 6
+    },
+    {
+      "category": "げんきチャージS",
+      "category_icon": "げんきチャージ.png",
+      "name": "つきのひかり",
+      "description": "自分のげんきをN回復する\nときどき、さらにチームのポケモン1匹のげんきをM回復する",
+      "max_level": 6
+    },
+    {
+      "category": "げんきオールS",
+      "category_icon": "げんきオール.png",
+      "name": "げんきオールS",
+      "description": "おてつだいチームのポケモンのげんきをN回復する",
+      "max_level": 6
+    },
+    {
+      "category": "げんきオールS",
+      "category_icon": "げんきオール.png",
+      "name": "みかづきのいのり",
+      "description": "おてつだいチームのポケモンのげんきをN回復し、\n自分とチームのきのみも獲得する",
+      "max_level": 6
+    },
+    {
+      "category": "げんきオールS",
+      "category_icon": "げんきオール.png",
+      "name": "きのみジュース",
+      "description": "おてつだいチームのポケモンのげんきをN回復する\nときどき、さらに追加できのみジュースをゲットする",
+      "max_level": 6
+    },
+    {
+      "category": "おてつだいサポートS",
+      "category_icon": "おてつだいサポート.png",
+      "name": "おてつだいサポートS",
+      "description": "おてつだいポケモンの誰か1匹のおてつだいがN回分すぐに完了する",
+      "max_level": 7
+    },
+    {
+      "category": "食材ゲットS",
+      "category_icon": "食材ゲット.png",
+      "name": "食材ゲットS",
+      "description": "ランダムで食材をN個ゲットする",
+      "max_level": 7
+    },
+    {
+      "category": "食材ゲットS",
+      "category_icon": "食材ゲット.png",
+      "name": "プラス",
+      "description": "ランダムで食材をN個ゲットする\n特定の条件を満たすと、さらに追加で自分の1枠目の食材をM個ゲットする",
+      "max_level": 7
+    },
+    {
+      "category": "食材ゲットS",
+      "category_icon": "食材ゲット.png",
+      "name": "プレゼント",
+      "description": "ランダムで食材をN個ゲットする\nときどき、追加でチームのポケモン1匹のアメを4個ゲットする",
+      "max_level": 7
+    },
+    {
+      "category": "料理パワーアップS",
+      "category_icon": "料理パワーアップ.png",
+      "name": "料理パワーアップS",
+      "description": "次回の料理でなべの容量をN個増やす",
+      "max_level": 7
+    },
+    {
+      "category": "料理パワーアップS",
+      "category_icon": "料理パワーアップ.png",
+      "name": "マイナス",
+      "description": "次回の料理でなべの容量をN個増やす\n特定の条件を満たすと、さらにランダムでチームのポケモン1匹のげんきをM回復する",
+      "max_level": 7
+    },
+    {
+      "category": "ゆびをふる",
+      "category_icon": "ゆびをふる.png",
+      "name": "ゆびをふる",
+      "description": "たくさんのメインスキルの中からどれか1つをくりだす",
+      "max_level": 7
+    },
+    {
+      "category": "料理チャンスS",
+      "category_icon": "料理チャンス.png",
+      "name": "料理チャンスS",
+      "description": "料理の大成功確率がN%上がる\n効果は料理が大成功するか、フィールドを移動するまで持続する",
+      "max_level": 6
+    },
+    {
+      "category": "おてつだいブースト",
+      "category_icon": "おてつだいブースト.png",
+      "name": "おてつだいブースト",
+      "description": "チームのポケモン全員のおてつだいがN回分すぐに完了する\n特定の条件を満たすとさらに効果アップ",
+      "max_level": 6
+    },
+    {
+      "category": "きのみバースト",
+      "category_icon": "きのみバースト.png",
+      "name": "きのみバースト",
+      "description": "きのみをN個獲得し、さらにチーム内のポケモンのきのみもM個ずつ獲得する",
+      "max_level": 6
+    },
+    {
+      "category": "きのみバースト",
+      "category_icon": "きのみバースト.png",
+      "name": "ばけのかわ",
+      "description": "きのみをN個獲得し、さらにチーム内のポケモンのきのみもM個ずつ獲得する\nまれに大成功することがあり、きのみを大量に獲得できる",
+      "max_level": 6
+    },
+    {
+      "category": "スキルコピー",
+      "category_icon": "スキルコピー.png",
+      "name": "へんしん",
+      "description": "ランダムでチームのポケモン1匹のメインスキルをコピーしてくりだす",
+      "max_level": 7
+    },
+    {
+      "category": "スキルコピー",
+      "category_icon": "スキルコピー.png",
+      "name": "ものまね",
+      "description": "~",
+      "max_level": 7
+    },
+    {
+      "category": "食材セレクトS",
+      "category_icon": "食材セレクト.png",
+      "name": "食材セレクトS",
+      "description": "特定の食材の中からランダムで1種類の食材をN個ゲットする",
+      "max_level": 7
+    },
+    {
+      "category": "食材セレクトS",
+      "category_icon": "食材セレクト.png",
+      "name": "きょううん",
+      "description": "特定の食材の中からランダムで1種類の食材をN個ゲットする\nまれに食材の代わりに大量のゆめのかけらをゲットする",
+      "max_level": 7
+    },
+    {
+      "category": "食材セレクトS",
+      "category_icon": "食材セレクト.png",
+      "name": "かいりきバサミ",
+      "description": "特定の食材の中からランダムで1種類の食材をN個ゲットする\nときどき、追加でN個食材をゲットする",
+      "max_level": 7
+    },
+    {
+      "category": "料理アシスト",
+      "category_icon": "料理アシスト.png",
+      "name": "ビルドアップ",
+      "description": "ランダムで食材をゲットする\nさらに、料理の大成功確率が上がる\n効果は料理が大成功するか、フィールドを移動するまで持続する",
+      "max_level": 7
+    },
+    {
+      "category": "オールマイティー",
+      "category_icon": "オールマイティー.png",
+      "name": "オールマイティー",
+      "description": "ひらめきのた(ミュウ)を使用してメインスキルを変化させることができる\n追加で、チームのポケモン1匹のアメを1個、ときどきN個ゲットする",
+      "max_level": 8
+    }
+  ],
+  "_meta": {
+    "count": 31
+  }
+}

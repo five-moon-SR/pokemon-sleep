@@ -1,0 +1,197 @@
+{
+  "records": [
+    {
+      "name": "がんばりや",
+      "up": "speed",
+      "down": "speed",
+      "is_neutral": true
+    },
+    {
+      "name": "さみしがり",
+      "up": "speed",
+      "down": "energy",
+      "is_neutral": false
+    },
+    {
+      "name": "いじっぱり",
+      "up": "speed",
+      "down": "ingredient",
+      "is_neutral": false
+    },
+    {
+      "name": "やんちゃ",
+      "up": "speed",
+      "down": "skill",
+      "is_neutral": false
+    },
+    {
+      "name": "ゆうかん",
+      "up": "speed",
+      "down": "exp",
+      "is_neutral": false
+    },
+    {
+      "name": "ずぶとい",
+      "up": "energy",
+      "down": "speed",
+      "is_neutral": false
+    },
+    {
+      "name": "すなお",
+      "up": "energy",
+      "down": "energy",
+      "is_neutral": true
+    },
+    {
+      "name": "わんぱく",
+      "up": "energy",
+      "down": "ingredient",
+      "is_neutral": false
+    },
+    {
+      "name": "のうてんき",
+      "up": "energy",
+      "down": "skill",
+      "is_neutral": false
+    },
+    {
+      "name": "のんき",
+      "up": "energy",
+      "down": "exp",
+      "is_neutral": false
+    },
+    {
+      "name": "ひかえめ",
+      "up": "ingredient",
+      "down": "speed",
+      "is_neutral": false
+    },
+    {
+      "name": "おっとり",
+      "up": "ingredient",
+      "down": "energy",
+      "is_neutral": false
+    },
+    {
+      "name": "てれや",
+      "up": "ingredient",
+      "down": "ingredient",
+      "is_neutral": true
+    },
+    {
+      "name": "うっかりや",
+      "up": "ingredient",
+      "down": "skill",
+      "is_neutral": false
+    },
+    {
+      "name": "れいせい",
+      "up": "ingredient",
+      "down": "exp",
+      "is_neutral": false
+    },
+    {
+      "name": "おだやか",
+      "up": "skill",
+      "down": "speed",
+      "is_neutral": false
+    },
+    {
+      "name": "おとなしい",
+      "up": "skill",
+      "down": "energy",
+      "is_neutral": false
+    },
+    {
+      "name": "しんちょう",
+      "up": "skill",
+      "down": "ingredient",
+      "is_neutral": false
+    },
+    {
+      "name": "きまぐれ",
+      "up": "skill",
+      "down": "skill",
+      "is_neutral": true
+    },
+    {
+      "name": "なまいき",
+      "up": "skill",
+      "down": "exp",
+      "is_neutral": false
+    },
+    {
+      "name": "おくびょう",
+      "up": "exp",
+      "down": "speed",
+      "is_neutral": false
+    },
+    {
+      "name": "せっかち",
+      "up": "exp",
+      "down": "energy",
+      "is_neutral": false
+    },
+    {
+      "name": "ようき",
+      "up": "exp",
+      "down": "ingredient",
+      "is_neutral": false
+    },
+    {
+      "name": "むじゃき",
+      "up": "exp",
+      "down": "skill",
+      "is_neutral": false
+    },
+    {
+      "name": "まじめ",
+      "up": "exp",
+      "down": "exp",
+      "is_neutral": true
+    }
+  ],
+  "_meta": {
+    "count": 25,
+    "modifiers": {
+      "speed": {
+        "label": "おてつだいスピード",
+        "up": 1.11,
+        "down": 0.93,
+        "note": "おてつだい時間が▲で×0.9, ▼で×1.075になり、その逆数として効果はこの倍率"
+      },
+      "energy": {
+        "label": "げんき回復量",
+        "up": 1.2,
+        "down": 0.88,
+        "note": "Ver1.1.0で▼が0.8→0.88に緩和"
+      },
+      "ingredient": {
+        "label": "食材おてつだい確率",
+        "up": 1.2,
+        "down": 0.8,
+        "note": "要検証"
+      },
+      "skill": {
+        "label": "メインスキル発生確率",
+        "up": 1.2,
+        "down": 0.8,
+        "note": "要検証"
+      },
+      "exp": {
+        "label": "EXP獲得量",
+        "up": 1.18,
+        "down": 0.82,
+        "note": "アメ・睡眠リサーチによるEXP獲得量・Lv上限ボーナスに適用"
+      }
+    },
+    "neutrals": [
+      "がんばりや",
+      "すなお",
+      "てれや",
+      "きまぐれ",
+      "まじめ"
+    ],
+    "source": "貼り付けデータ集/性格データ.txt"
+  }
+}
