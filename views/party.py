@@ -15,6 +15,7 @@ import streamlit as st
 
 import db
 from image_utils import berry_icon_url, ingredient_icon_url
+from ui import components as uic
 from utils.party_logic import (
     get_play_ctx,
     EVENT_BONUSES,
@@ -382,21 +383,19 @@ with st.container(border=True):
                         continue
                     m = dict(row)
                     master = db.get_species_data(m["species_name"]) or {}
-                    burl = berry_icon_url((master.get("berry") or {}).get("name"))
-                    if burl:
-                        st.markdown(
-                            f'<img src="{burl}" width="40">', unsafe_allow_html=True
-                        )
-                    st.markdown(
-                        f"**{m.get('nickname') or m['species_name']}**  \n"
-                        f"{m['species_name']}  \nLv{_effective_level(m)}"
-                    )
-                    st.caption(_main_skill_of(m, master) or "?")
-                    if st.button("外す", key=f"rm_{i}"):
+                    st.html(uic.pokemon_card(
+                        title=m.get("nickname") or m["species_name"],
+                        subtitle=f"{m['species_name']} · Lv{_effective_level(m)}",
+                        specialty=master.get("specialty"),
+                        berry_name=(master.get("berry") or {}).get("name"),
+                        footer=_main_skill_of(m, master) or "?",
+                        mini=True,
+                    ))
+                    if st.button("外す", key=f"rm_{i}", use_container_width=True):
                         ss.party_member_ids.pop(i)
                         st.rerun()
                 else:
-                    st.caption("（空き枠）")
+                    st.html(uic.pokemon_card(title="（空き枠）", mini=True))
 
     if ss.party_member_ids:
         summary = party_summary(
