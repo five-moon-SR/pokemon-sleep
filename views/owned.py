@@ -19,11 +19,15 @@ import streamlit as st
 import db
 from constants import (
     DAIFUKU_EVAL_LABELS,
+    DAIFUKU_RANK_COLORS,
     DAIFUKU_RANK_EMOJI,
     DAIFUKU_RANKS,
+    SUBSKILL_RARITY_COLORS,
     SUBSKILL_RARITY_EMOJI,
     SUBSKILL_RARITY_ORDER,
     SUBSKILL_UNLOCK_LEVELS,
+    THEME_INK_DIM,
+    blend_hex,
     format_nature_label,
     get_subskill_rarity,
 )
@@ -75,20 +79,18 @@ def _rank_filter_label(rank: str) -> str:
     return f"{DAIFUKU_RANK_EMOJI.get(rank, '')} {rank}".strip()
 
 
-# セル背景色（高ランクほど暖色 / レアリティに対応）。「増田」は SS 超えの伝説ランク。
+# セル色（高ランクほど暖色 / レアリティに対応）。「増田」は SS 超えの伝説ランク。
+# ダークテーマ用: 淡い同系面 + 明るい同系文字（constants の色トークンから生成）。
 RANK_BG_STYLE: dict[str, str] = {
-    "増田": "background-color: #ffd700; color: #6a0; font-weight: bold",
-    "SS":   "background-color: #ffb3b3; font-weight: bold",
-    "S":    "background-color: #ffd1a3",
-    "A":    "background-color: #fff0a3",
-    "B":    "background-color: #c8eeb8",
-    "C":    "background-color: #b8d6f0",
-    "D":    "background-color: #e8e8e8",
+    rank: (
+        f"background-color: {blend_hex(color)}; color: {color}"
+        + ("; font-weight: bold" if rank in ("増田", "SS") else "")
+    )
+    for rank, color in DAIFUKU_RANK_COLORS.items()
 }
 SUBSKILL_BG_STYLE: dict[str, str] = {
-    "gold":  "background-color: #fee570",
-    "blue":  "background-color: #d5edfd",
-    "white": "background-color: #f3f3f3",
+    rarity: f"background-color: {blend_hex(color)}; color: {color}"
+    for rarity, color in SUBSKILL_RARITY_COLORS.items()
 }
 
 
@@ -536,7 +538,7 @@ _IMG_COL_CONFIG = {
 }
 
 # 未開放セル用の薄いスタイル
-GRAY_STYLE = "color: #aaa; background-color: #f5f5f5; font-style: italic"
+GRAY_STYLE = f"color: {THEME_INK_DIM}; background-color: #171E30; font-style: italic"
 
 
 def _build_styler(df: pd.DataFrame):
@@ -572,7 +574,7 @@ def _build_styler(df: pd.DataFrame):
                 styles.loc[eff < unlock_lv, name_col] = GRAY_STYLE
                 img_col = "🥕" + name_col[-1]
                 if img_col in df_in.columns:
-                    styles.loc[eff < unlock_lv, img_col] = "background-color: #f5f5f5"
+                    styles.loc[eff < unlock_lv, img_col] = "background-color: #171E30"
 
         return styles
 

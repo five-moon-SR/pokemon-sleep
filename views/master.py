@@ -207,7 +207,7 @@ def _style_owned(df: pd.DataFrame):
     """所持済みの行を薄く色付け。Streamlit dataframe にそのまま渡せる Styler を返す。"""
     def _row_style(row: pd.Series) -> list[str]:
         if row.get("所持", 0) and row["所持"] > 0:
-            return ["background-color: #e8f5e9"] * len(row)
+            return ["background-color: #22332A; color: #A8E0B8"] * len(row)
         return [""] * len(row)
     return df.style.apply(_row_style, axis=1)
 

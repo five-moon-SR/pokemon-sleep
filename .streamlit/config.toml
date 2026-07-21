@@ -1,0 +1,17 @@
+# ポケスリ管理ツール テーマ「月夜のリサーチノート」
+# 標準ウィジェットの色はすべてここで指定する（CSSで input/selectbox を殴らない）。
+# 自作コンポーネントのCSSトークンは ui/theme.py 側（--ps-* 変数）。
+
+[theme]
+base = "dark"
+primaryColor = "#F5D06F"            # 月光ゴールド: ボタン・選択状態・リンク
+backgroundColor = "#131A2A"         # 夜空（深い群青）
+secondaryBackgroundColor = "#1C2438" # カード面・入力面
+textColor = "#E8EAF2"
+linkColor = "#F5D06F"
+borderColor = "#2C3650"
+baseRadius = "12px"
+buttonRadius = "full"
+
+[theme.sidebar]
+backgroundColor = "#10141F"         # ナビを一段暗くして主従を付ける

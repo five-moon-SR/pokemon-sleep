@@ -5,7 +5,7 @@ import ui
 
 st.set_page_config(page_title="ポケスリ管理", page_icon="🌙", layout="wide")
 
-ui.apply_mobile_css()
+ui.apply_theme()
 
 db.init_db()
 
