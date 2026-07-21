@@ -214,6 +214,62 @@ fav_set = set(fav_berries)
 event_set = set(sel_event_keys)
 
 
+# -------------- ①.5 🤖 自動編成提案 --------------
+
+with st.container(border=True):
+    st.subheader("🤖 自動編成提案")
+    st.caption(
+        "①の条件（好みきのみ/候補レシピ/役割目標/イベント）で最適5体を自動探索。"
+        "スコア = 主料理 + きのみ + スキルの各エナジー/日 − 役割未充足ペナルティ。"
+    )
+
+    if st.button("🔍 最適編成を探索", type="primary", use_container_width=True):
+        from utils.optimizer import optimize_party
+
+        target_recipe_recs = [
+            r for r in recipe_pool
+            if not sel_recipe_names or r["name"] in sel_recipe_names
+        ]
+        with st.spinner("探索中…（組み合わせを全探索しています）"):
+            ss["opt_results"] = optimize_party(
+                [dict(r) for r in db.list_pokemon()],
+                fav_berries=fav_set,
+                event_set=event_set,
+                target_recipes=target_recipe_recs,
+                role_targets=role_targets,
+            )
+        if not ss["opt_results"]:
+            st.warning("所持ポケモンが5体未満のため探索できません。")
+
+    for rank_i, res in enumerate(ss.get("opt_results") or []):
+        with st.container(border=True):
+            head = st.columns([4, 1])
+            head[0].markdown(
+                f"**#{rank_i + 1}**　" + "　".join(f"`{lbl}`" for lbl in res.labels)
+            )
+            if head[1].button(
+                "採用", key=f"opt_adopt_{rank_i}", use_container_width=True
+            ):
+                ss.party_member_ids = list(res.member_ids)
+                ss["opt_results"] = None
+                st.rerun()
+            detail = (
+                f"score **{res.score:,.0f}** ＝ "
+                f"🍳 {res.dish_energy:,.0f}"
+                + (f"（{res.best_recipe}）" if res.best_recipe else "")
+                + f" + 🍓 {res.berry_energy:,.0f} + ⚡ {res.skill_energy:,.0f} en/日"
+            )
+            if res.role_fulfillment:
+                parts = [
+                    f"{ROLE_LABELS[k]} {c}/{t}"
+                    for k, (c, t) in res.role_fulfillment.items()
+                ]
+                detail += "　｜　" + " / ".join(parts)
+            if res.bottleneck:
+                detail += f"　｜　律速: {'、'.join(res.bottleneck)}"
+            st.caption(detail)
+
+
 # -------------- ② 候補ポケモン（役割別） --------------
 
 def _render_role_candidates(
