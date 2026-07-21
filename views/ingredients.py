@@ -1,0 +1,161 @@
+"""🥕 食材・育成戦略ページ。
+
+ブロック構成:
+  ① 狙いのレシピ設定（user_settings KV に永続化）
+  ② 食材×担当マトリクス — 19食材それぞれの担当個体と供給量、担当ゼロをハイライト
+  ③ レシピ充足度 — 食材ごとの need/have バーと穴食材
+  ④ 育成優先度 / 捕獲優先度ランキング
+"""
+
+from __future__ import annotations
+
+import streamlit as st
+
+import db
+from ui import components as c
+from utils.ingredient_coverage import (
+    build_ingredient_index,
+    catch_priorities,
+    load_target_recipes,
+    recipe_coverage,
+    save_target_recipes,
+    team_supply,
+    training_priorities,
+)
+
+st.title("🥕 食材・育成戦略")
+st.caption("狙いの料理から逆算して、食材の穴・育成すべき個体・捕まえるべき種族を洗い出す。")
+
+db.init_db()
+owned = [dict(r) for r in db.list_pokemon()]
+
+if not owned:
+    st.html(c.empty_state("所持ポケモンがいません。先に「個体登録」から追加してください。"))
+    st.stop()
+
+
+# ============ ① 狙いのレシピ ============
+
+st.html(c.section_header("狙いのレシピ"))
+
+all_recipes = [r for r in db.list_all_recipe_records() if r.get("ingredients")]
+saved_targets = load_target_recipes()
+targets = st.multiselect(
+    "作りたい料理（保存され、次回も引き継がれる）",
+    [r["name"] for r in all_recipes],
+    default=[n for n in saved_targets if any(r["name"] == n for r in all_recipes)],
+    key="ing_targets",
+)
+if set(targets) != set(saved_targets):
+    save_target_recipes(targets)
+
+supply = team_supply(owned)
+
+
+# ============ ② 食材×担当マトリクス ============
+
+st.html(c.section_header("食材×担当ポケモン"))
+st.caption(
+    "全所持個体の枠から逆引き。数値は現在Lv・現在の食材選択での供給量/日。"
+    "「枠のみ」= その食材の枠は持っているが現在選んでいない/未解放。"
+)
+
+index = build_ingredient_index(owned)
+uncovered = [n for n, providers in index.items() if not any(p.per_day_now > 0 for p in providers)]
+if uncovered:
+    st.warning("担当ゼロの食材: " + "、".join(uncovered))
+
+target_ings: set[str] = set()
+for rec in all_recipes:
+    if rec["name"] in targets:
+        target_ings.update(i["name"] for i in rec["ingredients"])
+
+show_all = st.toggle("全食材を表示（OFF: 狙いレシピの食材のみ）", value=not targets)
+for name, providers in index.items():
+    if not show_all and name not in target_ings:
+        continue
+    active = [p for p in providers if p.per_day_now > 0]
+    idle = [p for p in providers if p.per_day_now <= 0]
+    have = supply.get(name, 0.0)
+    with st.expander(
+        f"{name}　—　{have:.1f}個/日（担当{len(active)}体・枠のみ{len(idle)}体）",
+        expanded=False,
+    ):
+        chips = [
+            c.icon_chip(None, f"{p.label} {p.per_day_now:.1f}/日", title=p.species_name)
+            for p in active
+        ] + [
+            c.icon_chip(
+                None,
+                f"{p.label}（枠{p.slot.upper()}・Lv{p.unlock_lv}解放{'済' if p.unlocked else '前'}）",
+                title=p.species_name,
+            )
+            for p in idle
+        ]
+        if chips:
+            st.html('<div style="display:flex; flex-wrap:wrap; gap:4px;">' + "".join(chips) + "</div>")
+        else:
+            st.html(c.empty_state("担当できる所持ポケモンがいない"))
+
+
+# ============ ③ レシピ充足度 ============
+
+st.html(c.section_header("レシピ充足度"))
+
+if not targets:
+    st.html(c.empty_state("狙いのレシピを選ぶと、食材ごとの充足度と穴が表示されます。"))
+else:
+    for cov in recipe_coverage(targets, supply):
+        with st.container(border=True):
+            head = st.columns([3, 2])
+            head[0].markdown(f"**{cov.recipe['name']}**")
+            head[1].caption(
+                f"作成ペース {cov.pace:.2f}回/日 ・ 期待 {cov.daily_energy:,.0f} en/日"
+            )
+            for ing_name, (need, have) in cov.per_ingredient.items():
+                ratio = have / need if need > 0 else 0.0
+                is_hole = ing_name in cov.holes
+                cols = st.columns([2, 3, 2])
+                cols[0].html(c.ingredient_chip(ing_name, f"{have:.1f}/{need:.0f}"))
+                cols[1].html(c.meter(ratio))
+                cols[2].caption(("🕳 律速" if is_hole else "") + f" ×{ratio:.2f}")
+
+
+# ============ ④ 育成・捕獲優先度 ============
+
+st.html(c.section_header("育成優先度"))
+st.caption("狙いレシピの料理エナジー改善を「1Lvあたり効率」で評価。Lv30/60の食材枠解放が大きく効く。")
+
+if not targets:
+    st.html(c.empty_state("狙いのレシピを選ぶと計算されます。"))
+else:
+    tps = training_priorities(owned, targets)
+    if not tps:
+        st.html(c.empty_state("これ以上伸ばしても狙いレシピは改善しない（すでに充足 or 対象食材の担当がいない）。"))
+    for i, tp in enumerate(tps[:10]):
+        with st.container(border=True):
+            cols = st.columns([3, 4])
+            cols[0].markdown(
+                f"**#{i + 1} {tp.label}**　Lv{tp.current_lv} → **Lv{tp.best_milestone}**"
+            )
+            delta = "、".join(f"{n} +{v:.1f}/日" for n, v in sorted(tp.delta_supply.items(), key=lambda x: -x[1]))
+            cols[1].caption(
+                f"効率 **{tp.gain_per_lv:,.0f} en/Lv** ・ 到達で **+{tp.total_gain:,.0f} en/日**"
+                + (f" ・ 増える食材: {delta}" if delta else "")
+            )
+
+st.html(c.section_header("捕獲優先度"))
+st.caption("未所持種族（最終進化に集約）のうち、狙いレシピの穴食材を埋められる子。理想個体Lv60前提の概算。")
+
+if not targets:
+    st.html(c.empty_state("狙いのレシピを選ぶと計算されます。"))
+else:
+    cps = catch_priorities(owned, targets)
+    if not cps:
+        st.html(c.empty_state("穴食材なし、または埋められる未所持種族がいない。"))
+    for i, cp in enumerate(cps[:10]):
+        with st.container(border=True):
+            cols = st.columns([3, 4])
+            cols[0].markdown(f"**#{i + 1} {cp.species_name}**　(No.{cp.dex_no})")
+            fills = "、".join(f"{n} +{v:.1f}/日" for n, v in sorted(cp.fills.items(), key=lambda x: -x[1]))
+            cols[1].caption(f"穴埋め価値 **{cp.score:,.0f} en/日** ・ {fills}")
