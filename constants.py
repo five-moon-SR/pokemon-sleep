@@ -16,32 +16,32 @@ DAIFUKU_RANK_EMOJI: dict[str, str] = {
     "D":   "⚪",
 }
 
-# テーマ「月夜のリサーチノート」機能色トークン（ui/theme.py の --ps-* と同値）。
+# テーマ「ひなたのリサーチノート」機能色トークン（ui/theme.py の --ps-* と同値）。
 # Styler（st.dataframe のセル色）はCSS変数が使えないのでここのhexを直接使う。
-THEME_DUSK = "#1C2438"   # カード面（セル背景のブレンド先）
-THEME_INK_DIM = "#98A0B8"
+THEME_DUSK = "#FFFFFF"   # カード面（セル背景のブレンド先）
+THEME_INK_DIM = "#8B93A8"
 
 DAIFUKU_RANK_COLORS: dict[str, str] = {
-    "増田": "#F5D06F",
-    "SS":  "#FF8A9A",
-    "S":   "#FFAB70",
-    "A":   "#E8C84A",
-    "B":   "#7FC77F",
-    "C":   "#6FA8DC",
-    "D":   "#8890A8",
+    "増田": "#C99A1F",
+    "SS":  "#E4526E",
+    "S":   "#E0813C",
+    "A":   "#C9A227",
+    "B":   "#4FA352",
+    "C":   "#3E87C7",
+    "D":   "#8B93A8",
 }
 
 SUBSKILL_RARITY_COLORS: dict[str, str] = {
-    "gold":  "#E8C84A",
-    "blue":  "#6FA8DC",
-    "white": "#C8CEDC",
+    "gold":  "#C99A1F",
+    "blue":  "#3E87C7",
+    "white": "#8B93A8",
 }
 
 SPECIALTY_COLORS: dict[str, str] = {
-    "きのみ": "#7FC77F",
-    "食材":   "#FFAB70",
-    "スキル": "#6FA8DC",
-    "オール": "#C0A8E0",
+    "きのみ": "#4FA352",
+    "食材":   "#E0813C",
+    "スキル": "#3E87C7",
+    "オール": "#9B6BC7",
 }
 
 

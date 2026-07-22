@@ -562,7 +562,7 @@ _IMG_COL_CONFIG = {
 }
 
 # 未開放セル用の薄いスタイル
-GRAY_STYLE = f"color: {THEME_INK_DIM}; background-color: #171E30; font-style: italic"
+GRAY_STYLE = f"color: {THEME_INK_DIM}; background-color: #F4EFE2; font-style: italic"
 
 
 def _build_styler(df: pd.DataFrame):
@@ -598,7 +598,7 @@ def _build_styler(df: pd.DataFrame):
                 styles.loc[eff < unlock_lv, name_col] = GRAY_STYLE
                 img_col = "🥕" + name_col[-1]
                 if img_col in df_in.columns:
-                    styles.loc[eff < unlock_lv, img_col] = "background-color: #171E30"
+                    styles.loc[eff < unlock_lv, img_col] = "background-color: #F4EFE2"
 
         return styles
 

@@ -157,7 +157,7 @@ else:
         st.markdown("**だいふくランク分布**")
         if rank_rows:
             df = pd.DataFrame(rank_rows, columns=["ランク", "人数"])
-            st.bar_chart(df.set_index("ランク"), height=180, color="#F5D06F")
+            st.bar_chart(df.set_index("ランク"), height=180, color="#F0B32E")
         else:
             st.caption("—")
 
@@ -171,7 +171,7 @@ else:
         st.markdown("**とくいなもの分布**")
         if sp_counts:
             df = pd.DataFrame({"区分": list(sp_counts), "人数": list(sp_counts.values())})
-            st.bar_chart(df.set_index("区分"), height=180, color="#6FA8DC")
+            st.bar_chart(df.set_index("区分"), height=180, color="#3E87C7")
         else:
             st.caption("—")
 

@@ -1,4 +1,4 @@
-"""テーマ「月夜のリサーチノート」のCSSトークンと共通スタイル注入。
+"""テーマ「ひなたのリサーチノート」（ゲーム内UI寄せ）のCSSトークンと共通スタイル注入。
 
 役割分担:
 - 標準ウィジェットの色・角丸 → .streamlit/config.toml（ここでは触らない）
@@ -16,40 +16,40 @@ import streamlit as st
 
 # --- カラートークン（config.toml と同じ世界観。コンポーネントHTMLはCSS変数だけ参照する） ---
 
-NIGHT = "#131A2A"      # 夜空/アプリ背景
-DUSK = "#1C2438"       # カード面
-LINE = "#2C3650"       # 罫線
-INK = "#E8EAF2"        # 本文
-INK_DIM = "#98A0B8"    # キャプション
-MOON = "#F5D06F"       # 月光ゴールド（アクセントはこの1色のみ）
+NIGHT = "#FBF3E4"      # クリーム地/アプリ背景
+DUSK = "#FFFFFF"       # カード面
+LINE = "#EADFC8"       # 罫線
+INK = "#3B4460"        # 本文（ネイビー）
+INK_DIM = "#8B93A8"    # キャプション
+MOON = "#35A7CC"       # スリープブルー（アクセントはこの1色のみ）
 
 _THEME_CSS = """
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Zen+Maru+Gothic:wght@400;500;700&display=swap');
 
 :root {
-    --ps-night: #131A2A;
-    --ps-dusk: #1C2438;
-    --ps-line: #2C3650;
-    --ps-ink: #E8EAF2;
-    --ps-ink-dim: #98A0B8;
-    --ps-moon: #F5D06F;
+    --ps-night: #FBF3E4;
+    --ps-dusk: #FFFFFF;
+    --ps-line: #EADFC8;
+    --ps-ink: #3B4460;
+    --ps-ink-dim: #8B93A8;
+    --ps-moon: #35A7CC;
 
-    /* 機能色（ゲーム由来なので固定。ダーク面用に彩度調整済み） */
-    --ps-rank-masuda: #F5D06F;
-    --ps-rank-ss: #FF8A9A;
-    --ps-rank-s: #FFAB70;
-    --ps-rank-a: #E8C84A;
-    --ps-rank-b: #7FC77F;
-    --ps-rank-c: #6FA8DC;
-    --ps-rank-d: #8890A8;
-    --ps-sub-gold: #E8C84A;
-    --ps-sub-blue: #6FA8DC;
-    --ps-sub-white: #C8CEDC;
-    --ps-sp-berry: #7FC77F;
-    --ps-sp-food: #FFAB70;
-    --ps-sp-skill: #6FA8DC;
-    --ps-sp-all: #C0A8E0;
+    /* 機能色（ゲーム由来なので固定。白カード面用に濃いめ調整） */
+    --ps-rank-masuda: #C99A1F;
+    --ps-rank-ss: #E4526E;
+    --ps-rank-s: #E0813C;
+    --ps-rank-a: #C9A227;
+    --ps-rank-b: #4FA352;
+    --ps-rank-c: #3E87C7;
+    --ps-rank-d: #8B93A8;
+    --ps-sub-gold: #C99A1F;
+    --ps-sub-blue: #3E87C7;
+    --ps-sub-white: #8B93A8;
+    --ps-sp-berry: #4FA352;
+    --ps-sp-food: #E0813C;
+    --ps-sp-skill: #3E87C7;
+    --ps-sp-all: #9B6BC7;
 }
 
 html, body, [data-testid="stAppViewContainer"] * {
@@ -69,13 +69,13 @@ code, pre, [data-testid="stCode"] * { font-family: ui-monospace, monospace; }
 
 /* ===== 自作コンポーネント ===== */
 
-/* カード: 影は1段のみ（夜なので光らせない） */
+/* カード: 白面 + やわらか影（ゲーム内メニューのふっくら感） */
 .ps-card {
     background: var(--ps-dusk);
     border: 1px solid var(--ps-line);
-    border-radius: 12px;
+    border-radius: 16px;
     padding: 12px;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.25);
+    box-shadow: 0 2px 6px rgba(90, 70, 30, 0.10);
     color: var(--ps-ink);
 }
 .ps-card .ps-card-title {
@@ -149,8 +149,9 @@ code, pre, [data-testid="stCode"] * { font-family: ui-monospace, monospace; }
 .ps-tile {
     background: var(--ps-dusk);
     border: 1px solid var(--ps-line);
-    border-radius: 12px;
+    border-radius: 16px;
     padding: 10px 12px;
+    box-shadow: 0 2px 6px rgba(90, 70, 30, 0.08);
 }
 .ps-tile .ps-tile-label { color: var(--ps-ink-dim); font-size: 0.72rem; }
 .ps-tile .ps-tile-value {
@@ -171,7 +172,7 @@ code, pre, [data-testid="stCode"] * { font-family: ui-monospace, monospace; }
     font-weight: 700;
     font-size: 1.05rem;
 }
-.ps-section::before { content: "☾"; color: var(--ps-moon); font-size: 0.9em; }
+.ps-section::before { content: "❋"; color: var(--ps-moon); font-size: 0.9em; }
 .ps-section::after {
     content: "";
     flex: 1;
