@@ -697,7 +697,7 @@ if disp_mode == "🃏 カード":
     ss.setdefault("owned_cards_shown", 30)
     page_df = display_df.head(ss["owned_cards_shown"])
 
-    CARDS_PER_ROW = 3
+    CARDS_PER_ROW = 2  # スマホ主眼: 3列だとタイトルが縦割れする
     rows_iter = list(page_df.iterrows())
     for start in range(0, len(rows_iter), CARDS_PER_ROW):
         cols = st.columns(CARDS_PER_ROW)
