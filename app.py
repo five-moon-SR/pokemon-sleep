@@ -3,7 +3,12 @@ import streamlit as st
 import db
 import ui
 
-st.set_page_config(page_title="ポケスリ管理", page_icon="🌙", layout="wide")
+# page_icon: プリンの寝顔（ブラウザタブ/ホーム画面追加時のアイコン）
+st.set_page_config(
+    page_title="ポケスリ管理",
+    page_icon="https://www.serebii.net/pokemonsleep/pokemon/39.png",
+    layout="wide",
+)
 
 ui.apply_theme()
 
