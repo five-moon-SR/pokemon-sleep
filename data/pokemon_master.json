@@ -34,7 +34,7 @@
       },
       "main_skill": "食材ゲットS",
       "base_assist_seconds": 4400,
-      "food_drop_rate": 25.63,
+      "food_drop_rate": 25.7,
       "main_skill_rate": 1.9
     },
     {
@@ -145,7 +145,7 @@
       },
       "main_skill": "食材ゲットS",
       "base_assist_seconds": 3500,
-      "food_drop_rate": 20.05,
+      "food_drop_rate": 20.1,
       "main_skill_rate": 1.1
     },
     {
@@ -256,7 +256,7 @@
       },
       "main_skill": "食材ゲットS",
       "base_assist_seconds": 4500,
-      "food_drop_rate": 27.01,
+      "food_drop_rate": 27.1,
       "main_skill_rate": 2.0
     },
     {
@@ -367,7 +367,7 @@
       },
       "main_skill": "食材ゲットS",
       "base_assist_seconds": 4400,
-      "food_drop_rate": 17.96,
+      "food_drop_rate": 17.9,
       "main_skill_rate": 0.8
     },
     {
@@ -589,7 +589,7 @@
       },
       "main_skill": "げんきチャージS",
       "base_assist_seconds": 3400,
-      "food_drop_rate": 26.32,
+      "food_drop_rate": 26.4,
       "main_skill_rate": 5.7
     },
     {
@@ -663,7 +663,7 @@
       },
       "main_skill": "エナジーチャージS(ランダム)",
       "base_assist_seconds": 2500,
-      "food_drop_rate": 21.87,
+      "food_drop_rate": 21.8,
       "main_skill_rate": 2.8
     },
     {
@@ -848,7 +848,7 @@
       },
       "main_skill": "ゆびをふる",
       "base_assist_seconds": 4000,
-      "food_drop_rate": 16.88,
+      "food_drop_rate": 16.8,
       "main_skill_rate": 3.6
     },
     {
@@ -922,8 +922,8 @@
       },
       "main_skill": "げんきエールS",
       "base_assist_seconds": 4700,
-      "food_drop_rate": 16.79,
-      "main_skill_rate": 2.7
+      "food_drop_rate": 16.8,
+      "main_skill_rate": 3.2
     },
     {
       "dex_no": "0037",
@@ -997,7 +997,7 @@
       "main_skill": "げんきエールS",
       "base_assist_seconds": 2600,
       "food_drop_rate": 16.4,
-      "main_skill_rate": 2.5
+      "main_skill_rate": 2.9
     },
     {
       "dex_no": "0038",
@@ -1070,7 +1070,7 @@
       },
       "main_skill": "げんきオールS",
       "base_assist_seconds": 3900,
-      "food_drop_rate": 18.27,
+      "food_drop_rate": 18.2,
       "main_skill_rate": 4.3
     },
     {
@@ -1107,7 +1107,7 @@
       },
       "main_skill": "げんきオールS",
       "base_assist_seconds": 2750,
-      "food_drop_rate": 17.26,
+      "food_drop_rate": 19.1,
       "main_skill_rate": 4.0
     },
     {
@@ -1144,7 +1144,7 @@
       },
       "main_skill": "エナジーチャージS",
       "base_assist_seconds": 4300,
-      "food_drop_rate": 19.14,
+      "food_drop_rate": 19.2,
       "main_skill_rate": 2.1
     },
     {
@@ -1181,7 +1181,7 @@
       },
       "main_skill": "エナジーチャージS",
       "base_assist_seconds": 2650,
-      "food_drop_rate": 18.93,
+      "food_drop_rate": 19.0,
       "main_skill_rate": 2.0
     },
     {
@@ -1213,8 +1213,8 @@
       },
       "main_skill": "ゆめのかけらゲットS",
       "base_assist_seconds": 4400,
-      "food_drop_rate": 16.39,
-      "main_skill_rate": 4.19
+      "food_drop_rate": 16.3,
+      "main_skill_rate": 4.2
     },
     {
       "dex_no": "0053",
@@ -1430,7 +1430,7 @@
       },
       "main_skill": "おてつだいサポートS",
       "base_assist_seconds": 4300,
-      "food_drop_rate": 13.73,
+      "food_drop_rate": 13.8,
       "main_skill_rate": 5.0
     },
     {
@@ -1615,8 +1615,8 @@
       },
       "main_skill": "エナジーチャージS(ランダム)",
       "base_assist_seconds": 5700,
-      "food_drop_rate": 28.03,
-      "main_skill_rate": 5.19
+      "food_drop_rate": 28.1,
+      "main_skill_rate": 5.2
     },
     {
       "dex_no": "0075",
@@ -1727,7 +1727,7 @@
       "main_skill": "げんきエールS",
       "base_assist_seconds": 5700,
       "food_drop_rate": 15.1,
-      "main_skill_rate": 6.7
+      "main_skill_rate": 7.8
     },
     {
       "dex_no": "0080",
@@ -1764,7 +1764,7 @@
       "main_skill": "げんきエールS",
       "base_assist_seconds": 3800,
       "food_drop_rate": 19.7,
-      "main_skill_rate": 6.8
+      "main_skill_rate": 8.0
     },
     {
       "dex_no": "0081",
@@ -1795,7 +1795,7 @@
       },
       "main_skill": "料理パワーアップS",
       "base_assist_seconds": 5800,
-      "food_drop_rate": 18.12,
+      "food_drop_rate": 18.2,
       "main_skill_rate": 6.4
     },
     {
@@ -2224,8 +2224,8 @@
       },
       "main_skill": "食材ゲットS",
       "base_assist_seconds": 2650,
-      "food_drop_rate": 22.16,
-      "main_skill_rate": 1.7
+      "food_drop_rate": 22.2,
+      "main_skill_rate": 3.2
     },
     {
       "dex_no": "0122",
@@ -2298,7 +2298,7 @@
       },
       "main_skill": "エナジーチャージM",
       "base_assist_seconds": 2400,
-      "food_drop_rate": 20.6,
+      "food_drop_rate": 21.6,
       "main_skill_rate": 3.1
     },
     {
@@ -2335,7 +2335,7 @@
       },
       "main_skill": "へんしん(スキルコピー)",
       "base_assist_seconds": 3500,
-      "food_drop_rate": 20.05,
+      "food_drop_rate": 20.1,
       "main_skill_rate": 3.6
     },
     {
@@ -2483,7 +2483,7 @@
       },
       "main_skill": "食材ゲットS",
       "base_assist_seconds": 3100,
-      "food_drop_rate": 21.1,
+      "food_drop_rate": 21.2,
       "main_skill_rate": 6.1
     },
     {
@@ -2557,8 +2557,8 @@
       },
       "main_skill": "料理パワーアップS",
       "base_assist_seconds": 2700,
-      "food_drop_rate": 18.55,
-      "main_skill_rate": 5.19
+      "food_drop_rate": 18.5,
+      "main_skill_rate": 5.2
     },
     {
       "dex_no": "0147",
@@ -2810,7 +2810,7 @@
       },
       "main_skill": "エナジーチャージS(ランダム)",
       "base_assist_seconds": 2800,
-      "food_drop_rate": 17.44,
+      "food_drop_rate": 17.5,
       "main_skill_rate": 4.6
     },
     {
@@ -2847,8 +2847,8 @@
       },
       "main_skill": "エナジーチャージS(ランダム)",
       "base_assist_seconds": 3500,
-      "food_drop_rate": 18.53,
-      "main_skill_rate": 2.09
+      "food_drop_rate": 18.6,
+      "main_skill_rate": 2.1
     },
     {
       "dex_no": "0156",
@@ -2921,7 +2921,7 @@
       },
       "main_skill": "エナジーチャージS(ランダム)",
       "base_assist_seconds": 2400,
-      "food_drop_rate": 20.55,
+      "food_drop_rate": 20.8,
       "main_skill_rate": 3.9
     },
     {
@@ -2985,8 +2985,8 @@
       },
       "main_skill": "エナジーチャージS(ランダム)",
       "base_assist_seconds": 3400,
-      "food_drop_rate": 25.7,
-      "main_skill_rate": 5.19
+      "food_drop_rate": 25.3,
+      "main_skill_rate": 5.2
     },
     {
       "dex_no": "0160",
@@ -3054,8 +3054,8 @@
       },
       "main_skill": "エナジーチャージS",
       "base_assist_seconds": 4300,
-      "food_drop_rate": 20.95,
-      "main_skill_rate": 2.29
+      "food_drop_rate": 21.0,
+      "main_skill_rate": 2.3
     },
     {
       "dex_no": "0173",
@@ -3091,7 +3091,7 @@
       },
       "main_skill": "ゆびをふる",
       "base_assist_seconds": 5600,
-      "food_drop_rate": 16.34,
+      "food_drop_rate": 16.4,
       "main_skill_rate": 3.4
     },
     {
@@ -3165,7 +3165,7 @@
       },
       "main_skill": "ゆびをふる",
       "base_assist_seconds": 4800,
-      "food_drop_rate": 15.03,
+      "food_drop_rate": 15.1,
       "main_skill_rate": 4.9
     },
     {
@@ -3308,7 +3308,7 @@
       },
       "main_skill": "エナジーチャージM",
       "base_assist_seconds": 4600,
-      "food_drop_rate": 12.72,
+      "food_drop_rate": 12.8,
       "main_skill_rate": 4.7
     },
     {
@@ -3557,7 +3557,7 @@
       },
       "main_skill": "エナジーチャージM",
       "base_assist_seconds": 2400,
-      "food_drop_rate": 16.33,
+      "food_drop_rate": 16.4,
       "main_skill_rate": 4.4
     },
     {
@@ -3669,7 +3669,7 @@
       "main_skill": "げんきエールS",
       "base_assist_seconds": 3400,
       "food_drop_rate": 16.6,
-      "main_skill_rate": 7.4
+      "main_skill_rate": 8.7
     },
     {
       "dex_no": "0202",
@@ -3706,7 +3706,7 @@
       "main_skill": "げんきエールS",
       "base_assist_seconds": 3500,
       "food_drop_rate": 21.1,
-      "main_skill_rate": 7.0
+      "main_skill_rate": 8.2
     },
     {
       "dex_no": "0208",
@@ -3817,7 +3817,7 @@
       "main_skill": "ビルドアップ(料理アシストS)",
       "base_assist_seconds": 2300,
       "food_drop_rate": 15.8,
-      "main_skill_rate": 4.5
+      "main_skill_rate": 4.7
     },
     {
       "dex_no": "0215",
@@ -3891,7 +3891,7 @@
       "main_skill": "プレゼント(食材ゲットS)",
       "base_assist_seconds": 2500,
       "food_drop_rate": 18.8,
-      "main_skill_rate": 1.5
+      "main_skill_rate": 3.0
     },
     {
       "dex_no": "0228",
@@ -4038,7 +4038,7 @@
       },
       "main_skill": "おてつだいブースト(でんき)",
       "base_assist_seconds": 2100,
-      "food_drop_rate": 19.12,
+      "food_drop_rate": 19.2,
       "main_skill_rate": 1.9
     },
     {
@@ -4149,7 +4149,7 @@
       },
       "main_skill": "げんきチャージS",
       "base_assist_seconds": 4800,
-      "food_drop_rate": 23.71,
+      "food_drop_rate": 23.8,
       "main_skill_rate": 4.1
     },
     {
@@ -4223,8 +4223,8 @@
       },
       "main_skill": "げんきチャージS",
       "base_assist_seconds": 2700,
-      "food_drop_rate": 26.55,
-      "main_skill_rate": 5.19
+      "food_drop_rate": 26.6,
+      "main_skill_rate": 5.2
     },
     {
       "dex_no": "0252",
@@ -4371,7 +4371,7 @@
       },
       "main_skill": "げんきチャージS",
       "base_assist_seconds": 4300,
-      "food_drop_rate": 17.0,
+      "food_drop_rate": 16.0,
       "main_skill_rate": 4.4
     },
     {
@@ -4593,7 +4593,7 @@
       },
       "main_skill": "げんきオールS",
       "base_assist_seconds": 4800,
-      "food_drop_rate": 14.56,
+      "food_drop_rate": 14.5,
       "main_skill_rate": 4.3
     },
     {
@@ -4704,7 +4704,7 @@
       },
       "main_skill": "食材ゲットS",
       "base_assist_seconds": 4900,
-      "food_drop_rate": 21.35,
+      "food_drop_rate": 21.6,
       "main_skill_rate": 1.9
     },
     {
@@ -4778,7 +4778,7 @@
       },
       "main_skill": "食材ゲットS",
       "base_assist_seconds": 3600,
-      "food_drop_rate": 33.95,
+      "food_drop_rate": 33.9,
       "main_skill_rate": 6.7
     },
     {
@@ -5222,7 +5222,7 @@
       },
       "main_skill": "エナジーチャージS",
       "base_assist_seconds": 2700,
-      "food_drop_rate": 1702.0,
+      "food_drop_rate": 17.2,
       "main_skill_rate": 3.9
     },
     {
@@ -5259,7 +5259,7 @@
       },
       "main_skill": "げんきチャージS",
       "base_assist_seconds": 4200,
-      "food_drop_rate": 17.57,
+      "food_drop_rate": 17.7,
       "main_skill_rate": 3.2
     },
     {
@@ -5444,8 +5444,8 @@
       },
       "main_skill": "げんきエールS",
       "base_assist_seconds": 5800,
-      "food_drop_rate": 21.04,
-      "main_skill_rate": 5.91
+      "food_drop_rate": 21.3,
+      "main_skill_rate": 6.9
     },
     {
       "dex_no": "0363",
@@ -5555,8 +5555,8 @@
       },
       "main_skill": "食材ゲットS",
       "base_assist_seconds": 4000,
-      "food_drop_rate": 22.05,
-      "main_skill_rate": 2.09
+      "food_drop_rate": 22.1,
+      "main_skill_rate": 2.1
     },
     {
       "dex_no": "0365",
@@ -5592,7 +5592,7 @@
       },
       "main_skill": "食材ゲットS",
       "base_assist_seconds": 3000,
-      "food_drop_rate": 22.4,
+      "food_drop_rate": 22.3,
       "main_skill_rate": 2.2
     },
     {
@@ -6259,7 +6259,7 @@
       "main_skill": "たくわえる(エナジーチャージS)",
       "base_assist_seconds": 4800,
       "food_drop_rate": 13.7,
-      "main_skill_rate": 6.9
+      "main_skill_rate": 7.1
     },
     {
       "dex_no": "0426",
@@ -6296,7 +6296,7 @@
       "main_skill": "たくわえる(エナジーチャージS)",
       "base_assist_seconds": 2500,
       "food_drop_rate": 12.8,
-      "main_skill_rate": 6.1
+      "main_skill_rate": 6.3
     },
     {
       "dex_no": "0430",
@@ -6406,8 +6406,8 @@
       },
       "main_skill": "ものまね(スキルコピー)",
       "base_assist_seconds": 4300,
-      "food_drop_rate": 20.04,
-      "main_skill_rate": 3.19
+      "food_drop_rate": 20.1,
+      "main_skill_rate": 3.2
     },
     {
       "dex_no": "0440",
@@ -6586,7 +6586,7 @@
       },
       "main_skill": "エナジーチャージS",
       "base_assist_seconds": 5600,
-      "food_drop_rate": 22.71,
+      "food_drop_rate": 22.8,
       "main_skill_rate": 4.2
     },
     {
@@ -6761,8 +6761,8 @@
       },
       "main_skill": "料理パワーアップS",
       "base_assist_seconds": 3100,
-      "food_drop_rate": 18.0,
-      "main_skill_rate": 6.19
+      "food_drop_rate": 17.9,
+      "main_skill_rate": 6.2
     },
     {
       "dex_no": "0468",
@@ -6835,8 +6835,8 @@
       },
       "main_skill": "げんきエールS",
       "base_assist_seconds": 3000,
-      "food_drop_rate": 20.57,
-      "main_skill_rate": 5.9
+      "food_drop_rate": 20.5,
+      "main_skill_rate": 6.9
     },
     {
       "dex_no": "0471",
@@ -7194,7 +7194,7 @@
       "main_skill": "きのみバースト",
       "base_assist_seconds": 2400,
       "food_drop_rate": 12.1,
-      "main_skill_rate": 3.2
+      "main_skill_rate": 3.5
     },
     {
       "dex_no": "0696",
@@ -8008,7 +8008,7 @@
       "main_skill": "げんきエールS",
       "base_assist_seconds": 2500,
       "food_drop_rate": 16.7,
-      "main_skill_rate": 3.0
+      "main_skill_rate": 3.5
     },
     {
       "dex_no": "0777",
@@ -8045,7 +8045,7 @@
       "main_skill": "ほっぺすりすり(げんきエールS)",
       "base_assist_seconds": 2700,
       "food_drop_rate": 16.9,
-      "main_skill_rate": 5.4
+      "main_skill_rate": 5.5
     },
     {
       "dex_no": "0778",
@@ -8082,7 +8082,7 @@
       "main_skill": "ばけのかわ(きのみバースト)",
       "base_assist_seconds": 2500,
       "food_drop_rate": 15.3,
-      "main_skill_rate": 3.3
+      "main_skill_rate": 3.5
     },
     {
       "dex_no": "0780",
@@ -8414,8 +8414,8 @@
       },
       "main_skill": "げんきチャージS",
       "base_assist_seconds": 4200,
-      "food_drop_rate": 25.33,
-      "main_skill_rate": 5.31
+      "food_drop_rate": 25.4,
+      "main_skill_rate": 5.3
     },
     {
       "dex_no": "0910",

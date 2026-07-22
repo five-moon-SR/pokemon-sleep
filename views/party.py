@@ -324,7 +324,8 @@ def _render_role_candidates(
             use_container_width=True,
         ):
             ss.party_member_ids.append(p["id"])
-            st.rerun()
+            # fragment内から呼ばれても ③ 編成サマリまで更新したいので全体rerun
+            st.rerun(scope="app")
 
 
 # ② と ③ で共通利用するため、所持ポケと役割スコアを先に計算
@@ -336,15 +337,20 @@ for p in owned_rows:
         p, master, fav_set, event_set, needed_ings
     )
 
-with st.container(border=True):
-    st.subheader("② 候補ポケモン（役割別）")
-    st.caption(
-        "①で設定した役割の目標数 / イベント補正 / 候補レシピが各タブのスコアに反映されます。"
-    )
+@st.fragment
+def _candidates_block() -> None:
+    """②全体をフラグメント化。表示件数の切替や追加ボタンでの再描画をこのブロックに閉じる
+    （メンバー追加は ③ に波及するので st.rerun(scope="app") で全体再実行）。"""
+    with st.container(border=True):
+        st.subheader("② 候補ポケモン（役割別）")
+        st.caption(
+            "①で設定した役割の目標数 / イベント補正 / 候補レシピが各タブのスコアに反映されます。"
+        )
 
-    if not owned_rows:
-        st.info("所持ポケモンがいません。先に「個体登録」から追加してください。")
-    else:
+        if not owned_rows:
+            st.info("所持ポケモンがいません。先に「個体登録」から追加してください。")
+            return
+
         roles_with_target = [k for k in ROLE_LABELS if role_targets.get(k, 0) > 0]
         roles_to_show = roles_with_target or list(ROLE_LABELS.keys())
 
@@ -359,6 +365,9 @@ with st.container(border=True):
         for tab, role_key in zip(tabs, roles_to_show):
             with tab:
                 _render_role_candidates(role_key, owned_rows, scores_map, ss)
+
+
+_candidates_block()
 
 
 # -------------- ③ 編成中のパーティ --------------

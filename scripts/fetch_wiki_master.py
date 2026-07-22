@@ -193,11 +193,12 @@ def parse_probability_rows(table_html: str) -> dict[str, dict[str, float]]:
     return probs
 
 
-def sync_probabilities(*, apply: bool, html: str | None = None) -> int:
+def sync_probabilities(*, apply: bool, overwrite: bool = False, html: str | None = None) -> int:
     """確率ページと突合。null の穴埋め候補と既存値の食い違いを報告し、--apply で穴埋めする。
 
     方針はマスター本体と同じ: 自動で書くのは「null → 値」の穴埋めだけ。
     既存値との食い違い（Wikiの推定値更新）は報告のみ。
+    --overwrite 併用時のみ、食い違いもWiki値へ一括更新する（評価%が動く点に注意）。
     """
     if html is None:
         print(f"取得中: {PROB_URL}")
@@ -230,28 +231,32 @@ def sync_probabilities(*, apply: bool, html: str | None = None) -> int:
                 diffs.append(f"skill {rec.get('main_skill_rate')} → {p['main_skill_rate']}")
             if diffs:
                 mismatches.append(f"{name}: {' / '.join(diffs)}")
+                if apply and overwrite:
+                    rec["food_drop_rate"] = p["food_drop_rate"]
+                    rec["main_skill_rate"] = p["main_skill_rate"]
 
     if missing:
         print(f"\n⚠ 確率ページに見つからない種族 ({len(missing)}件): {missing}")
     if mismatches:
-        print(f"\n△ 既存値とWiki推定値の食い違い ({len(mismatches)}件) — 自動では上書きしない:")
+        verb = "Wiki値へ更新" if (apply and overwrite) else "自動では上書きしない(--overwrite で更新)"
+        print(f"\n△ 既存値とWiki推定値の食い違い ({len(mismatches)}件) — {verb}:")
         for m in mismatches:
             print(f"  - {m}")
-    if not fills:
+    if fills:
+        print(f"\n★ null 穴埋め{'完了' if apply else '候補'} ({len(fills)}件):")
+        for f in fills:
+            print(f"  - {f}")
+    else:
         print("\n✅ null の確率データなし。穴埋め不要。")
-        return 0
 
-    print(f"\n★ null 穴埋め{'完了' if apply else '候補'} ({len(fills)}件):")
-    for f in fills:
-        print(f"  - {f}")
-
-    if apply:
+    wrote_overwrites = apply and overwrite and mismatches
+    if apply and (fills or wrote_overwrites):
         MASTER_PATH.write_text(
             json.dumps(data, ensure_ascii=False, indent=2), encoding="utf-8"
         )
         print(f"\n書き込み完了 → {MASTER_PATH.relative_to(ROOT)}")
-    else:
-        print("\n(dry-run) 穴埋めするには --probs --apply で再実行。")
+    elif not apply and (fills or mismatches):
+        print("\n(dry-run) 反映するには --probs --apply（食い違いも更新するなら +--overwrite）で再実行。")
     return 0
 
 
@@ -356,12 +361,13 @@ def main() -> int:
     ap = argparse.ArgumentParser(description=__doc__.splitlines()[0])
     ap.add_argument("--apply", action="store_true", help="新種族をマスターに追記する（既定はdry-run）")
     ap.add_argument("--probs", action="store_true", help="確率ページと突合して null を穴埋めするモード")
+    ap.add_argument("--overwrite", action="store_true", help="--probs --apply 時、既存値の食い違いもWiki値へ更新")
     ap.add_argument("--html", type=Path, help="取得済みHTMLファイルを使う（Wikiにアクセスしない）")
     args = ap.parse_args()
 
     if args.probs:
         html = args.html.read_text(encoding="utf-8") if args.html else None
-        return sync_probabilities(apply=args.apply, html=html)
+        return sync_probabilities(apply=args.apply, overwrite=args.overwrite, html=html)
 
     if args.html:
         html = args.html.read_text(encoding="utf-8")
