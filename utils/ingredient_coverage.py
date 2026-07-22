@@ -25,6 +25,7 @@ from utils.food_expectation import (
     expected_ingredients_per_day,
     qty_at_slot,
 )
+from utils.community_tier import get_tier, tier_weight
 from utils.party_logic import _main_recipe_pace, _recipe_base_energy, get_play_ctx
 
 TARGET_RECIPES_KEY = "user.target_recipes"
@@ -245,7 +246,8 @@ def training_priorities(
 class CatchPriority:
     species_name: str
     dex_no: str
-    score: float                          # 穴を埋める分の期待エナジー/日
+    score: float                          # 穴埋め期待エナジー/日 × コミュニティティア係数
+    tier: str | None = None               # コミュニティ評価(S/A/B/C、未掲載None)
     fills: dict[str, float] = field(default_factory=dict)  # 食材 -> 埋まる量/日
 
 
@@ -323,11 +325,13 @@ def catch_priorities(
         fills = {n: v for n, v in fills.items() if v > 0.005}
         if not fills:
             continue
-        score = sum(v * ingredient_energy.get(n, 1.0) for n, v in fills.items())
+        # コミュニティ評価が高い種族ほど優先(強ポケは理想構成で確保したい)
+        score = sum(v * ingredient_energy.get(n, 1.0) for n, v in fills.items()) * tier_weight(name)
         out.append(CatchPriority(
             species_name=name,
             dex_no=species.get("dex_no") or "",
             score=score,
+            tier=get_tier(name),
             fills=fills,
         ))
 

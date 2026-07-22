@@ -1,0 +1,132 @@
+{
+  "records": [
+    {
+      "species_name": "ダークライ",
+      "tier": "S",
+      "axis": "ingredient"
+    },
+    {
+      "species_name": "ウェーニバル",
+      "tier": "A",
+      "axis": "ingredient"
+    },
+    {
+      "species_name": "カモネギ",
+      "tier": "A",
+      "axis": "ingredient"
+    },
+    {
+      "species_name": "クレセリア",
+      "tier": "A",
+      "axis": "ingredient"
+    },
+    {
+      "species_name": "リザードン",
+      "tier": "B",
+      "axis": "ingredient"
+    },
+    {
+      "species_name": "デンリュウ",
+      "tier": "B",
+      "axis": "ingredient"
+    },
+    {
+      "species_name": "バクフーン",
+      "tier": "B",
+      "axis": "ingredient"
+    },
+    {
+      "species_name": "オンバーン",
+      "tier": "B",
+      "axis": "ingredient"
+    },
+    {
+      "species_name": "ミュウ",
+      "tier": "B",
+      "axis": "ingredient"
+    },
+    {
+      "species_name": "ヘルガー",
+      "tier": "B",
+      "axis": "ingredient"
+    },
+    {
+      "species_name": "ダグトリオ",
+      "tier": "B",
+      "axis": "ingredient"
+    },
+    {
+      "species_name": "ガルーラ",
+      "tier": "B",
+      "axis": "ingredient"
+    },
+    {
+      "species_name": "ウェルカモ",
+      "tier": "B",
+      "axis": "ingredient"
+    },
+    {
+      "species_name": "ゲンガー",
+      "tier": "C",
+      "axis": "ingredient"
+    },
+    {
+      "species_name": "ラティオス",
+      "tier": "C",
+      "axis": "ingredient"
+    },
+    {
+      "species_name": "フライゴン",
+      "tier": "C",
+      "axis": "ingredient"
+    },
+    {
+      "species_name": "リザード",
+      "tier": "C",
+      "axis": "ingredient"
+    },
+    {
+      "species_name": "カイリュー",
+      "tier": "C",
+      "axis": "ingredient"
+    },
+    {
+      "species_name": "ヘラクロス",
+      "tier": "C",
+      "axis": "ingredient"
+    },
+    {
+      "species_name": "ライチュウ",
+      "tier": "C",
+      "axis": "ingredient"
+    },
+    {
+      "species_name": "ゴウカザル",
+      "tier": "C",
+      "axis": "ingredient"
+    },
+    {
+      "species_name": "メガニウム",
+      "tier": "C",
+      "axis": "ingredient"
+    },
+    {
+      "species_name": "マグマラシ",
+      "tier": "C",
+      "axis": "ingredient"
+    }
+  ],
+  "_meta": {
+    "count": 23,
+    "source": "https://pks.raenonx.cc/ja/pokedex/tier",
+    "source_name": "RaenonX ポケモンティア表(食材軸)",
+    "fetched_at": "2026-07-23",
+    "note": "S/A/Bは全量、Cはサイト表示上位10件のみ(全31件中)。D以下は捕獲優先度に影響しないため未収集。ユーザー設定(RaenonX側)の影響を受ける簡易ティア。更新時はPlaywrightで同ページから再取得。",
+    "tier_order": [
+      "S",
+      "A",
+      "B",
+      "C"
+    ]
+  }
+}

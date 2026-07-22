@@ -12,7 +12,10 @@ from __future__ import annotations
 import streamlit as st
 
 import db
+from image_utils import pokemon_image_url
 from ui import components as c
+from utils.community_tier import get_tier, recommended_composition, top_tier_species
+from utils.food_expectation import composition_string
 from utils.ingredient_coverage import (
     build_ingredient_index,
     catch_priorities,
@@ -156,6 +159,52 @@ else:
     for i, cp in enumerate(cps[:10]):
         with st.container(border=True):
             cols = st.columns([3, 4])
+            sp = db.get_species_data(cp.species_name) or {}
+            tier_html = (
+                c.rank_badge(cp.tier) if cp.tier else ""
+            ) + c.text_badge(f"狙い: {recommended_composition(sp)}")
             cols[0].markdown(f"**#{i + 1} {cp.species_name}**　(No.{cp.dex_no})")
+            cols[0].html(tier_html)
             fills = "、".join(f"{n} +{v:.1f}/日" for n, v in sorted(cp.fills.items(), key=lambda x: -x[1]))
-            cols[1].caption(f"穴埋め価値 **{cp.score:,.0f} en/日** ・ {fills}")
+            cols[1].caption(
+                f"穴埋め価値 **{cp.score:,.0f} en/日**"
+                + (f" ・ Tier{cp.tier}補正込み" if cp.tier else "")
+                + f" ・ {fills}"
+            )
+
+
+# ============ ⑤ 強ポケ捕獲方針（コミュニティTier × 構成厳選） ============
+
+st.html(c.section_header("強ポケ捕獲方針"))
+st.caption(
+    "RaenonXティア表(食材軸)の上位種。未所持は理想構成での捕獲候補、"
+    "所持済みでも構成が狙いと違えば引き直し候補。定石: 食材得意=AAA / きのみ=不問 / スキル=低食材。"
+)
+
+owned_by_species: dict[str, list[dict]] = {}
+for p in owned:
+    owned_by_species.setdefault(p["species_name"], []).append(p)
+
+rows = []
+for species_name, tier in top_tier_species("C"):
+    sp = db.get_species_data(species_name) or {}
+    want = recommended_composition(sp)
+    holders = owned_by_species.get(species_name, [])
+    comps = [composition_string(p, sp) for p in holders]
+    if not holders:
+        status = "未所持 → 捕獲候補"
+    elif want == "AAA" and not any(cs == "AAA" for cs in comps):
+        status = f"所持({'/'.join(comps)}) → AAA引き直し候補"
+    else:
+        status = f"所持({'/'.join(comps)}) ✓"
+    rows.append((species_name, tier, want, status))
+
+with st.container(key="tier_policy"):
+    for species_name, tier, want, status in rows:
+        cols = st.columns([5, 4], vertical_alignment="center")
+        cols[0].html(c.result_row(
+            title=species_name,
+            img_url=pokemon_image_url(species_name),
+            badges=[c.rank_badge(tier), c.text_badge(f"狙い: {want}")],
+        ))
+        cols[1].caption(status)
