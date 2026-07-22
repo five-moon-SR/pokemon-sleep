@@ -64,6 +64,12 @@ code, pre, [data-testid="stCode"] * { font-family: ui-monospace, monospace; }
     font-family: "Material Symbols Rounded" !important;
 }
 
+/* ボタン文言は折り返さない（「編/集」のような縦割れ防止） */
+.stButton button p, .stFormSubmitButton button p { white-space: nowrap; }
+
+/* 日本語見出しは文節単位で折る（Chrome系のみ。他は通常折返し） */
+h1, h2, h3, [data-testid="stMarkdownContainer"] strong { word-break: auto-phrase; }
+
 /* 数値は桁が揃う字形で */
 [data-testid="stMetricValue"], .ps-num { font-variant-numeric: tabular-nums; }
 
@@ -82,10 +88,16 @@ code, pre, [data-testid="stCode"] * { font-family: ui-monospace, monospace; }
     font-weight: 700;
     font-size: 0.95rem;
     line-height: 1.3;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 .ps-card .ps-card-sub {
     color: var(--ps-ink-dim);
     font-size: 0.78rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 /* カードグリッド（owned カードモード等）: スマホで2列に落ちる */
@@ -106,7 +118,7 @@ code, pre, [data-testid="stCode"] * { font-family: ui-monospace, monospace; }
     -webkit-overflow-scrolling: touch;
     padding-bottom: 4px;
 }
-.ps-row-scroll > * { flex: 0 0 auto; }
+.ps-row-scroll > * { flex: 0 0 auto; max-width: 200px; }
 
 /* バッジ（ランク等）: 淡い同系面 + 明るい文字 */
 .ps-badge {

@@ -507,11 +507,7 @@ VIEW_PRESETS: dict[str, list[str] | None] = {
     "🌐 全部": None,  # = display_cols（全列）
 }
 
-mode_label = (
-    "📍 現在Lvモード（current_level基準）"
-    if consider_lv is None
-    else f"🔮 将来性モード（Lv{consider_lv}まで考慮）"
-)
+mode_label = "📍 現在Lv" if consider_lv is None else f"🔮 Lv{consider_lv}まで"
 
 disp_mode = st.segmented_control(
     "表示",
@@ -523,7 +519,7 @@ disp_mode = st.segmented_control(
 
 header_cols = st.columns([3, 4])
 with header_cols[0]:
-    st.caption(f"{len(display_df)} / {len(df_full)} 件　— {mode_label}")
+    st.caption(f"{len(display_df)} / {len(df_full)} 件 · {mode_label}")
 view_mode = list(VIEW_PRESETS.keys())[0]
 if disp_mode == "📋 表":
     with header_cols[1]:
