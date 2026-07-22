@@ -8,7 +8,7 @@
 ---
 
 ## 1. ポケモン種族マスター (`pokemon_master.json`)
-- 件数: **228種**
+- 件数: **241種**（2026-07-22 Wiki自動取込で新規13種追加。fetch_wiki_master.py 参照）
 - 主要フィールド: `dex_no` / `species_name` / `sleep_type` / `specialty` (きのみ/食材/スキル) / `berry` {name,qty} / `ingredients` {a/b/c → {name, qty:[第n枠位置順]}} / `main_skill` / `base_assist_seconds` / `food_drop_rate` / `main_skill_rate`
 - `ingredients[X].qty` の解釈（重要）：**スロット位置順**であって Lv段階ではない。a枠食材の qty list 長さは3 (=第一/第二/第三スロット時の qty)、b枠は2 (=第二/第三)、c枠は1 (=第三のみ)。例: マメミート(a枠)`[2,5,7]` は「第一2/第二5/第三7」、あったかジンジャー(b枠)`[4,7]` は「第二4/第三7」、げきからハーブ(c枠)`[6]` は「第三6」。Lv は枠の解放（b=Lv30, c=Lv60）にだけ効き、qty には効かない。共有ヘルパは `utils.food_expectation.qty_at_slot(species, food_name, slot_idx)`。
 - 読み込み: `db.list_all_master_records()` / `db.get_species_data(name)` / `db.list_species_names()`
@@ -40,7 +40,7 @@
 - 主要フィールド: `no` / `category` (curry_stew/salad/dessert) / `name` / `icon` / `ingredients` / `total_ingredients` / `energy_lv1` / `energy_lv30` / `energy_lv60` / `energy_max_pot69` / `energy_max_pot507` / `description`
 - 読み込み: `db.list_all_recipe_records()`
 - 追加: `add_recipe`（運用は `game_pokemon_sleep_add_recipe`）
-- 特殊: 新8件は Lv30以降 null。「ごちゃまぜ系」3種は ingredients=[]
+- 特殊: 「ごちゃまぜ系」3種は ingredients=[]（Lv30/60 エナジーは2026-07-23にWiki倍率で全件補完済み）
 
 ## 6. メインスキル (`main_skill.json`)
 - 件数: **31件**
@@ -57,7 +57,7 @@
 - カテゴリ: speed / skill_trigger / ingredient_rate / berry_count / inventory / skill_level / sleep_exp / research_exp / energy_recovery / dream_shard / help_bonus
 
 ## 8. 進化 (`evolution.json`)
-- 件数: **119件**（72系列＋分岐）
+- 件数: **126件**（新規: ナエトル/ヒコザル/ポッチャマ/チゴラス系の7件を2026-07-23追加）
 - 主要フィールド: `from` / `to` / `candy` / `conditions` {min_level?, items?[], time_of_day?, gender?}
 - 読み込み: `db.list_all_evolution_records()` / `list_evolutions_from(name)` / `list_evolutions_to(name)` / `list_evolutions_using_item(item)`
 - 追加: `add_evolution`（運用は `game_pokemon_sleep_add_evolution`）
