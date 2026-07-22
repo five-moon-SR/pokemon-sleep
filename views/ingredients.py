@@ -26,7 +26,7 @@ from utils.ingredient_coverage import (
     training_priorities,
 )
 
-st.title("🥕 食材・育成戦略")
+st.html(c.page_banner("食材・育成戦略", "bag", icon="🥕"))
 st.caption("狙いの料理から逆算して、食材の穴・育成すべき個体・捕まえるべき種族を洗い出す。")
 
 db.init_db()

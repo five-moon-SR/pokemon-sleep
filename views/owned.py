@@ -40,7 +40,10 @@ from ui import components as uic
 RANK_ORDER_MAP: dict[str, int] = {r: i for i, r in enumerate(DAIFUKU_RANKS)}
 from image_utils import berry_icon_url, ingredient_icon_url, pokemon_image_url, sleep_ribbon_icon_url
 
-st.title("📦 所持ポケデータ")
+st.html(
+    uic.page_banner("所持ポケデータ", "box", icon="📦")
+    + " " + uic.count_pill(f"{len(db.list_pokemon())} / 120", "box")
+)
 
 owned = [dict(r) for r in db.list_pokemon()]
 if not owned:

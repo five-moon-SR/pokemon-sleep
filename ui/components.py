@@ -207,6 +207,36 @@ def empty_state(msg: str) -> str:
     return f'<div class="ps-empty">{escape(msg)}</div>'
 
 
+# 本家のカテゴリ色(実機スクショ実測)。バナー地色 → 下縁の濃色
+PAGE_ACCENTS: dict[str, tuple[str, str]] = {
+    "box": ("#FE7658", "#D95A44"),     # ポケモンボックス(コーラル)
+    "bag": ("#FFC23F", "#DB9F22"),     # バッグ(オレンジ)
+    "green": ("#23D76B", "#17AE54"),   # 育成・決定(緑)
+    "blue": ("#47A2FF", "#2F7FD6"),    # カウンタ青
+    "cyan": ("#33BEE7", "#1E96BC"),    # 睡眠計測シアン
+}
+
+
+def page_banner(title: str, accent: str = "green", *, icon: str = "") -> str:
+    """本家風のカテゴリ色ページバナー(白太字+下縁の濃色)。st.title の代替。"""
+    bg, rim = PAGE_ACCENTS.get(accent, PAGE_ACCENTS["green"])
+    ic = f'<span style="margin-right:6px;">{icon}</span>' if icon else ""
+    return (
+        f'<div style="display:inline-block; background:{bg}; color:#FFFFFF; '
+        f'font-weight:700; font-size:1.15rem; padding:10px 22px; border-radius:14px; '
+        f'box-shadow: 0 4px 0 {rim}; margin: 0.2rem 0 0.9rem;">{ic}{escape(title)}</div>'
+    )
+
+
+def count_pill(text: str, accent: str = "box") -> str:
+    """本家風のカウントピル(115/120 のような表示)。"""
+    bg, _ = PAGE_ACCENTS.get(accent, PAGE_ACCENTS["box"])
+    return (
+        f'<span class="ps-badge" style="background:{bg}; color:#FFFFFF; '
+        f'font-size:0.85rem; padding:3px 14px;">{escape(text)}</span>'
+    )
+
+
 def context_strip(items: list[str]) -> str:
     """画面最上部の「今の前提」常設ストリップ。items はチップHTML or プレーン文字列。"""
     chips = [

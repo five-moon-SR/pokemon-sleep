@@ -1,18 +1,17 @@
-# ポケスリ管理ツール テーマ「ひなたのリサーチノート」（ゲーム内UI寄せ）
-# ポケスリ本体の クリーム地 × 白カード × スリープブルー × 丸ゴ の雰囲気。
-# 標準ウィジェットの色はすべてここで指定する（CSSで input/selectbox を殴らない）。
-# 自作コンポーネントのCSSトークンは ui/theme.py 側（--ps-* 変数）。
+# ポケスリ管理ツール テーマ「本家準拠」
+# 実機スクショ(貼り付けデータ集/画像集/アプリUI/)からの実測パレット。
+# メニュー画面は白ベース+カテゴリ色バナー+緑の決定ボタンが本家の骨格。
 
 [theme]
 base = "light"
-primaryColor = "#33BEE7"            # 本家シアン(公式スクショ実測系): ボタン・選択状態・リンク
-backgroundColor = "#FBF6E3"         # クリーム地（ゲームのメニュー背景）
-secondaryBackgroundColor = "#FFFFFF" # カード面・入力面
-textColor = "#3B4460"               # ネイビー文字
-linkColor = "#1C629E"  # 本家の数字・リンク濃青
-borderColor = "#EADFC8"
+primaryColor = "#23D76B"            # 本家の決定/主ボタン緑(実測)
+backgroundColor = "#FFFFFF"         # メニュー画面は白ベース
+secondaryBackgroundColor = "#F6F6F6" # 入力/ピル面(下部バーの白ピル系)
+textColor = "#3F3F3F"               # 本文チャコール
+linkColor = "#1C629E"               # 数値・リンクの濃青
+borderColor = "#E5E5E5"
 baseRadius = "16px"
 buttonRadius = "full"
 
 [theme.sidebar]
-backgroundColor = "#F3EAD6"         # ナビは一段濃いクリームで主従を付ける
+backgroundColor = "#FAF7EC"         # ナビはうっすらクリームで主従を付ける

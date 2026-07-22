@@ -34,7 +34,7 @@ from utils.party_logic import (
     party_summary,
 )
 
-st.title("⚔ パーティー編成")
+st.html(uic.page_banner("パーティー編成", "cyan", icon="⚔"))
 st.caption("今週の前提 → 候補ポケモンスコア → 5体選択 → 保存。スコア係数は暫定。")
 
 

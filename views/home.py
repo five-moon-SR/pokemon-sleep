@@ -21,7 +21,7 @@ from utils.play_context import PlayContext, load_play_context, save_play_context
 
 ctx = load_play_context()
 
-st.title("🏠 ホーム")
+st.html(c.page_banner("ホーム", "green", icon="🏠"))
 
 
 def _eff_lv(p: dict) -> int:

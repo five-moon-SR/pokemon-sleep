@@ -19,7 +19,7 @@ DAIFUKU_RANK_EMOJI: dict[str, str] = {
 # テーマ「ひなたのリサーチノート」機能色トークン（ui/theme.py の --ps-* と同値）。
 # Styler（st.dataframe のセル色）はCSS変数が使えないのでここのhexを直接使う。
 THEME_DUSK = "#FFFFFF"   # カード面（セル背景のブレンド先）
-THEME_INK_DIM = "#8B93A8"
+THEME_INK_DIM = "#9B9B9B"
 
 DAIFUKU_RANK_COLORS: dict[str, str] = {
     "増田": "#C99A1F",

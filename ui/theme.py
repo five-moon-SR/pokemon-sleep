@@ -16,12 +16,12 @@ import streamlit as st
 
 # --- カラートークン（config.toml と同じ世界観。コンポーネントHTMLはCSS変数だけ参照する） ---
 
-NIGHT = "#FBF6E3"      # クリーム地/アプリ背景
+NIGHT = "#FFFFFF"      # メニュー白ベース(本家実測)
 DUSK = "#FFFFFF"       # カード面
-LINE = "#EADFC8"       # 罫線
-INK = "#3B4460"        # 本文（ネイビー）
-INK_DIM = "#8B93A8"    # キャプション
-MOON = "#33BEE7"       # 本家シアン（公式スクショ実測ベース）
+LINE = "#E8E8E8"       # 罫線(本家のリスト区切り)
+INK = "#3F3F3F"        # 本文チャコール(本家実測)
+INK_DIM = "#9B9B9B"    # キャプション
+MOON = "#23D76B"       # 本家の緑(決定色・実測)
 DEEP_BLUE = "#1C629E"  # 本家の数値強調の濃青
 
 _THEME_CSS = """
@@ -29,12 +29,12 @@ _THEME_CSS = """
 @import url('https://fonts.googleapis.com/css2?family=Zen+Maru+Gothic:wght@400;500;700&display=swap');
 
 :root {
-    --ps-night: #FBF6E3;
+    --ps-night: #FFFFFF;
     --ps-dusk: #FFFFFF;
-    --ps-line: #EADFC8;
-    --ps-ink: #3B4460;
-    --ps-ink-dim: #8B93A8;
-    --ps-moon: #33BEE7;
+    --ps-line: #E8E8E8;
+    --ps-ink: #3F3F3F;
+    --ps-ink-dim: #9B9B9B;
+    --ps-moon: #23D76B;
     --ps-deep: #1C629E;
 
     /* 機能色（ゲーム由来なので固定。白カード面用に濃いめ調整） */
@@ -78,27 +78,27 @@ code, pre, [data-testid="stCode"] * { font-family: ui-monospace, monospace; }
     transition: transform 0.05s ease, box-shadow 0.05s ease;
 }
 [data-testid^="stBaseButton-primary"] {
-    background: #33BEE7;
+    background: #23D76B;
     color: #FFFFFF;
     border: none;
-    box-shadow: 0 4px 0 #1E96BC;
+    box-shadow: 0 4px 0 #17AE54;
 }
 [data-testid^="stBaseButton-primary"]:hover {
-    background: #4ECAEE;
+    background: #3AE07E;
     color: #FFFFFF;
 }
 [data-testid^="stBaseButton-primary"]:active {
     transform: translateY(3px);
-    box-shadow: 0 1px 0 #1E96BC;
+    box-shadow: 0 1px 0 #17AE54;
 }
 [data-testid^="stBaseButton-secondary"] {
     background: #FFFFFF;
-    border: 1px solid #EADFC8;
-    box-shadow: 0 4px 0 #E3D8BE;
+    border: 1px solid #E5E5E5;
+    box-shadow: 0 4px 0 #D9D9D9;
 }
 [data-testid^="stBaseButton-secondary"]:active {
     transform: translateY(3px);
-    box-shadow: 0 1px 0 #E3D8BE;
+    box-shadow: 0 1px 0 #D9D9D9;
 }
 
 /* 日本語見出しは文節単位で折る（Chrome系のみ。他は通常折返し） */
@@ -175,8 +175,8 @@ h1, h2, h3, [data-testid="stMarkdownContainer"] strong { word-break: auto-phrase
     font-size: 0.75rem;
     line-height: 1.6;
     white-space: nowrap;
-    border: 1px solid #CDEFF7;
-    background: #EAF9FC;  /* 本家の淡シアンピル */
+    border: 1px solid #E5E5E5;
+    background: #F6F6F6;  /* 本家の白ピル */
 }
 .ps-chip img { vertical-align: middle; }
 .ps-dot {
@@ -213,18 +213,13 @@ h1, h2, h3, [data-testid="stMarkdownContainer"] strong { word-break: auto-phrase
 .ps-section {
     display: flex;
     align-items: center;
-    gap: 8px;
     margin: 1.1rem 0 0.5rem;
+    padding-left: 10px;
+    border-left: 6px solid #23D76B;  /* 本家の「表示順」見出しの緑縦バー */
+    border-radius: 2px;
     color: var(--ps-ink);
     font-weight: 700;
     font-size: 1.05rem;
-}
-.ps-section::before { content: "❋"; color: var(--ps-moon); font-size: 0.9em; }
-.ps-section::after {
-    content: "";
-    flex: 1;
-    height: 1px;
-    background: var(--ps-line);
 }
 
 /* 空状態 */
