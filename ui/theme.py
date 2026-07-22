@@ -219,35 +219,48 @@ code, pre, [data-testid="stCode"] * { font-family: ui-monospace, monospace; }
 @media (max-width: 640px) {
     [data-testid="stHorizontalBlock"] {
         flex-wrap: wrap;
-        gap: 0.5rem 0.6rem;
+        gap: 0.4rem 0.5rem;
     }
     [data-testid="stColumn"], [data-testid="column"] {
         flex: 1 1 7.5rem !important;
         min-width: 7.5rem !important;
     }
 
+    /* スマホは全体的に一段締める（大きい文字は情報密度を殺す） */
     html, body, [data-testid="stMarkdownContainer"] p, [data-testid="stMarkdownContainer"] li {
-        font-size: 1.02rem;
-        line-height: 1.6;
+        font-size: 0.92rem;
+        line-height: 1.55;
     }
+    [data-testid="stCaptionContainer"] p { font-size: 0.75rem; }
 
+    /* タッチターゲットは高さで確保しつつ文字は控えめに */
     .stButton button, .stFormSubmitButton button, .stDownloadButton button {
-        min-height: 44px;
-        font-size: 1rem;
+        min-height: 40px;
+        font-size: 0.9rem;
     }
     input, textarea,
     [data-baseweb="select"] > div,
     [data-baseweb="input"] > div {
-        min-height: 42px;
-        font-size: 1rem !important;
+        min-height: 40px;
+        font-size: 0.92rem !important;
     }
 
-    [data-testid="stMetricValue"] { font-size: 1.4rem; }
-    [data-testid="stMetricLabel"] { font-size: 0.8rem; }
+    [data-testid="stMetricValue"] { font-size: 1.2rem; }
+    [data-testid="stMetricLabel"] { font-size: 0.72rem; }
 
-    h1 { font-size: 1.45rem; }
-    h2 { font-size: 1.25rem; }
-    h3 { font-size: 1.05rem; }
+    /* Streamlit本体のheading CSSより優先させるため !important */
+    h1 { font-size: 1.3rem !important; }
+    h2 { font-size: 1.15rem !important; }
+    h3 { font-size: 1.0rem !important; }
+
+    .ps-section { font-size: 0.95rem; }
+    .ps-card .ps-card-title { font-size: 0.88rem; }
+    .ps-tile .ps-tile-value { font-size: 1.15rem; }
+    .block-container {
+        padding-top: 0.8rem;
+        padding-left: 0.7rem;
+        padding-right: 0.7rem;
+    }
 
     [data-testid="stTabs"] [data-baseweb="tab-list"] {
         overflow-x: auto;

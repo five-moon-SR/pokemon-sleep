@@ -125,7 +125,7 @@ def pokemon_card(
     berry = ""
     if img_url:
         berry += (
-            f'<img src="{img_url}" width="{40 if mini else 56}" loading="lazy" '
+            f'<img src="{img_url}" width="{36 if mini else 56}" loading="lazy" '
             f'style="float:right; margin-left:6px;">'
         )
     if berry_name:
@@ -134,7 +134,7 @@ def pokemon_card(
             berry += f'<img src="{url}" width="{20 if mini else 24}" title="{escape(berry_name)}" style="float:right; margin-left:4px;">'
     parts = [
         f'<div class="ps-card" style="border-left: 3px solid var({sp_var});'
-        + ("padding:8px 10px; min-width:120px;" if mini else "")
+        + ("padding:8px 10px; min-width:150px;" if mini else "")
         + '">',
         berry,
         f'<div class="ps-card-title">{escape(title)}</div>',

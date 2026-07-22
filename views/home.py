@@ -64,7 +64,7 @@ prof_cols[0].caption(
     f"RR{ctx.research_rank} · 鍋{ctx.pot_capacity} · "
     f"おてつだい 平日{ctx.active_hours():.1f}h/休日{ctx.active_hours(weekend=True):.1f}h"
 )
-if prof_cols[1].button("⚙ プロフィール編集", use_container_width=True):
+if prof_cols[1].button("⚙ 設定", use_container_width=True):
     _profile_dialog()
 
 owned = [dict(r) for r in db.list_pokemon()]

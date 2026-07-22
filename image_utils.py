@@ -88,12 +88,12 @@ def sleep_ribbon_icon_url(stage: int | None) -> str | None:
 
 
 # ---------------------------------------------------------------------------
-# ポケモン本体の画像（PokeAPI公式アートをdex_noでホットリンク。ローカル保存なし）
+# ポケモン本体の画像（Pokémon Sleep版アートをdex_noでホットリンク。ローカル保存なし）
+# serebii.net/pokemonsleep が寝顔スタイルのアートを dex.png で提供している
+# （新種13種まで200確認済み 2026-07-23）。
 # ---------------------------------------------------------------------------
 
-_ARTWORK_BASE = (
-    "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork"
-)
+_ARTWORK_BASE = "https://www.serebii.net/pokemonsleep/pokemon"
 
 
 @st.cache_data
@@ -111,7 +111,7 @@ def _species_dex_map() -> dict[str, int]:
 
 
 def pokemon_image_url(species_name: str | None) -> str | None:
-    """種族の公式アートワークURL（475px PNG）。マスターに居なければ None。"""
+    """種族のポケスリ版アートワークURL。マスターに居なければ None。"""
     if not species_name:
         return None
     dex = _species_dex_map().get(species_name)
