@@ -20,18 +20,25 @@ st.logo(
 
 db.init_db()
 
-pages = [
-    st.Page("views/home.py", title="ホーム", icon="🏠", default=True),
-    st.Page("views/register.py", title="個体登録", icon="📝"),
-    st.Page("views/update.py", title="個体強化・進化", icon="🔧"),
-    st.Page("views/edit_record.py", title="登録情報の修正", icon="✏️"),
-    st.Page("views/master.py", title="全ポケデータ", icon="📚"),
-    st.Page("views/owned.py", title="所持ポケデータ", icon="📦"),
-    st.Page("views/ingredients.py", title="食材・育成戦略", icon="🥕"),
-    st.Page("views/data_collection.py", title="データ集", icon="🗂"),
-    st.Page("views/party.py", title="パーティー編成", icon="⚔"),
-    st.Page("views/guide.py", title="使い方", icon="📖"),
-]
+# ナビは「ユーザーの目的」でグループ化する（ui_design_policy.md）
+pages = {
+    "今週の運用": [
+        st.Page("views/home.py", title="ホーム", icon="🏠", default=True),
+        st.Page("views/party.py", title="パーティー編成", icon="⚔"),
+        st.Page("views/ingredients.py", title="食材・育成戦略", icon="🥕"),
+    ],
+    "個体管理": [
+        st.Page("views/owned.py", title="所持ポケデータ", icon="📦"),
+        st.Page("views/register.py", title="個体登録", icon="📝"),
+        st.Page("views/update.py", title="個体強化・進化", icon="🔧"),
+        st.Page("views/edit_record.py", title="登録情報の修正", icon="✏️"),
+    ],
+    "データ・ガイド": [
+        st.Page("views/master.py", title="全ポケデータ", icon="📚"),
+        st.Page("views/data_collection.py", title="データ集", icon="🗂"),
+        st.Page("views/guide.py", title="使い方", icon="📖"),
+    ],
+}
 
 nav = st.navigation(pages)
 

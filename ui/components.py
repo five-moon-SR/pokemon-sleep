@@ -196,6 +196,57 @@ def empty_state(msg: str) -> str:
     return f'<div class="ps-empty">{escape(msg)}</div>'
 
 
+def context_strip(items: list[str]) -> str:
+    """画面最上部の「今の前提」常設ストリップ。items はチップHTML or プレーン文字列。"""
+    chips = [
+        i if i.startswith("<") else icon_chip(None, i)
+        for i in items if i
+    ]
+    return (
+        '<div style="display:flex; flex-wrap:wrap; gap:4px; align-items:center; '
+        'margin-bottom:0.4rem;">' + "".join(chips) + "</div>"
+    )
+
+
+def result_row(
+    *,
+    title: str,
+    subtitle: str | None = None,
+    img_url: str | None = None,
+    badges: list[str] | None = None,
+    right: str | None = None,
+) -> str:
+    """検索結果の1列コンパクト行（「探す」ビュー用）。操作ボタンは呼び出し側で隣に置く。"""
+    img = (
+        f'<img src="{img_url}" width="40" loading="lazy" style="flex:0 0 auto; border-radius:8px;">'
+        if img_url else ""
+    )
+    sub = f'<div class="ps-card-sub">{escape(subtitle)}</div>' if subtitle else ""
+    b = (
+        '<div style="display:flex; gap:4px; flex-wrap:wrap; margin-top:2px;">' + "".join(badges) + "</div>"
+        if badges else ""
+    )
+    r = (
+        f'<div class="ps-card-sub" style="margin-left:auto; text-align:right; flex:0 0 auto;">{right}</div>'
+        if right else ""
+    )
+    return (
+        f'<div class="ps-card" style="display:flex; gap:10px; align-items:center; padding:8px 10px;">'
+        f"{img}<div style='min-width:0;'>"
+        f'<div class="ps-card-title" style="font-size:0.9rem;">{escape(title)}</div>{sub}{b}</div>{r}</div>'
+    )
+
+
+def decision_card(*, title: str, body_html: str, accent: bool = False) -> str:
+    """「今の答え」を出す判断カード。accent=True で主役強調。"""
+    border = "2px solid var(--ps-moon)" if accent else "1px solid var(--ps-line)"
+    return (
+        f'<div class="ps-card" style="border: {border};">'
+        f'<div class="ps-card-title">{escape(title)}</div>'
+        f'<div style="margin-top:6px;">{body_html}</div></div>'
+    )
+
+
 def meter(ratio: float) -> str:
     """0〜1の充足度メーター。"""
     pct = max(0.0, min(1.0, ratio)) * 100
