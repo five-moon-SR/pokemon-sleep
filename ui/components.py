@@ -11,6 +11,13 @@ from html import escape
 from constants import get_subskill_rarity
 from image_utils import berry_icon_url, ingredient_icon_url
 
+
+def _clean(value) -> str | None:
+    """文字列以外(None / pandasのNaN等)を安全にNone化する。"""
+    if isinstance(value, str) and value:
+        return value
+    return None
+
 # ランク → CSS変数（constants.DAIFUKU_RANKS と対応）
 _RANK_VAR = {
     "増田": "--ps-rank-masuda",
@@ -39,7 +46,8 @@ _SPECIALTY_VAR = {
 
 
 def rank_badge(rank: str | None, pct: float | None = None) -> str:
-    """ランクの色バッジ。pct を渡すと「S · 92%」のように併記。"""
+    """ランクの色バッジ。pct を渡すと「S · 92%」のように併記。NaN/None は空。"""
+    rank = _clean(rank)
     if not rank:
         return ""
     var = _RANK_VAR.get(rank, "--ps-ink-dim")
@@ -54,6 +62,7 @@ def rank_badge(rank: str | None, pct: float | None = None) -> str:
 
 def specialty_badge(specialty: str | None) -> str:
     """得意分野（きのみ/食材/スキル/オール）の色バッジ。"""
+    specialty = _clean(specialty)
     if not specialty:
         return ""
     var = _SPECIALTY_VAR.get(specialty, "--ps-ink-dim")
@@ -65,6 +74,7 @@ def specialty_badge(specialty: str | None) -> str:
 
 def text_badge(label: str | None) -> str:
     """中立色のテキストバッジ（食材構成 AAA/ABB 等の属性表示用）。"""
+    label = _clean(label)
     if not label:
         return ""
     return (
@@ -76,6 +86,7 @@ def text_badge(label: str | None) -> str:
 
 def subskill_chip(name: str | None) -> str:
     """サブスキルチップ。金/青/白のレア度ドット付き。"""
+    name = _clean(name)
     if not name:
         return ""
     var = _SUB_VAR.get(get_subskill_rarity(name), "--ps-sub-white")
