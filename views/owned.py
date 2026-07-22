@@ -32,6 +32,7 @@ from constants import (
     get_subskill_rarity,
 )
 from utils.evaluator import evaluate_and_save, evaluate_at_levels, evaluate_pokemon
+from utils.food_expectation import composition_string
 from ui import components as uic
 
 # ランク並び替え用の順位（SS=0, S=1, ..., D=5）。
@@ -136,6 +137,7 @@ for p in owned:
             "全体ランク": er.global_rank,
             "全体%": _truncate_pct(er.global_total),
             "得意": species.get("specialty"),
+            "構成": composition_string(p, species),
             "現在Lv": p.get("current_level"),
             "メインスキル": p.get("main_skill_name") or species.get("main_skill"),
             "メインスキルLv": p.get("main_skill_level") or 1,
@@ -257,6 +259,14 @@ with st.expander("🔍 絞り込み・並び替え", expanded=True):
     with row2[4]:
         sel_eval_type = st.multiselect("評価タイプ", list(range(1, 10)))
 
+    row2b = st.columns(5)
+    with row2b[0]:
+        sel_compositions = st.multiselect(
+            "食材構成（AAA/ABB等）",
+            _uniques("構成"),
+            help="個体の3スロットがどの枠(A/B/C)の食材かの並び。未入力スロットは ? 表示。",
+        )
+
     st.caption("数値レンジ")
     row3 = st.columns(4)
     with row3[0]:
@@ -339,6 +349,8 @@ if sel_natures:
     filtered = filtered[filtered["性格"].isin(sel_natures)]
 if sel_eval_type:
     filtered = filtered[filtered["評価タイプ"].isin(sel_eval_type)]
+if sel_compositions:
+    filtered = filtered[filtered["構成"].isin(sel_compositions)]
 if sel_ribbons:
     filtered = filtered[filtered["リボン"].isin(sel_ribbons)]
 
@@ -475,7 +487,7 @@ VIEW_PRESETS: dict[str, list[str] | None] = {
         "ニックネーム", "種族",
         "ランク", "評価%", "Lv50ランク", "Lv50%", "Lv60ランク", "Lv60%",
         "全体ランク", "全体%",
-        "評価タイプ", "得意", "メインスキル", "現在Lv", "性格",
+        "評価タイプ", "得意", "構成", "メインスキル", "現在Lv", "性格",
     ],
     "📋 ステータス": [
         "ニックネーム", "種族", "ランク", "評価%", "得意",
@@ -488,7 +500,7 @@ VIEW_PRESETS: dict[str, list[str] | None] = {
         "サブLv10", "サブLv25", "サブLv50", "サブLv75", "サブLv100",
     ],
     "🥕 食材・きのみ": [
-        "ニックネーム", "種族", "現在Lv", "メインスキル",
+        "ニックネーム", "種族", "現在Lv", "構成", "メインスキル",
         "🌳", "きのみ",
         "🥕1", "食材1", "🥕2", "食材2", "🥕3", "食材3",
         "🎀", "リボン",
@@ -705,6 +717,8 @@ if disp_mode == "🃏 カード":
             with col:
                 pid = int(row["_ID"])
                 badges = [uic.rank_badge(row["ランク"], row["評価%"] if pd.notna(row["評価%"]) else None)]
+                if row.get("構成"):
+                    badges.append(uic.text_badge(row["構成"]))
                 if pd.notna(row.get("Lv60ランク")):
                     badges.append(uic.rank_badge(row["Lv60ランク"]))
                 chips = [

@@ -75,6 +75,25 @@ def find_food_origin(species: dict[str, Any], food_name: str) -> str | None:
     return None
 
 
+def composition_string(pokemon: dict[str, Any], species: dict[str, Any]) -> str:
+    """個体の食材構成表記（AAA / ABB / ABC 等）を返す。
+
+    各スロットの選択食材を枠(a/b/c)に逆引きして大文字で並べる。
+    未入力スロットは「?」（スロット1だけは仕様上A確定なのでAを返す）。
+    例: "AAA" / "AB?" / "A??"
+    """
+    letters: list[str] = []
+    default_a = ((species.get("ingredients") or {}).get("a") or {}).get("name")
+    for i, key in enumerate(("ingredient_1", "ingredient_2", "ingredient_3")):
+        name = pokemon.get(key) or (default_a if i == 0 else None)
+        if not name:
+            letters.append("?")
+            continue
+        origin = find_food_origin(species, name)
+        letters.append(origin.upper() if origin else "?")
+    return "".join(letters)
+
+
 def qty_at_slot(species: dict[str, Any], food_name: str, slot_idx: int) -> int:
     """個体が第 (slot_idx+1) スロットでこの食材を取った時の獲得個数。
 

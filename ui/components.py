@@ -63,6 +63,17 @@ def specialty_badge(specialty: str | None) -> str:
     )
 
 
+def text_badge(label: str | None) -> str:
+    """中立色のテキストバッジ（食材構成 AAA/ABB 等の属性表示用）。"""
+    if not label:
+        return ""
+    return (
+        f'<span class="ps-badge" style="color: var(--ps-ink-dim); '
+        f'background: color-mix(in srgb, var(--ps-ink-dim) 14%, transparent); '
+        f'letter-spacing: 0.08em;">{escape(label)}</span>'
+    )
+
+
 def subskill_chip(name: str | None) -> str:
     """サブスキルチップ。金/青/白のレア度ドット付き。"""
     if not name:
