@@ -203,6 +203,32 @@ code, pre, [data-testid="stCode"] * { font-family: ui-monospace, monospace; }
     background: var(--ps-moon);
 }
 
+/* ===== サイドバーナビ（タッチしやすく・読みやすく大きめ） ===== */
+
+[data-testid="stSidebarNav"] a {
+    padding: 0.55rem 0.75rem;
+    border-radius: 10px;
+    min-height: 44px;
+}
+[data-testid="stSidebarNav"] a p {
+    font-size: 1.02rem;
+    font-weight: 500;
+}
+[data-testid="stSidebarNav"] a span {
+    font-size: 1.15rem;  /* 絵文字アイコン */
+}
+[data-testid="stSidebarNav"] a[aria-current="page"] {
+    background: color-mix(in srgb, var(--ps-moon) 14%, transparent);
+}
+[data-testid="stSidebarNav"] a[aria-current="page"] p {
+    color: var(--ps-moon);
+    font-weight: 700;
+}
+[data-testid="stLogo"] {
+    height: 3.2rem;
+    margin: 0.4rem auto 0.2rem;
+}
+
 /* ===== スマホ最適化（旧 ui.py apply_mobile_css から移設） ===== */
 
 .block-container {
