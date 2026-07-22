@@ -16,24 +16,24 @@ import streamlit as st
 
 # --- カラートークン（config.toml と同じ世界観。コンポーネントHTMLはCSS変数だけ参照する） ---
 
-NIGHT = "#FBF3E4"      # クリーム地/アプリ背景
+NIGHT = "#FBF6E3"      # クリーム地/アプリ背景
 DUSK = "#FFFFFF"       # カード面
 LINE = "#EADFC8"       # 罫線
 INK = "#3B4460"        # 本文（ネイビー）
 INK_DIM = "#8B93A8"    # キャプション
-MOON = "#35A7CC"       # スリープブルー（アクセントはこの1色のみ）
+MOON = "#2CB0D8"       # 本家シアンブルー（アクセントはこの1色のみ）
 
 _THEME_CSS = """
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Zen+Maru+Gothic:wght@400;500;700&display=swap');
 
 :root {
-    --ps-night: #FBF3E4;
+    --ps-night: #FBF6E3;
     --ps-dusk: #FFFFFF;
     --ps-line: #EADFC8;
     --ps-ink: #3B4460;
     --ps-ink-dim: #8B93A8;
-    --ps-moon: #35A7CC;
+    --ps-moon: #2CB0D8;
 
     /* 機能色（ゲーム由来なので固定。白カード面用に濃いめ調整） */
     --ps-rank-masuda: #C99A1F;
@@ -66,6 +66,38 @@ code, pre, [data-testid="stCode"] * { font-family: ui-monospace, monospace; }
 
 /* ボタン文言は折り返さない（「編/集」のような縦割れ防止） */
 .stButton button p, .stFormSubmitButton button p { white-space: nowrap; }
+
+/* ===== 本家アプリ風「ぷっくり押し込み」ボタン =====
+   ゲーム内の主ボタン: シアン青ピル + 下端の濃い縁。押すと沈む。 */
+.stButton button, .stFormSubmitButton button, .stDownloadButton button {
+    border-radius: 999px;
+    font-weight: 700;
+    min-height: 48px;
+    transition: transform 0.05s ease, box-shadow 0.05s ease;
+}
+[data-testid^="stBaseButton-primary"] {
+    background: #2CB0D8;
+    color: #FFFFFF;
+    border: none;
+    box-shadow: 0 4px 0 #1E8DB0;
+}
+[data-testid^="stBaseButton-primary"]:hover {
+    background: #3FBCE2;
+    color: #FFFFFF;
+}
+[data-testid^="stBaseButton-primary"]:active {
+    transform: translateY(3px);
+    box-shadow: 0 1px 0 #1E8DB0;
+}
+[data-testid^="stBaseButton-secondary"] {
+    background: #FFFFFF;
+    border: 1px solid #EADFC8;
+    box-shadow: 0 4px 0 #E3D8BE;
+}
+[data-testid^="stBaseButton-secondary"]:active {
+    transform: translateY(3px);
+    box-shadow: 0 1px 0 #E3D8BE;
+}
 
 /* 日本語見出しは文節単位で折る（Chrome系のみ。他は通常折返し） */
 h1, h2, h3, [data-testid="stMarkdownContainer"] strong { word-break: auto-phrase; }
@@ -285,8 +317,8 @@ h1, h2, h3, [data-testid="stMarkdownContainer"] strong { word-break: auto-phrase
 
     /* タッチターゲットは高さで確保しつつ文字は控えめに */
     .stButton button, .stFormSubmitButton button, .stDownloadButton button {
-        min-height: 40px;
-        font-size: 0.9rem;
+        min-height: 46px;
+        font-size: 0.92rem;
     }
     input, textarea,
     [data-baseweb="select"] > div,

@@ -5,11 +5,11 @@
 
 [theme]
 base = "light"
-primaryColor = "#35A7CC"            # スリープブルー: ボタン・選択状態・リンク
-backgroundColor = "#FBF3E4"         # クリーム地（ゲームのメニュー背景）
+primaryColor = "#2CB0D8"            # 本家シアンブルー: ボタン・選択状態・リンク
+backgroundColor = "#FBF6E3"         # クリーム地（ゲームのメニュー背景）
 secondaryBackgroundColor = "#FFFFFF" # カード面・入力面
 textColor = "#3B4460"               # ネイビー文字
-linkColor = "#35A7CC"
+linkColor = "#2CB0D8"
 borderColor = "#EADFC8"
 baseRadius = "16px"
 buttonRadius = "full"
