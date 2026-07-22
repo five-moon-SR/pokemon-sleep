@@ -57,6 +57,13 @@ html, body, [data-testid="stAppViewContainer"] * {
 }
 code, pre, [data-testid="stCode"] * { font-family: ui-monospace, monospace; }
 
+/* Materialアイコンはアイコンフォントに戻す（上の全要素フォント指定が
+   ligature を壊して "keyboard_double_arrow_right" 等の生テキストが出るのを防ぐ） */
+[data-testid="stIconMaterial"],
+[class*="material-symbols"] {
+    font-family: "Material Symbols Rounded" !important;
+}
+
 /* 数値は桁が揃う字形で */
 [data-testid="stMetricValue"], .ps-num { font-variant-numeric: tabular-nums; }
 
@@ -238,9 +245,9 @@ code, pre, [data-testid="stCode"] * { font-family: ui-monospace, monospace; }
     [data-testid="stMetricValue"] { font-size: 1.4rem; }
     [data-testid="stMetricLabel"] { font-size: 0.8rem; }
 
-    h1 { font-size: 1.6rem; }
-    h2 { font-size: 1.3rem; }
-    h3 { font-size: 1.1rem; }
+    h1 { font-size: 1.45rem; }
+    h2 { font-size: 1.25rem; }
+    h3 { font-size: 1.05rem; }
 
     [data-testid="stTabs"] [data-baseweb="tab-list"] {
         overflow-x: auto;

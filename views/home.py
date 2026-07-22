@@ -21,8 +21,7 @@ from utils.play_context import PlayContext, load_play_context, save_play_context
 
 ctx = load_play_context()
 
-head = st.columns([5, 1])
-head[0].title("🏠 ホーム")
+st.title("🏠 ホーム")
 
 
 def _eff_lv(p: dict) -> int:
@@ -60,13 +59,13 @@ def _profile_dialog() -> None:
             st.rerun()
 
 
-if head[1].button("⚙", help="プレイヤープロフィールを編集", use_container_width=True):
-    _profile_dialog()
-
-st.caption(
+prof_cols = st.columns([3, 2])
+prof_cols[0].caption(
     f"RR{ctx.research_rank} · 鍋{ctx.pot_capacity} · "
     f"おてつだい 平日{ctx.active_hours():.1f}h/休日{ctx.active_hours(weekend=True):.1f}h"
 )
+if prof_cols[1].button("⚙ プロフィール編集", use_container_width=True):
+    _profile_dialog()
 
 owned = [dict(r) for r in db.list_pokemon()]
 
