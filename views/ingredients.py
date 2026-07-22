@@ -12,7 +12,7 @@ from __future__ import annotations
 import streamlit as st
 
 import db
-from image_utils import pokemon_image_url
+from image_utils import RECIPE_ICON_DIR, icon_data_url, pokemon_image_url
 from ui import components as c
 from utils.community_tier import get_tier, recommended_composition, top_tier_species
 from utils.food_expectation import composition_string
@@ -111,7 +111,12 @@ else:
     for cov in recipe_coverage(targets, supply):
         with st.container(border=True):
             head = st.columns([3, 2])
-            head[0].markdown(f"**{cov.recipe['name']}**")
+            _rurl = icon_data_url(str(RECIPE_ICON_DIR), cov.recipe.get("icon"))
+            head[0].markdown(
+                (f'<img src="{_rurl}" width="34" style="vertical-align:middle; margin-right:6px;">' if _rurl else "")
+                + f"**{cov.recipe['name']}**",
+                unsafe_allow_html=True,
+            )
             head[1].caption(
                 f"作成ペース {cov.pace:.2f}回/日 ・ 期待 {cov.daily_energy:,.0f} en/日"
             )

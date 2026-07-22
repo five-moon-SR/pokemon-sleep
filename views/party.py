@@ -14,7 +14,7 @@ from __future__ import annotations
 import streamlit as st
 
 import db
-from image_utils import berry_icon_url, ingredient_icon_url, pokemon_image_url
+from image_utils import berry_icon_url, field_icon_url, ingredient_icon_url, pokemon_image_url
 from ui import components as uic
 from utils.party_logic import (
     get_play_ctx,
@@ -79,6 +79,12 @@ with st.container(border=True):
     field_options = ["（未選択）"] + [f["name"] for f in fields]
     sel_field_name = st.selectbox("フィールド", field_options, key="p_field")
     sel_field = next((f for f in fields if f["name"] == sel_field_name), None)
+    if sel_field:
+        _furl = field_icon_url(sel_field_name)
+        if _furl:
+            st.html(
+                f'<img src="{_furl}" style="width:100%; max-width:420px; border-radius:14px; margin:2px 0 6px;">'
+            )
 
     fav_berries: list[str] = []
     if sel_field:

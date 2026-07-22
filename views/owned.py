@@ -540,19 +540,25 @@ active_cols = VIEW_PRESETS[view_mode] or display_cols
 
 _IMG_COL_CONFIG = {
     # ニックネーム/種族/ランクは左にピン留めして横スクロール中も常に見えるように
-    "ニックネーム": st.column_config.TextColumn("ニックネーム", pinned=True),
-    "種族": st.column_config.TextColumn("種族", pinned=True),
-    "ランク": st.column_config.TextColumn("ランク", pinned=True),
+    "ニックネーム": st.column_config.TextColumn("ニックネーム", pinned=True, width="medium"),
+    "種族": st.column_config.TextColumn("種族", pinned=True, width="small"),
+    "ランク": st.column_config.TextColumn("ランク", pinned=True, width="small"),
+    "構成": st.column_config.TextColumn("構成", width="small", help="食材スロットの枠並び(AAA/ABB等)"),
+    "現在Lv": st.column_config.NumberColumn("Lv", width="small"),
+    "メインスキルLv": st.column_config.NumberColumn("スキLv", width="small"),
+    "リボン": st.column_config.NumberColumn("🎀段階", width="small"),
+    "得意": st.column_config.TextColumn("得意", width="small"),
+    "睡眠": st.column_config.TextColumn("睡眠", width="small"),
     "🌳": st.column_config.ImageColumn("🌳", width="small"),
     "🥕1": st.column_config.ImageColumn("🥕1", width="small"),
     "🥕2": st.column_config.ImageColumn("🥕2", width="small"),
     "🥕3": st.column_config.ImageColumn("🥕3", width="small"),
     "🎀": st.column_config.ImageColumn("🎀", width="small"),
-    "評価%": st.column_config.NumberColumn("評価%", format="%.2f"),
-    "Lv50%": st.column_config.NumberColumn("Lv50%", format="%.2f"),
-    "Lv60%": st.column_config.NumberColumn("Lv60%", format="%.2f"),
-    "全体%": st.column_config.NumberColumn("全体%", format="%.2f"),
-    "だいふく%": st.column_config.NumberColumn("だいふく%", format="%.2f"),
+    "評価%": st.column_config.NumberColumn("評価%", format="%.1f", width="small"),
+    "Lv50%": st.column_config.NumberColumn("Lv50%", format="%.1f", width="small"),
+    "Lv60%": st.column_config.NumberColumn("Lv60%", format="%.1f", width="small"),
+    "全体%": st.column_config.NumberColumn("全体%", format="%.1f", width="small"),
+    "だいふく%": st.column_config.NumberColumn("だいふく%", format="%.1f", width="small"),
 }
 
 # 未開放セル用の薄いスタイル

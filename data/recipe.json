@@ -495,7 +495,7 @@
       "no": 20,
       "category": "curry_stew",
       "name": "めざめるパワーシチュー",
-      "icon": "hiddenpower",
+      "icon": "hiddenpowerperk-upstew.png",
       "ingredients": [
         {
           "name": "ワカクサ大豆",

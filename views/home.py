@@ -15,7 +15,7 @@ import pandas as pd
 import streamlit as st
 
 import db
-from image_utils import RECIPE_ICON_DIR, icon_data_url, pokemon_image_url
+from image_utils import RECIPE_ICON_DIR, field_icon_url, icon_data_url, pokemon_image_url
 from ui import components as c
 from utils.play_context import PlayContext, load_play_context, save_play_context
 
@@ -85,7 +85,7 @@ if parties:
         fr = next((f for f in db.list_all_field_records() if f["name"] == field_name), None)
         fav = [b["name"] for b in (fr.get("favorite_berries") or [])] if fr else []
 
-    chips = [c.icon_chip(None, f"🏝 {field_name}")]
+    chips = [c.icon_chip(field_icon_url(field_name), field_name, size=24)]
     chips += [c.berry_chip(b) for b in fav]
     for rname in (pt.get("candidate_recipes") or [])[:5]:
         rec = next((r for r in db.list_all_recipe_records() if r["name"] == rname), None)

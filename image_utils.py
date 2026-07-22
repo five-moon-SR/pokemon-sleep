@@ -68,6 +68,21 @@ def ingredient_icon_url(ingredient_name: str | None) -> str | None:
 
 
 @st.cache_data
+def _field_icon_map() -> dict[str, str]:
+    return {
+        r["name"]: r["icon"]
+        for r in db.list_all_field_records()
+        if r.get("icon")
+    }
+
+
+def field_icon_url(field_name: str | None) -> str | None:
+    if not field_name:
+        return None
+    return icon_data_url(str(FIELD_ICON_DIR), _field_icon_map().get(field_name))
+
+
+@st.cache_data
 def _sleep_ribbon_icon_map() -> dict[int, str]:
     return {
         int(r["stage"]): r["icon"]
