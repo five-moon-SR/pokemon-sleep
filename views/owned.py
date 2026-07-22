@@ -236,10 +236,17 @@ sel_specialty = st.pills(
     "得意", _uniques("得意"), selection_mode="multi", key="of_sp",
     label_visibility="collapsed",
 ) or []
-sel_rank = st.pills(
-    "ランク", DAIFUKU_RANKS, selection_mode="multi",
-    format_func=_rank_filter_label, key="of_rank", label_visibility="collapsed",
-) or []
+rank_cols = st.columns([4, 2])
+with rank_cols[0]:
+    sel_rank = st.pills(
+        "ランク", DAIFUKU_RANKS, selection_mode="multi",
+        format_func=_rank_filter_label, key="of_rank", label_visibility="collapsed",
+    ) or []
+with rank_cols[1]:
+    rank_target = st.pills(
+        "ランク対象", ["🌱 育成後", "📍 今"], default="🌱 育成後",
+        key="of_rank_target", label_visibility="collapsed",
+    ) or "🌱 育成後"
 _consider_pick = st.pills(
     "どこまで育てる前提で見るか", list(_QUICK_CONSIDER), default="📍 現在Lv",
     key="of_consider",
@@ -277,7 +284,8 @@ with detail_pop:
     st.caption("数値レンジ")
     lv_range = st.slider("現在Lv", min_value=1, max_value=65, value=(1, 65), key="of_lv")
     skill_lv_range = st.slider("メインスキルLv", min_value=1, max_value=8, value=(1, 8), key="of_slv")
-    pct_range = st.slider("種族内%", min_value=0.0, max_value=120.0, value=(0.0, 120.0), step=0.5, key="of_pct")
+    pct_range = st.slider("種族内%（今）", min_value=0.0, max_value=120.0, value=(0.0, 120.0), step=0.5, key="of_pct")
+    pct60_range = st.slider("種族内%（育成後Lv60）", min_value=0.0, max_value=120.0, value=(0.0, 120.0), step=0.5, key="of_pct60")
 
     st.caption("並び替え（第1キー → 第2キー。「登録順」は新→旧固定）")
     sortable_cols = [
@@ -310,7 +318,9 @@ if lv_range != (1, 65):
 if skill_lv_range != (1, 8):
     _active_labels.append(f"スキルLv {skill_lv_range[0]}-{skill_lv_range[1]}")
 if pct_range != (0.0, 120.0):
-    _active_labels.append(f"{pct_range[0]:.0f}-{pct_range[1]:.0f}%")
+    _active_labels.append(f"今 {pct_range[0]:.0f}-{pct_range[1]:.0f}%")
+if pct60_range != (0.0, 120.0):
+    _active_labels.append(f"育成後 {pct60_range[0]:.0f}-{pct60_range[1]:.0f}%")
 
 if _active_labels:
     ac = st.columns([5, 2])
@@ -340,7 +350,8 @@ if sel_specialty:
 if sel_skill:
     filtered = filtered[filtered["メインスキル"].isin(sel_skill)]
 if sel_rank:
-    filtered = filtered[filtered["ランク"].isin(sel_rank)]
+    _rank_col = "Lv60ランク" if "育成後" in rank_target else "ランク"
+    filtered = filtered[filtered[_rank_col].isin(sel_rank)]
 if sel_berries:
     filtered = filtered[filtered["きのみ"].isin(sel_berries)]
 if sel_natures:
@@ -401,6 +412,10 @@ if skill_lv_range != (1, 8):
 if pct_range != (0.0, 120.0):
     filtered = filtered[
         filtered["評価%"].fillna(-1).between(pct_range[0], pct_range[1])
+    ]
+if pct60_range != (0.0, 120.0):
+    filtered = filtered[
+        filtered["Lv60%"].fillna(-1).between(pct60_range[0], pct60_range[1])
     ]
 
 # ソート
