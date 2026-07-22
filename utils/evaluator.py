@@ -331,8 +331,10 @@ def _calc_skill_value(
     base_lv = int(main_skill_level) if main_skill_level else max_lv
     eff_lv = _effective_skill_lv(base_lv, max_lv, subs)
 
-    # 効果量テーブル経由でエナジー相当を取得
-    energy_per_activation = get_skill_energy_per_activation(cat, eff_lv)
+    # 効果量テーブル経由でエナジー相当を取得（派生スキル固有テーブルを優先）
+    energy_per_activation = get_skill_energy_per_activation(
+        cat, eff_lv, skill_name=species.get("main_skill")
+    )
     if energy_per_activation is None:
         # 未対応カテゴリ（ゆびをふる/きのみバースト/食材セレクト/料理チャンス/料理アシスト/
         # おてつだいサポート/おてつだいブースト/スキルコピー/オールマイティー）は
