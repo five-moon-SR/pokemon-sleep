@@ -75,13 +75,15 @@ def _pctl(xs: list[float], q: float) -> float:
 
 def thresholds_from(qpool: dict[str, list[float]]) -> list[tuple[float, str]]:
     good_med = _pctl(qpool["good"], 0.50)
-    great_med = _pctl(qpool["great"], 0.50)
+    mid_med = _pctl(qpool["mid"], 0.50)
     anchors = [
+        # v1.4.1: v1.4は締めすぎ(高ランク激減)だったので半段緩和。
+        # S=適正金1級の中央値(だいふく帯とv1.4の中間の厳しさ)
         ("増田", _pctl(qpool["great"], 0.90)),   # 理想ビルドの上位1割だけ
-        ("SS",  great_med),                      # 理想ビルドの半数
-        ("S",   (good_med + great_med) / 2),     # 良と理想の中間 = 「明確に良く仕上がった個体」
-        ("A",   good_med),                       # 金1+スピM級
-        ("B",   _pctl(qpool["mid"], 0.50)),      # 並(白サブ)級
+        ("SS",  _pctl(qpool["great"], 0.50)),    # 理想ビルド級
+        ("S",   good_med),                       # 適正金1+スピM級 = ちゃんと仕上がった個体
+        ("A",   (mid_med + good_med) / 2),       # 並と良の中間
+        ("B",   mid_med),                        # 並(白サブ)級
         ("C",   _pctl(qpool["plain"], 0.50)),    # 無補正級
     ]
     out = []
