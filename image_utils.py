@@ -85,3 +85,36 @@ def sleep_ribbon_icon_url(stage: int | None) -> str | None:
         return None
     icon = _sleep_ribbon_icon_map().get(int(stage))
     return icon_data_url(str(SLEEP_RIBBON_ICON_DIR), icon)
+
+
+# ---------------------------------------------------------------------------
+# ポケモン本体の画像（PokeAPI公式アートをdex_noでホットリンク。ローカル保存なし）
+# ---------------------------------------------------------------------------
+
+_ARTWORK_BASE = (
+    "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork"
+)
+
+
+@st.cache_data
+def _species_dex_map() -> dict[str, int]:
+    """種族名 → 図鑑No（int）。イベント/リージョン表記「ピカチュウ(ハロウィン)」は
+    ベース種と同じ dex_no を持つのでそのまま使える。"""
+    out: dict[str, int] = {}
+    for name in db.list_species_names():
+        rec = db.get_species_data(name) or {}
+        try:
+            out[name] = int(str(rec.get("dex_no") or "").lstrip("0") or "0")
+        except ValueError:
+            continue
+    return out
+
+
+def pokemon_image_url(species_name: str | None) -> str | None:
+    """種族の公式アートワークURL（475px PNG）。マスターに居なければ None。"""
+    if not species_name:
+        return None
+    dex = _species_dex_map().get(species_name)
+    if not dex:
+        return None
+    return f"{_ARTWORK_BASE}/{dex}.png"

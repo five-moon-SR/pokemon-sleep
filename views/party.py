@@ -14,7 +14,7 @@ from __future__ import annotations
 import streamlit as st
 
 import db
-from image_utils import berry_icon_url, ingredient_icon_url
+from image_utils import berry_icon_url, ingredient_icon_url, pokemon_image_url
 from ui import components as uic
 from utils.party_logic import (
     get_play_ctx,
@@ -388,6 +388,7 @@ with st.container(border=True):
                         subtitle=f"{m['species_name']} · Lv{_effective_level(m)}",
                         specialty=master.get("specialty"),
                         berry_name=(master.get("berry") or {}).get("name"),
+                        img_url=pokemon_image_url(m["species_name"]),
                         footer=_main_skill_of(m, master) or "?",
                         mini=True,
                     ))

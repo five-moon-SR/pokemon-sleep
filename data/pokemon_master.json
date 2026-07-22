@@ -774,8 +774,8 @@
       },
       "main_skill": "食材セレクトS",
       "base_assist_seconds": 5300,
-      "food_drop_rate": null,
-      "main_skill_rate": null
+      "food_drop_rate": 10.0,
+      "main_skill_rate": 4.6
     },
     {
       "dex_no": "0028",
@@ -811,8 +811,8 @@
       },
       "main_skill": "食材セレクトS",
       "base_assist_seconds": 2800,
-      "food_drop_rate": null,
-      "main_skill_rate": null
+      "food_drop_rate": 10.8,
+      "main_skill_rate": 4.3
     },
     {
       "dex_no": "0035",
@@ -2699,8 +2699,8 @@
       },
       "main_skill": "オールマイティー",
       "base_assist_seconds": 2900,
-      "food_drop_rate": null,
-      "main_skill_rate": null
+      "food_drop_rate": 20.0,
+      "main_skill_rate": 4.0
     },
     {
       "dex_no": "0152",
@@ -5740,8 +5740,8 @@
       },
       "main_skill": "いやしのはどう(げんきエールS)",
       "base_assist_seconds": 2800,
-      "food_drop_rate": null,
-      "main_skill_rate": null
+      "food_drop_rate": 11.4,
+      "main_skill_rate": 4.9
     },
     {
       "dex_no": "0381",
@@ -5777,8 +5777,8 @@
       },
       "main_skill": "りゅうせいぐん(きのみバースト)",
       "base_assist_seconds": 2800,
-      "food_drop_rate": null,
-      "main_skill_rate": null
+      "food_drop_rate": 19.8,
+      "main_skill_rate": 3.0
     },
     {
       "dex_no": "0387",
@@ -5814,8 +5814,8 @@
       },
       "main_skill": "げんきオールS",
       "base_assist_seconds": 4500,
-      "food_drop_rate": null,
-      "main_skill_rate": null
+      "food_drop_rate": 13.2,
+      "main_skill_rate": 4.1
     },
     {
       "dex_no": "0388",
@@ -5851,8 +5851,8 @@
       },
       "main_skill": "げんきオールS",
       "base_assist_seconds": 3700,
-      "food_drop_rate": null,
-      "main_skill_rate": null
+      "food_drop_rate": 15.0,
+      "main_skill_rate": 4.6
     },
     {
       "dex_no": "0389",
@@ -5888,8 +5888,8 @@
       },
       "main_skill": "げんきオールS",
       "base_assist_seconds": 2900,
-      "food_drop_rate": null,
-      "main_skill_rate": null
+      "food_drop_rate": 15.6,
+      "main_skill_rate": 4.8
     },
     {
       "dex_no": "0390",
@@ -5925,8 +5925,8 @@
       },
       "main_skill": "きのみバースト",
       "base_assist_seconds": 4100,
-      "food_drop_rate": null,
-      "main_skill_rate": null
+      "food_drop_rate": 11.4,
+      "main_skill_rate": 3.3
     },
     {
       "dex_no": "0391",
@@ -5962,8 +5962,8 @@
       },
       "main_skill": "きのみバースト",
       "base_assist_seconds": 3100,
-      "food_drop_rate": null,
-      "main_skill_rate": null
+      "food_drop_rate": 11.4,
+      "main_skill_rate": 3.3
     },
     {
       "dex_no": "0392",
@@ -5999,8 +5999,8 @@
       },
       "main_skill": "きのみバースト",
       "base_assist_seconds": 2400,
-      "food_drop_rate": null,
-      "main_skill_rate": null
+      "food_drop_rate": 10.6,
+      "main_skill_rate": 3.3
     },
     {
       "dex_no": "0393",
@@ -6036,8 +6036,8 @@
       },
       "main_skill": "おてつだいサポートS",
       "base_assist_seconds": 4500,
-      "food_drop_rate": null,
-      "main_skill_rate": null
+      "food_drop_rate": 15.9,
+      "main_skill_rate": 2.6
     },
     {
       "dex_no": "0394",
@@ -6073,8 +6073,8 @@
       },
       "main_skill": "おてつだいサポートS",
       "base_assist_seconds": 3700,
-      "food_drop_rate": null,
-      "main_skill_rate": null
+      "food_drop_rate": 16.3,
+      "main_skill_rate": 3.5
     },
     {
       "dex_no": "0395",
@@ -6110,8 +6110,8 @@
       },
       "main_skill": "おてつだいサポートS",
       "base_assist_seconds": 3200,
-      "food_drop_rate": null,
-      "main_skill_rate": null
+      "food_drop_rate": 16.8,
+      "main_skill_rate": 3.8
     },
     {
       "dex_no": "0403",
@@ -7230,8 +7230,8 @@
       },
       "main_skill": "料理パワーアップS",
       "base_assist_seconds": 5200,
-      "food_drop_rate": null,
-      "main_skill_rate": null
+      "food_drop_rate": 20.3,
+      "main_skill_rate": 2.4
     },
     {
       "dex_no": "0697",
@@ -7267,8 +7267,8 @@
       },
       "main_skill": "料理パワーアップS",
       "base_assist_seconds": 2800,
-      "food_drop_rate": null,
-      "main_skill_rate": null
+      "food_drop_rate": 17.8,
+      "main_skill_rate": 2.9
     },
     {
       "dex_no": "0700",
@@ -7674,8 +7674,8 @@
       },
       "main_skill": "エナジーチャージM",
       "base_assist_seconds": 5100,
-      "food_drop_rate": null,
-      "main_skill_rate": null
+      "food_drop_rate": 19.8,
+      "main_skill_rate": 4.8
     },
     {
       "dex_no": "0715",
@@ -7711,8 +7711,8 @@
       },
       "main_skill": "エナジーチャージM",
       "base_assist_seconds": 2700,
-      "food_drop_rate": null,
-      "main_skill_rate": null
+      "food_drop_rate": 19.5,
+      "main_skill_rate": 4.8
     },
     {
       "dex_no": "0736",
@@ -7859,8 +7859,8 @@
       },
       "main_skill": "食材セレクトS",
       "base_assist_seconds": 4500,
-      "food_drop_rate": null,
-      "main_skill_rate": null
+      "food_drop_rate": 19.9,
+      "main_skill_rate": 1.9
     },
     {
       "dex_no": "0743",
@@ -7896,8 +7896,8 @@
       },
       "main_skill": "食材セレクトS",
       "base_assist_seconds": 2300,
-      "food_drop_rate": null,
-      "main_skill_rate": null
+      "food_drop_rate": 19.4,
+      "main_skill_rate": 2.5
     },
     {
       "dex_no": "0759",
@@ -8118,8 +8118,8 @@
       },
       "main_skill": "料理チャンスS",
       "base_assist_seconds": 3500,
-      "food_drop_rate": null,
-      "main_skill_rate": null
+      "food_drop_rate": 29.4,
+      "main_skill_rate": 4.6
     },
     {
       "dex_no": "0845",

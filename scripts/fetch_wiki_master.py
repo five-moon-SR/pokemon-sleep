@@ -34,6 +34,7 @@ from scripts.add_pokemon import add_pokemon  # noqa: E402
 
 MASTER_PATH = ROOT / "data" / "pokemon_master.json"
 WIKI_URL = "https://wikiwiki.jp/poke_sleep/ポケモンの一覧"
+PROB_URL = "https://wikiwiki.jp/poke_sleep/ポケモンの一覧/食材確率・スキル発動確率の推定値一覧"
 USER_AGENT = (
     "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) "
     "AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0 Safari/537.36"
@@ -160,6 +161,100 @@ def parse_rows(table_html: str) -> tuple[list[dict], list[str]]:
     return records, warnings
 
 
+def find_probability_table(html: str) -> str:
+    """「名前/食材/スキル」ヘッダを持つ確率一覧表を特定する。"""
+    for table in _TABLE_RE.findall(html):
+        headers = [_cell_text(h).replace("­", "") for h in _TH_RE.findall(table)]
+        if "名前" in headers and "食材" in headers and "スキル" in headers:
+            return table
+    raise RuntimeError("確率一覧テーブルが見つからない。Wikiのページ構造が変わった可能性あり。")
+
+
+def parse_probability_rows(table_html: str) -> dict[str, dict[str, float]]:
+    """確率一覧表 → {種族名: {food_drop_rate, main_skill_rate}}。
+
+    列: 画像 | 名前 | 食材% | スキル% | メインスキル | 得意 | 手伝
+    """
+    probs: dict[str, dict[str, float]] = {}
+    for row_html in _TR_RE.findall(table_html):
+        cells = _TD_RE.findall(row_html)
+        if len(cells) < 4:
+            continue
+        raw_name = _cell_text(cells[1])
+        if not raw_name:
+            continue
+        name = WIKI_NAME_ALIASES.get(raw_name, raw_name)
+        try:
+            food = float(_cell_text(cells[2]).rstrip("%"))
+            skill = float(_cell_text(cells[3]).rstrip("%"))
+        except ValueError:
+            continue
+        probs[name] = {"food_drop_rate": food, "main_skill_rate": skill}
+    return probs
+
+
+def sync_probabilities(*, apply: bool, html: str | None = None) -> int:
+    """確率ページと突合。null の穴埋め候補と既存値の食い違いを報告し、--apply で穴埋めする。
+
+    方針はマスター本体と同じ: 自動で書くのは「null → 値」の穴埋めだけ。
+    既存値との食い違い（Wikiの推定値更新）は報告のみ。
+    """
+    if html is None:
+        print(f"取得中: {PROB_URL}")
+        html = fetch_html(PROB_URL)
+    probs = parse_probability_rows(find_probability_table(html))
+    print(f"確率データ: {len(probs)} 種")
+
+    data = json.loads(MASTER_PATH.read_text(encoding="utf-8"))
+    fills: list[str] = []
+    mismatches: list[str] = []
+    missing: list[str] = []
+    for rec in data["records"]:
+        name = rec["species_name"]
+        p = probs.get(name)
+        if p is None:
+            missing.append(name)
+            continue
+        if rec.get("food_drop_rate") is None:
+            if apply:
+                rec["food_drop_rate"] = p["food_drop_rate"]
+                rec["main_skill_rate"] = p["main_skill_rate"]
+            fills.append(
+                f"{name}: food={p['food_drop_rate']}% skill={p['main_skill_rate']}%"
+            )
+        else:
+            diffs = []
+            if abs(float(rec["food_drop_rate"]) - p["food_drop_rate"]) >= 0.05:
+                diffs.append(f"food {rec['food_drop_rate']} → {p['food_drop_rate']}")
+            if abs(float(rec.get("main_skill_rate") or 0) - p["main_skill_rate"]) >= 0.05:
+                diffs.append(f"skill {rec.get('main_skill_rate')} → {p['main_skill_rate']}")
+            if diffs:
+                mismatches.append(f"{name}: {' / '.join(diffs)}")
+
+    if missing:
+        print(f"\n⚠ 確率ページに見つからない種族 ({len(missing)}件): {missing}")
+    if mismatches:
+        print(f"\n△ 既存値とWiki推定値の食い違い ({len(mismatches)}件) — 自動では上書きしない:")
+        for m in mismatches:
+            print(f"  - {m}")
+    if not fills:
+        print("\n✅ null の確率データなし。穴埋め不要。")
+        return 0
+
+    print(f"\n★ null 穴埋め{'完了' if apply else '候補'} ({len(fills)}件):")
+    for f in fills:
+        print(f"  - {f}")
+
+    if apply:
+        MASTER_PATH.write_text(
+            json.dumps(data, ensure_ascii=False, indent=2), encoding="utf-8"
+        )
+        print(f"\n書き込み完了 → {MASTER_PATH.relative_to(ROOT)}")
+    else:
+        print("\n(dry-run) 穴埋めするには --probs --apply で再実行。")
+    return 0
+
+
 def check_reference_masters(new_records: list[dict]) -> list[str]:
     """新種族が参照するきのみ/食材/メインスキルが既存マスターに居るか確認する。
 
@@ -260,8 +355,13 @@ def apply_new(new_records: list[dict]) -> tuple[list[str], list[str]]:
 def main() -> int:
     ap = argparse.ArgumentParser(description=__doc__.splitlines()[0])
     ap.add_argument("--apply", action="store_true", help="新種族をマスターに追記する（既定はdry-run）")
+    ap.add_argument("--probs", action="store_true", help="確率ページと突合して null を穴埋めするモード")
     ap.add_argument("--html", type=Path, help="取得済みHTMLファイルを使う（Wikiにアクセスしない）")
     args = ap.parse_args()
+
+    if args.probs:
+        html = args.html.read_text(encoding="utf-8") if args.html else None
+        return sync_probabilities(apply=args.apply, html=html)
 
     if args.html:
         html = args.html.read_text(encoding="utf-8")

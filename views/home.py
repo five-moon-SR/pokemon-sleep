@@ -15,7 +15,7 @@ import pandas as pd
 import streamlit as st
 
 import db
-from image_utils import RECIPE_ICON_DIR, icon_data_url
+from image_utils import RECIPE_ICON_DIR, icon_data_url, pokemon_image_url
 from ui import components as c
 from utils.play_context import PlayContext, load_play_context, save_play_context
 
@@ -106,6 +106,7 @@ if parties:
             subtitle=f"{m['species_name']} · Lv{_eff_lv(m)}",
             specialty=master.get("specialty"),
             berry_name=(master.get("berry") or {}).get("name"),
+            img_url=pokemon_image_url(m["species_name"]),
             badges=[c.rank_badge(m.get("daifuku_rank"))],
             mini=True,
         ))
@@ -189,6 +190,7 @@ else:
             subtitle=f"{p['species_name']} · Lv{_eff_lv(p)}",
             specialty=master.get("specialty"),
             berry_name=(master.get("berry") or {}).get("name"),
+            img_url=pokemon_image_url(p["species_name"]),
             badges=[c.rank_badge(p.get("daifuku_rank"))],
             mini=True,
         ))

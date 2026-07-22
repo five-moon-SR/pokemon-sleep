@@ -37,7 +37,7 @@ from ui import components as uic
 # ランク並び替え用の順位（SS=0, S=1, ..., D=5）。
 # 「昇順」で SS が最上段に来るよう、強い順から 0 を振る。
 RANK_ORDER_MAP: dict[str, int] = {r: i for i, r in enumerate(DAIFUKU_RANKS)}
-from image_utils import berry_icon_url, ingredient_icon_url, sleep_ribbon_icon_url
+from image_utils import berry_icon_url, ingredient_icon_url, pokemon_image_url, sleep_ribbon_icon_url
 
 st.title("📦 所持ポケデータ")
 
@@ -719,6 +719,7 @@ if disp_mode == "🃏 カード":
                     subtitle=f"{row['種族']} · {lv_txt} {ribbon}",
                     specialty=row.get("得意"),
                     berry_name=row.get("きのみ"),
+                    img_url=pokemon_image_url(row["種族"]),
                     badges=badges,
                     chips=chips,
                 ))

@@ -1017,10 +1017,67 @@
       "conditions": {
         "min_level": 15
       }
+    },
+    {
+      "from": "ナエトル",
+      "to": "ハヤシガメ",
+      "candy": 40,
+      "conditions": {
+        "min_level": 14
+      }
+    },
+    {
+      "from": "ハヤシガメ",
+      "to": "ドダイトス",
+      "candy": 80,
+      "conditions": {
+        "min_level": 24
+      }
+    },
+    {
+      "from": "ヒコザル",
+      "to": "モウカザル",
+      "candy": 40,
+      "conditions": {
+        "min_level": 11
+      }
+    },
+    {
+      "from": "モウカザル",
+      "to": "ゴウカザル",
+      "candy": 80,
+      "conditions": {
+        "min_level": 27
+      }
+    },
+    {
+      "from": "ポッチャマ",
+      "to": "ポッタイシ",
+      "candy": 40,
+      "conditions": {
+        "min_level": 12
+      }
+    },
+    {
+      "from": "ポッタイシ",
+      "to": "エンペルト",
+      "candy": 80,
+      "conditions": {
+        "min_level": 27
+      }
+    },
+    {
+      "from": "チゴラス",
+      "to": "ガチゴラス",
+      "candy": 80,
+      "conditions": {
+        "min_level": 29,
+        "time_of_day": "day"
+      }
     }
   ],
   "_meta": {
-    "count": 119,
+    "count": 126,
     "source": "https://jara-blog.com/sleep_shinka",
     "fetched_at": "2026-05-01"
   }

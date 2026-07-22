@@ -107,6 +107,7 @@ def pokemon_card(
     subtitle: str | None = None,
     specialty: str | None = None,
     berry_name: str | None = None,
+    img_url: str | None = None,
     badges: list[str] | None = None,
     chips: list[str] | None = None,
     footer: str | None = None,
@@ -116,15 +117,21 @@ def pokemon_card(
 
     title: ニックネームまたは種族名 / subtitle: 「種族名 · Lv25」等
     specialty: 左縁のアクセント色に使う / berry_name: 右上のきのみアイコン
+    img_url: ポケモン本体画像（image_utils.pokemon_image_url）。右上に表示
     badges: rank_badge() 等のHTML / chips: subskill_chip() 等のHTML
     mini: 横スクロール行・スロット用の小型版
     """
     sp_var = _SPECIALTY_VAR.get(specialty or "", "--ps-line")
     berry = ""
+    if img_url:
+        berry += (
+            f'<img src="{img_url}" width="{40 if mini else 56}" loading="lazy" '
+            f'style="float:right; margin-left:6px;">'
+        )
     if berry_name:
         url = berry_icon_url(berry_name)
         if url:
-            berry = f'<img src="{url}" width="{22 if mini else 28}" title="{escape(berry_name)}" style="float:right; margin-left:6px;">'
+            berry += f'<img src="{url}" width="{20 if mini else 24}" title="{escape(berry_name)}" style="float:right; margin-left:4px;">'
     parts = [
         f'<div class="ps-card" style="border-left: 3px solid var({sp_var});'
         + ("padding:8px 10px; min-width:120px;" if mini else "")
