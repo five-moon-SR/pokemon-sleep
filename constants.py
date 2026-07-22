@@ -16,6 +16,41 @@ DAIFUKU_RANK_EMOJI: dict[str, str] = {
     "D":   "⚪",
 }
 
+# テーマ「月夜のリサーチノート」機能色トークン（ui/theme.py の --ps-* と同値）。
+# Styler（st.dataframe のセル色）はCSS変数が使えないのでここのhexを直接使う。
+THEME_DUSK = "#1C2438"   # カード面（セル背景のブレンド先）
+THEME_INK_DIM = "#98A0B8"
+
+DAIFUKU_RANK_COLORS: dict[str, str] = {
+    "増田": "#F5D06F",
+    "SS":  "#FF8A9A",
+    "S":   "#FFAB70",
+    "A":   "#E8C84A",
+    "B":   "#7FC77F",
+    "C":   "#6FA8DC",
+    "D":   "#8890A8",
+}
+
+SUBSKILL_RARITY_COLORS: dict[str, str] = {
+    "gold":  "#E8C84A",
+    "blue":  "#6FA8DC",
+    "white": "#C8CEDC",
+}
+
+SPECIALTY_COLORS: dict[str, str] = {
+    "きのみ": "#7FC77F",
+    "食材":   "#FFAB70",
+    "スキル": "#6FA8DC",
+    "オール": "#C0A8E0",
+}
+
+
+def blend_hex(fg: str, bg: str = THEME_DUSK, alpha: float = 0.22) -> str:
+    """fg色をalphaでbg色に重ねたhexを返す（Styler用の淡いダーク面）。"""
+    f = [int(fg[i:i+2], 16) for i in (1, 3, 5)]
+    b = [int(bg[i:i+2], 16) for i in (1, 3, 5)]
+    return "#" + "".join(f"{round(fv*alpha + bv*(1-alpha)):02x}" for fv, bv in zip(f, b))
+
 # だいふくチェッカーの9項目評価。3×3行列（得意分野 × 寄り）。
 # 配列の並びはだいふく公式サイトの表示順に準拠。
 DAIFUKU_EVAL_LABELS: list[str] = [

@@ -19,15 +19,20 @@ import streamlit as st
 import db
 from constants import (
     DAIFUKU_EVAL_LABELS,
+    DAIFUKU_RANK_COLORS,
     DAIFUKU_RANK_EMOJI,
     DAIFUKU_RANKS,
+    SUBSKILL_RARITY_COLORS,
     SUBSKILL_RARITY_EMOJI,
     SUBSKILL_RARITY_ORDER,
     SUBSKILL_UNLOCK_LEVELS,
+    THEME_INK_DIM,
+    blend_hex,
     format_nature_label,
     get_subskill_rarity,
 )
 from utils.evaluator import evaluate_and_save, evaluate_at_levels, evaluate_pokemon
+from ui import components as uic
 
 # ランク並び替え用の順位（SS=0, S=1, ..., D=5）。
 # 「昇順」で SS が最上段に来るよう、強い順から 0 を振る。
@@ -75,20 +80,18 @@ def _rank_filter_label(rank: str) -> str:
     return f"{DAIFUKU_RANK_EMOJI.get(rank, '')} {rank}".strip()
 
 
-# セル背景色（高ランクほど暖色 / レアリティに対応）。「増田」は SS 超えの伝説ランク。
+# セル色（高ランクほど暖色 / レアリティに対応）。「増田」は SS 超えの伝説ランク。
+# ダークテーマ用: 淡い同系面 + 明るい同系文字（constants の色トークンから生成）。
 RANK_BG_STYLE: dict[str, str] = {
-    "増田": "background-color: #ffd700; color: #6a0; font-weight: bold",
-    "SS":   "background-color: #ffb3b3; font-weight: bold",
-    "S":    "background-color: #ffd1a3",
-    "A":    "background-color: #fff0a3",
-    "B":    "background-color: #c8eeb8",
-    "C":    "background-color: #b8d6f0",
-    "D":    "background-color: #e8e8e8",
+    rank: (
+        f"background-color: {blend_hex(color)}; color: {color}"
+        + ("; font-weight: bold" if rank in ("増田", "SS") else "")
+    )
+    for rank, color in DAIFUKU_RANK_COLORS.items()
 }
 SUBSKILL_BG_STYLE: dict[str, str] = {
-    "gold":  "background-color: #fee570",
-    "blue":  "background-color: #d5edfd",
-    "white": "background-color: #f3f3f3",
+    rarity: f"background-color: {blend_hex(color)}; color: {color}"
+    for rarity, color in SUBSKILL_RARITY_COLORS.items()
 }
 
 
@@ -502,19 +505,30 @@ mode_label = (
     if consider_lv is None
     else f"🔮 将来性モード（Lv{consider_lv}まで考慮）"
 )
+
+disp_mode = st.segmented_control(
+    "表示",
+    options=["🃏 カード", "📋 表"],
+    default="🃏 カード",
+    key="owned_disp_mode",
+    label_visibility="collapsed",
+)
+
 header_cols = st.columns([3, 4])
 with header_cols[0]:
     st.caption(f"{len(display_df)} / {len(df_full)} 件　— {mode_label}")
-with header_cols[1]:
-    view_mode = st.radio(
-        "表示モード",
-        options=list(VIEW_PRESETS.keys()),
-        index=0,
-        horizontal=True,
-        key="owned_view_mode",
-        label_visibility="collapsed",
-        help="列が多くて横スクロールが面倒な時はモードで絞ってください。",
-    )
+view_mode = list(VIEW_PRESETS.keys())[0]
+if disp_mode == "📋 表":
+    with header_cols[1]:
+        view_mode = st.radio(
+            "表示モード",
+            options=list(VIEW_PRESETS.keys()),
+            index=0,
+            horizontal=True,
+            key="owned_view_mode",
+            label_visibility="collapsed",
+            help="列が多くて横スクロールが面倒な時はモードで絞ってください。",
+        )
 
 active_cols = VIEW_PRESETS[view_mode] or display_cols
 
@@ -536,7 +550,7 @@ _IMG_COL_CONFIG = {
 }
 
 # 未開放セル用の薄いスタイル
-GRAY_STYLE = "color: #aaa; background-color: #f5f5f5; font-style: italic"
+GRAY_STYLE = f"color: {THEME_INK_DIM}; background-color: #171E30; font-style: italic"
 
 
 def _build_styler(df: pd.DataFrame):
@@ -572,36 +586,17 @@ def _build_styler(df: pd.DataFrame):
                 styles.loc[eff < unlock_lv, name_col] = GRAY_STYLE
                 img_col = "🥕" + name_col[-1]
                 if img_col in df_in.columns:
-                    styles.loc[eff < unlock_lv, img_col] = "background-color: #f5f5f5"
+                    styles.loc[eff < unlock_lv, img_col] = "background-color: #171E30"
 
         return styles
 
     return df.style.apply(_apply, axis=None)
 
 
-event = st.dataframe(
-    _build_styler(display_df),
-    hide_index=True,
-    use_container_width=True,
-    height=600,
-    on_select="rerun",
-    selection_mode="single-row",
-    key="owned_table",
-    column_config=_IMG_COL_CONFIG,
-    column_order=active_cols,
-)
-
-
 # ---------------------------------------------------------------------------
-# 行選択時の詳細＋削除
+# 個体詳細＋削除（表モード=行選択でインライン / カードモード=dialog で共用）
 # ---------------------------------------------------------------------------
-selected_rows = event.selection.rows if event and event.selection else []
-if selected_rows:
-    idx = selected_rows[0]
-    row = display_df.iloc[idx]
-    selected_id = int(row["_ID"])
-
-    st.divider()
+def _render_detail(row: pd.Series, selected_id: int) -> None:
     # ニックネームが種族名と同じなら冗長なのでブラケット省略
     species_text = row["種族"]
     nick_val = row.get("ニックネーム")
@@ -687,3 +682,70 @@ if selected_rows:
         db.delete_pokemon(selected_id)
         st.success(f"id={selected_id} を削除しました。")
         st.rerun()
+
+
+@st.dialog("個体詳細", width="large")
+def _detail_dialog(row: pd.Series, selected_id: int) -> None:
+    _render_detail(row, selected_id)
+
+
+# ---------------------------------------------------------------------------
+# 一覧の描画（カード / 表）
+# ---------------------------------------------------------------------------
+if disp_mode == "🃏 カード":
+    ss = st.session_state
+    ss.setdefault("owned_cards_shown", 30)
+    page_df = display_df.head(ss["owned_cards_shown"])
+
+    CARDS_PER_ROW = 3
+    rows_iter = list(page_df.iterrows())
+    for start in range(0, len(rows_iter), CARDS_PER_ROW):
+        cols = st.columns(CARDS_PER_ROW)
+        for col, (_, row) in zip(cols, rows_iter[start:start + CARDS_PER_ROW]):
+            with col:
+                pid = int(row["_ID"])
+                badges = [uic.rank_badge(row["ランク"], row["評価%"] if pd.notna(row["評価%"]) else None)]
+                if pd.notna(row.get("Lv60ランク")):
+                    badges.append(uic.rank_badge(row["Lv60ランク"]))
+                chips = [
+                    uic.subskill_chip(row.get(f"サブLv{lv}"))
+                    for lv in SUBSKILL_UNLOCK_LEVELS
+                    if row.get(f"サブLv{lv}") and row.get(f"サブLv{lv}") != UNRELEASED_LABEL
+                ][:3]
+                lv_txt = f"Lv{int(row['現在Lv'])}" if pd.notna(row["現在Lv"]) else "Lv?"
+                ribbon = "🎀" * int(row["リボン"]) if row.get("リボン") else ""
+                st.html(uic.pokemon_card(
+                    title=row["ニックネーム"],
+                    subtitle=f"{row['種族']} · {lv_txt} {ribbon}",
+                    specialty=row.get("得意"),
+                    berry_name=row.get("きのみ"),
+                    badges=badges,
+                    chips=chips,
+                ))
+                if st.button("詳細", key=f"o_card_{pid}", use_container_width=True):
+                    _detail_dialog(row, pid)
+
+    remaining = len(display_df) - len(page_df)
+    if remaining > 0:
+        if st.button(f"さらに表示（残り {remaining} 件）", use_container_width=True):
+            ss["owned_cards_shown"] += 30
+            st.rerun()
+else:
+    event = st.dataframe(
+        _build_styler(display_df),
+        hide_index=True,
+        use_container_width=True,
+        height=600,
+        on_select="rerun",
+        selection_mode="single-row",
+        key="owned_table",
+        column_config=_IMG_COL_CONFIG,
+        column_order=active_cols,
+    )
+
+    selected_rows = event.selection.rows if event and event.selection else []
+    if selected_rows:
+        idx = selected_rows[0]
+        row = display_df.iloc[idx]
+        st.divider()
+        _render_detail(row, int(row["_ID"]))

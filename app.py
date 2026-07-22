@@ -5,7 +5,7 @@ import ui
 
 st.set_page_config(page_title="ポケスリ管理", page_icon="🌙", layout="wide")
 
-ui.apply_mobile_css()
+ui.apply_theme()
 
 db.init_db()
 
@@ -16,6 +16,7 @@ pages = [
     st.Page("views/edit_record.py", title="登録情報の修正", icon="✏️"),
     st.Page("views/master.py", title="全ポケデータ", icon="📚"),
     st.Page("views/owned.py", title="所持ポケデータ", icon="📦"),
+    st.Page("views/ingredients.py", title="食材・育成戦略", icon="🥕"),
     st.Page("views/data_collection.py", title="データ集", icon="🗂"),
     st.Page("views/party.py", title="パーティー編成", icon="⚔"),
     st.Page("views/guide.py", title="使い方", icon="📖"),
