@@ -19,7 +19,8 @@
       "base_energy": 167,
       "max_bonus_pct": 61,
       "max_bonus_recipes": [
-        "めざめるパワーシチュー"
+        "めざめるパワーシチュー",
+        "ごろごろねっとうサラダ"
       ],
       "effective_max_energy": 898,
       "dream_shard_price": 7,
@@ -106,7 +107,8 @@
       "base_energy": 101,
       "max_bonus_pct": 78,
       "max_bonus_recipes": [
-        "ドキドキこわいかおパンケーキ"
+        "ドキドキこわいかおパンケーキ",
+        "みつあつめチョコワッフル"
       ],
       "effective_max_energy": 600,
       "dream_shard_price": 4,
@@ -118,7 +120,8 @@
       "base_energy": 121,
       "max_bonus_pct": 78,
       "max_bonus_recipes": [
-        "しんりょくアボカドグラタン"
+        "しんりょくアボカドグラタン",
+        "みつあつめチョコワッフル"
       ],
       "effective_max_energy": 719,
       "dream_shard_price": 5,
@@ -153,11 +156,11 @@
       "name": "リラックスカカオ",
       "icon": "soothingcacao.png",
       "base_energy": 151,
-      "max_bonus_pct": 61,
+      "max_bonus_pct": 78,
       "max_bonus_recipes": [
-        "ドオーのエクレア"
+        "みつあつめチョコワッフル"
       ],
-      "effective_max_energy": 811,
+      "effective_max_energy": 897,
       "dream_shard_price": 6,
       "description": "加工は手間だが、それに見合うだけのリラックス効果が得られる。"
     },
@@ -192,9 +195,10 @@
       "base_energy": 140,
       "max_bonus_pct": 78,
       "max_bonus_recipes": [
-        "じならしワカモレチップス"
+        "じならしワカモレチップス",
+        "みつあつめチョコワッフル"
       ],
-      "effective_max_energy": 832,
+      "effective_max_energy": 833,
       "dream_shard_price": 6,
       "description": "生でも食べられる。甘みが際立つワカクサ特産品。"
     },
