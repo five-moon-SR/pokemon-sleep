@@ -204,6 +204,17 @@ code, pre, [data-testid="stCode"] * { font-family: ui-monospace, monospace; }
     background: var(--ps-moon);
 }
 
+/* 検索結果行(owned): モバイルの等幅カラム化を無効にして 行+開くボタン を1行維持 */
+.st-key-owned_results [data-testid="stHorizontalBlock"] { flex-wrap: nowrap; }
+.st-key-owned_results [data-testid="stColumn"]:first-child {
+    flex: 1 1 auto !important;
+    min-width: 0 !important;
+}
+.st-key-owned_results [data-testid="stColumn"]:last-child {
+    flex: 0 0 4.2rem !important;
+    min-width: 4.2rem !important;
+}
+
 /* ===== サイドバーナビ（タッチしやすく・読みやすく大きめ） ===== */
 
 [data-testid="stSidebarNav"] a {

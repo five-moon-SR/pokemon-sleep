@@ -213,115 +213,110 @@ CONSIDER_LV_OPTIONS: list[tuple[str, int | None]] = [
 _CONSIDER_LV_MAP = dict(CONSIDER_LV_OPTIONS)
 
 
-with st.expander("🔍 絞り込み・並び替え", expanded=True):
-    consider_label = st.selectbox(
-        "将来性モード（どこまで育てる前提で絞り込むか）",
-        options=[lbl for lbl, _ in CONSIDER_LV_OPTIONS],
-        index=0,
-        help=(
-            "選んだLvまで育つ前提で食材枠・サブスキル枠を検索対象に含めます。"
-            "現在Lvが既にそれ以上の個体は、現在Lvがそのまま使われます。"
-            "Lv30で食材2、Lv60で食材3、Lv10/25/50/75/100でサブスキルが順に解放。"
-        ),
+# ---------------------------------------------------------------------------
+# クイックフィルタ: 「探す」に必要な最小限だけ露出し、残りは popover に沈める
+# (docs/ui_design_policy.md: 2〜6択は物理ボタン、検索対象はselectbox)
+# ---------------------------------------------------------------------------
+_QUICK_CONSIDER: dict[str, int | None] = {
+    "📍 現在Lv": None, "🔮 Lv30": 30, "🔮 Lv60": 60, "🔮 Lv100": 100,
+}
+
+qf_top = st.columns([5, 2])
+with qf_top[0]:
+    keyword = st.text_input(
+        "検索", placeholder="🔎 種族名・ニックネームで探す",
+        key="of_kw", label_visibility="collapsed",
     )
-    consider_lv: int | None = _CONSIDER_LV_MAP[consider_label]
+detail_pop = qf_top[1].popover("⚙ 詳細", use_container_width=True)
 
-    row1 = st.columns(5)
-    with row1[0]:
-        keyword = st.text_input("種族/ニックネーム検索", placeholder="例: ばなお")
-    with row1[1]:
-        sel_sleep = st.multiselect("睡眠", _uniques("睡眠"))
-    with row1[2]:
-        sel_specialty = st.multiselect("得意", _uniques("得意"))
-    with row1[3]:
-        sel_skill = st.multiselect("メインスキル", _uniques("メインスキル"))
-    with row1[4]:
-        sel_rank = st.multiselect(
-            "ランク（自前評価・種族内）",
-            DAIFUKU_RANKS,
-            format_func=_rank_filter_label,
-            help="自前評価の種族内ランク。※ DAIFUKU_RANKS の文字列セット（増田/SS/S/A/B/C/D）を流用。",
-        )
+sel_specialty = st.pills(
+    "得意", _uniques("得意"), selection_mode="multi", key="of_sp",
+    label_visibility="collapsed",
+) or []
+sel_rank = st.pills(
+    "ランク", DAIFUKU_RANKS, selection_mode="multi",
+    format_func=_rank_filter_label, key="of_rank", label_visibility="collapsed",
+) or []
+_consider_pick = st.pills(
+    "どこまで育てる前提で見るか", list(_QUICK_CONSIDER), default="📍 現在Lv",
+    key="of_consider",
+)
+consider_lv: int | None = _QUICK_CONSIDER.get(_consider_pick or "📍 現在Lv")
 
-    row2 = st.columns(5)
-    with row2[0]:
-        sel_berries = st.multiselect("きのみ", _uniques("きのみ"))
-    with row2[1]:
-        sel_ingredients = st.multiselect("食材（いずれかに含む）", all_ingredients)
-    with row2[2]:
+with detail_pop:
+    st.caption("属性で絞る")
+    dcol = st.columns(2)
+    with dcol[0]:
+        sel_sleep = st.multiselect("睡眠", _uniques("睡眠"), key="of_sleep")
+        sel_berries = st.multiselect("きのみ", _uniques("きのみ"), key="of_berry")
         sel_subskills = st.multiselect(
-            "サブスキル（金→青→白 / いずれかに含む）",
-            all_subskills,
-            format_func=_sub_filter_label,
+            "サブスキル（金→青→白）", all_subskills,
+            format_func=_sub_filter_label, key="of_sub",
         )
-    with row2[3]:
-        sel_natures = st.multiselect("性格", _uniques("性格"))
-    with row2[4]:
-        sel_eval_type = st.multiselect("評価タイプ", list(range(1, 10)))
-
-    row2b = st.columns(5)
-    with row2b[0]:
+        sel_eval_type = st.multiselect("評価タイプ", list(range(1, 10)), key="of_et")
+    with dcol[1]:
+        sel_skill = st.multiselect("メインスキル", _uniques("メインスキル"), key="of_skill")
+        sel_ingredients = st.multiselect("食材（いずれかに含む）", all_ingredients, key="of_ing")
+        sel_natures = st.multiselect("性格", _uniques("性格"), key="of_nat")
         sel_compositions = st.multiselect(
-            "食材構成（AAA/ABB等）",
-            _uniques("構成"),
-            help="個体の3スロットがどの枠(A/B/C)の食材かの並び。未入力スロットは ? 表示。",
+            "食材構成（AAA/ABB等）", _uniques("構成"), key="of_comp",
+            help="3スロットがどの枠(A/B/C)かの並び。未入力は ?",
         )
+
+    ribbon_options = [("未獲得", 0), ("段階1", 1), ("段階2", 2), ("段階3", 3), ("段階4", 4)]
+    sel_ribbons = st.multiselect(
+        "🎀 おやすみリボン",
+        options=[v for _, v in ribbon_options],
+        format_func=lambda v: dict((vv, lbl) for lbl, vv in ribbon_options).get(v, str(v)),
+        key="of_ribbon",
+    )
 
     st.caption("数値レンジ")
-    row3 = st.columns(4)
-    with row3[0]:
-        lv_range = st.slider("現在Lv", min_value=1, max_value=65, value=(1, 65))
-    with row3[1]:
-        skill_lv_range = st.slider(
-            "メインスキルLv", min_value=1, max_value=8, value=(1, 8)
-        )
-    with row3[2]:
-        pct_range = st.slider(
-            "種族内%", min_value=0.0, max_value=120.0, value=(0.0, 120.0), step=0.5
-        )
-    with row3[3]:
-        ribbon_options = [
-            ("未獲得", 0),
-            ("段階1", 1),
-            ("段階2", 2),
-            ("段階3", 3),
-            ("段階4", 4),
-        ]
-        sel_ribbons = st.multiselect(
-            "🎀 おやすみリボン",
-            options=[v for _, v in ribbon_options],
-            format_func=lambda v: dict((vv, lbl) for lbl, vv in ribbon_options).get(v, str(v)),
-            help="複数選択可。空＝絞り込みなし。",
-        )
+    lv_range = st.slider("現在Lv", min_value=1, max_value=65, value=(1, 65), key="of_lv")
+    skill_lv_range = st.slider("メインスキルLv", min_value=1, max_value=8, value=(1, 8), key="of_slv")
+    pct_range = st.slider("種族内%", min_value=0.0, max_value=120.0, value=(0.0, 120.0), step=0.5, key="of_pct")
 
-    st.caption("並び替え（上から順に第1キー → 第2キー）　※「登録順」は新→旧で固定")
+    st.caption("並び替え（第1キー → 第2キー。「登録順」は新→旧固定）")
     sortable_cols = [
-        "登録順",
-        "ニックネーム",
-        "種族",
-        "現在Lv",
-        "捕獲時Lv",
-        "ランク",
-        "評価%",
-        "Lv50ランク",
-        "Lv50%",
-        "Lv60ランク",
-        "Lv60%",
-        "全体ランク",
-        "全体%",
-        "メインスキルLv",
+        "登録順", "ニックネーム", "種族", "現在Lv", "捕獲時Lv",
+        "ランク", "評価%", "Lv50ランク", "Lv50%", "Lv60ランク", "Lv60%",
+        "全体ランク", "全体%", "メインスキルLv",
     ]
-    row4 = st.columns([2, 1, 2, 1])
+    row4 = st.columns([2, 1])
     with row4[0]:
         sort_key1 = st.selectbox("並び替え1", options=sortable_cols, index=0, key="o_sk1")
     with row4[1]:
         sort_dir1 = st.radio("方向1", ["昇順", "降順"], horizontal=True, key="o_dir1")
-    with row4[2]:
-        sort_key2 = st.selectbox(
-            "並び替え2", options=["（なし）", *sortable_cols], index=0, key="o_sk2"
-        )
-    with row4[3]:
+    row5 = st.columns([2, 1])
+    with row5[0]:
+        sort_key2 = st.selectbox("並び替え2", options=["（なし）", *sortable_cols], index=0, key="o_sk2")
+    with row5[1]:
         sort_dir2 = st.radio("方向2", ["昇順", "降順"], horizontal=True, key="o_dir2")
+
+# 適用中の詳細フィルタをチップで可視化 + 全解除（フィルタ状態を隠さない）
+_active_labels: list[str] = []
+for label, vals in [
+    ("睡眠", sel_sleep), ("スキル", sel_skill), ("きのみ", sel_berries),
+    ("食材", sel_ingredients), ("サブ", sel_subskills), ("性格", sel_natures),
+    ("タイプ", sel_eval_type), ("構成", sel_compositions), ("🎀", sel_ribbons),
+]:
+    if vals:
+        _active_labels.append(f"{label}: {'/'.join(str(v) for v in vals[:3])}{'…' if len(vals) > 3 else ''}")
+if lv_range != (1, 65):
+    _active_labels.append(f"Lv {lv_range[0]}-{lv_range[1]}")
+if skill_lv_range != (1, 8):
+    _active_labels.append(f"スキルLv {skill_lv_range[0]}-{skill_lv_range[1]}")
+if pct_range != (0.0, 120.0):
+    _active_labels.append(f"{pct_range[0]:.0f}-{pct_range[1]:.0f}%")
+
+if _active_labels:
+    ac = st.columns([5, 2])
+    ac[0].html(uic.context_strip(_active_labels))
+    if ac[1].button("✕ 絞り込み解除", use_container_width=True):
+        for k in list(st.session_state):
+            if k.startswith(("of_", "o_sk", "o_dir")):
+                del st.session_state[k]
+        st.rerun()
 
 
 # ---------------------------------------------------------------------------
@@ -520,8 +515,8 @@ mode_label = (
 
 disp_mode = st.segmented_control(
     "表示",
-    options=["🃏 カード", "📋 表"],
-    default="🃏 カード",
+    options=["🔎 探す", "📋 表"],
+    default="🔎 探す",
     key="owned_disp_mode",
     label_visibility="collapsed",
 )
@@ -704,46 +699,38 @@ def _detail_dialog(row: pd.Series, selected_id: int) -> None:
 # ---------------------------------------------------------------------------
 # 一覧の描画（カード / 表）
 # ---------------------------------------------------------------------------
-if disp_mode == "🃏 カード":
+if disp_mode == "🔎 探す":
     ss = st.session_state
-    ss.setdefault("owned_cards_shown", 30)
+    ss.setdefault("owned_cards_shown", 20)
     page_df = display_df.head(ss["owned_cards_shown"])
 
-    CARDS_PER_ROW = 2  # スマホ主眼: 3列だとタイトルが縦割れする
-    rows_iter = list(page_df.iterrows())
-    for start in range(0, len(rows_iter), CARDS_PER_ROW):
-        cols = st.columns(CARDS_PER_ROW)
-        for col, (_, row) in zip(cols, rows_iter[start:start + CARDS_PER_ROW]):
-            with col:
-                pid = int(row["_ID"])
-                badges = [uic.rank_badge(row["ランク"], row["評価%"] if pd.notna(row["評価%"]) else None)]
-                if row.get("構成"):
-                    badges.append(uic.text_badge(row["構成"]))
-                if pd.notna(row.get("Lv60ランク")):
-                    badges.append(uic.rank_badge(row["Lv60ランク"]))
-                chips = [
-                    uic.subskill_chip(row.get(f"サブLv{lv}"))
-                    for lv in SUBSKILL_UNLOCK_LEVELS
-                    if row.get(f"サブLv{lv}") and row.get(f"サブLv{lv}") != UNRELEASED_LABEL
-                ][:3]
-                lv_txt = f"Lv{int(row['現在Lv'])}" if pd.notna(row["現在Lv"]) else "Lv?"
-                ribbon = "🎀" * int(row["リボン"]) if row.get("リボン") else ""
-                st.html(uic.pokemon_card(
-                    title=row["ニックネーム"],
-                    subtitle=f"{row['種族']} · {lv_txt} {ribbon}",
-                    specialty=row.get("得意"),
-                    berry_name=row.get("きのみ"),
-                    img_url=pokemon_image_url(row["種族"]),
-                    badges=badges,
-                    chips=chips,
-                ))
-                if st.button("詳細", key=f"o_card_{pid}", use_container_width=True):
-                    _detail_dialog(row, pid)
+    with st.container(key="owned_results"):
+        for _, row in page_df.iterrows():
+            pid = int(row["_ID"])
+            badges = [uic.rank_badge(row["ランク"], row["評価%"] if pd.notna(row["評価%"]) else None)]
+            if row.get("構成"):
+                badges.append(uic.text_badge(row["構成"]))
+            chips = [
+                uic.subskill_chip(row.get(f"サブLv{lv}"))
+                for lv in (10, 25)
+                if row.get(f"サブLv{lv}") and row.get(f"サブLv{lv}") != UNRELEASED_LABEL
+            ]
+            lv_txt = f"Lv{int(row['現在Lv'])}" if pd.notna(row["現在Lv"]) else "Lv?"
+            ribbon = "🎀" * int(row["リボン"]) if row.get("リボン") else ""
+            cols = st.columns([6, 1], vertical_alignment="center")
+            cols[0].html(uic.result_row(
+                title=row["ニックネーム"],
+                subtitle=f"{row['種族']} · {lv_txt} {ribbon}",
+                img_url=pokemon_image_url(row["種族"]),
+                badges=badges + chips,
+            ))
+            if cols[1].button("開く", key=f"o_open_{pid}", use_container_width=True):
+                _detail_dialog(row, pid)
 
     remaining = len(display_df) - len(page_df)
     if remaining > 0:
         if st.button(f"さらに表示（残り {remaining} 件）", use_container_width=True):
-            ss["owned_cards_shown"] += 30
+            ss["owned_cards_shown"] += 20
             st.rerun()
 else:
     event = st.dataframe(
