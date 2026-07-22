@@ -45,8 +45,8 @@ _SPECIALTY_VAR = {
 }
 
 
-def rank_badge(rank: str | None, pct: float | None = None) -> str:
-    """ランクの色バッジ。pct を渡すと「S · 92%」のように併記。NaN/None は空。"""
+def rank_badge(rank: str | None, pct: float | None = None, *, prefix: str | None = None) -> str:
+    """ランクの色バッジ。pct を渡すと「S · 92%」、prefix で「育成後 S · 92%」。NaN/None は空。"""
     rank = _clean(rank)
     if not rank:
         return ""
@@ -54,9 +54,10 @@ def rank_badge(rank: str | None, pct: float | None = None) -> str:
     label = escape(rank)
     if pct is not None:
         label += f" · {pct:.0f}%"
+    pre = f'<span style="opacity:0.75; font-weight:500; margin-right:3px;">{escape(prefix)}</span>' if prefix else ""
     return (
         f'<span class="ps-badge" style="color: var({var}); '
-        f'background: color-mix(in srgb, var({var}) 16%, transparent);">{label}</span>'
+        f'background: color-mix(in srgb, var({var}) 16%, transparent);">{pre}{label}</span>'
     )
 
 

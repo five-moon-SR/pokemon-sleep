@@ -712,7 +712,15 @@ if disp_mode == "🔎 探す":
     with st.container(key="owned_results"):
         for _, row in page_df.iterrows():
             pid = int(row["_ID"])
-            badges = [uic.rank_badge(row["ランク"], row["評価%"] if pd.notna(row["評価%"]) else None)]
+            # 主役=育成後(Lv60)のポテンシャル、控え=現状。「育てたらどこまで行くか」を先に見せる
+            badges = [uic.rank_badge(
+                row.get("Lv60ランク"),
+                row["Lv60%"] if pd.notna(row.get("Lv60%")) else None,
+                prefix="育成後",
+            )]
+            badges.append(uic.rank_badge(
+                row["ランク"], row["評価%"] if pd.notna(row["評価%"]) else None, prefix="今",
+            ))
             if row.get("構成"):
                 badges.append(uic.text_badge(row["構成"]))
             chips = [
