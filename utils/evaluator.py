@@ -13,6 +13,7 @@ SCORE_RANK_THRESHOLDS でランク化する。
 
 from __future__ import annotations
 
+import re
 from dataclasses import dataclass, field
 from datetime import datetime
 from functools import lru_cache
@@ -187,12 +188,35 @@ def _main_skill_max_level() -> dict[str, int]:
 
 
 def _main_skill_category(species: dict[str, Any]) -> str | None:
-    """種族の main_skill 名 → カテゴリへ解決。"""
+    """種族の main_skill 名 → カテゴリへ解決。
+
+    マスターは「ばけのかわ(きのみバースト)」「エナジーチャージS(ランダム)」のような
+    複合表記を55種で使うため、完全一致で見つからない場合は
+    括弧の前後をカテゴリ/スキル名と突合するフォールバックで解決する。
+    """
     name = species.get("main_skill")
     if not name:
         return None
-    for r in db.list_all_main_skill_records():
+    records = db.list_all_main_skill_records()
+    for r in records:
         if r.get("name") == name:
+            return r.get("category")
+
+    # フォールバック: 「固有名(カテゴリ)」の括弧内・括弧前で解決
+    m = re.match(r"^(.+?)\(([^)]+)\)$", name)
+    if not m:
+        return None
+    outer, inner = m.group(1).strip(), m.group(2).strip()
+    categories = {r.get("category") for r in records}
+    # 括弧内がカテゴリそのもの（例: ばけのかわ(きのみバースト)）
+    if inner in categories:
+        return inner
+    for r in records:
+        # 括弧内がスキル名（例: きょううん(食材セレクトS)→name食材セレクトS）
+        if r.get("name") == inner:
+            return r.get("category")
+        # 括弧前がスキル名（例: エナジーチャージS(ランダム)、ビルドアップ(料理アシストS)）
+        if r.get("name") == outer:
             return r.get("category")
     return None
 
