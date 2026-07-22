@@ -42,7 +42,7 @@ from image_utils import berry_icon_url, ingredient_icon_url, pokemon_image_url, 
 
 st.html(
     uic.page_banner("所持ポケデータ", "box", icon="📦")
-    + " " + uic.count_pill(f"{len(db.list_pokemon())} / 120", "box")
+    + " " + uic.count_pill(f"{len(db.list_pokemon())}匹", "box")
 )
 
 owned = [dict(r) for r in db.list_pokemon()]
