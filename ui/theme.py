@@ -257,7 +257,7 @@ code, pre, [data-testid="stCode"] * { font-family: ui-monospace, monospace; }
     .ps-card .ps-card-title { font-size: 0.88rem; }
     .ps-tile .ps-tile-value { font-size: 1.15rem; }
     .block-container {
-        padding-top: 0.8rem;
+        padding-top: 2.6rem;  /* Streamlitヘッダーの重なり分を確保 */
         padding-left: 0.7rem;
         padding-right: 0.7rem;
     }
