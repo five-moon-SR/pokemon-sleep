@@ -21,7 +21,8 @@ DUSK = "#FFFFFF"       # カード面
 LINE = "#EADFC8"       # 罫線
 INK = "#3B4460"        # 本文（ネイビー）
 INK_DIM = "#8B93A8"    # キャプション
-MOON = "#2CB0D8"       # 本家シアンブルー（アクセントはこの1色のみ）
+MOON = "#33BEE7"       # 本家シアン（公式スクショ実測ベース）
+DEEP_BLUE = "#1C629E"  # 本家の数値強調の濃青
 
 _THEME_CSS = """
 <style>
@@ -33,7 +34,8 @@ _THEME_CSS = """
     --ps-line: #EADFC8;
     --ps-ink: #3B4460;
     --ps-ink-dim: #8B93A8;
-    --ps-moon: #2CB0D8;
+    --ps-moon: #33BEE7;
+    --ps-deep: #1C629E;
 
     /* 機能色（ゲーム由来なので固定。白カード面用に濃いめ調整） */
     --ps-rank-masuda: #C99A1F;
@@ -76,18 +78,18 @@ code, pre, [data-testid="stCode"] * { font-family: ui-monospace, monospace; }
     transition: transform 0.05s ease, box-shadow 0.05s ease;
 }
 [data-testid^="stBaseButton-primary"] {
-    background: #2CB0D8;
+    background: #33BEE7;
     color: #FFFFFF;
     border: none;
-    box-shadow: 0 4px 0 #1E8DB0;
+    box-shadow: 0 4px 0 #1E96BC;
 }
 [data-testid^="stBaseButton-primary"]:hover {
-    background: #3FBCE2;
+    background: #4ECAEE;
     color: #FFFFFF;
 }
 [data-testid^="stBaseButton-primary"]:active {
     transform: translateY(3px);
-    box-shadow: 0 1px 0 #1E8DB0;
+    box-shadow: 0 1px 0 #1E96BC;
 }
 [data-testid^="stBaseButton-secondary"] {
     background: #FFFFFF;
@@ -173,8 +175,8 @@ h1, h2, h3, [data-testid="stMarkdownContainer"] strong { word-break: auto-phrase
     font-size: 0.75rem;
     line-height: 1.6;
     white-space: nowrap;
-    border: 1px solid var(--ps-line);
-    background: color-mix(in srgb, var(--ps-dusk) 70%, transparent);
+    border: 1px solid #CDEFF7;
+    background: #EAF9FC;  /* 本家の淡シアンピル */
 }
 .ps-chip img { vertical-align: middle; }
 .ps-dot {
@@ -203,6 +205,7 @@ h1, h2, h3, [data-testid="stMarkdownContainer"] strong { word-break: auto-phrase
     font-weight: 700;
     font-variant-numeric: tabular-nums;
     line-height: 1.3;
+    color: var(--ps-deep);  /* 本家の数字は濃青 */
 }
 .ps-tile .ps-tile-sub { color: var(--ps-ink-dim); font-size: 0.72rem; }
 
