@@ -349,6 +349,48 @@ def _calc_skill_value(
 
 
 # ---------------------------------------------------------------------------
+# 進化ウォーカー（最終進化への射影）／サブスキルランクUP写像
+# ---------------------------------------------------------------------------
+@lru_cache(maxsize=1)
+def _forward_evolution_map() -> dict[str, str]:
+    """進化系列の from → to 辞書。分岐進化は最初の登録先を採用。"""
+    out: dict[str, str] = {}
+    for e in db.list_all_evolution_records():
+        frm, to = e.get("from"), e.get("to")
+        if frm and to and frm not in out:
+            out[frm] = to
+    return out
+
+
+@lru_cache(maxsize=None)
+def final_evolution_of(species_name: str) -> str:
+    """種族の最終進化形の種族名を返す。既に最終進化 or 進化先不明ならそのまま。
+
+    ピカチュウ(ハロウィン)等は from に登場しないため自然に終端する。循環はガードで停止。
+    """
+    fmap = _forward_evolution_map()
+    seen = {species_name}
+    cur = species_name
+    while cur in fmap:
+        nxt = fmap[cur]
+        if nxt in seen:  # 循環ガード（データ異常時）
+            break
+        seen.add(nxt)
+        cur = nxt
+    return cur
+
+
+# サブスキルランクUPアイテム（S→M）の写像。評価に効くもののみ。
+# きのみの数S は M が無く、最大所持数系は評価非関与のため対象外。
+SUBSKILL_RANK_UP: dict[str, str] = {
+    "おてつだいスピードS": "おてつだいスピードM",
+    "食材確率アップS": "食材確率アップM",
+    "スキル確率アップS": "スキル確率アップM",
+    "スキルレベルアップS": "スキルレベルアップM",
+}
+
+
+# ---------------------------------------------------------------------------
 # ベンチマーク
 # ---------------------------------------------------------------------------
 # 軸別「理想性格」: その軸を最も伸ばす上昇1軸で、下げる軸が他軸への影響を最小化。
@@ -553,18 +595,37 @@ def evaluate_and_save(pokemon_id: int) -> EvaluationResult:
     return result
 
 
+def evaluate_potential(p: dict[str, Any]) -> EvaluationResult:
+    """育成後（最終進化形 × Lv60）のポテンシャル評価。
+
+    進化系列をまたいで横並び比較できるよう、進化前個体も最終進化形の
+    種族物理値・ベンチマークで評価する（性格/サブ/メインスキルLvは個体のまま）。
+    """
+    final_sp = final_evolution_of(p["species_name"])
+    q = dict(p)
+    q["species_name"] = final_sp
+    res = evaluate_pokemon(q, eval_level=60)
+    if final_sp != p["species_name"]:
+        res.assumptions.insert(0, f"最終進化形 {p['species_name']}→{final_sp} 想定で評価")
+    return res
+
+
 def evaluate_at_levels(
     p: dict[str, Any],
     target_levels: tuple[int, ...] = (50, 60),
 ) -> dict[str, EvaluationResult]:
-    """現状Lv ＋ 指定Lvの評価をまとめて返す。
+    """現状Lv ＋ 育成後（最終進化Lv60）＋ 指定Lvの評価をまとめて返す。
 
     キー:
-      "current" — 現在の current_level/caught_level/level
-      "lv50"    — Lv50想定（サブスキル3枠目解放、食材は a/b 枠の Lv30 段階）
-      "lv60"    — Lv60想定（食材3枠目 c 解放）
+      "current"   — 現在の current_level/caught_level/level（現種族）
+      "potential" — 育成後（最終進化形 × Lv60）。owned の主役評価
+      "lv50"      — Lv50想定（現種族・参考）
+      "lv60"      — Lv60想定（現種族・参考）
     """
-    out: dict[str, EvaluationResult] = {"current": evaluate_pokemon(p)}
+    out: dict[str, EvaluationResult] = {
+        "current": evaluate_pokemon(p),
+        "potential": evaluate_potential(p),
+    }
     for lv in target_levels:
         out[f"lv{lv}"] = evaluate_pokemon(p, eval_level=lv)
     return out

@@ -31,7 +31,17 @@ from constants import (
     format_nature_label,
     get_subskill_rarity,
 )
-from utils.evaluator import evaluate_and_save, evaluate_at_levels, evaluate_pokemon
+from utils.evaluator import (
+    evaluate_and_save,
+    evaluate_at_levels,
+    evaluate_pokemon,
+    final_evolution_of,
+)
+from utils.item_simulation import (
+    nature_item_priorities,
+    simulate_items,
+    subskill_item_priorities,
+)
 from utils.food_expectation import composition_string
 from ui import components as uic
 
@@ -119,11 +129,12 @@ records = []
 for p in owned:
     species = db.get_species_data(p["species_name"]) or {}
     berry = species.get("berry") or {}
-    # 現状/Lv50/Lv60 の3点評価
-    er_set = evaluate_at_levels(p, target_levels=(50, 60))
+    # 現状/Lv50/育成後(最終進化Lv60) の評価。育成後は最終進化形に射影して比較する
+    er_set = evaluate_at_levels(p, target_levels=(50,))
     er = er_set["current"]
     er_lv50 = er_set["lv50"]
-    er_lv60 = er_set["lv60"]
+    er_lv60 = er_set["potential"]  # 育成後 = 最終進化形 × Lv60
+    _final_species = final_evolution_of(p["species_name"])
     records.append(
         {
             # ↓ ユーザー指定の表示順（先頭から）
@@ -170,6 +181,8 @@ for p in owned:
             "だいふくタイプ": p.get("daifuku_eval_type"),
             # ↓ 内部用（_接頭辞は表示から除外される）
             "_ID": p["id"],
+            "_final_species": _final_species,
+            "_evolves": _final_species != p["species_name"],
             "_食材確率%": species.get("food_drop_rate"),
             "_スキル確率%": species.get("main_skill_rate"),
             "_effective_lv": _effective_level(p),
@@ -571,7 +584,7 @@ _IMG_COL_CONFIG = {
     "🎀": st.column_config.ImageColumn("🎀", width="small"),
     "評価%": st.column_config.NumberColumn("評価%", format="%.1f", width="small"),
     "Lv50%": st.column_config.NumberColumn("Lv50%", format="%.1f", width="small"),
-    "Lv60%": st.column_config.NumberColumn("Lv60%", format="%.1f", width="small"),
+    "Lv60%": st.column_config.NumberColumn("育成後%", format="%.1f", width="small", help="最終進化形×Lv60のポテンシャル"),
     "全体%": st.column_config.NumberColumn("全体%", format="%.1f", width="small"),
     "だいふく%": st.column_config.NumberColumn("だいふく%", format="%.1f", width="small"),
 }
@@ -695,6 +708,39 @@ def _render_detail(row: pd.Series, selected_id: int) -> None:
             + ", ".join(f"{lbl} {v:+.1f}" for lbl, v in detail_eval.option_breakdown)
         )
 
+    # ===== アイテム使用シミュレーション（育成後・最終進化Lv60基準） =====
+    st.markdown("##### 🧪 アイテムを使ったら？（育成後・最終進化Lv60基準）")
+    _p = db.get_pokemon(selected_id)
+    if _p is not None:
+        sim = simulate_items(dict(_p))
+        options = ["🚫 使わない"]
+        if not sim.nature_is_neutral:
+            options.append("🌀 性格を無補正化")
+        if sim.best_sub_upgrade:
+            options.append("⬆ サブスキルS→M")
+        pick = st.radio(
+            "アイテム", options, horizontal=True,
+            key=f"item_sim_{selected_id}", label_visibility="collapsed",
+        )
+        if pick == "🌀 性格を無補正化":
+            after, delta, note = (
+                sim.nature_neutral_total, sim.nature_neutral_delta,
+                f"性格 {_p.get('nature')} → 無補正",
+            )
+        elif pick == "⬆ サブスキルS→M":
+            b = sim.best_sub_upgrade
+            after, delta, note = b.total, b.delta, f"{b.from_sub} → {b.to_sub}"
+        else:
+            after, delta, note = sim.base_total, 0.0, "アイテムなし"
+        sc = st.columns([2, 2, 3])
+        sc[0].metric("育成後ベース", f"{sim.base_total:.1f}", sim.base_rank)
+        sc[1].metric("適用後", f"{after:.1f}", f"{delta:+.1f}")
+        sc[2].caption(f"想定: {note}")
+        if sim.nature_is_neutral:
+            st.caption("※この個体は既に無補正のため性格アイテムは不要。")
+        if not sim.best_sub_upgrade:
+            st.caption("※評価に効くSサブスキル未装着のためランクUP対象なし。")
+
     st.markdown("##### 削除")
     confirm = st.checkbox(
         f"id={selected_id} を本当に削除する",
@@ -727,11 +773,12 @@ if disp_mode == "🔎 探す":
     with st.container(key="owned_results"):
         for _, row in page_df.iterrows():
             pid = int(row["_ID"])
-            # 主役=育成後(Lv60)のポテンシャル、控え=現状。「育てたらどこまで行くか」を先に見せる
+            # 主役=育成後(最終進化Lv60)のポテンシャル、控え=現状。「育てたらどこまで行くか」を先に見せる
+            _evo_prefix = f"育成後→{row['_final_species']}" if row.get("_evolves") else "育成後"
             badges = [uic.rank_badge(
                 row.get("Lv60ランク"),
                 row["Lv60%"] if pd.notna(row.get("Lv60%")) else None,
-                prefix="育成後",
+                prefix=_evo_prefix,
             )]
             badges.append(uic.rank_badge(
                 row["ランク"], row["評価%"] if pd.notna(row["評価%"]) else None, prefix="今",
@@ -779,3 +826,37 @@ else:
         row = display_df.iloc[idx]
         st.divider()
         _render_detail(row, int(row["_ID"]))
+
+
+# ---------------------------------------------------------------------------
+# アイテム使用優先度ランキング（育成後・最終進化Lv60基準）
+# ---------------------------------------------------------------------------
+st.divider()
+st.markdown("### 🎁 アイテム使用優先度")
+st.caption("育成後（最終進化Lv60）のスコアが一番伸びる個体から。限られたアイテムをどの子に使うかの目安。")
+
+if st.toggle("計算する（所持全体を走査）", key="owned_item_priority"):
+    _nat = nature_item_priorities(owned)
+    _sub = subskill_item_priorities(owned)
+
+    def _priority_rows(items, empty_msg):
+        if not items:
+            st.html(uic.empty_state(empty_msg))
+            return
+        for i, ip in enumerate(items[:10], 1):
+            cols = st.columns([3, 4], vertical_alignment="center")
+            arrow = f"　→{ip.final_species}" if ip.final_species != ip.species_name else ""
+            cols[0].html(uic.result_row(
+                title=f"#{i} {ip.label}{arrow}",
+                img_url=pokemon_image_url(ip.final_species),
+                badges=[uic.text_badge(f"+{ip.delta:.1f}")],
+            ))
+            cols[1].caption(f"{ip.base_total:.1f} → {ip.after_total:.1f}　／　{ip.detail}")
+
+    t_nat, t_sub = st.tabs([f"🌀 性格を無補正化（{len(_nat)}体）", f"⬆ サブスキルS→M（{len(_sub)}体）"])
+    with t_nat:
+        st.caption("下降補正で損している個体ほど無補正化で得をする。")
+        _priority_rows(_nat, "無補正化で得をする個体はいない（皆すでに無補正 or 有利な性格）。")
+    with t_sub:
+        st.caption("装着中のSサブスキルをMに上げた時の最良の1枠昇格。")
+        _priority_rows(_sub, "評価に効くSサブスキルを装着した個体がいない。")

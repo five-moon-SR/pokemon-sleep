@@ -122,11 +122,11 @@ list_rows = []
 for p in filtered:
     species = db.get_species_data(p["species_name"]) or {}
     berry = species.get("berry") or {}
-    # 所持ポケと同じ自前評価（現状/Lv50/Lv60 の3点）
-    er_set = evaluate_at_levels(p, target_levels=(50, 60))
+    # 所持ポケと同じ自前評価（現状/Lv50/育成後=最終進化Lv60）
+    er_set = evaluate_at_levels(p, target_levels=(50,))
     er = er_set["current"]
     er_lv50 = er_set["lv50"]
-    er_lv60 = er_set["lv60"]
+    er_lv60 = er_set["potential"]  # 育成後 = 最終進化形 × Lv60
     list_rows.append(
         {
             # 所持ポケデータと揃えた列順
