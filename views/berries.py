@@ -86,7 +86,13 @@ for cov in coverages:
            + (f"・他{rest}体" if rest > 0 else "")
            if top else "担当ゼロ")
     )
-    with st.expander(title, expanded=False):
+    brow = st.columns([1, 9], vertical_alignment="center")
+    _burl = berry_icon_url(b_name)
+    if _burl:
+        brow[0].markdown(
+            f'<img src="{_burl}" width="34" loading="lazy">', unsafe_allow_html=True
+        )
+    with brow[1].expander(title, expanded=False):
         if top:
             for p in top:
                 lbl = f"{p.label} Lv{p.level}　{p.energy_per_day:,.0f}en/日（{p.count_per_day:.1f}個）"

@@ -15,9 +15,10 @@ from __future__ import annotations
 import streamlit as st
 
 import db
-from image_utils import RECIPE_ICON_DIR, icon_data_url, pokemon_image_url
+from image_utils import RECIPE_ICON_DIR, icon_data_url, ingredient_icon_url, pokemon_image_url
 from ui import components as c
 from ui.widgets import pokemon_popover_row, pokemon_status_popover
+from utils.party_logic import get_play_ctx
 from utils.community_tier import get_tier, recommended_composition, top_tier_species
 from utils.food_expectation import composition_string
 from utils.ingredient_coverage import (
@@ -89,7 +90,13 @@ for name, providers in index.items():
     top_active, rest_active = active[:2], active[2:]
     top_idle, rest_idle = idle[:2], idle[2:]
     best_str = "・".join(f"{p.label} {p.per_day_now:.1f}個/日" for p in top_active)
-    with st.expander(
+    row = st.columns([1, 9], vertical_alignment="center")
+    _iurl = ingredient_icon_url(name)
+    if _iurl:
+        row[0].markdown(
+            f'<img src="{_iurl}" width="34" loading="lazy">', unsafe_allow_html=True
+        )
+    with row[1].expander(
         f"{name}　—　"
         + (f"主力: {best_str}" if best_str else f"担当{len(active)}体")
         + f"・枠のみ{len(idle)}体",
@@ -152,6 +159,22 @@ else:
             head[1].caption(
                 f"作成ペース {cov.pace:.2f}回/日 ・ 期待 {cov.daily_energy:,.0f} en/日"
             )
+
+            # 必要食材の総量と、現状の鍋容量で作れるか
+            _pot = get_play_ctx().pot_capacity
+            _total_need = sum(float(i["count"]) for i in cov.recipe.get("ingredients") or [])
+            _need_list = "、".join(
+                f"{i['name']}×{int(i['count'])}" for i in cov.recipe.get("ingredients") or []
+            )
+            _fits = _total_need <= _pot
+            st.markdown(
+                f"必要食材: {_need_list}　→　**総量 {_total_need:.0f}個** ／ 鍋容量 {_pot}　"
+                + (f"<span style='color:#17AE54; font-weight:700;'>✅ 現状の鍋で作れる</span>"
+                   if _fits else
+                   f"<span style='color:#D95A44; font-weight:700;'>❌ 鍋容量オーバー（あと{_total_need - _pot:.0f}）</span>"),
+                unsafe_allow_html=True,
+            )
+
             for ing_name, (need, have) in cov.per_ingredient.items():
                 ratio = have / need if need > 0 else 0.0
                 is_hole = ing_name in cov.holes
