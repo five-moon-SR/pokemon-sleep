@@ -599,14 +599,26 @@ def evaluate_potential(p: dict[str, Any]) -> EvaluationResult:
     """育成後（最終進化形 × Lv60）のポテンシャル評価。
 
     進化系列をまたいで横並び比較できるよう、進化前個体も最終進化形の
-    種族物理値・ベンチマークで評価する（性格/サブ/メインスキルLvは個体のまま）。
+    種族物理値・ベンチマークで評価する（性格/サブは個体のまま）。
+    メインスキルLvは「1進化ごとに +1」される仕様を反映し、残り進化回数ぶん
+    引き上げてから評価する（skill_effects テーブルの max_lv で内部クランプ）。
     """
+    from utils.sleep_ribbon import count_remaining_evolutions
+
     final_sp = final_evolution_of(p["species_name"])
+    remaining = count_remaining_evolutions(p["species_name"])
     q = dict(p)
     q["species_name"] = final_sp
+    base_msl = int(p.get("main_skill_level") or 1)
+    projected_msl = base_msl + remaining
+    q["main_skill_level"] = projected_msl
     res = evaluate_pokemon(q, eval_level=60)
     if final_sp != p["species_name"]:
-        res.assumptions.insert(0, f"最終進化形 {p['species_name']}→{final_sp} 想定で評価")
+        res.assumptions.insert(
+            0,
+            f"最終進化形 {p['species_name']}→{final_sp} 想定"
+            f"（メインスキルLv {base_msl}→{projected_msl}・進化{remaining}回ぶん加算）",
+        )
     return res
 
 

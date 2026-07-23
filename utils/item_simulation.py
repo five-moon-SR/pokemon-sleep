@@ -25,15 +25,20 @@ from utils.evaluator import (
     final_evolution_of,
     normalize_subskill_name,
 )
+from utils.sleep_ribbon import count_remaining_evolutions
 
 # 育成後の基準Lv（最終進化・Lv60）
 POTENTIAL_LEVEL = 60
 
 
 def _potential_dict(p: dict[str, Any]) -> dict[str, Any]:
-    """最終進化形に射影した個体 dict（育成後評価の土台）。"""
+    """最終進化形に射影した個体 dict（育成後評価の土台）。
+
+    メインスキルLvは「1進化ごとに +1」される仕様を反映（evaluate_potential と整合）。
+    """
     q = dict(p)
     q["species_name"] = final_evolution_of(p["species_name"])
+    q["main_skill_level"] = int(p.get("main_skill_level") or 1) + count_remaining_evolutions(p["species_name"])
     return q
 
 
