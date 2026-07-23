@@ -101,6 +101,59 @@ def build_ingredient_index(
 
 
 # ---------------------------------------------------------------------------
+# 多能な主力（複数食材で上位担当を張れる個体）
+# ---------------------------------------------------------------------------
+
+# 「主力」とみなす上位担当の人数（編成に乗る現実枠）
+MAIN_TOP_N = 2
+
+
+@dataclass
+class VersatileMain:
+    pokemon_id: int
+    label: str
+    species_name: str
+    duties: list[tuple[str, float]]   # (食材名, 供給量/日) を供給量降順。この個体が主力の食材のみ
+    total_per_day: float              # 主力担当ぶんの供給量/日 合計
+
+
+def versatile_mains(
+    index: dict[str, list[IngredientProvider]],
+    *,
+    top_n: int = MAIN_TOP_N,
+    min_duties: int = 2,
+) -> list[VersatileMain]:
+    """1体で複数食材の上位 top_n（=主力）に入る個体を抽出。
+
+    build_ingredient_index() の結果を渡す。編成枠が限られる中で
+    二役以上こなせる個体は価値が高いので、別枠で洗い出す用途。
+    duties 数の多い順 → 合計供給量の多い順でランキング。
+    """
+    acc: dict[int, VersatileMain] = {}
+    for name, providers in index.items():
+        active = [p for p in providers if p.per_day_now > 0]
+        for p in active[:top_n]:
+            vm = acc.get(p.pokemon_id)
+            if vm is None:
+                vm = VersatileMain(
+                    pokemon_id=p.pokemon_id,
+                    label=p.label,
+                    species_name=p.species_name,
+                    duties=[],
+                    total_per_day=0.0,
+                )
+                acc[p.pokemon_id] = vm
+            vm.duties.append((name, p.per_day_now))
+            vm.total_per_day += p.per_day_now
+
+    out = [vm for vm in acc.values() if len(vm.duties) >= min_duties]
+    for vm in out:
+        vm.duties.sort(key=lambda d: -d[1])
+    out.sort(key=lambda vm: (-len(vm.duties), -vm.total_per_day))
+    return out
+
+
+# ---------------------------------------------------------------------------
 # レシピ充足度
 # ---------------------------------------------------------------------------
 

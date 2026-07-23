@@ -34,6 +34,7 @@ from utils.ingredient_coverage import (
     save_target_recipes,
     team_supply,
     training_priorities,
+    versatile_mains,
 )
 
 st.html(c.page_banner("食材・きのみ戦略", "bag", icon="🥕"))
@@ -117,6 +118,26 @@ for name, providers in index.items():
                 st.caption(f"他{omitted}体は省略（編成に乗る上位2体＋枠のみ上位2体まで表示）")
         else:
             st.html(c.empty_state("担当できる所持ポケモンがいない"))
+
+
+# ============ ②'' 多能な主力（複数食材の上位担当） ============
+
+st.html(c.section_header("多能な主力"))
+st.caption("1体で複数食材の主力（上位2体）を張れる個体。編成枠が少ないほど二役こなせる子は価値が高い。")
+
+vmains = versatile_mains(index)
+if not vmains:
+    st.html(c.empty_state("複数食材の主力を兼ねる個体はいない（各食材の担当が分散している）。"))
+for vm in vmains:
+    with st.container(border=True):
+        cols = st.columns([3, 5], vertical_alignment="center")
+        cols[0].html(c.result_row(
+            title=vm.label,
+            img_url=pokemon_image_url(vm.species_name),
+            badges=[c.text_badge(f"{len(vm.duties)}食材の主力")],
+        ))
+        duties = "、".join(f"{n} {v:.1f}個/日" for n, v in vm.duties)
+        cols[1].caption(duties)
 
 
 # ============ ②' きのみ充足度（ボックス監査） ============
