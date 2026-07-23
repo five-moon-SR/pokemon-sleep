@@ -92,7 +92,7 @@ for name, providers in index.items():
     idle = [p for p in providers if p.per_day_now <= 0]
     top_active, rest_active = active[:2], active[2:]
     top_idle, rest_idle = idle[:2], idle[2:]
-    best_str = "・".join(p.label for p in top_active)
+    best_str = "・".join(f"{p.label} {p.per_day_now:.1f}個/日" for p in top_active)
     with st.expander(
         f"{name}　—　"
         + (f"主力: {best_str}" if best_str else f"担当{len(active)}体")
@@ -169,7 +169,8 @@ for cov in coverages:
     rest = len(cov.providers) - len(top)
     title = (
         f"{star}{b_name}　—　"
-        + ("主力: " + " / ".join(p.label for p in top) + (f"・他{rest}体" if rest > 0 else "")
+        + ("主力: " + " / ".join(f"{p.label} {p.count_per_day:.1f}個/日" for p in top)
+           + (f"・他{rest}体" if rest > 0 else "")
            if top else "担当ゼロ")
     )
     with st.expander(title, expanded=False):
