@@ -17,7 +17,7 @@ import streamlit as st
 import db
 from image_utils import RECIPE_ICON_DIR, icon_data_url, ingredient_icon_url
 from ui import components as c
-from ui.widgets import pokemon_popover_row
+from ui.widgets import pokemon_popover_row, pokemon_status_popover
 from utils.party_logic import _recipe_base_energy, get_play_ctx
 from utils.community_tier import recommended_composition
 from utils.ingredient_coverage import (
@@ -129,7 +129,9 @@ for name, providers in index.items():
         continue
     active = [p for p in providers if p.per_day_now > 0]
     idle = [p for p in providers if p.per_day_now <= 0]
-    best_str = "・".join(f"{p.label} {p.per_day_now:.1f}個/日" for p in active[:2])
+    top_active, rest_active = active[:2], active[2:]
+    top_idle, rest_idle = idle[:2], idle[2:]
+    best_str = "・".join(f"{p.label} {p.per_day_now:.1f}個/日" for p in top_active)
     _iurl = ingredient_icon_url(name)
     _icon = (
         f'<img src="{_iurl}" width="20" loading="lazy" '
@@ -140,26 +142,42 @@ for name, providers in index.items():
         f'<div style="font-size:0.9rem; margin:3px 0;">{_icon}<b>{name}</b>'
         f'<span style="color:#7a7a7a;"> — {_summary}</span></div>'
     )
+    with st.expander("担当ポケモンを見る", expanded=False):
+        shown = [(p, f"{p.label}　{p.per_day_now:.1f}/日") for p in top_active] + [
+            (p, f"{p.label}（枠{p.slot.upper()}・Lv{p.unlock_lv}解放{'済' if p.unlocked else '前'}）")
+            for p in top_idle
+        ]
+        if shown:
+            for prov, lbl in shown:
+                pk = owned_by_id.get(prov.pokemon_id)
+                if pk:
+                    pokemon_status_popover(pk, label=lbl, use_container_width=True)
+                else:
+                    st.html(c.icon_chip(None, lbl, title=prov.species_name))
+            omitted = len(rest_active) + len(rest_idle)
+            if omitted > 0:
+                st.caption(f"他{omitted}体は省略（編成に乗る上位2体＋枠のみ上位2体まで表示）")
+        else:
+            st.html(c.empty_state("担当できる所持ポケモンがいない"))
 
 
-# ============ ②'' 多能な主力（複数食材の上位担当） ============
-
-st.html(c.section_header("多能な主力"))
-st.caption("1体で複数食材の主力（上位2体）を張れる個体。編成枠が少ないほど二役こなせる子は価値が高い。")
+# ============ ②'' 多能な主力（複数食材の上位担当・折りたたみ） ============
 
 vmains = versatile_mains(index)
-if not vmains:
-    st.html(c.empty_state("複数食材の主力を兼ねる個体はいない（各食材の担当が分散している）。"))
-for vm in vmains:
-    with st.container(border=True):
-        duties = "、".join(f"{n} {v:.1f}個/日" for n, v in vm.duties)
-        pokemon_popover_row(
-            owned_by_id.get(vm.pokemon_id),
-            label=vm.label,
-            img_species=vm.species_name,
-            badges_text=f"{len(vm.duties)}食材の主力",
-            caption=duties,
-        )
+with st.expander(f"🧩 多能な主力（複数食材の上位担当）— {len(vmains)}体", expanded=False):
+    st.caption("1体で複数食材の主力（上位2体）を張れる個体。編成枠が少ないほど二役こなせる子は価値が高い。")
+    if not vmains:
+        st.html(c.empty_state("複数食材の主力を兼ねる個体はいない（各食材の担当が分散している）。"))
+    for vm in vmains:
+        with st.container(border=True):
+            duties = "、".join(f"{n} {v:.1f}個/日" for n, v in vm.duties)
+            pokemon_popover_row(
+                owned_by_id.get(vm.pokemon_id),
+                label=vm.label,
+                img_species=vm.species_name,
+                badges_text=f"{len(vm.duties)}食材の主力",
+                caption=duties,
+            )
 
 
 # ============ ③ レシピ充足度 ============

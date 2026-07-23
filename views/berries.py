@@ -12,6 +12,7 @@ import streamlit as st
 import db
 from image_utils import berry_icon_url
 from ui import components as c
+from ui.widgets import pokemon_status_popover
 from utils.berry_coverage import (
     berry_audit,
     favorite_holes,
@@ -27,6 +28,7 @@ st.caption("全きのみのボックス監査。フィールドの好物3種に�
 
 db.init_db()
 owned = [dict(r) for r in db.list_pokemon()]
+owned_by_id = {p["id"]: p for p in owned}
 
 if not owned:
     st.html(c.empty_state("所持ポケモンがいません。先に「個体登録」から追加してください。"))
@@ -92,3 +94,16 @@ for cov in coverages:
         f'<div style="font-size:0.9rem; margin:3px 0;">{_icon}<b>{star}{b_name}</b>'
         f'<span style="color:#7a7a7a;"> — {_summary}</span></div>'
     )
+    with st.expander("担当ポケモンを見る", expanded=False):
+        if top:
+            for p in top:
+                lbl = f"{p.label} Lv{p.level}　{p.energy_per_day:,.0f}en/日（{p.count_per_day:.1f}個）"
+                pk = owned_by_id.get(p.pokemon_id)
+                if pk:
+                    pokemon_status_popover(pk, label=lbl, use_container_width=True)
+                else:
+                    st.html(c.icon_chip(berry_icon_url(b_name), lbl, title=p.species_name))
+            if rest > 0:
+                st.caption(f"他{rest}体は編成に乗らないため省略（充足は上位{len(top)}体で判定）")
+        else:
+            st.html(c.empty_state("担当できる所持ポケモンがいない"))
