@@ -18,7 +18,7 @@ import db
 from image_utils import RECIPE_ICON_DIR, icon_data_url, ingredient_icon_url
 from ui import components as c
 from ui.widgets import pokemon_popover_row, pokemon_status_popover
-from utils.party_logic import get_play_ctx
+from utils.party_logic import _recipe_base_energy, get_play_ctx
 from utils.community_tier import recommended_composition
 from utils.ingredient_coverage import (
     build_ingredient_index,
@@ -49,9 +49,9 @@ if not owned:
 st.html(c.section_header("狙いのレシピ"))
 
 all_recipes = [r for r in db.list_all_recipe_records() if r.get("ingredients")]
-# 基礎エネルギー降順（弱い料理は下に）。選択肢に基礎エナジーを併記。
-all_recipes.sort(key=lambda r: -(r.get("base_energy") or 0))
-_recipe_energy = {r["name"]: int(r.get("base_energy") or 0) for r in all_recipes}
+# 基礎エネルギー(Lv60基準)降順（弱い料理は下に）。選択肢に基礎エナジーを併記。
+_recipe_energy = {r["name"]: _recipe_base_energy(r) for r in all_recipes}
+all_recipes.sort(key=lambda r: -_recipe_energy[r["name"]])
 saved_targets = load_target_recipes()
 targets = st.multiselect(
     "作りたい料理（基礎エナジー降順・保存され次回も引き継がれる）",
