@@ -44,22 +44,57 @@ if not owned:
     st.stop()
 
 
-# ============ ① 狙いのレシピ ============
+# ============ ① 料理カテゴリ & 狙いのレシピ ============
+
+# recipe.json の category（curry_stew / salad / drink_dessert）→ 日本語ラベル
+_CATEGORY_LABELS = {
+    "curry_stew": "🍛 カレー・シチュー",
+    "salad": "🥗 サラダ",
+    "drink_dessert": "🍰 デザート・ドリンク",
+}
+
+all_recipes = [r for r in db.list_all_recipe_records() if r.get("ingredients")]
+# 基礎エネルギー(Lv60基準)降順（弱い料理は下に）。
+_recipe_energy = {r["name"]: _recipe_base_energy(r) for r in all_recipes}
+all_recipes.sort(key=lambda r: -_recipe_energy[r["name"]])
+_recipe_by_name = {r["name"]: r for r in all_recipes}
+_recipe_total_map = {r["name"]: int(r.get("total_ingredients") or 0) for r in all_recipes}
+_recipe_cat_map = {r["name"]: r.get("category") for r in all_recipes}
+
+st.html(c.section_header("料理カテゴリ"))
+cat_pick = st.pills(
+    "料理カテゴリ", ["🍲 全部", *_CATEGORY_LABELS.values()], default="🍲 全部",
+    key="ing_category", label_visibility="collapsed",
+) or "🍲 全部"
 
 st.html(c.section_header("狙いのレシピ"))
 
-all_recipes = [r for r in db.list_all_recipe_records() if r.get("ingredients")]
-# 基礎エネルギー(Lv60基準)降順（弱い料理は下に）。選択肢に基礎エナジーを併記。
-_recipe_energy = {r["name"]: _recipe_base_energy(r) for r in all_recipes}
-all_recipes.sort(key=lambda r: -_recipe_energy[r["name"]])
+# カテゴリで選択肢を絞る（他カテゴリの選択はKVに保持したまま）
+_cat_opts = [
+    r["name"] for r in all_recipes
+    if cat_pick == "🍲 全部" or _CATEGORY_LABELS.get(r.get("category")) == cat_pick
+]
+
 saved_targets = load_target_recipes()
-targets = st.multiselect(
-    "作りたい料理（基礎エナジー降順・保存され次回も引き継がれる）",
-    [r["name"] for r in all_recipes],
-    default=[n for n in saved_targets if any(r["name"] == n for r in all_recipes)],
-    format_func=lambda n: f"{n}（基礎 {_recipe_energy.get(n, 0):,} en）",
+_pot_cap = get_play_ctx().pot_capacity
+
+
+def _opt_label(n: str) -> str:
+    total = _recipe_total_map.get(n, 0)
+    over = f"　🍳✕不足{total - _pot_cap}" if total > _pot_cap else ""
+    return f"{n}（基礎 {_recipe_energy.get(n, 0):,} en・食材{total}{over}）"
+
+
+picked_in_cat = st.multiselect(
+    "作りたい料理（基礎エナジー降順・保存され次回も引き継がれる・🍳✕=鍋容量不足）",
+    _cat_opts,
+    default=[n for n in saved_targets if n in _cat_opts],
+    format_func=_opt_label,
     key="ing_targets",
 )
+# 他カテゴリの保存選択を保持しつつマージ
+_other = [n for n in saved_targets if n not in _cat_opts]
+targets = _other + picked_in_cat
 if set(targets) != set(saved_targets):
     save_target_recipes(targets)
 
@@ -153,30 +188,33 @@ if not targets:
     st.html(c.empty_state("狙いのレシピを選ぶと、食材ごとの充足度と穴が表示されます。"))
 else:
     for cov in recipe_coverage(targets, supply):
+        # 現状の鍋容量で作れるか（不足なら赤字＋不足量）
+        _pot = _pot_cap
+        _total_need = int(cov.recipe.get("total_ingredients") or 0)
+        _fits = _total_need <= _pot
+        _short = _total_need - _pot
         with st.container(border=True):
             head = st.columns([3, 2])
             _rurl = icon_data_url(str(RECIPE_ICON_DIR), cov.recipe.get("icon"))
+            _name_color = "" if _fits else " style='color:#D95A44;'"
             head[0].markdown(
                 (f'<img src="{_rurl}" width="34" style="vertical-align:middle; margin-right:6px;">' if _rurl else "")
-                + f"**{cov.recipe['name']}**",
+                + f"<b{_name_color}>{cov.recipe['name']}</b>"
+                + ("" if _fits else " 🍳✕"),
                 unsafe_allow_html=True,
             )
             head[1].caption(
                 f"作成ペース {cov.pace:.2f}回/日 ・ 期待 {cov.daily_energy:,.0f} en/日"
             )
 
-            # 必要食材の総量と、現状の鍋容量で作れるか
-            _pot = get_play_ctx().pot_capacity
-            _total_need = sum(float(i["count"]) for i in cov.recipe.get("ingredients") or [])
             _need_list = "、".join(
                 f"{i['name']}×{int(i['count'])}" for i in cov.recipe.get("ingredients") or []
             )
-            _fits = _total_need <= _pot
             st.markdown(
-                f"必要食材: {_need_list}　→　**総量 {_total_need:.0f}個** ／ 鍋容量 {_pot}　"
+                f"必要食材: {_need_list}　→　**総量 {_total_need}個** ／ 鍋容量 {_pot}　"
                 + (f"<span style='color:#17AE54; font-weight:700;'>✅ 現状の鍋で作れる</span>"
                    if _fits else
-                   f"<span style='color:#D95A44; font-weight:700;'>❌ 鍋容量オーバー（あと{_total_need - _pot:.0f}）</span>"),
+                   f"<span style='color:#D95A44; font-weight:700;'>🍳 鍋容量不足：あと {_short}個（鍋を{_total_need}以上に）</span>"),
                 unsafe_allow_html=True,
             )
 
