@@ -12,6 +12,7 @@ import streamlit as st
 import db
 from image_utils import pokemon_image_url
 from ui import components as c
+from ui.widgets import pokemon_status_popover
 from utils.skill_role_coverage import (
     TOP_N,
     role_holes,
@@ -26,6 +27,7 @@ st.caption(
 
 db.init_db()
 owned = [dict(r) for r in db.list_pokemon()]
+owned_by_id = {p["id"]: p for p in owned}
 
 if not owned:
     st.html(c.empty_state("所持ポケモンがいません。先に「個体登録」から追加してください。"))
@@ -66,7 +68,7 @@ for cov in coverages:
             st.html(c.empty_state("この役割を担えるメインスキル持ちが所持にいない。"))
             continue
         for p in top:
-            cols = st.columns([3, 4], vertical_alignment="center")
+            cols = st.columns([3, 4, 1], vertical_alignment="center")
             arrow = f"　→{p.final_species}" if p.final_species != p.species_name else ""
             cols[0].html(c.result_row(
                 title=f"{p.label}{arrow}",
@@ -77,5 +79,9 @@ for cov in coverages:
                 f"スキル軸 **{p.skill_axis:.0f}**/100　・　"
                 f"想定メインスキルLv {p.main_skill_level}　・　{p.skill_category}"
             )
+            pk = owned_by_id.get(p.pokemon_id)
+            if pk:
+                with cols[2]:
+                    pokemon_status_popover(pk, label="🔍", help_text="この個体の簡易ステータス")
         if rest > 0:
             st.caption(f"他{rest}体は編成に乗らないため省略（充足は上位{TOP_N}体で判定）。")
