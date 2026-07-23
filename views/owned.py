@@ -714,6 +714,8 @@ def _render_detail(row: pd.Series, selected_id: int) -> None:
     if _p is not None:
         sim = simulate_items(dict(_p))
         options = ["🚫 使わない"]
+        if not sim.already_max_skill:
+            options.append("🔺 メインスキルLv最大")
         if not sim.nature_is_neutral:
             options.append("🌀 性格を無補正化")
         if sim.best_sub_upgrade:
@@ -722,7 +724,12 @@ def _render_detail(row: pd.Series, selected_id: int) -> None:
             "アイテム", options, horizontal=True,
             key=f"item_sim_{selected_id}", label_visibility="collapsed",
         )
-        if pick == "🌀 性格を無補正化":
+        if pick == "🔺 メインスキルLv最大":
+            after, delta, note = (
+                sim.maxskill_total, sim.maxskill_delta,
+                f"メインスキルLv {sim.projected_msl} → 最大 {sim.max_msl}",
+            )
+        elif pick == "🌀 性格を無補正化":
             after, delta, note = (
                 sim.nature_neutral_total, sim.nature_neutral_delta,
                 f"性格 {_p.get('nature')} → 無補正",
@@ -733,9 +740,17 @@ def _render_detail(row: pd.Series, selected_id: int) -> None:
         else:
             after, delta, note = sim.base_total, 0.0, "アイテムなし"
         sc = st.columns([2, 2, 3])
-        sc[0].metric("育成後ベース", f"{sim.base_total:.1f}", sim.base_rank)
+        sc[0].metric(f"育成後ベース (MSLv{sim.projected_msl})", f"{sim.base_total:.1f}", sim.base_rank)
         sc[1].metric("適用後", f"{after:.1f}", f"{delta:+.1f}")
         sc[2].caption(f"想定: {note}")
+        if not sim.already_max_skill:
+            st.caption(
+                f"🔺 メインスキルLv最大({sim.max_msl})の天井: "
+                f"**{sim.maxskill_total:.1f} ({sim.maxskill_rank})** "
+                f"／ ベースから **{sim.maxskill_delta:+.1f}**"
+            )
+        else:
+            st.caption("※メインスキルは既に最大想定。")
         if sim.nature_is_neutral:
             st.caption("※この個体は既に無補正のため性格アイテムは不要。")
         if not sim.best_sub_upgrade:

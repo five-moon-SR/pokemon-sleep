@@ -31,11 +31,19 @@ if not owned:
     st.html(c.empty_state("所持ポケモンがいません。先に「個体登録」から追加してください。"))
     st.stop()
 
-if not st.toggle("計算する（所持全体を走査）", key="skill_role_compute"):
+tcol = st.columns(2)
+run = tcol[0].toggle("計算する（所持全体を走査）", key="skill_role_compute")
+maxskill = tcol[1].toggle(
+    "🔺 メインスキルLv最大の天井で見る", key="skill_role_maxskill",
+    help="メインスキルを育て切った場合の各役割の天井を比較する。",
+)
+if not run:
     st.info("トグルをONにすると、育成後スコアで各スキル役割の担当を集計します。")
     st.stop()
 
-coverages = skill_role_audit(owned)
+coverages = skill_role_audit(owned, main_skill_max=maxskill)
+if maxskill:
+    st.caption("🔺 メインスキルLv最大（育て切った天井）で評価中。")
 
 holes = role_holes(coverages)
 if holes:

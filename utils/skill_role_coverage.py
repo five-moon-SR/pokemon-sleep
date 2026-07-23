@@ -21,6 +21,7 @@ from utils.evaluator import (
     _main_skill_category,
     evaluate_potential,
     final_evolution_of,
+    max_skill_level_of,
 )
 
 # 編成に乗る現実枠（各役割この人数までを戦力とみなす）
@@ -86,8 +87,15 @@ def _resolve_role(final_species_name: str) -> tuple[str, str] | None:
     return role, cat
 
 
-def skill_role_audit(owned_rows: list[dict[str, Any]]) -> list[SkillRoleCoverage]:
-    """全スキル役割 → 担当個体（育成後スキル軸降順）の逆引き監査。"""
+def skill_role_audit(
+    owned_rows: list[dict[str, Any]],
+    *,
+    main_skill_max: bool = False,
+) -> list[SkillRoleCoverage]:
+    """全スキル役割 → 担当個体（育成後スキル軸降順）の逆引き監査。
+
+    main_skill_max=True で「メインスキルLv最大の天井」で評価する（育て切った比較）。
+    """
     buckets: dict[str, list[SkillProvider]] = {key: [] for key, _, _ in SKILL_ROLES}
 
     for p in owned_rows:
@@ -96,7 +104,11 @@ def skill_role_audit(owned_rows: list[dict[str, Any]]) -> list[SkillRoleCoverage
         if not resolved:
             continue
         role_key, cat = resolved
-        res = evaluate_potential(p)
+        res = evaluate_potential(p, main_skill_max=main_skill_max)
+        if main_skill_max:
+            shown_msl = max_skill_level_of(final_sp)
+        else:
+            shown_msl = int(p.get("main_skill_level") or 1) + _remaining(p["species_name"])
         buckets[role_key].append(SkillProvider(
             pokemon_id=p["id"],
             label=p.get("nickname") or p["species_name"],
@@ -106,8 +118,7 @@ def skill_role_audit(owned_rows: list[dict[str, Any]]) -> list[SkillRoleCoverage
             skill_axis=res.species_skill,
             potential_total=res.species_total,
             potential_rank=res.species_rank,
-            main_skill_level=int((p.get("main_skill_level") or 1))
-            + _remaining(p["species_name"]),
+            main_skill_level=shown_msl,
         ))
 
     out: list[SkillRoleCoverage] = []

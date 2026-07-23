@@ -390,6 +390,17 @@ SUBSKILL_RANK_UP: dict[str, str] = {
 }
 
 
+def max_skill_level_of(species_name: str) -> int:
+    """種族のメインスキル最大Lv。カテゴリ不明なら 1。"""
+    from utils.skill_effects import get_skill_max_lv
+
+    sp = db.get_species_data(species_name) or {}
+    cat = _main_skill_category(sp)
+    if not cat:
+        return 1
+    return get_skill_max_lv(cat) or _main_skill_max_level().get(cat, 6)
+
+
 # ---------------------------------------------------------------------------
 # ベンチマーク
 # ---------------------------------------------------------------------------
@@ -595,13 +606,16 @@ def evaluate_and_save(pokemon_id: int) -> EvaluationResult:
     return result
 
 
-def evaluate_potential(p: dict[str, Any]) -> EvaluationResult:
+def evaluate_potential(p: dict[str, Any], *, main_skill_max: bool = False) -> EvaluationResult:
     """育成後（最終進化形 × Lv60）のポテンシャル評価。
 
     進化系列をまたいで横並び比較できるよう、進化前個体も最終進化形の
     種族物理値・ベンチマークで評価する（性格/サブは個体のまま）。
     メインスキルLvは「1進化ごとに +1」される仕様を反映し、残り進化回数ぶん
     引き上げてから評価する（skill_effects テーブルの max_lv で内部クランプ）。
+
+    main_skill_max=True の場合はメインスキルLvを種族の最大まで引き上げた
+    「天井」評価（メインスキルを育て切った場合の比較用）。
     """
     from utils.sleep_ribbon import count_remaining_evolutions
 
@@ -610,15 +624,20 @@ def evaluate_potential(p: dict[str, Any]) -> EvaluationResult:
     q = dict(p)
     q["species_name"] = final_sp
     base_msl = int(p.get("main_skill_level") or 1)
-    projected_msl = base_msl + remaining
+    if main_skill_max:
+        projected_msl = max_skill_level_of(final_sp)
+        note = f"メインスキルLv最大 {projected_msl} 想定（育て切った天井）"
+    else:
+        projected_msl = base_msl + remaining
+        note = f"メインスキルLv {base_msl}→{projected_msl}・進化{remaining}回ぶん加算"
     q["main_skill_level"] = projected_msl
     res = evaluate_pokemon(q, eval_level=60)
-    if final_sp != p["species_name"]:
-        res.assumptions.insert(
-            0,
+    if final_sp != p["species_name"] or main_skill_max:
+        head = (
             f"最終進化形 {p['species_name']}→{final_sp} 想定"
-            f"（メインスキルLv {base_msl}→{projected_msl}・進化{remaining}回ぶん加算）",
+            if final_sp != p["species_name"] else "育成後"
         )
+        res.assumptions.insert(0, f"{head}（{note}）")
     return res
 
 

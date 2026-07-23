@@ -23,6 +23,7 @@ from utils.evaluator import (
     evaluate_pokemon,
     evaluate_potential,
     final_evolution_of,
+    max_skill_level_of,
     normalize_subskill_name,
 )
 from utils.sleep_ribbon import count_remaining_evolutions
@@ -73,6 +74,11 @@ class SubUpgradeOption:
 class ItemSimResult:
     base_total: float                          # 育成後(最終進化Lv60)ベース
     base_rank: str
+    projected_msl: int                         # 育成後の想定メインスキルLv（進化+1込み）
+    max_msl: int                               # 種族のメインスキル最大Lv
+    maxskill_total: float                      # メインスキルLv最大の天井
+    maxskill_rank: str
+    maxskill_delta: float                      # base からの差分
     nature_neutral_total: float                # 無補正化後
     nature_neutral_delta: float
     nature_is_neutral: bool                    # 既に無補正なら True（アイテム不要）
@@ -81,6 +87,10 @@ class ItemSimResult:
     @property
     def best_sub_upgrade(self) -> SubUpgradeOption | None:
         return self.sub_upgrades[0] if self.sub_upgrades else None
+
+    @property
+    def already_max_skill(self) -> bool:
+        return self.projected_msl >= self.max_msl
 
 
 def _eval_total(q: dict[str, Any]) -> tuple[float, str]:
@@ -92,6 +102,14 @@ def simulate_items(p: dict[str, Any]) -> ItemSimResult:
     """育成後ベースに対する各アイテムの評価変化を計算する。"""
     base_q = _potential_dict(p)
     base_total, base_rank = _eval_total(base_q)
+
+    final_sp = base_q["species_name"]
+    projected_msl = int(base_q.get("main_skill_level") or 1)
+    max_msl = max_skill_level_of(final_sp)
+
+    # メインスキルLv最大の天井
+    max_res = evaluate_potential(p, main_skill_max=True)
+    maxskill_total, maxskill_rank = max_res.species_total, max_res.species_rank
 
     # 性格無補正化
     nature_is_neutral = not p.get("nature")
@@ -117,6 +135,11 @@ def simulate_items(p: dict[str, Any]) -> ItemSimResult:
     return ItemSimResult(
         base_total=base_total,
         base_rank=base_rank,
+        projected_msl=projected_msl,
+        max_msl=max_msl,
+        maxskill_total=maxskill_total,
+        maxskill_rank=maxskill_rank,
+        maxskill_delta=maxskill_total - base_total,
         nature_neutral_total=neutral_total,
         nature_neutral_delta=neutral_total - base_total,
         nature_is_neutral=nature_is_neutral,
