@@ -25,7 +25,8 @@ pages = {
     "今週の運用": [
         st.Page("views/home.py", title="ホーム", icon="🏠", default=True),
         st.Page("views/party.py", title="パーティー編成", icon="⚔"),
-        st.Page("views/ingredients.py", title="食材・きのみ戦略", icon="🥕"),
+        st.Page("views/ingredients.py", title="食材戦略", icon="🥕"),
+        st.Page("views/berries.py", title="きのみ戦略", icon="🍓"),
         st.Page("views/skill_roles.py", title="スキル・役割", icon="🎯"),
     ],
     "個体管理": [

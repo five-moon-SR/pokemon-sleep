@@ -44,7 +44,7 @@ from utils.item_simulation import (
 )
 from utils.food_expectation import composition_string
 from ui import components as uic
-from ui.widgets import pokemon_status_popover
+from ui.widgets import pokemon_popover_row
 
 # ランク並び替え用の順位（SS=0, S=1, ..., D=5）。
 # 「昇順」で SS が最上段に来るよう、強い順から 0 を振る。
@@ -861,18 +861,14 @@ if st.toggle("計算する（所持全体を走査）", key="owned_item_priority
             st.html(uic.empty_state(empty_msg))
             return
         for i, ip in enumerate(items[:10], 1):
-            cols = st.columns([3, 4, 1], vertical_alignment="center")
             arrow = f"　→{ip.final_species}" if ip.final_species != ip.species_name else ""
-            cols[0].html(uic.result_row(
-                title=f"#{i} {ip.label}{arrow}",
-                img_url=pokemon_image_url(ip.final_species),
-                badges=[uic.text_badge(f"+{ip.delta:.1f}")],
-            ))
-            cols[1].caption(f"{ip.base_total:.1f} → {ip.after_total:.1f}　／　{ip.detail}")
-            pk = owned_by_id.get(ip.pokemon_id)
-            if pk:
-                with cols[2]:
-                    pokemon_status_popover(pk, label="🔍", help_text="この個体の簡易ステータス")
+            pokemon_popover_row(
+                owned_by_id.get(ip.pokemon_id),
+                label=f"#{i} {ip.label}{arrow}",
+                img_species=ip.final_species,
+                badges_text=f"+{ip.delta:.1f}",
+                caption=f"{ip.base_total:.1f} → {ip.after_total:.1f}　／　{ip.detail}",
+            )
 
     t_nat, t_sub = st.tabs([f"🌀 性格を無補正化（{len(_nat)}体）", f"⬆ サブスキルS→M（{len(_sub)}体）"])
     with t_nat:

@@ -10,9 +10,8 @@ from __future__ import annotations
 import streamlit as st
 
 import db
-from image_utils import pokemon_image_url
 from ui import components as c
-from ui.widgets import pokemon_status_popover
+from ui.widgets import pokemon_popover_row
 from utils.skill_role_coverage import (
     TOP_N,
     role_holes,
@@ -68,20 +67,16 @@ for cov in coverages:
             st.html(c.empty_state("この役割を担えるメインスキル持ちが所持にいない。"))
             continue
         for p in top:
-            cols = st.columns([3, 4, 1], vertical_alignment="center")
             arrow = f"　→{p.final_species}" if p.final_species != p.species_name else ""
-            cols[0].html(c.result_row(
-                title=f"{p.label}{arrow}",
-                img_url=pokemon_image_url(p.final_species),
-                badges=[c.rank_badge(p.potential_rank, p.potential_total, prefix="育成後")],
-            ))
-            cols[1].caption(
-                f"スキル軸 **{p.skill_axis:.0f}**/100　・　"
-                f"想定メインスキルLv {p.main_skill_level}　・　{p.skill_category}"
+            pokemon_popover_row(
+                owned_by_id.get(p.pokemon_id),
+                label=f"{p.label}{arrow}",
+                img_species=p.final_species,
+                badges_text=f"育成後 {p.potential_rank}·{p.potential_total:.0f}%",
+                caption=(
+                    f"スキル軸 {p.skill_axis:.0f}/100 ・ "
+                    f"想定メインスキルLv {p.main_skill_level} ・ {p.skill_category}"
+                ),
             )
-            pk = owned_by_id.get(p.pokemon_id)
-            if pk:
-                with cols[2]:
-                    pokemon_status_popover(pk, label="🔍", help_text="この個体の簡易ステータス")
         if rest > 0:
             st.caption(f"他{rest}体は編成に乗らないため省略（充足は上位{TOP_N}体で判定）。")

@@ -14,8 +14,38 @@ from typing import Any
 import streamlit as st
 
 import db
+from image_utils import pokemon_image_url
 
 _SUB_LVS = (10, 25, 50, 75, 100)
+
+
+def pokemon_popover_row(
+    p: dict[str, Any] | None,
+    *,
+    label: str,
+    caption: str,
+    img_species: str | None = None,
+    badges_text: str | None = None,
+) -> None:
+    """画像＋名前ポップオーバー＋説明キャプションの1行。
+
+    名前ボタン（ポケモン）を押すと簡易ステータスが出る。p が None（未所持等）なら
+    ポップオーバーにせず名前をそのまま表示する。
+    """
+    cols = st.columns([1, 3, 4], vertical_alignment="center")
+    url = pokemon_image_url(img_species or (p or {}).get("species_name", ""))
+    if url:
+        cols[0].markdown(
+            f'<img src="{url}" width="40" loading="lazy" style="border-radius:8px;">',
+            unsafe_allow_html=True,
+        )
+    with cols[1]:
+        if p is not None:
+            pokemon_status_popover(p, label=label, use_container_width=True)
+        else:
+            st.markdown(f"**{label}**")
+    cap = caption if not badges_text else f"{badges_text}　{caption}"
+    cols[2].caption(cap)
 
 
 def pokemon_status_popover(
