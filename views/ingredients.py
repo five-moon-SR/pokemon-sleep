@@ -15,15 +15,15 @@ from __future__ import annotations
 import streamlit as st
 
 import db
-from image_utils import RECIPE_ICON_DIR, icon_data_url, ingredient_icon_url, pokemon_image_url
+from image_utils import RECIPE_ICON_DIR, icon_data_url, ingredient_icon_url
 from ui import components as c
 from ui.widgets import pokemon_popover_row, pokemon_status_popover
 from utils.party_logic import get_play_ctx
-from utils.community_tier import get_tier, recommended_composition, top_tier_species
-from utils.food_expectation import composition_string
+from utils.community_tier import recommended_composition
 from utils.ingredient_coverage import (
     build_ingredient_index,
     catch_priorities,
+    catch_priorities_general,
     load_target_recipes,
     recipe_coverage,
     save_target_recipes,
@@ -49,11 +49,15 @@ if not owned:
 st.html(c.section_header("狙いのレシピ"))
 
 all_recipes = [r for r in db.list_all_recipe_records() if r.get("ingredients")]
+# 基礎エネルギー降順（弱い料理は下に）。選択肢に基礎エナジーを併記。
+all_recipes.sort(key=lambda r: -(r.get("base_energy") or 0))
+_recipe_energy = {r["name"]: int(r.get("base_energy") or 0) for r in all_recipes}
 saved_targets = load_target_recipes()
 targets = st.multiselect(
-    "作りたい料理（保存され、次回も引き継がれる）",
+    "作りたい料理（基礎エナジー降順・保存され次回も引き継がれる）",
     [r["name"] for r in all_recipes],
     default=[n for n in saved_targets if any(r["name"] == n for r in all_recipes)],
+    format_func=lambda n: f"{n}（基礎 {_recipe_energy.get(n, 0):,} en）",
     key="ing_targets",
 )
 if set(targets) != set(saved_targets):
@@ -90,11 +94,12 @@ for name, providers in index.items():
     top_active, rest_active = active[:2], active[2:]
     top_idle, rest_idle = idle[:2], idle[2:]
     best_str = "・".join(f"{p.label} {p.per_day_now:.1f}個/日" for p in top_active)
-    row = st.columns([1, 9], vertical_alignment="center")
+    row = st.columns([1, 16], vertical_alignment="center")
     _iurl = ingredient_icon_url(name)
     if _iurl:
         row[0].markdown(
-            f'<img src="{_iurl}" width="34" loading="lazy">', unsafe_allow_html=True
+            f'<img src="{_iurl}" width="22" loading="lazy" style="display:block;">',
+            unsafe_allow_html=True,
         )
     with row[1].expander(
         f"{name}　—　"
@@ -210,63 +215,29 @@ else:
             )
 
 st.html(c.section_header("捕獲優先度"))
-st.caption("未所持種族（最終進化に集約）のうち、狙いレシピの穴食材を埋められる子。理想個体Lv60前提の概算。")
-
-if not targets:
-    st.html(c.empty_state("狙いのレシピを選ぶと計算されます。"))
-else:
+if targets:
+    st.caption("未所持種族（最終進化に集約）のうち、狙いレシピの穴食材を埋められる子。理想個体Lv60前提の概算。")
     cps = catch_priorities(owned, targets)
-    if not cps:
-        st.html(c.empty_state("穴食材なし、または埋められる未所持種族がいない。"))
-    for i, cp in enumerate(cps[:10]):
-        with st.container(border=True):
-            cols = st.columns([3, 4])
-            sp = db.get_species_data(cp.species_name) or {}
-            tier_html = (
-                c.rank_badge(cp.tier) if cp.tier else ""
-            ) + c.text_badge(f"狙い: {recommended_composition(sp)}")
-            cols[0].markdown(f"**#{i + 1} {cp.species_name}**　(No.{cp.dex_no})")
-            cols[0].html(tier_html)
-            fills = "、".join(f"{n} +{v:.1f}/日" for n, v in sorted(cp.fills.items(), key=lambda x: -x[1]))
-            cols[1].caption(
-                f"穴埋め価値 **{cp.score:,.0f} en/日**"
-                + (f" ・ Tier{cp.tier}補正込み" if cp.tier else "")
-                + f" ・ {fills}"
-            )
+    _value_label = "穴埋め価値"
+else:
+    st.caption("狙いレシピ未選択時は、未所持の最終進化種を『理想個体Lv60の食材エナジー×ティア』で汎用評価。")
+    cps = catch_priorities_general(owned)
+    _value_label = "理想食材価値"
 
-
-# ============ ⑤ 強ポケ捕獲方針（コミュニティTier × 構成厳選） ============
-
-st.html(c.section_header("強ポケ捕獲方針"))
-st.caption(
-    "RaenonXティア表(食材軸)の上位種。未所持は理想構成での捕獲候補、"
-    "所持済みでも構成が狙いと違えば引き直し候補。定石: 食材得意=AAA / きのみ=不問 / スキル=低食材。"
-)
-
-owned_by_species: dict[str, list[dict]] = {}
-for p in owned:
-    owned_by_species.setdefault(p["species_name"], []).append(p)
-
-rows = []
-for species_name, tier in top_tier_species("C"):
-    sp = db.get_species_data(species_name) or {}
-    want = recommended_composition(sp)
-    holders = owned_by_species.get(species_name, [])
-    comps = [composition_string(p, sp) for p in holders]
-    if not holders:
-        status = "未所持 → 捕獲候補"
-    elif want == "AAA" and not any(cs == "AAA" for cs in comps):
-        status = f"所持({'/'.join(comps)}) → AAA引き直し候補"
-    else:
-        status = f"所持({'/'.join(comps)}) ✓"
-    rows.append((species_name, tier, want, status))
-
-with st.container(key="tier_policy"):
-    for species_name, tier, want, status in rows:
-        cols = st.columns([5, 4], vertical_alignment="center")
-        cols[0].html(c.result_row(
-            title=species_name,
-            img_url=pokemon_image_url(species_name),
-            badges=[c.rank_badge(tier), c.text_badge(f"狙い: {want}")],
-        ))
-        cols[1].caption(status)
+if not cps:
+    st.html(c.empty_state("埋められる/評価できる未所持種族がいない。"))
+for i, cp in enumerate(cps[:10]):
+    with st.container(border=True):
+        cols = st.columns([3, 4])
+        sp = db.get_species_data(cp.species_name) or {}
+        tier_html = (
+            c.rank_badge(cp.tier) if cp.tier else ""
+        ) + c.text_badge(f"狙い: {recommended_composition(sp)}")
+        cols[0].markdown(f"**#{i + 1} {cp.species_name}**　(No.{cp.dex_no})")
+        cols[0].html(tier_html)
+        fills = "、".join(f"{n} +{v:.1f}/日" for n, v in sorted(cp.fills.items(), key=lambda x: -x[1]))
+        cols[1].caption(
+            f"{_value_label} **{cp.score:,.0f} en/日**"
+            + (f" ・ Tier{cp.tier}補正込み" if cp.tier else "")
+            + f" ・ {fills}"
+        )

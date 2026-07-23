@@ -392,6 +392,44 @@ def catch_priorities(
     return out
 
 
+def catch_priorities_general(
+    owned_rows: list[dict[str, Any]],
+    *,
+    ingredient_energy: dict[str, float] | None = None,
+) -> list[CatchPriority]:
+    """レシピ非依存の捕獲優先度。未所持の最終進化種を「理想個体Lv60の食材エナジー/日
+    × コミュニティティア係数」で評価する。狙いレシピ未選択でも見たい用途。
+
+    fills には理想個体の各食材供給量/日を入れる（穴埋めでなく素の供給）。
+    """
+    if ingredient_energy is None:
+        ingredient_energy = {
+            r["name"]: float(r.get("base_energy") or 1.0)
+            for r in db.list_all_ingredient_records()
+        }
+    owned_species = {p["species_name"] for p in owned_rows}
+    finals = _final_evolutions()
+
+    out: list[CatchPriority] = []
+    for name in db.list_species_names():
+        if name in owned_species or name not in finals:
+            continue
+        species = db.get_species_data(name) or {}
+        ideal = _ideal_supply(species)
+        value = sum(v * ingredient_energy.get(n, 1.0) for n, v in ideal.items())
+        if value <= 0:
+            continue
+        out.append(CatchPriority(
+            species_name=name,
+            dex_no=species.get("dex_no") or "",
+            score=value * tier_weight(name),
+            tier=get_tier(name),
+            fills={n: v for n, v in ideal.items() if v > 0.005},
+        ))
+    out.sort(key=lambda x: -x.score)
+    return out
+
+
 if __name__ == "__main__":
     # python -m utils.ingredient_coverage で検算（DB接続が必要）
     owned = [dict(r) for r in db.list_pokemon()]

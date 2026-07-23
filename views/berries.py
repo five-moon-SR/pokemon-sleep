@@ -86,11 +86,12 @@ for cov in coverages:
            + (f"・他{rest}体" if rest > 0 else "")
            if top else "担当ゼロ")
     )
-    brow = st.columns([1, 9], vertical_alignment="center")
+    brow = st.columns([1, 16], vertical_alignment="center")
     _burl = berry_icon_url(b_name)
     if _burl:
         brow[0].markdown(
-            f'<img src="{_burl}" width="34" loading="lazy">', unsafe_allow_html=True
+            f'<img src="{_burl}" width="22" loading="lazy" style="display:block;">',
+            unsafe_allow_html=True,
         )
     with brow[1].expander(title, expanded=False):
         if top:

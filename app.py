@@ -28,6 +28,7 @@ pages = {
         st.Page("views/ingredients.py", title="食材戦略", icon="🥕"),
         st.Page("views/berries.py", title="きのみ戦略", icon="🍓"),
         st.Page("views/skill_roles.py", title="スキル・役割", icon="🎯"),
+        st.Page("views/catch_policy.py", title="強ポケ捕獲方針", icon="🏅"),
     ],
     "個体管理": [
         st.Page("views/owned.py", title="所持ポケデータ", icon="📦"),
