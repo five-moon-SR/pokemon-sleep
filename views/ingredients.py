@@ -132,19 +132,17 @@ for name, providers in index.items():
     top_active, rest_active = active[:2], active[2:]
     top_idle, rest_idle = idle[:2], idle[2:]
     best_str = "・".join(f"{p.label} {p.per_day_now:.1f}個/日" for p in top_active)
-    row = st.columns([1, 16], vertical_alignment="center")
     _iurl = ingredient_icon_url(name)
-    if _iurl:
-        row[0].markdown(
-            f'<img src="{_iurl}" width="22" loading="lazy" style="display:block;">',
-            unsafe_allow_html=True,
-        )
-    with row[1].expander(
-        f"{name}　—　"
-        + (f"主力: {best_str}" if best_str else f"担当{len(active)}体")
-        + f"・枠のみ{len(idle)}体",
-        expanded=False,
-    ):
+    _icon = (
+        f'<img src="{_iurl}" width="20" loading="lazy" '
+        f'style="vertical-align:middle; margin-right:5px;">' if _iurl else ""
+    )
+    _summary = (f"主力: {best_str}" if best_str else f"担当{len(active)}体") + f"・枠のみ{len(idle)}体"
+    st.html(
+        f'<div style="font-size:0.9rem; margin:2px 0;">{_icon}<b>{name}</b>'
+        f'<span style="color:#7a7a7a;"> — {_summary}</span></div>'
+    )
+    with st.expander("担当ポケモンを見る", expanded=False):
         shown = [(p, f"{p.label}　{p.per_day_now:.1f}/日") for p in top_active] + [
             (p, f"{p.label}（枠{p.slot.upper()}・Lv{p.unlock_lv}解放{'済' if p.unlocked else '前'}）")
             for p in top_idle

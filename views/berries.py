@@ -80,20 +80,21 @@ for cov in coverages:
     star = "⭐" if cov.is_favorite else ""
     top = cov.top
     rest = len(cov.providers) - len(top)
-    title = (
-        f"{star}{b_name}　—　"
-        + ("主力: " + " / ".join(f"{p.label} {p.count_per_day:.1f}個/日" for p in top)
-           + (f"・他{rest}体" if rest > 0 else "")
-           if top else "担当ゼロ")
+    _summary = (
+        "主力: " + " / ".join(f"{p.label} {p.count_per_day:.1f}個/日" for p in top)
+        + (f"・他{rest}体" if rest > 0 else "")
+        if top else "担当ゼロ"
     )
-    brow = st.columns([1, 16], vertical_alignment="center")
     _burl = berry_icon_url(b_name)
-    if _burl:
-        brow[0].markdown(
-            f'<img src="{_burl}" width="22" loading="lazy" style="display:block;">',
-            unsafe_allow_html=True,
-        )
-    with brow[1].expander(title, expanded=False):
+    _icon = (
+        f'<img src="{_burl}" width="20" loading="lazy" '
+        f'style="vertical-align:middle; margin-right:5px;">' if _burl else ""
+    )
+    st.html(
+        f'<div style="font-size:0.9rem; margin:2px 0;">{_icon}<b>{star}{b_name}</b>'
+        f'<span style="color:#7a7a7a;"> — {_summary}</span></div>'
+    )
+    with st.expander("担当ポケモンを見る", expanded=False):
         if top:
             for p in top:
                 lbl = f"{p.label} Lv{p.level}　{p.energy_per_day:,.0f}en/日（{p.count_per_day:.1f}個）"
