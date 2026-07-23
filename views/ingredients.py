@@ -81,8 +81,11 @@ _pot_cap = get_play_ctx().pot_capacity
 
 def _opt_label(n: str) -> str:
     total = _recipe_total_map.get(n, 0)
-    over = f"　🍳✕不足{total - _pot_cap}" if total > _pot_cap else ""
-    return f"{n}（基礎 {_recipe_energy.get(n, 0):,} en・食材{total}{over}）"
+    en = _recipe_energy.get(n, 0)
+    en_str = f"{en / 1000:.0f}k" if en >= 1000 else str(en)
+    # 鍋不足の警告は先頭に出す（右端で切れても見えるように）
+    prefix = f"🍳✕{total - _pot_cap} " if total > _pot_cap else ""
+    return f"{prefix}{n}｜{en_str}en・食材{total}"
 
 
 picked_in_cat = st.multiselect(
