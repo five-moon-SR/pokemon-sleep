@@ -90,14 +90,13 @@ for name, providers in index.items():
         continue
     active = [p for p in providers if p.per_day_now > 0]
     idle = [p for p in providers if p.per_day_now <= 0]
-    have = supply.get(name, 0.0)
     top_active, rest_active = active[:2], active[2:]
     top_idle, rest_idle = idle[:2], idle[2:]
     best_str = "・".join(p.label for p in top_active)
     with st.expander(
-        f"{name}　—　{have:.1f}個/日（"
+        f"{name}　—　"
         + (f"主力: {best_str}" if best_str else f"担当{len(active)}体")
-        + f"・枠のみ{len(idle)}体）",
+        + f"・枠のみ{len(idle)}体",
         expanded=False,
     ):
         chips = [
