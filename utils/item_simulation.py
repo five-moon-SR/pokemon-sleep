@@ -16,20 +16,23 @@ from __future__ import annotations
 from dataclasses import dataclass, field
 from typing import Any
 
+from constants import SUBSKILL_UNLOCK_LEVELS, SUBSKILL_UPGRADES, normalize_subskill_name
 from utils.evaluator import (
-    SUBSKILL_RANK_UP,
-    SUBSKILL_UNLOCK_LEVELS,
     EvaluationResult,
     evaluate_pokemon,
     evaluate_potential,
     final_evolution_of,
     max_skill_level_of,
-    normalize_subskill_name,
 )
+from utils.food_expectation import _effective_level
 from utils.sleep_ribbon import count_remaining_evolutions
 
 # 育成後の基準Lv（最終進化・Lv60）
 POTENTIAL_LEVEL = 60
+LEVEL_MILESTONES = (10, 25, 30, 50, 60)
+_IMMEDIATE_SUB_UPGRADE = {
+    name: upgrades[0] for name, upgrades in SUBSKILL_UPGRADES.items() if upgrades
+}
 
 
 def _potential_dict(p: dict[str, Any]) -> dict[str, Any]:
@@ -57,6 +60,75 @@ def _equipped_subskill_fields(p: dict[str, Any]) -> list[tuple[str, str]]:
     return out
 
 
+@dataclass
+class SubSeedCandidate:
+    field_name: str
+    unlock_level: int
+    from_sub: str
+    to_sub: str
+
+
+@dataclass
+class BlockedSubSeed:
+    field_name: str
+    unlock_level: int
+    from_sub: str
+    to_sub: str
+    reason: str
+
+
+def eligible_subskill_upgrades(
+    p: dict[str, Any],
+    *,
+    at_level: int | None = None,
+) -> tuple[list[SubSeedCandidate], list[BlockedSubSeed]]:
+    """銀種の抽選対象とブロック理由を返す。
+
+    - 抽選対象は指定Lvで解放済みの枠のみ。
+    - 強化先の重複判定は、未解放を含む5枠すべてを見る。
+    """
+    level = int(at_level if at_level is not None else _effective_level(p))
+    all_owned = {
+        normalize_subskill_name(p.get(f"subskill_lv{lv}"))
+        for lv in SUBSKILL_UNLOCK_LEVELS
+        if p.get(f"subskill_lv{lv}")
+    }
+    eligible: list[SubSeedCandidate] = []
+    blocked: list[BlockedSubSeed] = []
+    for unlock_level in SUBSKILL_UNLOCK_LEVELS:
+        field_name = f"subskill_lv{unlock_level}"
+        raw = p.get(field_name)
+        sub = normalize_subskill_name(raw) if raw else None
+        to_sub = _IMMEDIATE_SUB_UPGRADE.get(sub or "")
+        if not sub or not to_sub:
+            continue
+        if unlock_level > level:
+            blocked.append(
+                BlockedSubSeed(
+                    field_name,
+                    unlock_level,
+                    sub,
+                    to_sub,
+                    f"Lv{unlock_level}で未解放",
+                )
+            )
+        elif to_sub in all_owned:
+            blocked.append(
+                BlockedSubSeed(
+                    field_name,
+                    unlock_level,
+                    sub,
+                    to_sub,
+                    f"{to_sub}を別枠に所持",
+                )
+            )
+        else:
+            eligible.append(
+                SubSeedCandidate(field_name, unlock_level, sub, to_sub)
+            )
+    return eligible, blocked
+
+
 # ---------------------------------------------------------------------------
 # ifシミュレーション（1個体）
 # ---------------------------------------------------------------------------
@@ -68,6 +140,40 @@ class SubUpgradeOption:
     to_sub: str            # 例: おてつだいスピードM
     total: float           # 適用後の species_total
     delta: float           # base からの差分
+    probability: float = 1.0
+
+
+@dataclass
+class SubSeedAnalysis:
+    at_level: int
+    base_total: float
+    outcomes: list[SubUpgradeOption]
+    blocked: list[BlockedSubSeed]
+
+    @property
+    def expected_delta(self) -> float:
+        return sum(outcome.delta * outcome.probability for outcome in self.outcomes)
+
+    @property
+    def best_delta(self) -> float:
+        return max((outcome.delta for outcome in self.outcomes), default=0.0)
+
+    @property
+    def worst_delta(self) -> float:
+        return min((outcome.delta for outcome in self.outcomes), default=0.0)
+
+    @property
+    def is_guaranteed(self) -> bool:
+        return len(self.outcomes) == 1
+
+
+@dataclass
+class SubSeedPath:
+    probability: float
+    used_seeds: int
+    steps: list[str]
+    total: float
+    delta: float
 
 
 @dataclass
@@ -83,6 +189,9 @@ class ItemSimResult:
     nature_neutral_delta: float
     nature_is_neutral: bool                    # 既に無補正なら True（アイテム不要）
     sub_upgrades: list[SubUpgradeOption] = field(default_factory=list)  # delta降順
+    main_seed_total: float = 0.0
+    main_seed_delta: float = 0.0
+    main_seeds_to_max: int = 0
 
     @property
     def best_sub_upgrade(self) -> SubUpgradeOption | None:
@@ -98,6 +207,85 @@ def _eval_total(q: dict[str, Any]) -> tuple[float, str]:
     return res.species_total, res.species_rank
 
 
+def analyze_subskill_seed(
+    p: dict[str, Any],
+    *,
+    at_level: int | None = None,
+) -> SubSeedAnalysis:
+    """指定Lv時点で銀種を1個使ったランダム結果を評価する。"""
+    level = int(at_level if at_level is not None else _effective_level(p))
+    base_q = dict(p)
+    base_q["current_level"] = level
+    base_total = evaluate_pokemon(base_q, eval_level=level).species_total
+    candidates, blocked = eligible_subskill_upgrades(p, at_level=level)
+    probability = 1.0 / len(candidates) if candidates else 0.0
+    outcomes: list[SubUpgradeOption] = []
+    for candidate in candidates:
+        after = dict(base_q)
+        after[candidate.field_name] = candidate.to_sub
+        total = evaluate_pokemon(after, eval_level=level).species_total
+        outcomes.append(
+            SubUpgradeOption(
+                field_name=candidate.field_name,
+                from_sub=candidate.from_sub,
+                to_sub=candidate.to_sub,
+                total=total,
+                delta=total - base_total,
+                probability=probability,
+            )
+        )
+    outcomes.sort(key=lambda outcome: -outcome.delta)
+    return SubSeedAnalysis(level, base_total, outcomes, blocked)
+
+
+def subskill_seed_paths(
+    p: dict[str, Any],
+    *,
+    seed_count: int,
+    at_level: int | None = None,
+) -> list[SubSeedPath]:
+    """最大 seed_count 個まで銀種を使う全分岐を列挙する。"""
+    level = int(at_level if at_level is not None else _effective_level(p))
+    base = dict(p)
+    base["current_level"] = level
+    base_total = evaluate_pokemon(base, eval_level=level).species_total
+    states: list[tuple[dict[str, Any], float, list[str], int]] = [
+        (base, 1.0, [], 0)
+    ]
+    for _ in range(max(0, int(seed_count))):
+        next_states: list[tuple[dict[str, Any], float, list[str], int]] = []
+        advanced = False
+        for state, probability, steps, used in states:
+            candidates, _ = eligible_subskill_upgrades(state, at_level=level)
+            if not candidates:
+                next_states.append((state, probability, steps, used))
+                continue
+            advanced = True
+            branch_probability = probability / len(candidates)
+            for candidate in candidates:
+                after = dict(state)
+                after[candidate.field_name] = candidate.to_sub
+                next_states.append(
+                    (
+                        after,
+                        branch_probability,
+                        [*steps, f"{candidate.from_sub}→{candidate.to_sub}"],
+                        used + 1,
+                    )
+                )
+        states = next_states
+        if not advanced:
+            break
+    paths: list[SubSeedPath] = []
+    for state, probability, steps, used in states:
+        total = evaluate_pokemon(state, eval_level=level).species_total
+        paths.append(
+            SubSeedPath(probability, used, steps, total, total - base_total)
+        )
+    paths.sort(key=lambda path: (-path.probability, -path.delta, path.steps))
+    return paths
+
+
 def simulate_items(p: dict[str, Any]) -> ItemSimResult:
     """育成後ベースに対する各アイテムの評価変化を計算する。"""
     base_q = _potential_dict(p)
@@ -110,6 +298,10 @@ def simulate_items(p: dict[str, Any]) -> ItemSimResult:
     # メインスキルLv最大の天井
     max_res = evaluate_potential(p, main_skill_max=True)
     maxskill_total, maxskill_rank = max_res.species_total, max_res.species_rank
+    main_seed_q = dict(base_q)
+    main_seed_q["main_skill_level"] = min(projected_msl + 1, max_msl)
+    main_seed_total, _ = _eval_total(main_seed_q)
+    main_seeds_to_max = max(0, max_msl - projected_msl)
 
     # 性格無補正化
     nature_is_neutral = not p.get("nature")
@@ -117,17 +309,17 @@ def simulate_items(p: dict[str, Any]) -> ItemSimResult:
     neutral_q["nature"] = None
     neutral_total, _ = _eval_total(neutral_q)
 
-    # サブスキル S→M（装着中の対象サブを1つずつ上げる）
+    # Lv60時点で実際に銀種の抽選対象になるサブスキル。
     upgrades: list[SubUpgradeOption] = []
-    for field_name, sub in _equipped_subskill_fields(p):
-        to_sub = SUBSKILL_RANK_UP.get(sub)
-        if not to_sub:
-            continue
+    candidates, _ = eligible_subskill_upgrades(p, at_level=POTENTIAL_LEVEL)
+    for candidate in candidates:
         up_q = dict(base_q)
-        up_q[field_name] = to_sub
+        up_q[candidate.field_name] = candidate.to_sub
         total, _ = _eval_total(up_q)
         upgrades.append(SubUpgradeOption(
-            field_name=field_name, from_sub=sub, to_sub=to_sub,
+            field_name=candidate.field_name,
+            from_sub=candidate.from_sub,
+            to_sub=candidate.to_sub,
             total=total, delta=total - base_total,
         ))
     upgrades.sort(key=lambda u: -u.delta)
@@ -144,6 +336,9 @@ def simulate_items(p: dict[str, Any]) -> ItemSimResult:
         nature_neutral_delta=neutral_total - base_total,
         nature_is_neutral=nature_is_neutral,
         sub_upgrades=upgrades,
+        main_seed_total=main_seed_total,
+        main_seed_delta=main_seed_total - base_total,
+        main_seeds_to_max=main_seeds_to_max,
     )
 
 
@@ -161,6 +356,67 @@ class ItemPriority:
     after_total: float
     delta: float                 # 伸び幅（育成後スコア）
     detail: str                  # 何を上げるか（サブ名など）
+    probability: float = 1.0
+    worst_delta: float | None = None
+    best_delta: float | None = None
+    seeds_required: int | None = None
+
+
+@dataclass
+class LevelPriority:
+    pokemon_id: int
+    label: str
+    species_name: str
+    current_level: int
+    target_level: int
+    base_total: float
+    after_total: float
+    delta: float
+    delta_per_level: float
+    unlock: str
+
+
+def level_up_priorities(
+    owned_rows: list[dict[str, Any]],
+) -> list[LevelPriority]:
+    """次の解放マイルストーンまで上げた時の1Lvあたり改善順。"""
+    out: list[LevelPriority] = []
+    for p in owned_rows:
+        current = _effective_level(p)
+        base = evaluate_pokemon(p, eval_level=current).species_total
+        target = next(
+            (milestone for milestone in LEVEL_MILESTONES if milestone > current),
+            None,
+        )
+        if target is None:
+            continue
+        after = evaluate_pokemon(p, eval_level=target).species_total
+        delta = after - base
+        if delta <= 0.05:
+            continue
+        if target in (30, 60):
+            unlock = f"食材{2 if target == 30 else 3}枠目"
+        else:
+            unlock = (
+                normalize_subskill_name(p.get(f"subskill_lv{target}"))
+                or f"Lv{target}"
+            )
+        out.append(
+            LevelPriority(
+                pokemon_id=int(p["id"]),
+                label=p.get("nickname") or p["species_name"],
+                species_name=p["species_name"],
+                current_level=current,
+                target_level=target,
+                base_total=base,
+                after_total=after,
+                delta=delta,
+                delta_per_level=delta / max(1, target - current),
+                unlock=unlock,
+            )
+        )
+    out.sort(key=lambda item: (-item.delta_per_level, -item.delta))
+    return out
 
 
 def nature_item_priorities(owned_rows: list[dict[str, Any]]) -> list[ItemPriority]:
@@ -190,24 +446,59 @@ def nature_item_priorities(owned_rows: list[dict[str, Any]]) -> list[ItemPriorit
 
 
 def subskill_item_priorities(owned_rows: list[dict[str, Any]]) -> list[ItemPriority]:
-    """サブスキルランクUP（S→M）の使用優先度。最良の1枠昇格の伸び順。"""
+    """現在使った銀種1個の期待改善量順。"""
     out: list[ItemPriority] = []
     for p in owned_rows:
-        sim = simulate_items(p)
-        best = sim.best_sub_upgrade
-        if not best or best.delta <= 0.05:
+        analysis = analyze_subskill_seed(p)
+        if not analysis.outcomes or analysis.expected_delta <= 0.05:
             continue
+        best = analysis.outcomes[0]
+        detail = " / ".join(
+            f"{outcome.from_sub}→{outcome.to_sub}"
+            for outcome in analysis.outcomes
+        )
         out.append(ItemPriority(
             pokemon_id=p["id"],
             label=p.get("nickname") or p["species_name"],
             species_name=p["species_name"],
             final_species=final_evolution_of(p["species_name"]),
-            base_total=sim.base_total,
-            after_total=best.total,
-            delta=best.delta,
-            detail=f"{best.from_sub} → {best.to_sub}",
+            base_total=analysis.base_total,
+            after_total=analysis.base_total + analysis.expected_delta,
+            delta=analysis.expected_delta,
+            detail=detail,
+            probability=best.probability,
+            worst_delta=analysis.worst_delta,
+            best_delta=analysis.best_delta,
         ))
     out.sort(key=lambda x: -x.delta)
+    return out
+
+
+def main_skill_item_priorities(
+    owned_rows: list[dict[str, Any]],
+) -> list[ItemPriority]:
+    """メイン種1個の育成後スコア改善量順。"""
+    out: list[ItemPriority] = []
+    for p in owned_rows:
+        sim = simulate_items(p)
+        if sim.main_seeds_to_max <= 0 or sim.main_seed_delta <= 0.05:
+            continue
+        out.append(
+            ItemPriority(
+                pokemon_id=p["id"],
+                label=p.get("nickname") or p["species_name"],
+                species_name=p["species_name"],
+                final_species=final_evolution_of(p["species_name"]),
+                base_total=sim.base_total,
+                after_total=sim.main_seed_total,
+                delta=sim.main_seed_delta,
+                detail=(
+                    f"想定MSLv{sim.projected_msl}→{sim.projected_msl + 1}"
+                ),
+                seeds_required=sim.main_seeds_to_max,
+            )
+        )
+    out.sort(key=lambda item: -item.delta)
     return out
 
 

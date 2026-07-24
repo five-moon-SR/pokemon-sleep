@@ -37,11 +37,7 @@ from utils.evaluator import (
     evaluate_pokemon,
     final_evolution_of,
 )
-from utils.item_simulation import (
-    nature_item_priorities,
-    simulate_items,
-    subskill_item_priorities,
-)
+from utils.item_simulation import simulate_items
 from utils.food_expectation import composition_string
 from ui import components as uic
 from ui.widgets import pokemon_popover_row
@@ -846,34 +842,8 @@ else:
 
 
 # ---------------------------------------------------------------------------
-# アイテム使用優先度ランキング（育成後・最終進化Lv60基準）
+# 育成判断は専用ページへ集約
 # ---------------------------------------------------------------------------
 st.divider()
-st.markdown("### 🎁 アイテム使用優先度")
-st.caption("育成後（最終進化Lv60）のスコアが一番伸びる個体から。限られたアイテムをどの子に使うかの目安。")
-
-if st.toggle("計算する（所持全体を走査）", key="owned_item_priority"):
-    _nat = nature_item_priorities(owned)
-    _sub = subskill_item_priorities(owned)
-
-    def _priority_rows(items, empty_msg):
-        if not items:
-            st.html(uic.empty_state(empty_msg))
-            return
-        for i, ip in enumerate(items[:10], 1):
-            arrow = f"　→{ip.final_species}" if ip.final_species != ip.species_name else ""
-            pokemon_popover_row(
-                owned_by_id.get(ip.pokemon_id),
-                label=f"#{i} {ip.label}{arrow}",
-                img_species=ip.final_species,
-                badges_text=f"+{ip.delta:.1f}",
-                caption=f"{ip.base_total:.1f} → {ip.after_total:.1f}　／　{ip.detail}",
-            )
-
-    t_nat, t_sub = st.tabs([f"🌀 性格を無補正化（{len(_nat)}体）", f"⬆ サブスキルS→M（{len(_sub)}体）"])
-    with t_nat:
-        st.caption("下降補正で損している個体ほど無補正化で得をする。")
-        _priority_rows(_nat, "無補正化で得をする個体はいない（皆すでに無補正 or 有利な性格）。")
-    with t_sub:
-        st.caption("装着中のSサブスキルをMに上げた時の最良の1枠昇格。")
-        _priority_rows(_sub, "評価に効くSサブスキルを装着した個体がいない。")
+st.info("レベル上げ・各種たね・まっしろミントの優先度は「育成・アイテム戦略」でまとめて比較できます。")
+st.page_link("views/items.py", label="育成・アイテム戦略を開く", icon="🎁")

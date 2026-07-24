@@ -28,6 +28,7 @@ pages = {
     ],
     "個体管理": [
         st.Page("views/hand.py", title="手札ボード", icon="🧩"),
+        st.Page("views/items.py", title="育成・アイテム戦略", icon="🎁"),
         st.Page("views/owned.py", title="所持ポケデータ", icon="📦"),
         st.Page("views/register.py", title="個体登録", icon="📝"),
         st.Page("views/update.py", title="個体強化・進化", icon="🔧"),
