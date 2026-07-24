@@ -24,11 +24,7 @@ db.init_db()
 pages = {
     "今週の運用": [
         st.Page("views/home.py", title="ホーム", icon="🏠", default=True),
-        st.Page("views/party.py", title="パーティー編成", icon="⚔"),
-        st.Page("views/ingredients.py", title="食材戦略", icon="🥕"),
-        st.Page("views/berries.py", title="きのみ戦略", icon="🍓"),
-        st.Page("views/skill_roles.py", title="スキル・役割", icon="🎯"),
-        st.Page("views/catch_policy.py", title="強ポケ捕獲方針", icon="🏅"),
+        st.Page("views/party.py", title="攻略プラン", icon="🧭"),
     ],
     "個体管理": [
         st.Page("views/owned.py", title="所持ポケデータ", icon="📦"),

@@ -1,7 +1,7 @@
 """ホーム画面（ダッシュボード）。
 
 ブロック構成:
-  ① 直近編成のショートカット — 最新の保存パーティをミニカード行でサマリ
+  ① 今週の攻略プラン — 料理カテゴリ×フィールドの定番5体と週見通し
   ② 所持ポケモン統計 — 統計タイル + だいふく/specialty分布
   ③ 最近登録した子 — カード行
 プレイヤープロフィール編集は ⚙ ボタンから st.dialog で開く。
@@ -17,6 +17,8 @@ import streamlit as st
 import db
 from image_utils import RECIPE_ICON_DIR, field_icon_url, icon_data_url, pokemon_image_url
 from ui import components as c
+from utils.party_logic import RECIPE_CATEGORY_LABELS
+from utils.plan_simulation import capture_improvements, level_improvements, simulate_plan
 from utils.play_context import PlayContext, load_play_context, save_play_context
 
 ctx = load_play_context()
@@ -70,24 +72,26 @@ if prof_cols[1].button("⚙ 設定", use_container_width=True):
 owned = [dict(r) for r in db.list_pokemon()]
 
 
-# ============ ① 直近の編成 ============
+# ============ ① 今週の攻略プラン ============
 
-parties = db.list_parties()
-if parties:
-    pt = parties[0]  # updated_at 降順なので最新
-    st.html(c.section_header(f"直近の編成: {pt['name']}"))
+active_week = db.get_setting("user.active_strategy_week", {}) or {}
+pt = db.get_party(int(active_week["plan_id"])) if active_week.get("plan_id") else None
+if pt:
+    st.html(c.section_header(f"今週の攻略プラン: {pt['name']}"))
 
     # フィールド/好みきのみ/候補レシピ を1行のチップにまとめる
     field_name = pt.get("field_name") or "（未設定）"
-    if pt.get("random_field_berries"):
-        fav = list(pt["random_field_berries"])
+    if active_week.get("random_berries"):
+        fav = list(active_week["random_berries"])
     else:
         fr = next((f for f in db.list_all_field_records() if f["name"] == field_name), None)
         fav = [b["name"] for b in (fr.get("favorite_berries") or [])] if fr else []
 
     chips = [c.icon_chip(field_icon_url(field_name), field_name, size=24)]
     chips += [c.berry_chip(b) for b in fav]
-    for rname in (pt.get("candidate_recipes") or [])[:5]:
+    for rname in [pt.get("main_recipe")]:
+        if not rname:
+            continue
         rec = next((r for r in db.list_all_recipe_records() if r["name"] == rname), None)
         url = icon_data_url(str(RECIPE_ICON_DIR), rec["icon"]) if rec and rec.get("icon") else None
         chips.append(c.icon_chip(url, rname))
@@ -113,15 +117,73 @@ if parties:
     if cards:
         st.html(c.row_scroll(cards))
 
-    meta_cols = st.columns([3, 1])
-    meta_cols[0].caption(
-        f"方針: {' / '.join(pt.get('policy_tags') or []) or '—'}"
-        f"　最終更新: {(pt.get('updated_at') or '')[:16]}"
+    members = [
+        dict(row)
+        for mid in (pt.get("member_ids") or [])
+        if (row := db.get_pokemon(mid)) is not None
+    ]
+    recipe = next(
+        (
+            r for r in db.list_all_recipe_records()
+            if r["name"] == pt.get("main_recipe")
+        ),
+        None,
     )
-    meta_cols[1].page_link("views/party.py", label="→ 編成ページへ", icon="⚔")
+    if len(members) == 5 and recipe:
+        sim = simulate_plan(
+            members,
+            recipe,
+            fav_berries=set(fav),
+            ctx=ctx,
+            starting_inventory=active_week.get("starting_inventory", {}),
+            event_set=set(active_week.get("event_bonuses", [])),
+        )
+        metric_cols = st.columns(4)
+        metric_cols[0].metric("主料理", pt.get("main_recipe") or "—")
+        metric_cols[1].metric("3食安定度", f"{sim.stability:.0%}", f"{sim.cooked_meals}/21食")
+        metric_cols[2].metric("週期待値", f"{sim.weekly_energy:,.0f} en")
+        metric_cols[3].metric(
+            "律速",
+            " / ".join(sim.bottlenecks) if sim.bottlenecks else "なし",
+        )
+
+        advice_key = f"_home_advice_{pt['id']}:{pt.get('updated_at')}"
+        if advice_key not in st.session_state:
+            growth = level_improvements(
+                members, recipe, fav_berries=set(fav), ctx=ctx
+            )
+            catches = capture_improvements(
+                members, recipe, fav_berries=set(fav), ctx=ctx, limit=3
+            )
+            st.session_state[advice_key] = (growth[:3], catches[:3])
+        growth, catches = st.session_state[advice_key]
+        advice_cols = st.columns(2)
+        with advice_cols[0]:
+            st.markdown("**🌱 次の育成候補**")
+            for item in growth:
+                st.caption(
+                    f"{item['label']} → Lv{item['target_level']}｜"
+                    f"週 {item['energy_delta']:+,.0f} en"
+                )
+        with advice_cols[1]:
+            st.markdown("**🎯 次の捕獲候補**")
+            for item in catches:
+                st.caption(
+                    f"{item['species_name']} {item['composition']}｜"
+                    f"{' / '.join(item['fills'])}｜安定度 {item['stability_delta']:+.0%}"
+                )
+
+    meta_cols = st.columns([3, 1])
+    category = pt.get("recipe_category")
+    meta_cols[0].caption(
+        f"{RECIPE_CATEGORY_LABELS.get(category, category or '旧編成')}　"
+        f"最終更新: {(pt.get('updated_at') or '')[:16]}"
+    )
+    meta_cols[1].page_link("views/party.py", label="→ 攻略プランを調整", icon="🧭")
 else:
-    st.html(c.section_header("直近の編成"))
-    st.html(c.empty_state("まだ保存されたパーティがありません。「パーティー編成」から作成できます。"))
+    st.html(c.section_header("今週の攻略プラン"))
+    st.html(c.empty_state("料理カテゴリとフィールドを選び、今週の攻略プランを設定してください。"))
+    st.page_link("views/party.py", label="攻略プランを作る →", icon="🧭")
 
 
 # ============ ② 所持ポケモン統計 ============
