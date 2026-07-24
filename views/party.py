@@ -1,799 +1,486 @@
-"""パーティー編成ページ。
-
-4つのブロック構成:
-  ① 今週の前提（フィールド／料理カテゴリ／候補レシピ／方針タグ）
-  ② 候補ポケモン一覧（スコア順）
-  ③ 編成中のパーティ（5枠＋総合能力サマリ＋警告）
-  ④ パーティの保存・読込・削除
-
-計算・スコアリングの純ロジックは utils/party_logic.py に分離。
-"""
+"""フィールド×料理カテゴリの定番5体を管理する攻略プラン画面。"""
 
 from __future__ import annotations
 
+import pandas as pd
 import streamlit as st
 
 import db
-from image_utils import berry_icon_url, field_icon_url, ingredient_icon_url, pokemon_image_url
-from ui import components as uic
-from utils.party_logic import (
-    get_play_ctx,
-    EVENT_BONUSES,
-    RECIPE_CATEGORY_LABELS,
-    ROLE_LABELS,
-    ROLE_PRESETS,
-    _effective_level,
-    _ingredient_chip,
-    _main_recipe_recommendations,
-    _main_skill_of,
-    _propose_sub_recipes,
-    _recipe_progress,
-    _role_fulfillment,
-    _surplus_after_main,
-    compute_role_scores,
-    party_summary,
+from image_utils import field_icon_url, ingredient_icon_url, pokemon_image_url
+from ui import components as c
+from utils.party_logic import EVENT_BONUSES, RECIPE_CATEGORY_LABELS
+from utils.plan_simulation import (
+    capture_improvements,
+    level_improvements,
+    simulate_plan,
 )
+from utils.play_context import load_play_context
+from utils.strategy_optimizer import suggest_strategy_plans
 
-st.html(uic.page_banner("パーティー編成", "cyan", icon="⚔"))
-st.caption("今週の前提 → 候補ポケモンスコア → 5体選択 → 保存。スコア係数は暫定。")
 
+ACTIVE_WEEK_KEY = "user.active_strategy_week"
+CATEGORY_ORDER = ("curry_stew", "salad", "drink_dessert")
 
-# -------------- セッション状態 --------------
-
+st.html(c.page_banner("攻略プラン", "cyan", icon="🧭"))
+st.caption("今週の料理カテゴリからフィールドを選び、主料理1品と固定5体を育てる。")
 db.init_db()
 ss = st.session_state
-ss.setdefault("party_member_ids", [])  # list[int]
-ss.setdefault("party_loaded_id", None)
+ctx = load_play_context()
 
 
-# 読込ボタンは ④ で押下されるが、その時点で ① の widget は既に描画済みのため、
-# widget の key と同名の session_state を直接書き換えると Streamlit がエラーを出す。
-# そこで読込ボタンは「次回rerun時に適用する dict」を _pending_load に積み、
-# ここ（widget 描画前）で session_state に流し込む pending パターンを使う。
-if ss.get("_pending_load") is not None:
-    pt = ss["_pending_load"]
-    ss.party_member_ids = list(pt.get("member_ids") or [])
-    ss.party_loaded_id = pt["id"]
-    ss["p_field"] = pt.get("field_name") or "（未選択）"
-    ss["p_recipe_cats"] = list(pt.get("recipe_categories") or [])
-    ss["p_recipes"] = list(pt.get("candidate_recipes") or [])
-    ss["p_random_berries"] = list(pt.get("random_field_berries") or [])
-    ss["p_role_preset"] = "✏ カスタム"
-    for role_key in ROLE_LABELS:
-        ss[f"p_role_{role_key}"] = (pt.get("role_targets") or {}).get(role_key, 0)
-    ss["p_events"] = list(pt.get("event_bonuses") or [])
-    ss["p_save_name"] = pt.get("name") or ""
-    ss["p_save_note"] = pt.get("note") or ""
-    if pt.get("main_recipe"):
-        ss["p_main_recipe"] = pt["main_recipe"]
-    ss["_just_loaded_name"] = pt.get("name") or ""
-    ss["_pending_load"] = None
+def _field_favorites(field: dict, random_names: list[str]) -> set[str]:
+    if field.get("favorite_berries_random"):
+        return set(random_names)
+    return {x["name"] for x in (field.get("favorite_berries") or [])}
 
 
-# -------------- ① 今週の前提 --------------
+def _member_label(p: dict) -> str:
+    lv = p.get("current_level") or p.get("caught_level") or p.get("level") or 1
+    return f"{p.get('nickname') or p['species_name']}｜{p['species_name']} Lv{lv}"
 
-with st.container(border=True):
-    st.subheader("① 今週の前提")
 
-    fields = db.list_all_field_records()
-    field_options = ["（未選択）"] + [f["name"] for f in fields]
-    sel_field_name = st.selectbox("フィールド", field_options, key="p_field")
-    sel_field = next((f for f in fields if f["name"] == sel_field_name), None)
-    if sel_field:
-        _furl = field_icon_url(sel_field_name)
-        if _furl:
-            st.html(
-                f'<img src="{_furl}" style="width:100%; max-width:420px; border-radius:14px; margin:2px 0 6px;">'
-            )
-
-    fav_berries: list[str] = []
-    if sel_field:
-        if sel_field.get("favorite_berries_random"):
-            st.caption(
-                "🎲 ランダム好物フィールド：週の始まりに3種が決まるので、今週の3種を選んでください。"
-            )
-            all_berry_names = [b["name"] for b in db.list_all_berry_records()]
-            picked = st.multiselect(
-                "今週の好みきのみ（最大3種）",
-                all_berry_names,
-                max_selections=3,
-                key="p_random_berries",
-            )
-            fav_berries = list(picked)
-            if fav_berries:
-                cols = st.columns(len(fav_berries) + 1)
-                cols[0].caption("適用中:")
-                for i, name in enumerate(fav_berries):
-                    url = berry_icon_url(name)
-                    if url:
-                        cols[i + 1].markdown(
-                            f'<img src="{url}" width="20" style="vertical-align:middle">'
-                            f' {name}',
-                            unsafe_allow_html=True,
-                        )
-                    else:
-                        cols[i + 1].caption(name)
-        else:
-            fav_berries = [b["name"] for b in (sel_field.get("favorite_berries") or [])]
-            if fav_berries:
-                cols = st.columns(len(fav_berries) + 1)
-                cols[0].caption("好みのきのみ:")
-                for i, name in enumerate(fav_berries):
-                    url = berry_icon_url(name)
-                    label = f"{name}"
-                    if url:
-                        cols[i + 1].markdown(
-                            f'<img src="{url}" width="20" style="vertical-align:middle">'
-                            f' {label}',
-                            unsafe_allow_html=True,
-                        )
-                    else:
-                        cols[i + 1].caption(label)
-
-    sel_categories = st.multiselect(
-        "作る料理カテゴリ",
-        list(RECIPE_CATEGORY_LABELS.values()),
-        key="p_recipe_cats",
+def _sim_metrics(sim) -> None:
+    cols = st.columns(4)
+    cols[0].metric("3食安定度", f"{sim.stability:.0%}", f"{sim.cooked_meals}/21食")
+    cols[1].metric("主料理", f"{sim.cooked_per_day:.2f} 回/日")
+    cols[2].metric("週期待エナジー", f"{sim.weekly_energy:,.0f}")
+    cols[3].metric(
+        "げんきオール効果",
+        f"+{sim.healer_team_boost:.1%}",
+        f"{sim.healer_activation_per_day:.2f}回/日",
     )
 
-    all_recipes = db.list_all_recipe_records()
-    if sel_categories:
-        cat_keys = {k for k, v in RECIPE_CATEGORY_LABELS.items() if v in sel_categories}
-        recipe_pool = [r for r in all_recipes if r.get("category") in cat_keys]
-    else:
-        recipe_pool = all_recipes
-    recipe_pool = [r for r in recipe_pool if r.get("ingredients")]
-    sel_recipe_names = st.multiselect(
-        "候補レシピ（必要食材を ② のスコアに反映）",
-        [r["name"] for r in recipe_pool],
-        key="p_recipes",
+
+# ── 週初めの入口：料理カテゴリ → フィールド ────────────────────────────
+st.html(c.section_header("今週の入口"))
+category = st.radio(
+    "料理カテゴリ",
+    CATEGORY_ORDER,
+    format_func=lambda x: RECIPE_CATEGORY_LABELS[x],
+    horizontal=True,
+    key="strategy_category",
+)
+fields = db.list_all_field_records()
+field_name = st.selectbox(
+    "フィールド",
+    [f["name"] for f in fields],
+    key="strategy_field",
+)
+field = next(f for f in fields if f["name"] == field_name)
+field_url = field_icon_url(field_name)
+if field_url:
+    st.html(
+        f'<img src="{field_url}" style="width:100%;max-width:520px;'
+        'height:120px;object-fit:cover;border-radius:16px;margin-bottom:8px">'
     )
 
-    needed_ings: set[str] = set()
-    for rname in sel_recipe_names:
-        rec = next((r for r in all_recipes if r["name"] == rname), None)
-        if rec:
-            for ing in rec.get("ingredients") or []:
-                needed_ings.add(ing["name"])
+strategy_key = f"{category}:{field_name}"
+plan = db.get_strategy_plan(field_name, category)
+if ss.get("_strategy_loaded_key") != strategy_key:
+    ss["_strategy_loaded_key"] = strategy_key
+    ss["strategy_member_ids"] = list(plan.get("member_ids") or []) if plan else []
+    ss["strategy_main_recipe"] = plan.get("main_recipe") if plan else None
+    ss["strategy_note"] = plan.get("note") or "" if plan else ""
+    ss.pop("_strategy_suggestions", None)
+    ss.pop("_capture_results", None)
 
-    if needed_ings:
-        cols = st.columns(min(len(needed_ings), 6) + 1)
-        cols[0].caption("必要食材:")
-        for i, name in enumerate(sorted(needed_ings)):
-            url = ingredient_icon_url(name)
-            slot = cols[(i % 6) + 1]
-            if url:
-                slot.markdown(
-                    f'<img src="{url}" width="20" style="vertical-align:middle"> {name}',
-                    unsafe_allow_html=True,
-                )
-            else:
-                slot.caption(name)
+active_week = db.get_setting(ACTIVE_WEEK_KEY, {}) or {}
+is_active = bool(plan and active_week.get("plan_id") == plan.get("id"))
+if is_active:
+    st.success("✓ この組み合わせが今週の攻略プランです")
+elif plan:
+    st.info("保存済みの定番プランがあります。必要なら今週のプランに設定できます。")
+else:
+    st.warning("この組み合わせの定番プランは未作成です。所持個体から候補を作ります。")
 
-    st.divider()
-    st.markdown("##### 🎯 役割×目標人数")
-    preset_cols = st.columns([3, 1])
-    with preset_cols[0]:
-        sel_preset = st.selectbox(
-            "プリセット",
-            list(ROLE_PRESETS.keys()),
-            index=1,  # ⚖ バランス
-            key="p_role_preset",
-            label_visibility="collapsed",
-        )
-    with preset_cols[1]:
-        apply_preset = st.button(
-            "📋 適用",
-            key="p_preset_apply",
-            use_container_width=True,
-            disabled=ROLE_PRESETS[sel_preset] is None,
-            help="プリセットの値を各スライダーに反映します。",
-        )
-
-    if apply_preset and ROLE_PRESETS[sel_preset] is not None:
-        for role_key, count in ROLE_PRESETS[sel_preset].items():
-            ss[f"p_role_{role_key}"] = count
-        st.rerun()
-
-    role_target_cols = st.columns(5)
-    role_targets: dict[str, int] = {}
-    for i, (role_key, label) in enumerate(ROLE_LABELS.items()):
-        with role_target_cols[i]:
-            role_targets[role_key] = st.slider(
-                label, min_value=0, max_value=5, value=0, step=1,
-                key=f"p_role_{role_key}",
-            )
-    total_target = sum(role_targets.values())
-    if total_target > 5:
-        st.caption(f"⚠ 目標合計 {total_target}/5 超過")
-    else:
-        st.caption(f"目標合計: {total_target}/5")
-
-    st.divider()
-    sel_event_keys = st.multiselect(
-        "✨ 今週のイベント補正（複数可。空＝補正なし週）",
-        list(EVENT_BONUSES.keys()),
-        format_func=lambda k: EVENT_BONUSES[k],
-        key="p_events",
-    )
-
-fav_set = set(fav_berries)
-event_set = set(sel_event_keys)
-
-
-# -------------- ①.5 🤖 自動編成提案 --------------
-
-with st.container(border=True):
-    st.subheader("🤖 自動編成提案")
-    st.caption(
-        "①の条件（好みきのみ/候補レシピ/役割目標/イベント）で最適5体を自動探索。"
-        "スコア = 主料理 + きのみ + スキルの各エナジー/日 − 役割未充足ペナルティ。"
-    )
-
-    if st.button("🔍 最適編成を探索", type="primary", use_container_width=True):
-        from utils.optimizer import optimize_party
-
-        target_recipe_recs = [
-            r for r in recipe_pool
-            if not sel_recipe_names or r["name"] in sel_recipe_names
-        ]
-        with st.spinner("探索中…（組み合わせを全探索しています）"):
-            ss["opt_results"] = optimize_party(
-                [dict(r) for r in db.list_pokemon()],
-                fav_berries=fav_set,
-                event_set=event_set,
-                target_recipes=target_recipe_recs,
-                role_targets=role_targets,
-            )
-        if not ss["opt_results"]:
-            st.warning("所持ポケモンが5体未満のため探索できません。")
-
-    for rank_i, res in enumerate(ss.get("opt_results") or []):
-        with st.container(border=True):
-            head = st.columns([4, 1])
-            head[0].markdown(
-                f"**#{rank_i + 1}**　" + "　".join(f"`{lbl}`" for lbl in res.labels)
-            )
-            if head[1].button(
-                "採用", key=f"opt_adopt_{rank_i}", use_container_width=True
-            ):
-                ss.party_member_ids = list(res.member_ids)
-                ss["opt_results"] = None
-                st.rerun()
-            detail = (
-                f"score **{res.score:,.0f}** ＝ "
-                f"🍳 {res.dish_energy:,.0f}"
-                + (f"（{res.best_recipe}）" if res.best_recipe else "")
-                + f" + 🍓 {res.berry_energy:,.0f} + ⚡ {res.skill_energy:,.0f} en/日"
-            )
-            if res.role_fulfillment:
-                parts = [
-                    f"{ROLE_LABELS[k]} {c}/{t}"
-                    for k, (c, t) in res.role_fulfillment.items()
-                ]
-                detail += "　｜　" + " / ".join(parts)
-            if res.bottleneck:
-                detail += f"　｜　律速: {'、'.join(res.bottleneck)}"
-            st.caption(detail)
-
-
-# -------------- ② 候補ポケモン（役割別） --------------
-
-def _render_role_candidates(
-    role_key: str,
-    owned_rows: list[dict],
-    scores_map: dict[int, dict[str, tuple[float, str] | None]],
-    ss,
-) -> None:
-    candidates = [
-        (scores_map[p["id"]][role_key], p)
-        for p in owned_rows
-        if scores_map[p["id"]][role_key] is not None
+all_berries = [b["name"] for b in db.list_all_berry_records()]
+week_defaults = active_week if is_active else {}
+with st.expander("今週だけの条件", expanded=field.get("favorite_berries_random", False)):
+    event_labels = list(EVENT_BONUSES.values())
+    default_event_labels = [
+        EVENT_BONUSES[k]
+        for k in week_defaults.get("event_bonuses", [])
+        if k in EVENT_BONUSES
     ]
-    if not candidates:
-        st.info(f"{ROLE_LABELS[role_key]} に該当する所持ポケモンはいません。")
-        return
-    candidates.sort(key=lambda x: (-x[0][0], x[1]["species_name"]))
-
-    top_n_options = [n for n in (10, 20, 30, len(candidates)) if n <= len(candidates)]
-    if not top_n_options:
-        top_n_options = [len(candidates)]
-    with st.columns([1, 4])[0]:
-        top_n = st.selectbox(
-            "表示件数", top_n_options, key=f"p_role_topn_{role_key}",
-        )
-
-    for (score, breakdown), p in candidates[:top_n]:
-        in_party = p["id"] in ss.party_member_ids
-        full = len(ss.party_member_ids) >= 5
-        master = db.get_species_data(p["species_name"]) or {}
-
-        cols = st.columns([0.6, 2.4, 0.7, 3, 0.9])
-        burl = berry_icon_url((master.get("berry") or {}).get("name"))
-        cols[0].markdown(
-            f'<img src="{burl}" width="32">' if burl else "",
-            unsafe_allow_html=True,
-        )
-        label = (
-            f'**{p.get("nickname") or p["species_name"]}** '
-            f'({p["species_name"]}) Lv{_effective_level(p)} '
-            f'/ {master.get("specialty") or "?"}'
-        )
-        cols[1].markdown(label)
-        cols[2].markdown(f"**{score:.0f}**")
-        cols[3].caption(breakdown)
-        btn_label = "✓編成中" if in_party else "追加"
-        if cols[4].button(
-            btn_label,
-            key=f"add_{role_key}_{p['id']}",
-            disabled=in_party or full,
-            use_container_width=True,
-        ):
-            ss.party_member_ids.append(p["id"])
-            # fragment内から呼ばれても ③ 編成サマリまで更新したいので全体rerun
-            st.rerun(scope="app")
-
-
-# ② と ③ で共通利用するため、所持ポケと役割スコアを先に計算
-owned_rows: list[dict] = [dict(r) for r in db.list_pokemon()]
-scores_map: dict[int, dict[str, tuple[float, str] | None]] = {}
-for p in owned_rows:
-    master = db.get_species_data(p["species_name"]) or {}
-    scores_map[p["id"]] = compute_role_scores(
-        p, master, fav_set, event_set, needed_ings
+    selected_event_labels = st.multiselect(
+        "イベント補正",
+        event_labels,
+        default=default_event_labels,
+        key=f"strategy_events_{strategy_key}",
     )
-
-@st.fragment
-def _candidates_block() -> None:
-    """②全体をフラグメント化。表示件数の切替や追加ボタンでの再描画をこのブロックに閉じる
-    （メンバー追加は ③ に波及するので st.rerun(scope="app") で全体再実行）。"""
-    with st.container(border=True):
-        st.subheader("② 候補ポケモン（役割別）")
-        st.caption(
-            "①で設定した役割の目標数 / イベント補正 / 候補レシピが各タブのスコアに反映されます。"
+    event_set = {k for k, v in EVENT_BONUSES.items() if v in selected_event_labels}
+    if field.get("favorite_berries_random"):
+        random_berries = st.multiselect(
+            "今週の好みきのみ（最大3種）",
+            all_berries,
+            default=week_defaults.get("random_berries", []),
+            max_selections=3,
+            key=f"strategy_random_{strategy_key}",
         )
-
-        if not owned_rows:
-            st.info("所持ポケモンがいません。先に「個体登録」から追加してください。")
-            return
-
-        roles_with_target = [k for k in ROLE_LABELS if role_targets.get(k, 0) > 0]
-        roles_to_show = roles_with_target or list(ROLE_LABELS.keys())
-
-        tab_labels = []
-        for k in roles_to_show:
-            tgt = role_targets.get(k, 0)
-            tab_labels.append(
-                f"{ROLE_LABELS[k]}" + (f" (目標{tgt})" if tgt > 0 else "")
-            )
-
-        tabs = st.tabs(tab_labels)
-        for tab, role_key in zip(tabs, roles_to_show):
-            with tab:
-                _render_role_candidates(role_key, owned_rows, scores_map, ss)
-
-
-_candidates_block()
-
-
-# -------------- ③ 編成中のパーティ --------------
-
-with st.container(border=True):
-    st.subheader(f"③ 編成中のパーティ（{len(ss.party_member_ids)}/5）")
-
-    if not ss.party_member_ids:
-        st.caption("まだ未編成。② から「追加」してください。")
     else:
-        slot_cols = st.columns(5)
-        for i in range(5):
-            with slot_cols[i]:
-                if i < len(ss.party_member_ids):
-                    mid = ss.party_member_ids[i]
-                    row = db.get_pokemon(mid)
-                    if row is None:
-                        st.warning("削除済み")
-                        if st.button("外す", key=f"rm_{i}_missing"):
-                            ss.party_member_ids.pop(i)
-                            st.rerun()
-                        continue
-                    m = dict(row)
-                    master = db.get_species_data(m["species_name"]) or {}
-                    st.html(uic.pokemon_card(
-                        title=m.get("nickname") or m["species_name"],
-                        subtitle=f"{m['species_name']} · Lv{_effective_level(m)}",
-                        specialty=master.get("specialty"),
-                        berry_name=(master.get("berry") or {}).get("name"),
-                        img_url=pokemon_image_url(m["species_name"]),
-                        footer=_main_skill_of(m, master) or "?",
-                        mini=True,
-                    ))
-                    if st.button("外す", key=f"rm_{i}", use_container_width=True):
-                        ss.party_member_ids.pop(i)
-                        st.rerun()
-                else:
-                    st.html(uic.pokemon_card(title="（空き枠）", mini=True))
+        random_berries = []
 
-    if ss.party_member_ids:
-        summary = party_summary(
-            ss.party_member_ids, fav_berries=fav_set, field_bonus=0.0
+fav_berries = _field_favorites(field, random_berries)
+recipes = [
+    r
+    for r in db.list_all_recipe_records()
+    if r.get("category") == category and r.get("ingredients")
+]
+recipe_map = {r["name"]: r for r in recipes}
+owned = [dict(p) for p in db.list_pokemon()]
+owned_map = {int(p["id"]): p for p in owned}
+all_recipe_map = {r["name"]: r for r in db.list_all_recipe_records()}
+saved_plans = db.list_parties()
+
+
+def _plan_fit_count(species_name: str) -> int:
+    """保存済み攻略プランのうち、この種族が必要食材を担当できる件数。"""
+    master = db.get_species_data(species_name) or {}
+    available = {
+        slot.get("name")
+        for slot in (master.get("ingredients") or {}).values()
+        if isinstance(slot, dict) and slot.get("name")
+    }
+    count = 0
+    for saved in saved_plans:
+        rec = all_recipe_map.get(saved.get("main_recipe"))
+        if not saved.get("recipe_category") or not rec:
+            continue
+        needed = {x["name"] for x in (rec.get("ingredients") or [])}
+        if available & needed:
+            count += 1
+    return count
+
+
+# ── 自動提案 ──────────────────────────────────────────────────────────────
+def _run_suggestions() -> None:
+    with st.spinner("主料理と5体を探索し、上位案を7日間シミュレーション中…"):
+        ss["_strategy_suggestions"] = suggest_strategy_plans(
+            owned,
+            recipes,
+            fav_berries=fav_berries,
+            ctx=ctx,
         )
 
-        team_help = summary["team_help_bonus_count"]
-        if team_help > 0:
-            st.info(
-                f"🤝 **team-buff**: おてつだいボーナス装着 {team_help} 人 "
-                f"→ 全員のスピード ×{1.0 + 0.05 * team_help:.2f}（食材・きのみ獲得に反映済）"
+
+if not plan and "_strategy_suggestions" not in ss:
+    _run_suggestions()
+
+suggest_col, reset_col = st.columns([3, 1])
+if suggest_col.button(
+    "✨ 主料理＋5体を自動提案",
+    use_container_width=True,
+    type="primary" if not plan else "secondary",
+):
+    _run_suggestions()
+    st.rerun()
+if reset_col.button("編成を空にする", use_container_width=True):
+    ss["strategy_member_ids"] = []
+    ss["strategy_main_recipe"] = None
+    ss["_strategy_clear_members"] = strategy_key
+    st.rerun()
+
+suggestions = ss.get("_strategy_suggestions") or []
+if suggestions:
+    st.markdown("#### 自動提案")
+    for idx, suggestion in enumerate(suggestions, 1):
+        sim = suggestion.simulation
+        with st.container(border=True):
+            head, action = st.columns([5, 1])
+            healer = "💚ヒーラーあり" if suggestion.has_healer else "ヒーラーなし"
+            head.markdown(
+                f"**#{idx}　{suggestion.recipe_name}**　{healer}  \n"
+                + " / ".join(suggestion.member_labels)
             )
-
-        st.markdown("**🍓 きのみ獲得（1日あたり個数 ／ エナジー）**")
-        if summary["berries"]:
-            cols = st.columns(min(len(summary["berries"]), 5))
-            sorted_berries = sorted(
-                summary["berries"].items(), key=lambda x: -x[1]["energy"]
+            head.caption(
+                f"安定度 {sim.stability:.0%}｜{sim.cooked_meals}/21食｜"
+                f"週 {sim.weekly_energy:,.0f} en"
             )
-            for i, (name, data) in enumerate(sorted_berries):
-                url = berry_icon_url(name)
-                fav_mark = " ⭐" if data["is_favorite"] else ""
-                count_text = f"×{data['count']:.1f}/日"
-                energy_text = f"{int(round(data['energy'])):,} en"
-                with cols[i % len(cols)]:
-                    if url:
-                        st.markdown(
-                            f'<img src="{url}" width="22"> {name}{fav_mark}<br>'
-                            f'{count_text} ／ {energy_text}',
-                            unsafe_allow_html=True,
-                        )
-                    else:
-                        st.markdown(f"{name}{fav_mark} {count_text} ／ {energy_text}")
-
-        st.markdown("**🥕 食材1日獲得期待値（性格/サブ/Lv/リボン補正込み）**")
-        if summary["ingredients"]:
-            cols = st.columns(min(len(summary["ingredients"]), 5))
-            for i, (name, qty) in enumerate(sorted(summary["ingredients"].items(), key=lambda x: -x[1])):
-                url = ingredient_icon_url(name)
-                with cols[i % len(cols)]:
-                    if url:
-                        st.markdown(
-                            f'<img src="{url}" width="22"> {name} ×{qty:.1f}/日',
-                            unsafe_allow_html=True,
-                        )
-                    else:
-                        st.markdown(f"{name} ×{qty:.1f}/日")
-        else:
-            st.caption("—")
-
-        st.markdown("**🎯 メインスキル構成**")
-        skill_text = "、".join(summary["main_skills"]) if summary["main_skills"] else "—"
-        st.write(skill_text)
-
-        warnings: list[str] = []
-
-        fulfillment = _role_fulfillment(ss.party_member_ids, role_targets, scores_map)
-        if fulfillment:
-            st.markdown("**🎯 役割充足度**")
-            for role_key, (curr, tgt) in fulfillment.items():
-                ratio = min(curr / tgt, 1.0) if tgt > 0 else 0.0
-                icon = "✅" if curr >= tgt else "🔸"
-                fcols = st.columns([3, 1])
-                fcols[0].progress(ratio)
-                fcols[1].markdown(f"{icon} **{ROLE_LABELS[role_key]}**: {curr} / {tgt}")
-                if curr < tgt:
-                    warnings.append(
-                        f"{ROLE_LABELS[role_key]} 目標 {tgt} に対して現在 {curr} 体"
-                    )
-
-        if sel_recipe_names:
-            st.markdown("**🍳 レシピ達成進捗**（1日獲得期待値ベース・律速食材で日数決定）")
-            for prog in _recipe_progress(summary["ingredients"], sel_recipe_names, all_recipes):
-                req_text = " / ".join(f"{k}×{v}" for k, v in prog["required"].items())
-                if prog["days"] == float("inf"):
-                    miss_text = " / ".join(
-                        f"{k}×{v:g}" for k, v in prog["missing"].items()
-                    )
-                    st.warning(
-                        f"❌ **{prog['name']}** — 不足食材: {miss_text}（必要: {req_text}）"
-                    )
-                else:
-                    d = prog["days"]
-                    day_text = (
-                        f"{d:.1f} 日"
-                        if d < 7
-                        else f"{d/7:.1f} 週間（{d:.0f} 日）"
-                    )
-                    st.write(
-                        f"🍳 **{prog['name']}** — 約 **{day_text}** で完成（必要: {req_text}）"
-                    )
-            # 律速/不足食材を埋める手札の伸ばし方は食材戦略ページへ委譲
-            st.page_link(
-                "views/ingredients.py",
-                label="不足食材を埋める育成・捕獲候補を見る →（食材戦略）",
-                icon="🥕",
-            )
-
-        st.divider()
-        st.markdown("##### 🍽 主料理＋つなぎ料理提案")
-
-        # 主料理プール: ①の候補レシピがあればそこから、なければカテゴリ絞り、それもなければ全レシピ
-        if sel_recipe_names:
-            main_pool = [r for r in all_recipes if r["name"] in sel_recipe_names]
-            pool_label = "①の候補レシピ"
-        elif sel_categories:
-            cat_keys = {k for k, v in RECIPE_CATEGORY_LABELS.items() if v in sel_categories}
-            main_pool = [
-                r for r in all_recipes
-                if r.get("category") in cat_keys and r.get("ingredients")
-            ]
-            pool_label = "①の料理カテゴリ"
-        else:
-            main_pool = [r for r in all_recipes if r.get("ingredients")]
-            pool_label = "全レシピ"
-
-        if not main_pool:
-            st.caption("主料理候補がありません。①でレシピかカテゴリを選んでください。")
-        else:
-            recs = _main_recipe_recommendations(
-                main_pool, summary["ingredients"], event_set
-            )
-
-            if not recs:
-                st.caption(f"主料理プール: {pool_label}（{len(main_pool)}件）")
-                st.warning(
-                    "現在の編成では作成可能な主料理候補がありません。"
-                    "律速食材の獲得手段を編成してください。"
-                )
-            else:
-                dish_2x_note = " 🍳2x週" if "dish_2x" in event_set else ""
-                st.caption(
-                    f"主料理プール: {pool_label}（{len(main_pool)}件、作成可能 {len(recs)}件）"
-                    f"／ 1日あたり期待エナジー降順{dish_2x_note}"
-                )
-
-                # 現在の選択。未設定 or 候補外 ならトップを採用。
-                rec_names = [r["recipe"]["name"] for r in recs]
-                if ss.get("p_main_recipe") not in rec_names:
-                    ss["p_main_recipe"] = rec_names[0]
-                current = ss["p_main_recipe"]
-
-                def _render_main_row(rank: int, r: dict) -> None:
-                    rec = r["recipe"]
-                    is_current = rec["name"] == current
-                    cols = st.columns([0.4, 3, 2.2, 1.4, 0.9])
-                    cols[0].markdown(f"**#{rank}**")
-                    cat_label = RECIPE_CATEGORY_LABELS.get(
-                        rec.get("category"), rec.get("category") or ""
-                    )
-                    cols[1].markdown(f"**{rec['name']}**  \n_{cat_label}_")
-                    cols[2].markdown(
-                        f"<b>{int(round(r['daily_energy'])):,}</b> en/日<br>"
-                        f"<span style='color:#666; font-size:0.9em'>"
-                        f"{int(r['base_energy']):,}en × {r['pace']:.2f}回</span>",
-                        unsafe_allow_html=True,
-                    )
-                    cols[3].caption(
-                        "🔻 " + " / ".join(r["bottleneck"]) if r["bottleneck"] else "—"
-                    )
-                    btn_label = "✓選択中" if is_current else "選択"
-                    if cols[4].button(
-                        btn_label,
-                        key=f"p_main_pick_{rec['name']}",
-                        disabled=is_current,
-                        use_container_width=True,
-                    ):
-                        ss["p_main_recipe"] = rec["name"]
-                        st.rerun()
-
-                show_top = 5
-                for rank, r in enumerate(recs[:show_top], 1):
-                    _render_main_row(rank, r)
-
-                if len(recs) > show_top:
-                    with st.expander(
-                        f"残り {len(recs) - show_top} 件を表示", expanded=False
-                    ):
-                        for rank, r in enumerate(recs[show_top:], show_top + 1):
-                            _render_main_row(rank, r)
-
-                sel = next(r for r in recs if r["recipe"]["name"] == current)
-                main_recipe = sel["recipe"]
-                pace = sel["pace"]
-                bottleneck = sel["bottleneck"]
-
-                mc1, mc2, mc3 = st.columns([1, 1, 2])
-                mc1.metric("作成可能 / 日", f"{pace:.2f} 回")
-                mc2.metric("完成までの日数", f"{1/pace:.1f} 日")
-                mc3.metric(
-                    "🔻 律速食材",
-                    " / ".join(bottleneck) if bottleneck else "—",
-                )
-
-                surplus = _surplus_after_main(main_recipe, pace, summary["ingredients"])
-
-                with st.expander(f"📦 余剰食材（主料理を {pace:.2f}回/日 で作る前提）", expanded=False):
-                    if surplus:
-                        cols = st.columns(min(len(surplus), 5))
-                        for i, (name, qty) in enumerate(
-                            sorted(surplus.items(), key=lambda x: -x[1])
-                        ):
-                            url = ingredient_icon_url(name)
-                            with cols[i % len(cols)]:
-                                if url:
-                                    st.markdown(
-                                        f'<img src="{url}" width="22"> {name} ×{qty:.1f}/日',
-                                        unsafe_allow_html=True,
-                                    )
-                                else:
-                                    st.markdown(f"{name} ×{qty:.1f}/日")
-                    else:
-                        st.caption("—")
-
-                st.markdown("**🍳 つなぎ料理候補**（余剰食材で作れる別レシピ・スコア順）")
-                filter_cols = st.columns([1, 3])
-                with filter_cols[0]:
-                    sub_min_energy = st.number_input(
-                        "🚫 最小1個エナジー",
-                        min_value=0,
-                        max_value=10000,
-                        value=0,
-                        step=500,
-                        key="p_sub_min_energy",
-                        help=(
-                            "これ未満の base エナジーのレシピは候補から除外。"
-                            "単一食材で量産可能だが1個あたりエナジーが低い料理を弾きたい時に。"
-                            "0 で全候補表示。"
-                        ),
-                    )
-                sel_cat_keys = {
-                    k for k, v in RECIPE_CATEGORY_LABELS.items() if v in sel_categories
+            if action.button("採用", key=f"adopt_strategy_{strategy_key}_{idx}"):
+                ss["strategy_member_ids"] = suggestion.member_ids
+                ss["_strategy_pending_members"] = {
+                    "key": strategy_key,
+                    "ids": suggestion.member_ids,
                 }
-                pot_capacity = get_play_ctx().pot_capacity
-                sub_candidates = _propose_sub_recipes(
-                    main_recipe, surplus, set(bottleneck),
-                    all_recipes, sel_cat_keys, pot_capacity,
-                    top_n=8, min_base_energy=int(sub_min_energy),
-                )
-                if not sub_candidates:
-                    st.caption("つなぎ料理候補なし。余剰食材が少ないか、必要食材が揃いません。")
-                else:
-                    st.caption(
-                        "🍳 = 余剰だけで作れる ／ 🥄 = ストック前提（先週の残りなどで補う）"
-                        " ／ 並び順は 1日あたり期待エナジー降順"
-                    )
-                    for cand in sub_candidates:
-                        rec = cand["recipe"]
-                        badges = []
-                        if cand["consumes_bottleneck"]:
-                            badges.append("⚠律速食材使用")
-                        if not cand["fits_pot"]:
-                            badges.append(
-                                f"❌鍋超過({cand['total_ingredients']}>{pot_capacity})"
-                            )
-                        badge_text = " ".join(badges)
-
-                        req_chips = "".join(
-                            _ingredient_chip(ing["name"], ing["count"])
-                            for ing in (rec.get("ingredients") or [])
-                        )
-
-                        base_e = cand.get("base_energy", 0)
-                        daily_e = cand.get("daily_energy", 0)
-                        if cand["mode"] == "surplus":
-                            energy_text = (
-                                f"{int(base_e):,}en × {cand['max_create']:.2f}回 "
-                                f"≒ <b>{int(daily_e):,} en/日</b>"
-                            )
-                            head_line = f"🍳 <b>{rec['name']}</b> — {energy_text}"
-                            extra = ""
-                        else:
-                            shortage_chips = "".join(
-                                _ingredient_chip(n, s)
-                                for n, s in sorted(
-                                    cand["shortage_items"].items(),
-                                    key=lambda x: -x[1],
-                                )
-                            )
-                            energy_text = (
-                                f"1個 {int(base_e):,}en"
-                                f"（充足率 {cand['progress']*100:.0f}%）"
-                            )
-                            head_line = f"🥄 <b>{rec['name']}</b> — {energy_text}"
-                            extra = f"<div style='margin-left:1.5em'>あと {shortage_chips}で作れる</div>"
-                        if badge_text:
-                            head_line += f" <span style='color:#c66'>{badge_text}</span>"
-
-                        st.markdown(
-                            f"<div style='margin:6px 0'>{head_line}</div>"
-                            f"{extra}"
-                            f"<div style='margin-left:1.5em; color:#666; font-size:0.9em'>"
-                            f"必要: {req_chips}</div>",
-                            unsafe_allow_html=True,
-                        )
-
-        if warnings:
-            for w in warnings:
-                st.warning(w)
-        elif fulfillment:
-            st.success("役割の条件をクリア")
+                ss["strategy_main_recipe"] = suggestion.recipe_name
+                ss["_strategy_pending_recipe"] = suggestion.recipe_name
+                st.rerun()
 
 
-# -------------- ④ 保存・読込 --------------
+# ── 主料理と固定5体の編集 ───────────────────────────────────────────────
+st.html(c.section_header("定番プラン"))
+current_recipe = ss.get("strategy_main_recipe")
+if current_recipe not in recipe_map:
+    current_recipe = recipes[0]["name"] if recipes else None
+    ss["strategy_main_recipe"] = current_recipe
+recipe_names = list(recipe_map)
+recipe_widget_key = f"strategy_recipe_widget_{strategy_key}"
+if ss.get("_strategy_pending_recipe") in recipe_map:
+    ss[recipe_widget_key] = ss.pop("_strategy_pending_recipe")
+picked_recipe = st.selectbox(
+    "主料理",
+    recipe_names,
+    index=recipe_names.index(current_recipe) if current_recipe in recipe_names else 0,
+    key=recipe_widget_key,
+)
+ss["strategy_main_recipe"] = picked_recipe
+recipe = recipe_map[picked_recipe]
 
-with st.container(border=True):
-    st.subheader("④ 保存・読込")
+requirements = {x["name"]: int(x["count"]) for x in recipe.get("ingredients") or []}
+chips = []
+for name, qty in requirements.items():
+    chips.append(c.icon_chip(ingredient_icon_url(name), f"{name} ×{qty}", size=24))
+st.html('<div style="display:flex;flex-wrap:wrap;gap:5px">' + "".join(chips) + "</div>")
 
-    if ss.get("_just_loaded_name"):
-        st.success(f"読み込みました: {ss['_just_loaded_name']}")
-        ss["_just_loaded_name"] = None
+member_ids = list(ss.get("strategy_member_ids") or [])
+pending_members = ss.pop("_strategy_pending_members", None)
+if pending_members and pending_members.get("key") == strategy_key:
+    for i, pokemon_id in enumerate(pending_members.get("ids") or []):
+        ss[f"strategy_member_{strategy_key}_{i}"] = int(pokemon_id)
+if ss.pop("_strategy_clear_members", None) == strategy_key:
+    for i in range(5):
+        ss.pop(f"strategy_member_{strategy_key}_{i}", None)
+member_ids = [int(x) for x in member_ids if int(x) in owned_map][:5]
+while len(member_ids) < 5:
+    member_ids.append(0)
 
-    save_cols = st.columns([3, 2, 1])
-    with save_cols[0]:
-        party_name = st.text_input(
-            "パーティ名",
-            value=f"{sel_field_name if sel_field else ''}編成"
-            if sel_field
-            else "",
-            key="p_save_name",
+member_options = [0] + list(owned_map)
+cols = st.columns(5)
+new_member_ids: list[int] = []
+for i, col in enumerate(cols):
+    current_id = member_ids[i]
+    picked = col.selectbox(
+        f"{i + 1}枠目",
+        member_options,
+        index=member_options.index(current_id) if current_id in member_options else 0,
+        format_func=lambda pid: "（空き）" if pid == 0 else _member_label(owned_map[pid]),
+        key=f"strategy_member_{strategy_key}_{i}",
+    )
+    if picked:
+        new_member_ids.append(int(picked))
+        p = owned_map[int(picked)]
+        img = pokemon_image_url(p["species_name"])
+        if img:
+            col.image(img, width=80)
+ss["strategy_member_ids"] = new_member_ids
+
+if len(set(new_member_ids)) != len(new_member_ids):
+    st.error("同じ個体が複数枠に入っています。")
+valid_team = len(new_member_ids) == 5 and len(set(new_member_ids)) == 5
+members = [owned_map[mid] for mid in new_member_ids if mid in owned_map]
+
+starting_inventory: dict[str, float] = {}
+with st.expander("今週の持越し食材（標準評価は在庫ゼロ）"):
+    inv_cols = st.columns(min(4, max(1, len(requirements))))
+    defaults = week_defaults.get("starting_inventory", {})
+    for i, name in enumerate(requirements):
+        value = inv_cols[i % len(inv_cols)].number_input(
+            name,
+            min_value=0,
+            max_value=999,
+            value=int(defaults.get(name, 0)),
+            key=f"strategy_inv_{strategy_key}_{name}",
         )
-    with save_cols[1]:
-        note = st.text_input("メモ（任意）", key="p_save_note")
-    with save_cols[2]:
-        st.write("")
-        st.write("")
-        if st.button(
-            "💾 保存",
-            disabled=not party_name or not ss.party_member_ids,
-            use_container_width=True,
-        ):
-            payload = {
-                "name": party_name,
-                "field_name": sel_field_name if sel_field else None,
-                "recipe_categories": sel_categories,
-                "candidate_recipes": sel_recipe_names,
-                "member_ids": ss.party_member_ids,
+        if value:
+            starting_inventory[name] = float(value)
+
+note = st.text_input(
+    "メモ",
+    value=ss.get("strategy_note", ""),
+    key=f"strategy_note_{strategy_key}",
+)
+save_col, active_col = st.columns(2)
+if save_col.button(
+    "💾 定番プランを保存",
+    type="primary",
+    use_container_width=True,
+    disabled=not valid_team,
+):
+    plan_id = db.upsert_strategy_plan(
+        {
+            "name": f"{field_name}｜{RECIPE_CATEGORY_LABELS[category]}",
+            "field_name": field_name,
+            "recipe_category": category,
+            "main_recipe": picked_recipe,
+            "candidate_recipes": [picked_recipe],
+            "member_ids": new_member_ids,
+            "note": note,
+            "random_field_berries": [],
+            "role_targets": {},
+            "event_bonuses": [],
+            "policy_tags": [],
+        }
+    )
+    ss["_strategy_loaded_key"] = None
+    st.success(f"定番プランを保存しました（id={plan_id}）")
+    st.rerun()
+
+if active_col.button(
+    "📌 今週のプランに設定",
+    use_container_width=True,
+    disabled=not plan and not valid_team,
+):
+    if not plan:
+        plan_id = db.upsert_strategy_plan(
+            {
+                "name": f"{field_name}｜{RECIPE_CATEGORY_LABELS[category]}",
+                "field_name": field_name,
+                "recipe_category": category,
+                "main_recipe": picked_recipe,
+                "candidate_recipes": [picked_recipe],
+                "member_ids": new_member_ids,
                 "note": note,
-                "random_field_berries": fav_berries
-                if sel_field and sel_field.get("favorite_berries_random")
-                else [],
-                "role_targets": role_targets,
-                "event_bonuses": list(event_set),
-                "main_recipe": ss.get("p_main_recipe") or None,
+                "random_field_berries": [],
+                "role_targets": {},
+                "event_bonuses": [],
+                "policy_tags": [],
             }
-            if ss.party_loaded_id:
-                db.update_party(ss.party_loaded_id, **payload)
-                st.success(f"上書き保存しました（id={ss.party_loaded_id}）")
-            else:
-                new_id = db.insert_party(payload)
-                ss.party_loaded_id = new_id
-                st.success(f"新規保存しました（id={new_id}）")
-            st.rerun()
-
-    st.divider()
-    parties = db.list_parties()
-    if not parties:
-        st.caption("まだ保存されたパーティはありません。")
+        )
     else:
-        for pt in parties:
-            cols = st.columns([3, 2, 2, 1, 1])
-            cols[0].markdown(
-                f"**{pt['name']}** "
-                f"({pt.get('field_name') or '—'})"
-            )
-            cols[1].caption(
-                "／".join(pt.get("policy_tags") or []) or "—"
-            )
-            cols[2].caption(f"{len(pt.get('member_ids') or [])}体・{pt.get('updated_at','')[:16]}")
-            if cols[3].button("読込", key=f"load_{pt['id']}"):
-                # widget 描画後の直接書き換えは Streamlit が拒否するため、
-                # ここでは _pending_load にだけ積んで rerun。次回描画の冒頭で適用する。
-                ss["_pending_load"] = pt
-                st.rerun()
-            if cols[4].button("削除", key=f"del_{pt['id']}"):
-                db.delete_party(pt["id"])
-                if ss.party_loaded_id == pt["id"]:
-                    ss.party_loaded_id = None
-                st.rerun()
+        plan_id = int(plan["id"])
+    db.set_setting(
+        ACTIVE_WEEK_KEY,
+        {
+            "plan_id": plan_id,
+            "event_bonuses": sorted(event_set),
+            "random_berries": random_berries,
+            "starting_inventory": starting_inventory,
+        },
+    )
+    st.success("今週のプランに設定しました")
+    st.rerun()
 
-    if ss.party_member_ids or ss.party_loaded_id:
-        if st.button("🆕 新規編成（クリア）"):
-            ss.party_member_ids = []
-            ss.party_loaded_id = None
-            st.rerun()
+
+# ── 分析・育成・捕獲 ────────────────────────────────────────────────────
+if valid_team:
+    zero_sim = simulate_plan(
+        members,
+        recipe,
+        fav_berries=fav_berries,
+        ctx=ctx,
+        event_set=event_set,
+    )
+    carry_sim = simulate_plan(
+        members,
+        recipe,
+        fav_berries=fav_berries,
+        ctx=ctx,
+        event_set=event_set,
+        starting_inventory=starting_inventory,
+    )
+    overview_tab, analysis_tab, growth_tab = st.tabs(
+        ["📋 今週の見通し", "🔬 詳細分析", "🌱 育成・捕獲"]
+    )
+    with overview_tab:
+        _sim_metrics(carry_sim)
+        if starting_inventory:
+            st.caption(
+                f"持越し効果：安定度 {carry_sim.stability-zero_sim.stability:+.0%}｜"
+                f"週 {carry_sim.weekly_energy-zero_sim.weekly_energy:+,.0f} en"
+            )
+        if carry_sim.bottlenecks:
+            st.warning("律速食材：" + " / ".join(carry_sim.bottlenecks))
+        if carry_sim.conditional_pot_meals:
+            st.info(
+                f"鍋拡張が必要な料理：{carry_sim.conditional_pot_meals}食｜"
+                f"鍋スキル {carry_sim.pot_activation_per_day:.2f}回/日"
+            )
+
+    with analysis_tab:
+        breakdown = pd.DataFrame(
+            [
+                {"内訳": "主料理", "週期待エナジー": carry_sim.dish_energy},
+                {"内訳": "きのみ", "週期待エナジー": carry_sim.berry_energy},
+                {"内訳": "直接スキル", "週期待エナジー": carry_sim.skill_energy},
+            ]
+        )
+        st.dataframe(breakdown, hide_index=True, use_container_width=True)
+        st.markdown("##### 食材の自給力")
+        food_rows = []
+        for name, required in requirements.items():
+            daily = carry_sim.ingredient_supply.get(name, 0.0)
+            food_rows.append(
+                {
+                    "食材": name,
+                    "必要/食": required,
+                    "供給/日": round(daily, 1),
+                    "最大料理/日": round(daily / required, 2),
+                }
+            )
+        st.dataframe(pd.DataFrame(food_rows), hide_index=True, use_container_width=True)
+        future_rows = []
+        for target in (30, 60):
+            future = simulate_plan(
+                members,
+                recipe,
+                fav_berries=fav_berries,
+                ctx=ctx,
+                event_set=event_set,
+                future_level=target,
+            )
+            future_rows.append(
+                {
+                    "状態": f"全員Lv{target}以上",
+                    "安定度": f"{future.stability:.0%}",
+                    "料理/日": round(future.cooked_per_day, 2),
+                    "週期待エナジー": round(future.weekly_energy),
+                }
+            )
+        st.dataframe(pd.DataFrame(future_rows), hide_index=True, use_container_width=True)
+
+    with growth_tab:
+        st.markdown("##### 育成すると伸びる個体")
+        growth = level_improvements(
+            members, recipe, fav_berries=fav_berries, ctx=ctx
+        )
+        growth_rows = [
+            {
+                "個体": x["label"],
+                "目標": f"Lv{x['target_level']}",
+                "安定度改善": f"{x['stability_delta']:+.0%}",
+                "週エナジー改善": f"{x['energy_delta']:+,.0f}",
+            }
+            for x in growth[:10]
+            if x["stability_delta"] > 0 or x["energy_delta"] > 0
+        ]
+        if growth_rows:
+            st.dataframe(pd.DataFrame(growth_rows), hide_index=True, use_container_width=True)
+        else:
+            st.caption("この主料理に対する明確な育成改善候補はありません。")
+
+        st.markdown("##### 捕獲・厳選候補")
+        if st.button("🎯 捕獲候補を計算", key=f"capture_{strategy_key}"):
+            with st.spinner("未所持の最終進化AAA個体を各枠へ入れて比較中…"):
+                ss["_capture_results"] = capture_improvements(
+                    members,
+                    recipe,
+                    fav_berries=fav_berries,
+                    ctx=ctx,
+                )
+        captures = ss.get("_capture_results") or []
+        plan_fit_counts = {
+            x["species_name"]: _plan_fit_count(x["species_name"])
+            for x in captures
+        }
+        capture_rows = [
+            {
+                "候補": f"{x['species_name']} {x['composition']}",
+                "交代": x["replace_label"],
+                "埋まる食材": " / ".join(x["fills"]),
+                "汎用性": (
+                    f"⭐ {plan_fit_counts[x['species_name']]}プラン"
+                    if plan_fit_counts[x["species_name"]] >= 2
+                    else "—"
+                ),
+                "安定度改善": f"{x['stability_delta']:+.0%}",
+                "週エナジー改善": f"{x['energy_delta']:+,.0f}",
+            }
+            for x in captures
+            if x["stability_delta"] > 0 or x["energy_delta"] > 0
+        ]
+        if capture_rows:
+            st.dataframe(pd.DataFrame(capture_rows), hide_index=True, use_container_width=True)
+        elif "_capture_results" in ss:
+            st.caption("現在の5体を明確に改善する未所持候補はありません。")
+else:
+    st.info("固定メンバーを5体選ぶと、今週の見通しと育成・捕獲候補を表示します。")

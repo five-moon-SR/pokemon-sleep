@@ -161,7 +161,8 @@ def init_db() -> None:
             random_field_berries text,
             role_targets text,
             event_bonuses text,
-            main_recipe text
+            main_recipe text,
+            recipe_category text
         );
 
         create table if not exists {SCHEMA}.user_settings (
@@ -171,6 +172,11 @@ def init_db() -> None:
         );
         """
     )
+    _execute(
+        f"alter table {SCHEMA}.party add column if not exists recipe_category text"
+    )
+    _migrate_party_recipe_categories()
+    _normalize_strategy_plan_uniqueness()
 
 
 def insert_pokemon(data: dict[str, Any]) -> int:
@@ -319,6 +325,86 @@ def get_party(party_id: int) -> dict[str, Any] | None:
 
 def delete_party(party_id: int) -> None:
     _execute("DELETE FROM party WHERE id = %s", (party_id,))
+
+
+def _migrate_party_recipe_categories() -> None:
+    """旧 recipe_categories が単一値なら攻略プランの単一カテゴリへ移す。"""
+    category_keys = {
+        "カレー・シチュー": "curry_stew",
+        "サラダ": "salad",
+        "デザート・ドリンク": "drink_dessert",
+    }
+    rows = _fetchall(
+        "SELECT id, recipe_categories FROM party WHERE recipe_category IS NULL"
+    )
+    for row in rows:
+        raw = row.get("recipe_categories")
+        try:
+            categories = json.loads(raw) if raw else []
+        except (TypeError, ValueError):
+            categories = []
+        if isinstance(categories, list) and len(categories) == 1:
+            category = category_keys.get(str(categories[0]), str(categories[0]))
+            _execute(
+                "UPDATE party SET recipe_category = %s WHERE id = %s",
+                (category, row["id"]),
+            )
+
+
+def _normalize_strategy_plan_uniqueness() -> None:
+    """同じ組合せが複数あれば最新だけを定番にし、古い方は旧編成として残す。"""
+    rows = _fetchall(
+        """
+        SELECT id, field_name, recipe_category
+        FROM party
+        WHERE field_name IS NOT NULL AND recipe_category IS NOT NULL
+        ORDER BY updated_at DESC, id DESC
+        """
+    )
+    seen: set[tuple[str, str]] = set()
+    for row in rows:
+        key = (str(row["field_name"]), str(row["recipe_category"]))
+        if key in seen:
+            _execute(
+                "UPDATE party SET recipe_category = NULL WHERE id = %s",
+                (row["id"],),
+            )
+        else:
+            seen.add(key)
+
+
+def get_strategy_plan(field_name: str, recipe_category: str) -> dict[str, Any] | None:
+    """フィールド×料理カテゴリの定番攻略プランを返す。"""
+    row = _fetchone(
+        """
+        SELECT * FROM party
+        WHERE field_name = %s AND recipe_category = %s
+        ORDER BY updated_at DESC, id DESC
+        LIMIT 1
+        """,
+        (field_name, recipe_category),
+    )
+    return _deserialize_party_row(row)
+
+
+def upsert_strategy_plan(data: dict[str, Any]) -> int:
+    """フィールド×料理カテゴリで1件に保ち、攻略プランを保存する。"""
+    field_name = str(data.get("field_name") or "")
+    recipe_category = str(data.get("recipe_category") or "")
+    if not field_name or not recipe_category:
+        raise ValueError("field_name と recipe_category は必須です")
+    current = get_strategy_plan(field_name, recipe_category)
+    payload = dict(data)
+    category_labels = {
+        "curry_stew": "カレー・シチュー",
+        "salad": "サラダ",
+        "drink_dessert": "デザート・ドリンク",
+    }
+    payload["recipe_categories"] = [category_labels.get(recipe_category, recipe_category)]
+    if current:
+        update_party(int(current["id"]), **payload)
+        return int(current["id"])
+    return insert_party(payload)
 
 
 @lru_cache(maxsize=1)

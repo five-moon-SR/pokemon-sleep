@@ -175,7 +175,8 @@ def evaluate_combo(
         pace, bn = _main_recipe_pace(rec, combined)
         if pace <= 0:
             continue
-        e = _recipe_base_energy(rec) * pace * dish_mult
+        # 料理は1日3食まで。過剰供給で一次探索の順位が歪まないよう上限を置く。
+        e = _recipe_base_energy(rec) * min(pace, 3.0) * dish_mult
         if e > dish_e:
             dish_e, best_recipe, bottleneck = e, rec["name"], bn
 
