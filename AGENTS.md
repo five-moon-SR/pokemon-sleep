@@ -7,3 +7,8 @@ Before working here, read:
 
 If this project gains its own `CLAUDE.md`, read it as additional guidance.
 
+## GitHub authentication
+
+- `gh auth status` の失敗だけで、Git の push 認証が切れていると断定しない。
+- push を依頼された場合は、Git remote 側の認証を実際の `git fetch` / `git push` で確認する。
+
