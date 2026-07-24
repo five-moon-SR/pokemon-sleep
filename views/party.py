@@ -8,6 +8,8 @@ import streamlit as st
 import db
 from image_utils import field_icon_url, ingredient_icon_url, pokemon_image_url
 from ui import components as c
+from ui.widgets import pokemon_popover_row
+from utils.ingredient_coverage import build_ingredient_index, versatile_mains
 from utils.party_logic import EVENT_BONUSES, RECIPE_CATEGORY_LABELS
 from utils.plan_simulation import (
     capture_improvements,
@@ -15,6 +17,7 @@ from utils.plan_simulation import (
     simulate_plan,
 )
 from utils.play_context import load_play_context
+from utils.skill_role_coverage import skill_role_audit
 from utils.strategy_optimizer import suggest_strategy_plans
 
 
@@ -49,6 +52,18 @@ def _sim_metrics(sim) -> None:
         f"+{sim.healer_team_boost:.1%}",
         f"{sim.healer_activation_per_day:.2f}回/日",
     )
+
+
+@st.cache_data(show_spinner=False, ttl=300)
+def _cached_skill_roles(owned_rows: list[dict]) -> list:
+    """所持更新時だけ、最終進化後のスキル役割を再監査する。"""
+    return skill_role_audit(owned_rows)
+
+
+@st.cache_data(show_spinner=False, ttl=300)
+def _cached_ingredient_index(owned_rows: list[dict]) -> dict:
+    """全食材の担当逆引きを短時間キャッシュする。"""
+    return build_ingredient_index(owned_rows)
 
 
 # ── 週初めの入口：料理カテゴリ → フィールド ────────────────────────────
@@ -368,8 +383,8 @@ if valid_team:
         event_set=event_set,
         starting_inventory=starting_inventory,
     )
-    overview_tab, analysis_tab, growth_tab = st.tabs(
-        ["📋 今週の見通し", "🔬 詳細分析", "🌱 育成・捕獲"]
+    overview_tab, hand_tab, analysis_tab, growth_tab = st.tabs(
+        ["📋 今週の見通し", "🧩 手札・役割", "🔬 詳細分析", "🌱 育成・捕獲"]
     )
     with overview_tab:
         _sim_metrics(carry_sim)
@@ -385,6 +400,176 @@ if valid_team:
                 f"鍋拡張が必要な料理：{carry_sim.conditional_pot_meals}食｜"
                 f"鍋スキル {carry_sim.pot_activation_per_day:.2f}回/日"
             )
+
+    with hand_tab:
+        st.caption(
+            "固定5体で足りるもの、ボックスにはいるが未編成のもの、未所持の穴を分けて表示します。"
+        )
+        box_roles = _cached_skill_roles(owned)
+        member_id_set = set(new_member_ids)
+        recipe_total = sum(requirements.values())
+        role_rows = []
+        for coverage in box_roles:
+            team_providers = [
+                provider
+                for provider in coverage.providers
+                if int(provider.pokemon_id) in member_id_set
+            ]
+            if team_providers:
+                status = "✓ 編成内"
+            elif coverage.providers:
+                status = "△ 手札あり"
+            else:
+                status = "× 未所持"
+
+            if coverage.key == "pot_up" and recipe_total > ctx.pot_capacity:
+                priority = "必須"
+            elif coverage.key == "recovery_all":
+                priority = "推奨"
+            elif coverage.key in {"dish_chance", "food_get", "help_support"}:
+                priority = "補助"
+            else:
+                priority = "任意"
+
+            role_rows.append(
+                {
+                    "役割": coverage.label,
+                    "今回": priority,
+                    "充足": status,
+                    "固定5体": " / ".join(p.label for p in team_providers) or "—",
+                    "所持": len(coverage.providers),
+                }
+            )
+
+        st.markdown("##### 固定5体の役割充足")
+        st.dataframe(
+            pd.DataFrame(role_rows),
+            hide_index=True,
+            use_container_width=True,
+            column_config={
+                "所持": st.column_config.NumberColumn("所持", format="%d体"),
+            },
+        )
+        st.caption(
+            "スキル役割は、所持個体が最終進化した時のメインスキルで判定しています。"
+            "「手札あり」は交代候補がボックス内にいる状態です。"
+        )
+
+        with st.expander("スキル役割ごとの上位手札を見る"):
+            for coverage in box_roles:
+                st.markdown(f"**{coverage.label}**")
+                if not coverage.providers:
+                    st.caption("担当できる所持個体はいません。")
+                    continue
+                for provider in coverage.top:
+                    pokemon = owned_map.get(int(provider.pokemon_id))
+                    pokemon_popover_row(
+                        pokemon,
+                        label=provider.label,
+                        img_species=provider.species_name,
+                        caption=(
+                            f"最終進化 {provider.final_species}｜"
+                            f"スキル軸 {provider.skill_axis:.0f}｜"
+                            f"想定MSLv{provider.main_skill_level}"
+                        ),
+                        badges_text=(
+                            "編成中"
+                            if int(provider.pokemon_id) in member_id_set
+                            else None
+                        ),
+                    )
+
+        ingredient_index = _cached_ingredient_index(owned)
+        st.markdown("##### 主料理の必要食材")
+        ingredient_rows = []
+        for name, required in requirements.items():
+            daily_need = required * 3
+            team_daily = carry_sim.ingredient_supply.get(name, 0.0)
+            providers = ingredient_index.get(name, [])
+            active = [p for p in providers if p.per_day_now > 0]
+            future = [p for p in providers if p.per_day_now <= 0]
+            if team_daily >= daily_need:
+                status = "✓ 3食分"
+            elif team_daily > 0:
+                status = "△ 不足"
+            else:
+                status = "× 担当なし"
+            ingredient_rows.append(
+                {
+                    "食材": name,
+                    "充足": status,
+                    "固定5体/日": round(team_daily, 1),
+                    "3食必要/日": daily_need,
+                    "即戦力": len(active),
+                    "将来候補": len(future),
+                    "所持上位": " / ".join(
+                        f"{p.label} {p.per_day_now:.1f}" for p in active[:2]
+                    )
+                    or "—",
+                }
+            )
+        st.dataframe(
+            pd.DataFrame(ingredient_rows),
+            hide_index=True,
+            use_container_width=True,
+            column_config={
+                "即戦力": st.column_config.NumberColumn("即戦力", format="%d体"),
+                "将来候補": st.column_config.NumberColumn("将来候補", format="%d体"),
+            },
+        )
+        st.caption(
+            "固定5体の供給は、げんきオール・おてつだいボーナス・イベント補正込み。"
+            "即戦力は現在の食材構成とLvで供給できる所持個体です。"
+        )
+
+        with st.expander("全食材の所持状況を見る"):
+            all_food_rows = []
+            uncovered = []
+            for name, providers in ingredient_index.items():
+                active = [p for p in providers if p.per_day_now > 0]
+                if not active:
+                    uncovered.append(name)
+                all_food_rows.append(
+                    {
+                        "食材": name,
+                        "現在担当": len(active),
+                        "将来候補": len(providers) - len(active),
+                        "上位担当": " / ".join(
+                            f"{p.label} {p.per_day_now:.1f}/日" for p in active[:2]
+                        )
+                        or "—",
+                    }
+                )
+            st.dataframe(
+                pd.DataFrame(all_food_rows),
+                hide_index=True,
+                use_container_width=True,
+                column_config={
+                    "現在担当": st.column_config.NumberColumn(
+                        "現在担当", format="%d体"
+                    ),
+                    "将来候補": st.column_config.NumberColumn(
+                        "将来候補", format="%d体"
+                    ),
+                },
+            )
+            if uncovered:
+                st.warning("現在担当がいない食材：" + " / ".join(uncovered))
+
+            versatile = versatile_mains(ingredient_index)
+            if versatile:
+                st.markdown("###### 複数食材を任せられる主力")
+                for main in versatile[:8]:
+                    pokemon = owned_map.get(int(main.pokemon_id))
+                    pokemon_popover_row(
+                        pokemon,
+                        label=main.label,
+                        img_species=main.species_name,
+                        caption=" / ".join(
+                            f"{name} {daily:.1f}/日" for name, daily in main.duties
+                        ),
+                        badges_text=f"{len(main.duties)}食材",
+                    )
 
     with analysis_tab:
         breakdown = pd.DataFrame(
