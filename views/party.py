@@ -68,6 +68,24 @@ def _cached_ingredient_index(owned_rows: list[dict]) -> dict:
 
 # ── 週初めの入口：料理カテゴリ → フィールド ────────────────────────────
 st.html(c.section_header("今週の入口"))
+active_week = db.get_setting(ACTIVE_WEEK_KEY, {}) or {}
+active_plan_id = active_week.get("plan_id")
+active_plan = db.get_party(int(active_plan_id)) if active_plan_id else None
+fields = db.list_all_field_records()
+field_names = [f["name"] for f in fields]
+
+# 攻略プランを開いた直後は、空の先頭候補ではなく「今週のプラン」を見せる。
+# versioned key にして、既に開いているセッションにも一度だけ新しい導線を適用する。
+if not ss.get("_strategy_entry_initialized_v2"):
+    ss["_strategy_entry_initialized_v2"] = True
+    if active_plan:
+        active_category = active_plan.get("recipe_category")
+        active_field = active_plan.get("field_name")
+        if active_category in CATEGORY_ORDER:
+            ss["strategy_category"] = active_category
+        if active_field in field_names:
+            ss["strategy_field"] = active_field
+
 category = st.radio(
     "料理カテゴリ",
     CATEGORY_ORDER,
@@ -75,10 +93,9 @@ category = st.radio(
     horizontal=True,
     key="strategy_category",
 )
-fields = db.list_all_field_records()
 field_name = st.selectbox(
     "フィールド",
-    [f["name"] for f in fields],
+    field_names,
     key="strategy_field",
 )
 field = next(f for f in fields if f["name"] == field_name)
@@ -99,7 +116,6 @@ if ss.get("_strategy_loaded_key") != strategy_key:
     ss.pop("_strategy_suggestions", None)
     ss.pop("_capture_results", None)
 
-active_week = db.get_setting(ACTIVE_WEEK_KEY, {}) or {}
 is_active = bool(plan and active_week.get("plan_id") == plan.get("id"))
 if is_active:
     st.success("✓ この組み合わせが今週の攻略プランです")
