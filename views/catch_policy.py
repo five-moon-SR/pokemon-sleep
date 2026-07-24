@@ -18,8 +18,9 @@ from utils.food_expectation import composition_string
 
 st.html(c.page_banner("強ポケ捕獲方針", "green", icon="🏅"))
 st.caption(
-    "RaenonXティア表(食材軸)の上位種。未所持は理想構成での捕獲候補、"
-    "所持済みでも構成が狙いと違えば引き直し候補。定石: 食材得意=AAA / きのみ=不問 / スキル=低食材。"
+    "RaenonXティア表(食材軸)の上位種を、とくいタイプ（食材/きのみ/スキル/オール）別に一覧。"
+    "未所持は理想構成での捕獲候補、所持済みでも構成が狙いと違えば引き直し候補。"
+    "定石: 食材得意=AAA / きのみ=不問 / スキル=低食材。"
 )
 
 db.init_db()
@@ -36,12 +37,11 @@ tier_pick = st.pills(
 ) or "B以上"
 _min_tier = {"S以上": "S", "A以上": "A", "B以上": "B", "C以上": "C"}[tier_pick]
 
-only_todo = st.toggle("未所持・引き直し候補のみ", value=False, key="cp_only_todo")
-
 rows = []
 for species_name, tier in top_tier_species(_min_tier):
     sp = db.get_species_data(species_name) or {}
     want = recommended_composition(sp)
+    specialty = sp.get("specialty") or "オール"
     holders = owned_by_species.get(species_name, [])
     comps = [composition_string(p, sp) for p in holders]
     if not holders:
@@ -50,14 +50,36 @@ for species_name, tier in top_tier_species(_min_tier):
         status, todo = f"所持({'/'.join(comps)}) → AAA引き直し候補", True
     else:
         status, todo = f"所持({'/'.join(comps)}) ✓", False
-    rows.append((species_name, tier, want, status, todo, holders))
+    rows.append((species_name, tier, want, status, todo, holders, specialty))
 
-if only_todo:
-    rows = [r for r in rows if r[4]]
+# ---- とくいタイプ別に分割（存在する得意だけ物理ボタン化） ----
+_SP_ORDER = [("食材", "🥕 食材"), ("きのみ", "🍓 きのみ"), ("スキル", "⚡ スキル"), ("オール", "✨ オール")]
+_counts = {k: sum(1 for r in rows if r[6] == k) for k, _ in _SP_ORDER}
+_opts = [f"{lbl}（{_counts[k]}）" for k, lbl in _SP_ORDER if _counts[k] > 0]
+_opt_to_key = {f"{lbl}（{_counts[k]}）": k for k, lbl in _SP_ORDER if _counts[k] > 0}
 
-st.caption(f"{len(rows)} 種を表示中。")
+if not _opts:
+    st.html(c.empty_state("表示できる種がいない（ティア帯を広げてみて）。"))
+    st.stop()
 
-for species_name, tier, want, status, todo, holders in rows:
+# 既定は食材（このページは食材軸ティア表が主目的）
+_default = next((o for o in _opts if o.startswith("🥕")), _opts[0])
+if st.session_state.get("cp_specialty") not in _opts:
+    st.session_state["cp_specialty"] = _default
+sp_pick = st.segmented_control(
+    "とくいタイプ", options=_opts, key="cp_specialty", label_visibility="collapsed",
+) or _default
+sel_specialty = _opt_to_key[sp_pick]
+
+only_todo = st.toggle("未所持・引き直し候補のみ", value=False, key="cp_only_todo")
+
+view = [
+    r for r in rows
+    if r[6] == sel_specialty and (r[4] if only_todo else True)
+]
+st.caption(f"{sel_specialty}得意 {len(view)} 種を表示中。")
+
+for species_name, tier, want, status, todo, holders, specialty in view:
     with st.container(border=True):
         cols = st.columns([1, 3, 4], vertical_alignment="center")
         url = pokemon_image_url(species_name)

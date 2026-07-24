@@ -503,6 +503,12 @@ with st.container(border=True):
                     st.write(
                         f"🍳 **{prog['name']}** — 約 **{day_text}** で完成（必要: {req_text}）"
                     )
+            # 律速/不足食材を埋める手札の伸ばし方は食材戦略ページへ委譲
+            st.page_link(
+                "views/ingredients.py",
+                label="不足食材を埋める育成・捕獲候補を見る →（食材戦略）",
+                icon="🥕",
+            )
 
         st.divider()
         st.markdown("##### 🍽 主料理＋つなぎ料理提案")

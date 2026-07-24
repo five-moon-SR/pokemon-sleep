@@ -1,11 +1,11 @@
 """🥕 食材戦略ページ。
 
-目的「今週の料理の穴を埋める」（ui_design_policy.md 段5）。
-最上部で狙いのレシピを決め、直下 hero で全体像、以降は4モードで切替：
-  🕳 料理の穴  — 狙いレシピの充足度と穴食材＋穴ごとの「次の一手」（初期表示）
-  🌱 育成する  — 育成優先度ランキング
-  🎯 捕まえる  — 捕獲優先度ランキング
-  📚 食材索引  — 19食材×担当マトリクス＋多能な主力（参考情報を隔離）
+目的「手札全体をどう伸ばすか」（ui_design_policy.md 段5 / 役割純化）。
+律速食材・完成日数は "パーティー編成" ③で実編成5体ベースに判定する。
+このページは編成に依存せず、狙いレシピを軸に手札を伸ばす3モード：
+  🌱 育成する  — 所持個体をどのLvまで伸ばすと狙いレシピが改善するか（初期表示）
+  🎯 捕まえる  — 穴食材を埋められる未所持種族の優先度
+  📚 食材索引  — 19食材×担当マトリクス＋多能な主力（参考情報）
 （きのみ充足度は「きのみ戦略」ページに分離）
 """
 
@@ -14,7 +14,7 @@ from __future__ import annotations
 import streamlit as st
 
 import db
-from image_utils import RECIPE_ICON_DIR, icon_data_url, ingredient_icon_url
+from image_utils import ingredient_icon_url
 from ui import components as c
 from ui.widgets import pokemon_popover_row, pokemon_status_popover
 from utils.party_logic import _recipe_base_energy, get_play_ctx
@@ -24,15 +24,13 @@ from utils.ingredient_coverage import (
     catch_priorities,
     catch_priorities_general,
     load_target_recipes,
-    recipe_coverage,
     save_target_recipes,
-    team_supply,
     training_priorities,
     versatile_mains,
 )
 
 st.html(c.page_banner("食材戦略", "bag", icon="🥕"))
-st.caption("狙いの料理から逆算して、食材の穴・育成すべき個体・捕まえるべき種族を洗い出す。")
+st.caption("狙いの料理から逆算して、育成すべき個体・捕まえるべき種族を洗い出す。手札全体を伸ばすページ。")
 
 db.init_db()
 owned = [dict(r) for r in db.list_pokemon()]
@@ -41,6 +39,13 @@ owned_by_id = {p["id"]: p for p in owned}
 if not owned:
     st.html(c.empty_state("所持ポケモンがいません。先に「個体登録」から追加してください。"))
     st.stop()
+
+# 律速食材・完成日数は実編成ベースで party 側が判定する（役割分担の導線）
+st.page_link(
+    "views/party.py",
+    label="律速食材・完成日数は実編成5体ベースで判定 →（パーティー編成）",
+    icon="⚔",
+)
 
 
 # ============ ① 料理カテゴリ & 狙いのレシピ ============
@@ -56,9 +61,7 @@ all_recipes = [r for r in db.list_all_recipe_records() if r.get("ingredients")]
 # 基礎エネルギー(Lv60基準)降順（弱い料理は下に）。
 _recipe_energy = {r["name"]: _recipe_base_energy(r) for r in all_recipes}
 all_recipes.sort(key=lambda r: -_recipe_energy[r["name"]])
-_recipe_by_name = {r["name"]: r for r in all_recipes}
 _recipe_total_map = {r["name"]: int(r.get("total_ingredients") or 0) for r in all_recipes}
-_recipe_cat_map = {r["name"]: r.get("category") for r in all_recipes}
 
 st.html(c.section_header("料理カテゴリ"))
 cat_pick = st.pills(
@@ -100,145 +103,52 @@ targets = _other + picked_in_cat
 if set(targets) != set(saved_targets):
     save_target_recipes(targets)
 
-supply = team_supply(owned)
 index = build_ingredient_index(owned)
-
-# 狙いレシピの充足度は複数モードで使うので一度だけ計算
-covs = recipe_coverage(targets, supply) if targets else []
-# 穴食材（狙いレシピ横断でユニーク）
-hole_ings = sorted({h for cov in covs for h in cov.holes})
-total_pace = sum(cov.pace for cov in covs)
+uncovered = [n for n, providers in index.items() if not any(p.per_day_now > 0 for p in providers)]
+# 育成候補は hero と 育成モードの両方で使うので一度だけ計算
+tps = training_priorities(owned, targets) if targets else []
 
 
-# ============ hero（今の答え：全体像） ============
+# ============ hero（手札の状態） ============
 
 if targets:
     st.html(c.stat_tiles([
         c.stat_tile("狙い料理", f"{len(targets)}", sub="品"),
-        c.stat_tile("不足食材", f"{len(hole_ings)}", sub="律速の穴"),
-        c.stat_tile("合計ペース", f"{total_pace:.1f}", sub="回/日"),
+        c.stat_tile("担当ゼロ食材", f"{len(uncovered)}", sub="供給の穴"),
+        c.stat_tile("育成候補", f"{len(tps)}", sub="体"),
     ]))
 else:
-    st.info("上で狙いのレシピを選ぶと、不足食材・育成・捕獲の優先度が出ます。")
+    st.info("上で狙いのレシピを選ぶと、育成・捕獲の優先度が対象食材に絞られます。")
 
 
 # ============ モード切替（segmented） ============
 
-_MODE_HOLE = "🕳 料理の穴"
 _MODE_TRAIN = "🌱 育成する"
 _MODE_CATCH = "🎯 捕まえる"
 _MODE_INDEX = "📚 食材索引"
+_MODES = [_MODE_TRAIN, _MODE_CATCH, _MODE_INDEX]
 
-if "ing_mode" not in st.session_state:
-    st.session_state["ing_mode"] = _MODE_HOLE
+# 旧「料理の穴」など無効な保存値が session_state に残っていたら初期化
+if st.session_state.get("ing_mode") not in _MODES:
+    st.session_state["ing_mode"] = _MODE_TRAIN
 
-
-def _goto(mode: str) -> None:
-    """穴食材の「次の一手」ボタンからモードを切り替える。"""
-    st.session_state["ing_mode"] = mode
-
-
-# key が session_state に既にあるため default は渡さない（初期値は session_state 主導）
 mode = st.segmented_control(
     "表示モード",
-    options=[_MODE_HOLE, _MODE_TRAIN, _MODE_CATCH, _MODE_INDEX],
+    options=_MODES,
     key="ing_mode",
     label_visibility="collapsed",
-) or _MODE_HOLE
-
-
-# ============ 🕳 料理の穴（初期表示：狙いレシピの充足度＋次の一手） ============
-
-if mode == _MODE_HOLE:
-    if not targets:
-        st.html(c.empty_state("狙いのレシピを選ぶと、食材ごとの充足度と穴が表示されます。"))
-    else:
-        for cov in covs:
-            # 現状の鍋容量で作れるか（不足なら赤字＋不足量）
-            _pot = _pot_cap
-            _total_need = int(cov.recipe.get("total_ingredients") or 0)
-            _fits = _total_need <= _pot
-            _short = _total_need - _pot
-            with st.container(border=True):
-                head = st.columns([3, 2])
-                _rurl = icon_data_url(str(RECIPE_ICON_DIR), cov.recipe.get("icon"))
-                _name_color = "" if _fits else " style='color:#D95A44;'"
-                head[0].markdown(
-                    (f'<img src="{_rurl}" width="34" style="vertical-align:middle; margin-right:6px;">' if _rurl else "")
-                    + f"<b{_name_color}>{cov.recipe['name']}</b>"
-                    + ("" if _fits else " 🍳✕"),
-                    unsafe_allow_html=True,
-                )
-                head[1].caption(
-                    f"作成ペース {cov.pace:.2f}回/日 ・ 期待 {cov.daily_energy:,.0f} en/日"
-                )
-
-                _need_list = "、".join(
-                    f"{i['name']}×{int(i['count'])}" for i in cov.recipe.get("ingredients") or []
-                )
-                st.markdown(
-                    f"必要食材: {_need_list}　→　**総量 {_total_need}個** ／ 鍋容量 {_pot}　"
-                    + (f"<span style='color:#17AE54; font-weight:700;'>✅ 現状の鍋で作れる</span>"
-                       if _fits else
-                       f"<span style='color:#D95A44; font-weight:700;'>🍳 鍋容量不足：あと {_short}個（鍋を{_total_need}以上に）</span>"),
-                    unsafe_allow_html=True,
-                )
-
-                for ing_name, (need, have) in cov.per_ingredient.items():
-                    ratio = have / need if need > 0 else 0.0
-                    is_hole = ing_name in cov.holes
-                    cols = st.columns([2, 3, 2])
-                    cols[0].html(c.ingredient_chip(ing_name, f"{have:.1f}/{need:.0f}"))
-                    cols[1].html(c.meter(ratio))
-                    cols[2].caption(("🕳 律速" if is_hole else "") + f" ×{ratio:.2f}")
-
-        # ---- 穴食材ごとの「次の一手」 ----
-        st.html(c.section_header("穴を埋める次の一手"))
-        if not hole_ings:
-            st.success("狙いレシピに律速の穴なし。今の編成で回せる。")
-        else:
-            st.caption("不足食材ごとに、育成で伸ばせる所持個体がいるか／捕獲で埋めるかを提案。")
-            for h in hole_ings:
-                providers = index.get(h, [])
-                # 枠は持つが今は供給ゼロ＝育成/選択変更で伸ばせる候補
-                idle = [p for p in providers if p.per_day_now <= 0]
-                _iurl = ingredient_icon_url(h)
-                _icon = (
-                    f'<img src="{_iurl}" width="18" loading="lazy" '
-                    f'style="vertical-align:middle; margin-right:5px;">' if _iurl else ""
-                )
-                with st.container(border=True):
-                    hint = (
-                        f"枠を持つ所持個体が{len(idle)}体（育成・食材選択で供給を起こせる）"
-                        if idle else "所持個体に枠なし → 捕獲で埋めるのが早い"
-                    )
-                    st.html(
-                        f'<div style="font-size:0.92rem;">{_icon}<b>{h}</b>'
-                        f'<span style="color:#7a7a7a;"> — {hint}</span></div>'
-                    )
-                    btns = st.columns(2)
-                    btns[0].button(
-                        "🌱 育成対象を見る", key=f"hole_train_{h}",
-                        on_click=_goto, args=(_MODE_TRAIN,),
-                        use_container_width=True, disabled=not idle,
-                    )
-                    btns[1].button(
-                        "🎯 捕獲候補を見る", key=f"hole_catch_{h}",
-                        on_click=_goto, args=(_MODE_CATCH,),
-                        use_container_width=True,
-                    )
+) or _MODE_TRAIN
 
 
 # ============ 🌱 育成する（育成優先度） ============
 
-elif mode == _MODE_TRAIN:
+if mode == _MODE_TRAIN:
     st.caption("狙いレシピの料理エナジー改善を「1Lvあたり効率」で評価。Lv30/60の食材枠解放が大きく効く。")
     if not targets:
         st.html(c.empty_state("狙いのレシピを選ぶと計算されます。"))
+    elif not tps:
+        st.html(c.empty_state("これ以上伸ばしても狙いレシピは改善しない（すでに充足 or 対象食材の担当がいない）。"))
     else:
-        tps = training_priorities(owned, targets)
-        if not tps:
-            st.html(c.empty_state("これ以上伸ばしても狙いレシピは改善しない（すでに充足 or 対象食材の担当がいない）。"))
         for i, tp in enumerate(tps[:10]):
             with st.container(border=True):
                 delta = "、".join(f"{n} +{v:.1f}/日" for n, v in sorted(tp.delta_supply.items(), key=lambda x: -x[1]))
@@ -294,7 +204,6 @@ elif mode == _MODE_INDEX:
         "編成に乗るのは1〜2体なので、表示は各食材の上位2体まで。"
     )
 
-    uncovered = [n for n, providers in index.items() if not any(p.per_day_now > 0 for p in providers)]
     if uncovered:
         st.warning("担当ゼロの食材: " + "、".join(uncovered))
 
