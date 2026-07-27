@@ -219,6 +219,32 @@ def check_field_references() -> None:
             warn("空データ", f"field[{f['name']}]: 好みきのみが空でランダム指定も無い")
 
 
+def check_berry_field_crossref() -> None:
+    """きのみ側 preferred_field と フィールド側 favorite_berries の双方向突合。
+
+    片方だけ直して片方を直し忘れる事故を検出する。
+    """
+    f2b: dict[str, list[str]] = defaultdict(list)
+    for f in fields:
+        for b in f.get("favorite_berries") or []:
+            bname = b.get("name") if isinstance(b, dict) else b
+            f2b[bname].append(f["name"])
+
+    for b in berries:
+        pf, listed = b.get("preferred_field"), f2b.get(b["name"], [])
+        if not listed:
+            err("双方向不一致",
+                f"berry[{b['name']}]: preferred_field={pf!r} だが、どのフィールドの"
+                f"好みきのみにも載っていない")
+        elif pf not in listed:
+            err("双方向不一致",
+                f"berry[{b['name']}]: preferred_field={pf!r} だが、実際に載っているのは {listed}")
+
+    for bname, flds in f2b.items():
+        if len(flds) > 1:
+            warn("要確認", f"きのみ {bname} が複数フィールドの好みに載っている: {flds}")
+
+
 def check_evolution_references() -> None:
     for e in evolutions:
         for side in ("from", "to"):
@@ -454,6 +480,7 @@ CHECKS = [
     ("食材スロット", check_ingredient_slots),
     ("recipe参照", check_recipe_references),
     ("field参照", check_field_references),
+    ("きのみ↔フィールド", check_berry_field_crossref),
     ("evolution参照", check_evolution_references),
     ("tier参照", check_tier_references),
     ("ingredient逆参照", check_ingredient_recipe_backrefs),
