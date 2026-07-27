@@ -1,132 +1,1411 @@
 {
-  "records": [
-    {
-      "species_name": "ダークライ",
-      "tier": "S",
-      "axis": "ingredient"
-    },
-    {
-      "species_name": "ウェーニバル",
-      "tier": "A",
-      "axis": "ingredient"
-    },
-    {
-      "species_name": "カモネギ",
-      "tier": "A",
-      "axis": "ingredient"
-    },
-    {
-      "species_name": "クレセリア",
-      "tier": "A",
-      "axis": "ingredient"
-    },
-    {
-      "species_name": "リザードン",
-      "tier": "B",
-      "axis": "ingredient"
-    },
-    {
-      "species_name": "デンリュウ",
-      "tier": "B",
-      "axis": "ingredient"
-    },
-    {
-      "species_name": "バクフーン",
-      "tier": "B",
-      "axis": "ingredient"
-    },
-    {
-      "species_name": "オンバーン",
-      "tier": "B",
-      "axis": "ingredient"
-    },
-    {
-      "species_name": "ミュウ",
-      "tier": "B",
-      "axis": "ingredient"
-    },
-    {
-      "species_name": "ヘルガー",
-      "tier": "B",
-      "axis": "ingredient"
-    },
-    {
-      "species_name": "ダグトリオ",
-      "tier": "B",
-      "axis": "ingredient"
-    },
-    {
-      "species_name": "ガルーラ",
-      "tier": "B",
-      "axis": "ingredient"
-    },
-    {
-      "species_name": "ウェルカモ",
-      "tier": "B",
-      "axis": "ingredient"
-    },
-    {
-      "species_name": "ゲンガー",
-      "tier": "C",
-      "axis": "ingredient"
-    },
-    {
-      "species_name": "ラティオス",
-      "tier": "C",
-      "axis": "ingredient"
-    },
-    {
-      "species_name": "フライゴン",
-      "tier": "C",
-      "axis": "ingredient"
-    },
-    {
-      "species_name": "リザード",
-      "tier": "C",
-      "axis": "ingredient"
-    },
-    {
-      "species_name": "カイリュー",
-      "tier": "C",
-      "axis": "ingredient"
-    },
-    {
-      "species_name": "ヘラクロス",
-      "tier": "C",
-      "axis": "ingredient"
-    },
-    {
-      "species_name": "ライチュウ",
-      "tier": "C",
-      "axis": "ingredient"
-    },
-    {
-      "species_name": "ゴウカザル",
-      "tier": "C",
-      "axis": "ingredient"
-    },
-    {
-      "species_name": "メガニウム",
-      "tier": "C",
-      "axis": "ingredient"
-    },
-    {
-      "species_name": "マグマラシ",
-      "tier": "C",
-      "axis": "ingredient"
-    }
+ "_meta": {
+  "count": 113,
+  "source_name": "攻略サイト4ソースの人間評価を統合した独自ティア",
+  "sources": {
+   "ポケらく": {
+    "url": "https://pokemongo-raku.com/post93379",
+    "updated": "2026-07-14",
+    "count": 115
+   },
+   "ゲームエイト": {
+    "url": "https://game8.jp/pokemonsleep/542600",
+    "updated": "2026-07-21",
+    "count": 32
+   },
+   "Pokelog": {
+    "url": "https://lifematome.blog/pokesleep-saikyouranking-tier/",
+    "updated": "2025-11-02",
+    "count": 91
+   },
+   "こいき10選": {
+    "url": "https://x.com/koiki_pokesle/status/2080616484003606598",
+    "updated": "2026-07-24",
+    "count": 10
+   }
+  },
+  "built_at": "2026-07-28",
+  "tier_order": [
+   "SS",
+   "S",
+   "A",
+   "B",
+   "C",
+   "D"
   ],
-  "_meta": {
-    "count": 23,
-    "source": "https://pks.raenonx.cc/ja/pokedex/tier",
-    "source_name": "RaenonX ポケモンティア表(食材軸)",
-    "fetched_at": "2026-07-23",
-    "note": "S/A/Bは全量、Cはサイト表示上位10件のみ(全31件中)。D以下は捕獲優先度に影響しないため未収集。ユーザー設定(RaenonX側)の影響を受ける簡易ティア。更新時はPlaywrightで同ページから再取得。",
-    "tier_order": [
-      "S",
-      "A",
-      "B",
-      "C"
-    ]
+  "note": "計算由来のティア(RaenonX等)は採用せず、人間が評価しているソースのみを統合。採用条件は最新実装ポケモン(ドダイトス/ゴウカザル/エンペルト)の掲載。Pokelogのみ第9世代網羅で1段緩めて採用。同一パブリッシャーの複数記事は1票に統合。ゲームエイトはティア表記が無く順位のみのため上位5=SS/6-12=S/13-20=A/21-=B と段階化した近似。進化前は最終進化形で評価するため除外。sources=1 の種族は参考値。"
+ },
+ "records": [
+  {
+   "species_name": "サーナイト",
+   "tier": "SS",
+   "axis": "overall",
+   "score": 0.887,
+   "sources": 4,
+   "spread": 0.25,
+   "by_source": {
+    "ポケらく": "S",
+    "ゲームエイト": "SS",
+    "Pokelog": "マスダ",
+    "こいき10選": "SS"
+   }
+  },
+  {
+   "species_name": "カイリュー",
+   "tier": "SS",
+   "axis": "overall",
+   "score": 0.863,
+   "sources": 4,
+   "spread": 0.15,
+   "by_source": {
+    "ポケらく": "S",
+    "ゲームエイト": "SS",
+    "Pokelog": "SS",
+    "こいき10選": "SS"
+   }
+  },
+  {
+   "species_name": "カメックス",
+   "tier": "SS",
+   "axis": "overall",
+   "score": 0.85,
+   "sources": 3,
+   "spread": 0.15,
+   "by_source": {
+    "ポケらく": "S",
+    "ゲームエイト": "SS",
+    "Pokelog": "SS"
+   }
+  },
+  {
+   "species_name": "ジュカイン",
+   "tier": "SS",
+   "axis": "overall",
+   "score": 0.85,
+   "sources": 3,
+   "spread": 0.15,
+   "by_source": {
+    "ポケらく": "S",
+    "ゲームエイト": "SS",
+    "Pokelog": "SS"
+   }
+  },
+  {
+   "species_name": "ハガネール",
+   "tier": "SS",
+   "axis": "overall",
+   "score": 0.85,
+   "sources": 3,
+   "spread": 0.15,
+   "by_source": {
+    "ポケらく": "S",
+    "ゲームエイト": "SS",
+    "Pokelog": "SS"
+   }
+  },
+  {
+   "species_name": "ボーマンダ",
+   "tier": "SS",
+   "axis": "overall",
+   "score": 0.85,
+   "sources": 3,
+   "spread": 0.15,
+   "by_source": {
+    "ポケらく": "S",
+    "ゲームエイト": "SS",
+    "こいき10選": "SS"
+   }
+  },
+  {
+   "species_name": "ラグラージ",
+   "tier": "SS",
+   "axis": "overall",
+   "score": 0.85,
+   "sources": 3,
+   "spread": 0.15,
+   "by_source": {
+    "ポケらく": "S",
+    "Pokelog": "SS",
+    "こいき10選": "SS"
+   }
+  },
+  {
+   "species_name": "デデンネ",
+   "tier": "S",
+   "axis": "overall",
+   "score": 0.825,
+   "sources": 2,
+   "spread": 0.15,
+   "by_source": {
+    "ポケらく": "S",
+    "こいき10選": "SS"
+   }
+  },
+  {
+   "species_name": "バンギラス",
+   "tier": "S",
+   "axis": "overall",
+   "score": 0.825,
+   "sources": 2,
+   "spread": 0.15,
+   "by_source": {
+    "ポケらく": "S",
+    "Pokelog": "SS"
+   }
+  },
+  {
+   "species_name": "クレセリア",
+   "tier": "S",
+   "axis": "overall",
+   "score": 0.8,
+   "sources": 3,
+   "spread": 0.15,
+   "by_source": {
+    "ポケらく": "S",
+    "ゲームエイト": "S",
+    "Pokelog": "SS"
+   }
+  },
+  {
+   "species_name": "キテルグマ",
+   "tier": "S",
+   "axis": "overall",
+   "score": 0.793,
+   "sources": 3,
+   "spread": 0.32,
+   "by_source": {
+    "ポケらく": "A",
+    "Pokelog": "SS",
+    "こいき10選": "SS"
+   }
+  },
+  {
+   "species_name": "クワガノン",
+   "tier": "S",
+   "axis": "overall",
+   "score": 0.793,
+   "sources": 3,
+   "spread": 0.32,
+   "by_source": {
+    "ポケらく": "A",
+    "ゲームエイト": "SS",
+    "Pokelog": "SS"
+   }
+  },
+  {
+   "species_name": "ジバコイル",
+   "tier": "S",
+   "axis": "overall",
+   "score": 0.793,
+   "sources": 3,
+   "spread": 0.32,
+   "by_source": {
+    "ポケらく": "A",
+    "Pokelog": "SS",
+    "こいき10選": "SS"
+   }
+  },
+  {
+   "species_name": "ツボツボ",
+   "tier": "S",
+   "axis": "overall",
+   "score": 0.793,
+   "sources": 3,
+   "spread": 0.32,
+   "by_source": {
+    "ポケらく": "A",
+    "ゲームエイト": "SS",
+    "こいき10選": "SS"
+   }
+  },
+  {
+   "species_name": "ハピナス",
+   "tier": "S",
+   "axis": "overall",
+   "score": 0.793,
+   "sources": 3,
+   "spread": 0.32,
+   "by_source": {
+    "ポケらく": "A",
+    "ゲームエイト": "SS",
+    "Pokelog": "SS"
+   }
+  },
+  {
+   "species_name": "バクフーン",
+   "tier": "S",
+   "axis": "overall",
+   "score": 0.793,
+   "sources": 3,
+   "spread": 0.32,
+   "by_source": {
+    "ポケらく": "A",
+    "ゲームエイト": "SS",
+    "Pokelog": "SS"
+   }
+  },
+  {
+   "species_name": "パーモット",
+   "tier": "S",
+   "axis": "overall",
+   "score": 0.793,
+   "sources": 3,
+   "spread": 0.32,
+   "by_source": {
+    "ポケらく": "A",
+    "ゲームエイト": "SS",
+    "Pokelog": "SS"
+   }
+  },
+  {
+   "species_name": "フシギバナ",
+   "tier": "S",
+   "axis": "overall",
+   "score": 0.793,
+   "sources": 3,
+   "spread": 0.32,
+   "by_source": {
+    "ポケらく": "A",
+    "ゲームエイト": "SS",
+    "Pokelog": "SS"
+   }
+  },
+  {
+   "species_name": "ボスゴドラ",
+   "tier": "S",
+   "axis": "overall",
+   "score": 0.793,
+   "sources": 3,
+   "spread": 0.32,
+   "by_source": {
+    "ポケらく": "A",
+    "ゲームエイト": "SS",
+    "Pokelog": "SS"
+   }
+  },
+  {
+   "species_name": "マニューラ",
+   "tier": "S",
+   "axis": "overall",
+   "score": 0.793,
+   "sources": 3,
+   "spread": 0.32,
+   "by_source": {
+    "ポケらく": "A",
+    "ゲームエイト": "SS",
+    "Pokelog": "SS"
+   }
+  },
+  {
+   "species_name": "メガニウム",
+   "tier": "S",
+   "axis": "overall",
+   "score": 0.793,
+   "sources": 3,
+   "spread": 0.32,
+   "by_source": {
+    "ポケらく": "A",
+    "ゲームエイト": "SS",
+    "Pokelog": "SS"
+   }
+  },
+  {
+   "species_name": "ライチュウ",
+   "tier": "S",
+   "axis": "overall",
+   "score": 0.793,
+   "sources": 3,
+   "spread": 0.32,
+   "by_source": {
+    "ポケらく": "A",
+    "ゲームエイト": "SS",
+    "Pokelog": "SS"
+   }
+  },
+  {
+   "species_name": "ラティオス",
+   "tier": "S",
+   "axis": "overall",
+   "score": 0.75,
+   "sources": 1,
+   "spread": 0.0,
+   "by_source": {
+    "ポケらく": "S"
+   }
+  },
+  {
+   "species_name": "エンテイ",
+   "tier": "S",
+   "axis": "overall",
+   "score": 0.74,
+   "sources": 3,
+   "spread": 0.48,
+   "by_source": {
+    "ポケらく": "B",
+    "ゲームエイト": "SS",
+    "Pokelog": "SS"
+   }
+  },
+  {
+   "species_name": "オーダイル",
+   "tier": "S",
+   "axis": "overall",
+   "score": 0.74,
+   "sources": 3,
+   "spread": 0.48,
+   "by_source": {
+    "ポケらく": "B",
+    "ゲームエイト": "SS",
+    "Pokelog": "SS"
+   }
+  },
+  {
+   "species_name": "トドゼルガ",
+   "tier": "S",
+   "axis": "overall",
+   "score": 0.74,
+   "sources": 3,
+   "spread": 0.48,
+   "by_source": {
+    "ポケらく": "B",
+    "ゲームエイト": "SS",
+    "Pokelog": "SS"
+   }
+  },
+  {
+   "species_name": "ライコウ",
+   "tier": "S",
+   "axis": "overall",
+   "score": 0.74,
+   "sources": 3,
+   "spread": 0.48,
+   "by_source": {
+    "ポケらく": "B",
+    "ゲームエイト": "SS",
+    "Pokelog": "SS"
+   }
+  },
+  {
+   "species_name": "ウツボット",
+   "tier": "S",
+   "axis": "overall",
+   "score": 0.74,
+   "sources": 2,
+   "spread": 0.32,
+   "by_source": {
+    "ポケらく": "A",
+    "Pokelog": "SS"
+   }
+  },
+  {
+   "species_name": "ダークライ",
+   "tier": "S",
+   "axis": "overall",
+   "score": 0.74,
+   "sources": 2,
+   "spread": 0.32,
+   "by_source": {
+    "ポケらく": "A",
+    "Pokelog": "SS"
+   }
+  },
+  {
+   "species_name": "パンプジン",
+   "tier": "S",
+   "axis": "overall",
+   "score": 0.74,
+   "sources": 2,
+   "spread": 0.32,
+   "by_source": {
+    "ポケらく": "A",
+    "ゲームエイト": "SS"
+   }
+  },
+  {
+   "species_name": "フライゴン",
+   "tier": "S",
+   "axis": "overall",
+   "score": 0.74,
+   "sources": 2,
+   "spread": 0.32,
+   "by_source": {
+    "ポケらく": "A",
+    "ゲームエイト": "SS"
+   }
+  },
+  {
+   "species_name": "ミミッキュ",
+   "tier": "S",
+   "axis": "overall",
+   "score": 0.74,
+   "sources": 2,
+   "spread": 0.32,
+   "by_source": {
+    "ポケらく": "A",
+    "Pokelog": "SS"
+   }
+  },
+  {
+   "species_name": "ラウドボーン",
+   "tier": "S",
+   "axis": "overall",
+   "score": 0.74,
+   "sources": 2,
+   "spread": 0.32,
+   "by_source": {
+    "ポケらく": "A",
+    "Pokelog": "SS"
+   }
+  },
+  {
+   "species_name": "レントラー",
+   "tier": "S",
+   "axis": "overall",
+   "score": 0.74,
+   "sources": 2,
+   "spread": 0.32,
+   "by_source": {
+    "ポケらく": "A",
+    "Pokelog": "SS"
+   }
+  },
+  {
+   "species_name": "デンリュウ",
+   "tier": "S",
+   "axis": "overall",
+   "score": 0.71,
+   "sources": 2,
+   "spread": 0.58,
+   "by_source": {
+    "ポケらく": "B",
+    "Pokelog": "マスダ"
+   }
+  },
+  {
+   "species_name": "ドードリオ",
+   "tier": "A",
+   "axis": "overall",
+   "score": 0.693,
+   "sources": 3,
+   "spread": 0.17,
+   "by_source": {
+    "ポケらく": "A",
+    "ゲームエイト": "S",
+    "Pokelog": "S"
+   }
+  },
+  {
+   "species_name": "スイクン",
+   "tier": "A",
+   "axis": "overall",
+   "score": 0.69,
+   "sources": 3,
+   "spread": 0.48,
+   "by_source": {
+    "ポケらく": "B",
+    "ゲームエイト": "SS",
+    "Pokelog": "S"
+   }
+  },
+  {
+   "species_name": "ウェーニバル",
+   "tier": "A",
+   "axis": "overall",
+   "score": 0.665,
+   "sources": 2,
+   "spread": 0.17,
+   "by_source": {
+    "ポケらく": "A",
+    "Pokelog": "S"
+   }
+  },
+  {
+   "species_name": "キュウコン",
+   "tier": "A",
+   "axis": "overall",
+   "score": 0.665,
+   "sources": 2,
+   "spread": 0.17,
+   "by_source": {
+    "ポケらく": "A",
+    "Pokelog": "S"
+   }
+  },
+  {
+   "species_name": "ニンフィア",
+   "tier": "A",
+   "axis": "overall",
+   "score": 0.665,
+   "sources": 2,
+   "spread": 0.17,
+   "by_source": {
+    "ポケらく": "A",
+    "Pokelog": "S"
+   }
+  },
+  {
+   "species_name": "バシャーモ",
+   "tier": "A",
+   "axis": "overall",
+   "score": 0.665,
+   "sources": 2,
+   "spread": 0.17,
+   "by_source": {
+    "ポケらく": "A",
+    "Pokelog": "S"
+   }
+  },
+  {
+   "species_name": "ユキノオー",
+   "tier": "A",
+   "axis": "overall",
+   "score": 0.665,
+   "sources": 2,
+   "spread": 0.17,
+   "by_source": {
+    "ポケらく": "A",
+    "Pokelog": "S"
+   }
+  },
+  {
+   "species_name": "カモネギ",
+   "tier": "A",
+   "axis": "overall",
+   "score": 0.66,
+   "sources": 2,
+   "spread": 0.48,
+   "by_source": {
+    "ポケらく": "B",
+    "Pokelog": "SS"
+   }
+  },
+  {
+   "species_name": "ドクロッグ",
+   "tier": "A",
+   "axis": "overall",
+   "score": 0.66,
+   "sources": 2,
+   "spread": 0.48,
+   "by_source": {
+    "ポケらく": "B",
+    "Pokelog": "SS"
+   }
+  },
+  {
+   "species_name": "マスカーニャ",
+   "tier": "A",
+   "axis": "overall",
+   "score": 0.66,
+   "sources": 2,
+   "spread": 0.48,
+   "by_source": {
+    "ポケらく": "B",
+    "Pokelog": "SS"
+   }
+  },
+  {
+   "species_name": "ゲンガー",
+   "tier": "A",
+   "axis": "overall",
+   "score": 0.633,
+   "sources": 3,
+   "spread": 0.48,
+   "by_source": {
+    "ポケらく": "B",
+    "ゲームエイト": "SS",
+    "Pokelog": "A"
+   }
+  },
+  {
+   "species_name": "アブソル",
+   "tier": "A",
+   "axis": "overall",
+   "score": 0.585,
+   "sources": 2,
+   "spread": 0.33,
+   "by_source": {
+    "ポケらく": "B",
+    "Pokelog": "S"
+   }
+  },
+  {
+   "species_name": "アブリボン",
+   "tier": "A",
+   "axis": "overall",
+   "score": 0.585,
+   "sources": 2,
+   "spread": 0.33,
+   "by_source": {
+    "ポケらく": "B",
+    "ゲームエイト": "S"
+   }
+  },
+  {
+   "species_name": "ウォーグル",
+   "tier": "A",
+   "axis": "overall",
+   "score": 0.585,
+   "sources": 2,
+   "spread": 0.33,
+   "by_source": {
+    "ポケらく": "B",
+    "Pokelog": "S"
+   }
+  },
+  {
+   "species_name": "エルレイド",
+   "tier": "A",
+   "axis": "overall",
+   "score": 0.585,
+   "sources": 2,
+   "spread": 0.33,
+   "by_source": {
+    "ポケらく": "B",
+    "Pokelog": "S"
+   }
+  },
+  {
+   "species_name": "エーフィ",
+   "tier": "A",
+   "axis": "overall",
+   "score": 0.585,
+   "sources": 2,
+   "spread": 0.33,
+   "by_source": {
+    "ポケらく": "B",
+    "Pokelog": "S"
+   }
+  },
+  {
+   "species_name": "グレイシア",
+   "tier": "A",
+   "axis": "overall",
+   "score": 0.585,
+   "sources": 2,
+   "spread": 0.33,
+   "by_source": {
+    "ポケらく": "B",
+    "Pokelog": "S"
+   }
+  },
+  {
+   "species_name": "ゴルダック",
+   "tier": "A",
+   "axis": "overall",
+   "score": 0.585,
+   "sources": 2,
+   "spread": 0.33,
+   "by_source": {
+    "ポケらく": "B",
+    "Pokelog": "S"
+   }
+  },
+  {
+   "species_name": "ジュペッタ",
+   "tier": "A",
+   "axis": "overall",
+   "score": 0.585,
+   "sources": 2,
+   "spread": 0.33,
+   "by_source": {
+    "ポケらく": "B",
+    "Pokelog": "S"
+   }
+  },
+  {
+   "species_name": "デリバード",
+   "tier": "A",
+   "axis": "overall",
+   "score": 0.585,
+   "sources": 2,
+   "spread": 0.33,
+   "by_source": {
+    "ポケらく": "B",
+    "Pokelog": "S"
+   }
+  },
+  {
+   "species_name": "ヌオー",
+   "tier": "A",
+   "axis": "overall",
+   "score": 0.585,
+   "sources": 2,
+   "spread": 0.33,
+   "by_source": {
+    "ポケらく": "B",
+    "Pokelog": "S"
+   }
+  },
+  {
+   "species_name": "ネイティオ",
+   "tier": "A",
+   "axis": "overall",
+   "score": 0.585,
+   "sources": 2,
+   "spread": 0.33,
+   "by_source": {
+    "ポケらく": "B",
+    "Pokelog": "S"
+   }
+  },
+  {
+   "species_name": "ブースター",
+   "tier": "A",
+   "axis": "overall",
+   "score": 0.585,
+   "sources": 2,
+   "spread": 0.33,
+   "by_source": {
+    "ポケらく": "B",
+    "Pokelog": "S"
+   }
+  },
+  {
+   "species_name": "エンペルト",
+   "tier": "A",
+   "axis": "overall",
+   "score": 0.58,
+   "sources": 1,
+   "spread": 0.0,
+   "by_source": {
+    "ポケらく": "A"
+   }
+  },
+  {
+   "species_name": "ガチゴラス",
+   "tier": "A",
+   "axis": "overall",
+   "score": 0.58,
+   "sources": 1,
+   "spread": 0.0,
+   "by_source": {
+    "ポケらく": "A"
+   }
+  },
+  {
+   "species_name": "ゴウカザル",
+   "tier": "A",
+   "axis": "overall",
+   "score": 0.58,
+   "sources": 1,
+   "spread": 0.0,
+   "by_source": {
+    "ポケらく": "A"
+   }
+  },
+  {
+   "species_name": "ドダイトス",
+   "tier": "A",
+   "axis": "overall",
+   "score": 0.58,
+   "sources": 1,
+   "spread": 0.0,
+   "by_source": {
+    "ポケらく": "A"
+   }
+  },
+  {
+   "species_name": "ハルクジラ",
+   "tier": "A",
+   "axis": "overall",
+   "score": 0.58,
+   "sources": 1,
+   "spread": 0.0,
+   "by_source": {
+    "ポケらく": "A"
+   }
+  },
+  {
+   "species_name": "ミュウ",
+   "tier": "A",
+   "axis": "overall",
+   "score": 0.58,
+   "sources": 1,
+   "spread": 0.0,
+   "by_source": {
+    "ポケらく": "A"
+   }
+  },
+  {
+   "species_name": "ウソッキー",
+   "tier": "A",
+   "axis": "overall",
+   "score": 0.575,
+   "sources": 2,
+   "spread": 0.65,
+   "by_source": {
+    "ポケらく": "C",
+    "Pokelog": "SS"
+   }
+  },
+  {
+   "species_name": "サンダース",
+   "tier": "B",
+   "axis": "overall",
+   "score": 0.533,
+   "sources": 3,
+   "spread": 0.78,
+   "by_source": {
+    "ポケらく": "D",
+    "ゲームエイト": "SS",
+    "Pokelog": "A"
+   }
+  },
+  {
+   "species_name": "マルノーム",
+   "tier": "B",
+   "axis": "overall",
+   "score": 0.523,
+   "sources": 3,
+   "spread": 0.65,
+   "by_source": {
+    "ポケらく": "C",
+    "Pokelog": "B",
+    "こいき10選": "SS"
+   }
+  },
+  {
+   "species_name": "カイロス",
+   "tier": "B",
+   "axis": "overall",
+   "score": 0.5,
+   "sources": 2,
+   "spread": 0.5,
+   "by_source": {
+    "ポケらく": "C",
+    "Pokelog": "S"
+   }
+  },
+  {
+   "species_name": "ガルーラ",
+   "tier": "B",
+   "axis": "overall",
+   "score": 0.5,
+   "sources": 2,
+   "spread": 0.5,
+   "by_source": {
+    "ポケらく": "C",
+    "Pokelog": "S"
+   }
+  },
+  {
+   "species_name": "クチート",
+   "tier": "B",
+   "axis": "overall",
+   "score": 0.5,
+   "sources": 2,
+   "spread": 0.5,
+   "by_source": {
+    "ポケらく": "C",
+    "Pokelog": "S"
+   }
+  },
+  {
+   "species_name": "ゴローニャ",
+   "tier": "B",
+   "axis": "overall",
+   "score": 0.5,
+   "sources": 2,
+   "spread": 0.5,
+   "by_source": {
+    "ポケらく": "C",
+    "Pokelog": "S"
+   }
+  },
+  {
+   "species_name": "バタフリー",
+   "tier": "B",
+   "axis": "overall",
+   "score": 0.5,
+   "sources": 2,
+   "spread": 0.16,
+   "by_source": {
+    "ポケらく": "B",
+    "Pokelog": "A"
+   }
+  },
+  {
+   "species_name": "ピクシー",
+   "tier": "B",
+   "axis": "overall",
+   "score": 0.5,
+   "sources": 2,
+   "spread": 0.5,
+   "by_source": {
+    "ポケらく": "C",
+    "Pokelog": "S"
+   }
+  },
+  {
+   "species_name": "ヘルガー",
+   "tier": "B",
+   "axis": "overall",
+   "score": 0.5,
+   "sources": 2,
+   "spread": 0.5,
+   "by_source": {
+    "ポケらく": "C",
+    "Pokelog": "S"
+   }
+  },
+  {
+   "species_name": "マイナン",
+   "tier": "B",
+   "axis": "overall",
+   "score": 0.5,
+   "sources": 2,
+   "spread": 0.5,
+   "by_source": {
+    "ポケらく": "C",
+    "Pokelog": "S"
+   }
+  },
+  {
+   "species_name": "メタモン",
+   "tier": "B",
+   "axis": "overall",
+   "score": 0.5,
+   "sources": 2,
+   "spread": 0.5,
+   "by_source": {
+    "ポケらく": "C",
+    "Pokelog": "S"
+   }
+  },
+  {
+   "species_name": "プクリン",
+   "tier": "B",
+   "axis": "overall",
+   "score": 0.473,
+   "sources": 3,
+   "spread": 0.16,
+   "by_source": {
+    "ポケらく": "B",
+    "ゲームエイト": "B",
+    "Pokelog": "A"
+   }
+  },
+  {
+   "species_name": "リザードン",
+   "tier": "B",
+   "axis": "overall",
+   "score": 0.473,
+   "sources": 3,
+   "spread": 0.16,
+   "by_source": {
+    "ポケらく": "B",
+    "ゲームエイト": "B",
+    "Pokelog": "A"
+   }
+  },
+  {
+   "species_name": "プラスル",
+   "tier": "B",
+   "axis": "overall",
+   "score": 0.435,
+   "sources": 2,
+   "spread": 0.63,
+   "by_source": {
+    "ポケらく": "D",
+    "Pokelog": "S"
+   }
+  },
+  {
+   "species_name": "イワパレス",
+   "tier": "B",
+   "axis": "overall",
+   "score": 0.42,
+   "sources": 1,
+   "spread": 0.0,
+   "by_source": {
+    "ポケらく": "B"
+   }
+  },
+  {
+   "species_name": "オンバーン",
+   "tier": "B",
+   "axis": "overall",
+   "score": 0.42,
+   "sources": 1,
+   "spread": 0.0,
+   "by_source": {
+    "ポケらく": "B"
+   }
+  },
+  {
+   "species_name": "サンドパン",
+   "tier": "B",
+   "axis": "overall",
+   "score": 0.42,
+   "sources": 1,
+   "spread": 0.0,
+   "by_source": {
+    "ポケらく": "B"
+   }
+  },
+  {
+   "species_name": "ジジーロン",
+   "tier": "B",
+   "axis": "overall",
+   "score": 0.42,
+   "sources": 1,
+   "spread": 0.0,
+   "by_source": {
+    "ポケらく": "B"
+   }
+  },
+  {
+   "species_name": "トゲデマル",
+   "tier": "B",
+   "axis": "overall",
+   "score": 0.42,
+   "sources": 1,
+   "spread": 0.0,
+   "by_source": {
+    "ポケらく": "B"
+   }
+  },
+  {
+   "species_name": "ドオー",
+   "tier": "B",
+   "axis": "overall",
+   "score": 0.42,
+   "sources": 1,
+   "spread": 0.0,
+   "by_source": {
+    "ポケらく": "B"
+   }
+  },
+  {
+   "species_name": "ミカルゲ",
+   "tier": "B",
+   "axis": "overall",
+   "score": 0.42,
+   "sources": 1,
+   "spread": 0.0,
+   "by_source": {
+    "ポケらく": "B"
+   }
+  },
+  {
+   "species_name": "ラティアス",
+   "tier": "B",
+   "axis": "overall",
+   "score": 0.42,
+   "sources": 1,
+   "spread": 0.0,
+   "by_source": {
+    "ポケらく": "B"
+   }
+  },
+  {
+   "species_name": "キュワワー",
+   "tier": "B",
+   "axis": "overall",
+   "score": 0.415,
+   "sources": 2,
+   "spread": 0.33,
+   "by_source": {
+    "ポケらく": "C",
+    "Pokelog": "A"
+   }
+  },
+  {
+   "species_name": "フワライド",
+   "tier": "B",
+   "axis": "overall",
+   "score": 0.415,
+   "sources": 2,
+   "spread": 0.33,
+   "by_source": {
+    "ポケらく": "C",
+    "Pokelog": "A"
+   }
+  },
+  {
+   "species_name": "ヘラクロス",
+   "tier": "C",
+   "axis": "overall",
+   "score": 0.373,
+   "sources": 3,
+   "spread": 0.63,
+   "by_source": {
+    "ポケらく": "D",
+    "ゲームエイト": "S",
+    "Pokelog": "C"
+   }
+  },
+  {
+   "species_name": "オコリザル",
+   "tier": "C",
+   "axis": "overall",
+   "score": 0.35,
+   "sources": 2,
+   "spread": 0.46,
+   "by_source": {
+    "ポケらく": "D",
+    "Pokelog": "A"
+   }
+  },
+  {
+   "species_name": "チルタリス",
+   "tier": "C",
+   "axis": "overall",
+   "score": 0.35,
+   "sources": 2,
+   "spread": 0.46,
+   "by_source": {
+    "ポケらく": "D",
+    "Pokelog": "A"
+   }
+  },
+  {
+   "species_name": "ドンカラス",
+   "tier": "C",
+   "axis": "overall",
+   "score": 0.35,
+   "sources": 2,
+   "spread": 0.46,
+   "by_source": {
+    "ポケらく": "D",
+    "Pokelog": "A"
+   }
+  },
+  {
+   "species_name": "ムシャーナ",
+   "tier": "C",
+   "axis": "overall",
+   "score": 0.35,
+   "sources": 2,
+   "spread": 0.46,
+   "by_source": {
+    "ポケらく": "D",
+    "Pokelog": "A"
+   }
+  },
+  {
+   "species_name": "ヤドキング",
+   "tier": "C",
+   "axis": "overall",
+   "score": 0.335,
+   "sources": 2,
+   "spread": 0.17,
+   "by_source": {
+    "ポケらく": "C",
+    "Pokelog": "B"
+   }
+  },
+  {
+   "species_name": "アーボック",
+   "tier": "C",
+   "axis": "overall",
+   "score": 0.27,
+   "sources": 2,
+   "spread": 0.3,
+   "by_source": {
+    "ポケらく": "D",
+    "Pokelog": "B"
+   }
+  },
+  {
+   "species_name": "ケッキング",
+   "tier": "C",
+   "axis": "overall",
+   "score": 0.27,
+   "sources": 2,
+   "spread": 0.3,
+   "by_source": {
+    "ポケらく": "D",
+    "Pokelog": "B"
+   }
+  },
+  {
+   "species_name": "ダグトリオ",
+   "tier": "C",
+   "axis": "overall",
+   "score": 0.27,
+   "sources": 2,
+   "spread": 0.3,
+   "by_source": {
+    "ポケらく": "D",
+    "Pokelog": "B"
+   }
+  },
+  {
+   "species_name": "ラッタ",
+   "tier": "C",
+   "axis": "overall",
+   "score": 0.27,
+   "sources": 2,
+   "spread": 0.3,
+   "by_source": {
+    "ポケらく": "D",
+    "Pokelog": "B"
+   }
+  },
+  {
+   "species_name": "ガラガラ",
+   "tier": "C",
+   "axis": "overall",
+   "score": 0.25,
+   "sources": 2,
+   "spread": 0.0,
+   "by_source": {
+    "ポケらく": "C",
+    "Pokelog": "C"
+   }
+  },
+  {
+   "species_name": "リーフィア",
+   "tier": "C",
+   "axis": "overall",
+   "score": 0.25,
+   "sources": 2,
+   "spread": 0.0,
+   "by_source": {
+    "ポケらく": "C",
+    "Pokelog": "C"
+   }
+  },
+  {
+   "species_name": "ルカリオ",
+   "tier": "C",
+   "axis": "overall",
+   "score": 0.25,
+   "sources": 2,
+   "spread": 0.0,
+   "by_source": {
+    "ポケらく": "C",
+    "Pokelog": "C"
+   }
+  },
+  {
+   "species_name": "ウインディ",
+   "tier": "C",
+   "axis": "overall",
+   "score": 0.25,
+   "sources": 1,
+   "spread": 0.0,
+   "by_source": {
+    "ポケらく": "C"
+   }
+  },
+  {
+   "species_name": "ウッウ",
+   "tier": "C",
+   "axis": "overall",
+   "score": 0.25,
+   "sources": 1,
+   "spread": 0.0,
+   "by_source": {
+    "ポケらく": "C"
+   }
+  },
+  {
+   "species_name": "ストリンダー",
+   "tier": "C",
+   "axis": "overall",
+   "score": 0.25,
+   "sources": 1,
+   "spread": 0.0,
+   "by_source": {
+    "ポケらく": "C"
+   }
+  },
+  {
+   "species_name": "バリヤード",
+   "tier": "C",
+   "axis": "overall",
+   "score": 0.25,
+   "sources": 1,
+   "spread": 0.0,
+   "by_source": {
+    "ポケらく": "C"
+   }
+  },
+  {
+   "species_name": "シャワーズ",
+   "tier": "D",
+   "axis": "overall",
+   "score": 0.185,
+   "sources": 2,
+   "spread": 0.13,
+   "by_source": {
+    "ポケらく": "D",
+    "Pokelog": "C"
+   }
+  },
+  {
+   "species_name": "トゲキッス",
+   "tier": "D",
+   "axis": "overall",
+   "score": 0.185,
+   "sources": 2,
+   "spread": 0.13,
+   "by_source": {
+    "ポケらく": "D",
+    "Pokelog": "C"
+   }
+  },
+  {
+   "species_name": "ブラッキー",
+   "tier": "D",
+   "axis": "overall",
+   "score": 0.185,
+   "sources": 2,
+   "spread": 0.13,
+   "by_source": {
+    "ポケらく": "C",
+    "Pokelog": "D"
+   }
+  },
+  {
+   "species_name": "ソーナンス",
+   "tier": "D",
+   "axis": "overall",
+   "score": 0.12,
+   "sources": 2,
+   "spread": 0.0,
+   "by_source": {
+    "ポケらく": "D",
+    "Pokelog": "D"
+   }
+  },
+  {
+   "species_name": "ヤドラン",
+   "tier": "D",
+   "axis": "overall",
+   "score": 0.12,
+   "sources": 2,
+   "spread": 0.0,
+   "by_source": {
+    "ポケらく": "D",
+    "Pokelog": "D"
+   }
+  },
+  {
+   "species_name": "ペルシアン",
+   "tier": "D",
+   "axis": "overall",
+   "score": 0.085,
+   "sources": 2,
+   "spread": 0.07,
+   "by_source": {
+    "ポケらく": "D",
+    "Pokelog": "E"
+   }
+  },
+  {
+   "species_name": "ヤミラミ",
+   "tier": "D",
+   "axis": "overall",
+   "score": 0.085,
+   "sources": 2,
+   "spread": 0.07,
+   "by_source": {
+    "ポケらく": "D",
+    "Pokelog": "E"
+   }
   }
+ ]
 }

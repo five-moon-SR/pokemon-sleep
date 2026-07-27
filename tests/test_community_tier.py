@@ -1,0 +1,64 @@
+from __future__ import annotations
+
+import unittest
+
+from utils.community_tier import (
+    MIN_RELIABLE_SOURCES,
+    TIER_ORDER,
+    TIER_WEIGHT,
+    get_tier,
+    get_tier_detail,
+    is_reliable,
+    tier_weight,
+    top_tier_species,
+)
+
+
+class CommunityTierTest(unittest.TestCase):
+    """人間評価4ソースを統合した独自ティアのアクセサ。"""
+
+    def test_top_tier_is_ordered_by_tier_then_score(self) -> None:
+        items = top_tier_species("SS")
+        self.assertTrue(items, "SS帯が空になっている")
+        tiers = [t for _, t in items]
+        self.assertEqual(tiers, sorted(tiers, key=TIER_ORDER.index))
+
+    def test_unanimous_species_are_top_tier(self) -> None:
+        """全ソースが最上位に置いた種族はSSに来る。"""
+        for name in ("サーナイト", "カイリュー"):
+            self.assertEqual(get_tier(name), "SS", f"{name} がSSでない")
+
+    def test_detail_exposes_per_source_breakdown(self) -> None:
+        d = get_tier_detail("サーナイト")
+        self.assertIsNotNone(d)
+        self.assertGreaterEqual(d["sources"], MIN_RELIABLE_SOURCES)
+        self.assertTrue(d["by_source"], "ソース内訳が空")
+        self.assertIn(d["tier"], TIER_ORDER)
+
+    def test_skill_type_pokemon_are_not_buried(self) -> None:
+        """計算ティア(食材軸)ではF帯だったスキル型が、人間評価では上位に来る。
+
+        この逆転こそが人間評価へ切り替えた理由なので、退行しないよう固定する。
+        """
+        for name in ("ジバコイル", "ツボツボ"):
+            self.assertIn(get_tier(name), {"SS", "S", "A"}, f"{name} が沈んでいる")
+
+    def test_unknown_species_is_neutral(self) -> None:
+        self.assertIsNone(get_tier("存在しないポケモン"))
+        self.assertEqual(tier_weight("存在しないポケモン"), 1.0)
+
+    def test_weight_is_monotonic_in_tier(self) -> None:
+        ws = [TIER_WEIGHT[t] for t in TIER_ORDER]
+        self.assertEqual(ws, sorted(ws, reverse=True))
+
+    def test_single_source_species_are_excluded_by_default(self) -> None:
+        """1ソースのみの種族は多数決が成立しないので既定では出さない。"""
+        strict = {n for n, _ in top_tier_species("D", reliable_only=True)}
+        loose = {n for n, _ in top_tier_species("D", reliable_only=False)}
+        self.assertTrue(loose - strict, "参考値の種族が1件も除外されていない")
+        for n in strict:
+            self.assertTrue(is_reliable(n))
+
+
+if __name__ == "__main__":
+    unittest.main()
