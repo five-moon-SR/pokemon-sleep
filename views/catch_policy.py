@@ -54,8 +54,8 @@ _min_tier = {"SS": "SS", "S以上": "S", "A以上": "A", "B以上": "B", "C以�
 
 # 1ソースしか評価していない種は多数決が成立しないので既定では隠す
 show_provisional = st.toggle(
-    "1ソースのみの種も含める（参考値）", value=False, key="cp_provisional",
-    help="評価しているサイトが1つしかない種族。新実装・伝説・ニッチな種が多い。",
+    "1ソースのみも含む", value=False, key="cp_provisional",
+    help="評価しているサイトが1つしかない種族（参考値）。新実装・伝説・ニッチな種が多い。",
 )
 
 rows = []
@@ -79,10 +79,12 @@ for species_name, tier in top_tier_species(_min_tier, reliable_only=not show_pro
     })
 
 # ---- とくいタイプ別に分割（存在する得意だけ物理ボタン化） ----
-_SP_ORDER = [("食材", "🥕 食材"), ("きのみ", "🍓 きのみ"), ("スキル", "⚡ スキル"), ("オール", "✨ オール")]
+# ラベルに件数を入れると4択がスマホ幅(390px)で2段に折り返すので、件数は下の
+# キャプションに逃がしてボタンは最短にする。
+_SP_ORDER = [("食材", "🥕食材"), ("きのみ", "🍓きのみ"), ("スキル", "⚡スキル"), ("オール", "✨オール")]
 _counts = {k: sum(1 for r in rows if r["specialty"] == k) for k, _ in _SP_ORDER}
-_opts = [f"{lbl}（{_counts[k]}）" for k, lbl in _SP_ORDER if _counts[k] > 0]
-_opt_to_key = {f"{lbl}（{_counts[k]}）": k for k, lbl in _SP_ORDER if _counts[k] > 0}
+_opts = [lbl for k, lbl in _SP_ORDER if _counts[k] > 0]
+_opt_to_key = {lbl: k for k, lbl in _SP_ORDER if _counts[k] > 0}
 
 if not _opts:
     st.html(c.empty_state("表示できる種がいない（ティア帯を広げてみて）。"))
@@ -99,24 +101,22 @@ sp_pick = st.segmented_control(
 sel_specialty = _opt_to_key[sp_pick]
 
 # ── 所持状況で絞る（既に理想を持っている種を畳めるように細分化） ──
-_KIND_OPTS = ["すべて", "未所持のみ", "引き直しのみ", "未所持＋引き直し"]
+# こちらもスマホ幅で折り返さないよう最短ラベルにする。
+_KIND_OPTS = ["すべて", "未所持", "引き直し", "両方"]
 _counts_kind = {k: sum(1 for r in rows if r["kind"] == k) for k in ("未所持", "引き直し", "充足")}
 kind_pick = st.segmented_control(
     "所持状況",
     options=_KIND_OPTS,
     default="すべて",
     key="cp_kind",
-    help=(
-        f"未所持 {_counts_kind['未所持']} / "
-        f"引き直し {_counts_kind['引き直し']} / "
-        f"充足 {_counts_kind['充足']}（表示中のティア帯での内訳）"
-    ),
+    label_visibility="collapsed",
+    help="「両方」は未所持＋引き直し候補。件数は下の行に出る。",
 ) or "すべて"
 _KIND_FILTER = {
     "すべて": None,
-    "未所持のみ": {"未所持"},
-    "引き直しのみ": {"引き直し"},
-    "未所持＋引き直し": {"未所持", "引き直し"},
+    "未所持": {"未所持"},
+    "引き直し": {"引き直し"},
+    "両方": {"未所持", "引き直し"},
 }[kind_pick]
 
 # ── 今週のマップで出る種だけに絞る ──
@@ -127,8 +127,8 @@ week_field = (active_plan or {}).get("field_name")
 field_filter = None
 if week_field and has_data(week_field):
     if st.toggle(
-        f"今週のマップ（{week_field}）で出る種だけ", value=False, key="cp_week_field",
-        help="そのマップに出現しない種は、今週は狙えないので隠す。",
+        f"今週のマップ（{week_field}）のみ", value=False, key="cp_week_field",
+        help="そのマップに出現しない種は今週は狙えないので隠す。",
     ):
         field_filter = week_field
 elif week_field:
@@ -140,9 +140,12 @@ view = [
     and (_KIND_FILTER is None or r["kind"] in _KIND_FILTER)
     and (field_filter is None or field_filter in species_fields(r["species_name"]))
 ]
+# ボタンから外した件数はここにまとめる（スマホで折り返さないため）
 st.caption(
-    f"{sel_specialty}得意 {len(view)} 種を表示中。"
-    + (f"（{week_field}に出る種のみ）" if field_filter else "")
+    f"{sel_specialty}得意 **{len(view)}** 種を表示中"
+    + f"　｜　未所持 {_counts_kind['未所持']} ・ 引き直し {_counts_kind['引き直し']} ・ "
+      f"充足 {_counts_kind['充足']}"
+    + (f"　｜　{week_field}に出る種のみ" if field_filter else "")
 )
 
 # ── おすすめマップ: 未所持・引き直し候補が最も多く出るフィールド ──
@@ -185,14 +188,15 @@ for row in view:
     by_source: dict[str, str] = detail.get("by_source") or {}
 
     with st.container(border=True):
-        cols = st.columns([1, 3, 4], vertical_alignment="center")
+        # スマホ幅では3列に割ると名前が中央で浮いて読めなくなるので、
+        # 「画像＋見出し」だけを横並びにして、以下は全幅に流す。
+        head = st.columns([1, 5], vertical_alignment="center")
         url = pokemon_image_url(species_name)
         if url:
-            cols[0].markdown(
-                f'<img src="{url}" width="52" loading="lazy" style="border-radius:10px;">',
+            head[0].markdown(
+                f'<img src="{url}" width="48" loading="lazy" style="border-radius:10px;">',
                 unsafe_allow_html=True,
             )
-        cols[1].markdown(f"### {species_name}")
 
         # ティア＋狙い構成＋評価の確からしさをバッジで一列に
         badges = c.rank_badge(tier) + c.text_badge(f"狙い: {want}")
@@ -205,21 +209,23 @@ for row in view:
             badges += c.text_badge("参考値")
         elif spread >= SPREAD_ALERT:
             badges += c.text_badge("評価が割れている")
-        cols[1].html(badges)
+        head[1].markdown(f"**{species_name}**")
+        head[1].html(badges)
 
-        cols[2].markdown(("🎯 " if todo else "✅ ") + status)
+        st.markdown(("🎯 " if todo else "✅ ") + status)
         fields_of = species_fields(species_name)
         if fields_of:
             here = week_field in fields_of if week_field else False
             # 1マップ専属なら「そこに行かないと取れない」＝優先度が高い。
             # 複数マップに出るなら今週を逃しても他で狙えるので急がなくていい。
             tag = "専属" if len(fields_of) == 1 else f"{len(fields_of)}マップ"
-            cols[2].caption(
+            st.caption(
                 ("📍 今週のマップに出る： " if here else "出現： ")
                 + "、".join(fields_of)
                 + f"（{tag}）"
             )
-        with cols[2]:
+        act = st.columns([1, 1])
+        with act[0]:
             if by_source:
                 with st.popover("📊 評価の内訳", use_container_width=False):
                     st.caption(
@@ -233,6 +239,7 @@ for row in view:
                             "サイトによって評価軸が違うため割れている"
                             "（食材収集で見るか、スキル性能で見るか等）。"
                         )
+        with act[1]:
             for hp in holders:
                 pokemon_status_popover(
                     hp, label=f"🔍 {hp.get('nickname') or species_name}",
