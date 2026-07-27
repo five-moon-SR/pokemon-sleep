@@ -266,6 +266,32 @@ def check_evolution_references() -> None:
             stack.extend(nxt.get(cur, []))
 
 
+def check_evolution_completeness() -> None:
+    """進化ラインの登録漏れを検出する。
+
+    「進化しない種族」は実在する（伝説・単体種）ので、未登場そのものは異常ではない。
+    ただし master に居て evolution.json に一切登場しない種族は、
+    本当に進化しないのか登録漏れなのかを人が確認する必要があるため一覧に出す。
+    """
+    known_standalone = {
+        "カモネギ", "ガルーラ", "カイロス", "メタモン", "ミュウ", "ツボツボ",
+        "ヘラクロス", "デリバード", "ライコウ", "エンテイ", "スイクン", "ヤミラミ",
+        "クチート", "プラスル", "マイナン", "アブソル", "ラティアス", "ラティオス",
+        "ミカルゲ", "クレセリア", "ダークライ", "デデンネ", "キュワワー",
+        "トゲデマル", "ミミッキュ", "ジジーロン", "ウッウ",
+    }
+    in_evo = {e.get("from") for e in evolutions} | {e.get("to") for e in evolutions}
+    for m in master:
+        n = m["species_name"]
+        if "(" in n:            # リージョン/イベント違いは対象外
+            continue
+        if n in in_evo or n in known_standalone:
+            continue
+        err("進化ライン欠損",
+            f"pokemon_master[{n}]: evolution.json に一切登場しない。"
+            f"進化しない種族なら known_standalone に追記すること")
+
+
 def check_tier_references() -> None:
     for t in tiers:
         if t.get("species_name") not in species_names:
@@ -482,6 +508,7 @@ CHECKS = [
     ("field参照", check_field_references),
     ("きのみ↔フィールド", check_berry_field_crossref),
     ("evolution参照", check_evolution_references),
+    ("進化ライン網羅", check_evolution_completeness),
     ("tier参照", check_tier_references),
     ("ingredient逆参照", check_ingredient_recipe_backrefs),
     ("recipe合計値", check_recipe_totals),
