@@ -53,6 +53,7 @@ def suggest_strategy_plans(
         target_recipes=recipes,
         role_targets=role_targets,
         top_n=12,
+        pot_capacity=ctx.pot_capacity,
     )
     # ヒーラーなし案を必ず比較に残す。
     no_healer_owned = [p for p in owned if not _is_team_healer(p)]
@@ -64,6 +65,7 @@ def suggest_strategy_plans(
             target_recipes=recipes,
             role_targets=role_targets,
             top_n=5,
+            pot_capacity=ctx.pot_capacity,
         )
 
     owned_map = {int(p["id"]): p for p in owned}

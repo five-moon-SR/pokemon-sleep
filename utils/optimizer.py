@@ -50,6 +50,7 @@ class MemberStat:
     skill_energy: float                    # en/日（同上）
     has_help_bonus: bool
     roles: set[str] = field(default_factory=set)
+    pot_bonus_per_day: float = 0.0         # 料理パワーアップSで1日に積める鍋容量（同上）
 
 
 @dataclass
@@ -71,6 +72,20 @@ def _has_help_bonus(p: dict[str, Any]) -> bool:
         p.get("subskill_lv75"), p.get("subskill_lv100"),
     )
     return "おてつだいボーナス" in {s for s in subs if s}
+
+
+def _pot_bonus_per_day(p: dict[str, Any], master: dict[str, Any]) -> float:
+    """料理パワーアップSで1日に積める鍋容量。持っていなければ0。
+
+    plan_simulation と同じ「発動回数/日 × 1回あたりの効果量」で見積もる
+    （チーム補正は掛けないので、やや控えめな値になる）。
+    """
+    from utils.plan_simulation import _skill_effect, expected_skill_activations_per_day
+
+    category, effect = _skill_effect(p, master)
+    if category != "料理パワーアップS" or effect <= 0:
+        return 0.0
+    return float(expected_skill_activations_per_day(p, master)) * effect
 
 
 def precompute_member_stats(
@@ -107,6 +122,7 @@ def precompute_member_stats(
             skill_energy=skill_e,
             has_help_bonus=_has_help_bonus(p),
             roles=roles,
+            pot_bonus_per_day=_pot_bonus_per_day(p, master),
         )
     return stats
 
@@ -148,6 +164,42 @@ def build_candidate_pool(
     return sorted(pool)
 
 
+def _effective_pot_capacity(
+    pot_capacity: int | None, pot_bonus_per_day: float
+) -> float | None:
+    """その編成が実際に到達しうる鍋容量の上限。
+
+    料理パワーアップSの容量ボーナスは料理するたびリセットされるので、
+    1日1回は料理する前提で「素の容量 + 1日ぶんの積み上げ」を上限とする。
+    容量UP持ちが居なければ素の容量そのまま。
+    """
+    if pot_capacity is None:
+        return None
+    return float(pot_capacity) + max(0.0, float(pot_bonus_per_day))
+
+
+def _recipe_fits_pot(
+    rec: dict, pot_capacity: int | None, pot_bonus_per_day: float = 0.0
+) -> bool:
+    """その編成で実際に鍋に入る料理か。
+
+    エナジーだけで主料理を選ぶと、鍋に入らない大食い料理が上位を占領してしまう。
+    到達しうる容量を超える料理は、候補の段階で落とす。
+
+    容量UPスキル(料理パワーアップS)を積んだぶんは上限が伸びるが、青天井では
+    ないので「素の容量 + 1日ぶんの積み上げ」で頭打ちにする。その範囲内で
+    実際に届くかどうかは simulate_plan の7日シミュレーションが判定する。
+    """
+    ceiling = _effective_pot_capacity(pot_capacity, pot_bonus_per_day)
+    if ceiling is None:
+        return True
+    total = rec.get("total_ingredients")
+    if not total:
+        # 総量が定義されていない料理（ごちゃまぜ系）は従来どおり候補に残す。
+        return True
+    return float(total) <= ceiling + 1e-9
+
+
 def evaluate_combo(
     ids: tuple[int, ...],
     stats: dict[int, MemberStat],
@@ -156,6 +208,7 @@ def evaluate_combo(
     event_set: set[str],
     *,
     role_penalty: float = DEFAULT_ROLE_PENALTY,
+    pot_capacity: int | None = None,
 ) -> ComboResult:
     members = [stats[i] for i in ids]
     team_help = sum(1 for m in members if m.has_help_bonus)
@@ -170,8 +223,11 @@ def evaluate_combo(
             combined[n] = combined.get(n, 0.0) + v * factor
 
     dish_mult = 2.0 if "dish_2x" in event_set else 1.0
+    pot_bonus_per_day = sum(m.pot_bonus_per_day for m in members)
     dish_e, best_recipe, bottleneck = 0.0, None, []
     for rec in recipes:
+        if not _recipe_fits_pot(rec, pot_capacity, pot_bonus_per_day):
+            continue
         pace, bn = _main_recipe_pace(rec, combined)
         if pace <= 0:
             continue
@@ -209,6 +265,7 @@ def _hill_climb(
     recipes: list[dict],
     role_targets: dict[str, int],
     event_set: set[str],
+    pot_capacity: int | None = None,
 ) -> list[ComboResult]:
     """プールが大きい場合のフォールバック: 貪欲初期解 + 1体スワップ山登り。"""
     # 貪欲: 単体スコア(きのみ+スキル+食材総量×粗い係数)の上位5体から開始
@@ -216,7 +273,9 @@ def _hill_climb(
         s = stats[i]
         return s.berry_energy + s.skill_energy + sum(s.ingredients.values()) * 50
     current = tuple(sorted(sorted(pool, key=_solo, reverse=True)[:5]))
-    best = evaluate_combo(current, stats, recipes, role_targets, event_set)
+    best = evaluate_combo(
+        current, stats, recipes, role_targets, event_set, pot_capacity=pot_capacity
+    )
     improved = True
     while improved:
         improved = False
@@ -225,7 +284,10 @@ def _hill_climb(
                 if in_id in best.member_ids:
                     continue
                 cand_ids = tuple(sorted(set(best.member_ids) - {out_id} | {in_id}))
-                cand = evaluate_combo(cand_ids, stats, recipes, role_targets, event_set)
+                cand = evaluate_combo(
+                    cand_ids, stats, recipes, role_targets, event_set,
+                    pot_capacity=pot_capacity,
+                )
                 if cand.score > best.score:
                     best = cand
                     improved = True
@@ -240,10 +302,13 @@ def optimize_party(
     target_recipes: list[dict],
     role_targets: dict[str, int],
     top_n: int = 5,
+    pot_capacity: int | None = None,
 ) -> list[ComboResult]:
     """最適パーティー候補を score 降順で top_n 件返す。
 
     target_recipes: 主料理候補のレシピレコード集合（空なら料理エナジー項は0）。
+    pot_capacity: 鍋容量。渡すと、容量を超えて物理的に作れない料理を主料理の
+        候補から外す（容量UPスキル持ちが編成に居る場合は残す）。None なら無制限。
     """
     needed_ings: set[str] = {
         ing["name"] for rec in target_recipes for ing in (rec.get("ingredients") or [])
@@ -262,10 +327,15 @@ def optimize_party(
         pool = sorted(stats)
 
     if len(pool) > EXHAUSTIVE_POOL_LIMIT:
-        return _hill_climb(pool, stats, target_recipes, role_targets, event_set)
+        return _hill_climb(
+            pool, stats, target_recipes, role_targets, event_set, pot_capacity
+        )
 
     results = [
-        evaluate_combo(ids, stats, target_recipes, role_targets, event_set)
+        evaluate_combo(
+            ids, stats, target_recipes, role_targets, event_set,
+            pot_capacity=pot_capacity,
+        )
         for ids in combinations(pool, 5)
     ]
     results.sort(key=lambda r: -r.score)

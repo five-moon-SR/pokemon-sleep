@@ -248,11 +248,25 @@ recipe_names = list(recipe_map)
 recipe_widget_key = f"strategy_recipe_widget_{strategy_key}"
 if ss.get("_strategy_pending_recipe") in recipe_map:
     ss[recipe_widget_key] = ss.pop("_strategy_pending_recipe")
+
+
+def _recipe_label(name: str) -> str:
+    """鍋に入らない料理はラベルで警告する（選ぶこと自体は禁じない）。
+
+    容量UPスキルを編成に入れる前提で選ぶ場合があるため、隠さず注記に留める。
+    """
+    total = int((recipe_map.get(name) or {}).get("total_ingredients") or 0)
+    if total and total > ctx.pot_capacity:
+        return f"{name}　⚠ 食材{total}（鍋{ctx.pot_capacity}超・容量UP必須）"
+    return name
+
+
 picked_recipe = st.selectbox(
     "主料理",
     recipe_names,
     index=recipe_names.index(current_recipe) if current_recipe in recipe_names else 0,
     key=recipe_widget_key,
+    format_func=_recipe_label,
 )
 ss["strategy_main_recipe"] = picked_recipe
 recipe = recipe_map[picked_recipe]
