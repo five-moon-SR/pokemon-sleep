@@ -1,5 +1,8 @@
+import copy
 import json
 import os
+import threading
+import time
 from functools import lru_cache
 from pathlib import Path
 from typing import Any
@@ -85,32 +88,98 @@ def _run(fn):
     raise last_err  # type: ignore[misc]
 
 
+# ---------- 読み取りキャッシュ ----------
+# Streamlit は操作のたびにスクリプト全体を再実行する。ホスティング(Streamlit Cloud)と
+# DB(Supabase ap-northeast-1)が地理的に離れているので、1往復あたり150ms前後が
+# 素の遅さとして乗り、1操作で20往復以上すると数秒になる。
+# 実データは100行規模なのでプロセス内に持ち、書き込みがあった時点で捨てる。
+# TTL は外部(Supabaseダッシュボード等)から直接いじられた場合の保険。
+
+_CACHE_TTL_SEC = 300.0
+_read_cache: dict[tuple, tuple[float, Any]] = {}
+_cache_lock = threading.Lock()
+
+
+def clear_read_cache() -> None:
+    """読み取りキャッシュを捨てる。書き込みのたびに呼ばれる。"""
+    with _cache_lock:
+        _read_cache.clear()
+
+
+def _cached_read(key: tuple | None, loader):
+    """key があればプロセス内キャッシュを通す。key=None はキャッシュ無しで素通し。
+
+    呼び出し側が結果を書き換えてもキャッシュが汚れないよう、出入り口で複製する。
+    """
+    if key is None:
+        return loader()
+    now = time.monotonic()
+    with _cache_lock:
+        hit = _read_cache.get(key)
+        if hit is not None and now - hit[0] < _CACHE_TTL_SEC:
+            return copy.deepcopy(hit[1])
+    value = loader()
+    with _cache_lock:
+        _read_cache[key] = (now, value)
+    return copy.deepcopy(value)
+
+
+def _cache_key(kind: str, sql: str, params: tuple) -> tuple | None:
+    """SQLとパラメータからキャッシュキーを作る。ハッシュ不能なら None（＝キャッシュしない）。"""
+    try:
+        hash(params)
+    except TypeError:
+        return None
+    return (kind, sql, params)
+
+
 def _fetchall(sql: str, params: tuple = ()) -> list[dict[str, Any]]:
     def f(cur):
         cur.execute(sql, params)
-        return cur.fetchall()
+        return [dict(r) for r in cur.fetchall()]
 
-    return _run(f)
+    return _cached_read(_cache_key("all", sql, params), lambda: _run(f))
 
 
 def _fetchone(sql: str, params: tuple = ()) -> dict[str, Any] | None:
     def f(cur):
         cur.execute(sql, params)
-        return cur.fetchone()
+        row = cur.fetchone()
+        return dict(row) if row is not None else None
 
-    return _run(f)
+    return _cached_read(_cache_key("one", sql, params), lambda: _run(f))
 
 
 def _execute(sql: str, params: tuple = (), returning: bool = False):
     def f(cur):
         cur.execute(sql, params)
-        return cur.fetchone() if returning else None
+        if not returning:
+            return None
+        row = cur.fetchone()
+        return dict(row) if row is not None else None
 
-    return _run(f)
+    try:
+        return _run(f)
+    finally:
+        # 書き込み後の読み取りが古い値を返さないよう、成否によらず捨てる。
+        clear_read_cache()
 
 
-def init_db() -> None:
-    """スキーマとテーブルが無ければ作成する（既にあれば何もしない）。"""
+_initialized = False
+
+
+def init_db(force: bool = False) -> None:
+    """スキーマとテーブルが無ければ作成する（既にあれば何もしない）。
+
+    DDL と移行はプロセス起動につき1回で足りるので、2回目以降は即 return する。
+    Streamlit は操作のたびに app.py を頭から再実行するため、ここを毎回通すと
+    「create table / alter table / 移行SELECT+UPDATE」＝書き込みトランザクション
+    5本前後が、画面を1ピクセル描く前に毎回走ってしまう。
+    """
+    global _initialized
+    if _initialized and not force:
+        return
+
     _execute(
         f"""
         create schema if not exists {SCHEMA};
@@ -177,6 +246,8 @@ def init_db() -> None:
     )
     _migrate_party_recipe_categories()
     _normalize_strategy_plan_uniqueness()
+    # 途中で落ちた場合は次の呼び出しでやり直せるよう、最後に立てる。
+    _initialized = True
 
 
 def insert_pokemon(data: dict[str, Any]) -> int:
