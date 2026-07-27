@@ -189,7 +189,8 @@ h1, h2, h3, [data-testid="stMarkdownContainer"] strong { word-break: auto-phrase
 /* 統計タイル（st.metric の代替。スマホで潰れない自前grid） */
 .ps-tiles {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+    /* 120pxだとスマホで3枚目が落ちる。100pxなら390px幅に3枚並ぶ。 */
+    grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
     gap: 8px;
 }
 .ps-tile {
@@ -301,9 +302,11 @@ h1, h2, h3, [data-testid="stMarkdownContainer"] strong { word-break: auto-phrase
         flex-wrap: wrap;
         gap: 0.4rem 0.5rem;
     }
+    /* 最小7.5rem(120px)だと390px幅で3列が入らず2段に折り返す。
+       6.2rem(99px)なら 3列×99+gap が収まり、2列レイアウトも従来どおり並ぶ。 */
     [data-testid="stColumn"], [data-testid="column"] {
-        flex: 1 1 7.5rem !important;
-        min-width: 7.5rem !important;
+        flex: 1 1 6.2rem !important;
+        min-width: 6.2rem !important;
     }
 
     /* スマホは全体的に一段締める（大きい文字は情報密度を殺す）。

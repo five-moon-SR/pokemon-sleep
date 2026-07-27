@@ -86,7 +86,15 @@ all_main_skills: list[str] = sorted(df_full["メインスキル"].dropna().uniqu
 
 # 絞り込みUI ---------------------------------------------------------------
 with st.expander("🔍 絞り込み・並び替え", expanded=True):
-    row1 = st.columns([2, 2, 2, 2, 2])
+    # 所持状況は3択なので、狭い列に入れると縦積みになる。全幅の pills にする。
+    owned_count_total = sum(1 for v in owned_counts.values() if v > 0)
+    ownership_filter = st.pills(
+        f"所持状況（{owned_count_total}/{len(records)}種）",
+        ["すべて", "所持のみ", "未所持のみ"],
+        default="すべて",
+    ) or "すべて"
+
+    row1 = st.columns([2, 2, 2, 2])
     with row1[0]:
         keyword = st.text_input("種族名で検索", placeholder="例: ピカチュウ")
     with row1[1]:
@@ -95,13 +103,6 @@ with st.expander("🔍 絞り込み・並び替え", expanded=True):
         sel_sleep = st.multiselect("睡眠", all_sleep_types)
     with row1[3]:
         sel_skill = st.multiselect("メインスキル", all_main_skills)
-    with row1[4]:
-        owned_count_total = sum(1 for v in owned_counts.values() if v > 0)
-        ownership_filter = st.radio(
-            f"所持状況（{owned_count_total}/{len(records)}種）",
-            ["すべて", "所持のみ", "未所持のみ"],
-            horizontal=True,   # スマホで3択が縦積みになるのを防ぐ
-        )
 
     row2 = st.columns([3, 3])
     with row2[0]:

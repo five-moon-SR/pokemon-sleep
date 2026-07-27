@@ -71,6 +71,12 @@ prof_cols[0].caption(
 if prof_cols[1].button("⚙ 設定", use_container_width=True):
     _profile_dialog()
 
+# よく使う導線を上に置く（ホームから2タップで目的のページに着けるように）
+nav_cols = st.columns(3)
+nav_cols[0].page_link("views/party.py", label="編成", icon="🧭", use_container_width=True)
+nav_cols[1].page_link("views/register.py", label="登録", icon="📝", use_container_width=True)
+nav_cols[2].page_link("views/catch_policy.py", label="捕獲方針", icon="🏅", use_container_width=True)
+
 perf.mark("home: ヘッダ＋設定ボタン")
 
 owned = [dict(r) for r in db.list_pokemon()]
@@ -148,14 +154,15 @@ if pt:
             starting_inventory=active_week.get("starting_inventory", {}),
             event_set=set(active_week.get("event_bonuses", [])),
         )
-        metric_cols = st.columns(4)
-        metric_cols[0].metric("主料理", pt.get("main_recipe") or "—")
-        metric_cols[1].metric("3食安定度", f"{sim.stability:.0%}", f"{sim.cooked_meals}/21食")
-        metric_cols[2].metric("週期待値", f"{sim.weekly_energy:,.0f} en")
-        metric_cols[3].metric(
-            "律速",
-            " / ".join(sim.bottlenecks) if sim.bottlenecks else "なし",
-        )
+        # st.metric は長い料理名や律速食材が「みつあつめチョコワッ…」と省略されるので、
+        # 数値はタイル、テキストは1行の文として出す。
+        st.html(c.stat_tiles([
+            c.stat_tile("3食安定度", f"{sim.stability:.0%}", f"{sim.cooked_meals}/21食"),
+            c.stat_tile("週期待エナジー", f"{sim.weekly_energy:,.0f}", "en"),
+            c.stat_tile("1日の料理", f"{sim.cooked_per_day:.1f}", "回"),
+        ]))
+        bottleneck = " / ".join(sim.bottlenecks) if sim.bottlenecks else "なし"
+        st.caption(f"主料理: **{pt.get('main_recipe') or '—'}**　｜　律速: {bottleneck}")
 
         perf.mark("home: simulate_plan＋指標4つ")
 
@@ -171,21 +178,24 @@ if pt:
         perf.mark("home: 育成/捕獲アドバイス計算")
 
         growth, catches = st.session_state[advice_key]
-        advice_cols = st.columns(2)
-        with advice_cols[0]:
-            st.markdown("**🌱 次の育成候補**")
-            for item in growth:
-                st.caption(
-                    f"{item['label']} → Lv{item['target_level']}｜"
-                    f"週 {item['energy_delta']:+,.0f} en"
-                )
-        with advice_cols[1]:
-            st.markdown("**🎯 次の捕獲候補**")
-            for item in catches:
-                st.caption(
-                    f"{item['species_name']} {item['composition']}｜"
-                    f"{' / '.join(item['fills'])}｜安定度 {item['stability_delta']:+.0%}"
-                )
+        # スマホでは2列に割ると1項目が3行に折れて読めないので、全幅で縦に並べる
+        with st.expander("🌱 次の一手（育成・捕獲の候補）", expanded=True):
+            if growth:
+                st.markdown("**育てる**")
+                for item in growth:
+                    st.markdown(
+                        f"- {item['label']} → **Lv{item['target_level']}**"
+                        f"　週 {item['energy_delta']:+,.0f} en"
+                    )
+            if catches:
+                st.markdown("**捕まえる**")
+                for item in catches:
+                    st.markdown(
+                        f"- {item['species_name']}（{item['composition']}）"
+                        f"　{' / '.join(item['fills'])}　安定度 {item['stability_delta']:+.0%}"
+                    )
+            if not growth and not catches:
+                st.caption("いまの編成で伸ばせる余地は見つからなかった。")
 
     meta_cols = st.columns([3, 1])
     category = pt.get("recipe_category")
@@ -225,38 +235,40 @@ else:
 
     perf.mark("home: 統計タイル5枚")
 
-    chart_cols = st.columns(2)
+    # 分布グラフは毎回見るものではないので畳む（スマホで縦を食うため）
+    with st.expander("📊 分布を見る（だいふくランク / とくいなもの）", expanded=False):
+        chart_cols = st.columns(2)
 
-    # だいふくランク分布
-    rank_counts: dict[str, int] = {}
-    for p in owned:
-        r = p.get("daifuku_rank") or "未評価"
-        rank_counts[r] = rank_counts.get(r, 0) + 1
-    rank_order = ["SS", "S", "A", "B", "C", "D", "未評価"]
-    rank_rows = [(r, rank_counts[r]) for r in rank_order if r in rank_counts]
-    with chart_cols[0]:
-        st.markdown("**だいふくランク分布**")
-        if rank_rows:
-            df = pd.DataFrame(rank_rows, columns=["ランク", "人数"])
-            st.bar_chart(df.set_index("ランク"), height=180, color="#F0B32E")
-        else:
-            st.caption("—")
+        # だいふくランク分布
+        rank_counts: dict[str, int] = {}
+        for p in owned:
+            r = p.get("daifuku_rank") or "未評価"
+            rank_counts[r] = rank_counts.get(r, 0) + 1
+        rank_order = ["SS", "S", "A", "B", "C", "D", "未評価"]
+        rank_rows = [(r, rank_counts[r]) for r in rank_order if r in rank_counts]
+        with chart_cols[0]:
+            st.markdown("**だいふくランク分布**")
+            if rank_rows:
+                df = pd.DataFrame(rank_rows, columns=["ランク", "人数"])
+                st.bar_chart(df.set_index("ランク"), height=180, color="#F0B32E")
+            else:
+                st.caption("—")
 
-    perf.mark("home: チャート① だいふくランク分布")
+        perf.mark("home: チャート① だいふくランク分布")
 
-    # とくいなもの分布
-    sp_counts: dict[str, int] = {}
-    for p in owned:
-        master = db.get_species_data(p["species_name"]) or {}
-        sp = master.get("specialty") or "?"
-        sp_counts[sp] = sp_counts.get(sp, 0) + 1
-    with chart_cols[1]:
-        st.markdown("**とくいなもの分布**")
-        if sp_counts:
-            df = pd.DataFrame({"区分": list(sp_counts), "人数": list(sp_counts.values())})
-            st.bar_chart(df.set_index("区分"), height=180, color="#3E87C7")
-        else:
-            st.caption("—")
+        # とくいなもの分布
+        sp_counts: dict[str, int] = {}
+        for p in owned:
+            master = db.get_species_data(p["species_name"]) or {}
+            sp = master.get("specialty") or "?"
+            sp_counts[sp] = sp_counts.get(sp, 0) + 1
+        with chart_cols[1]:
+            st.markdown("**とくいなもの分布**")
+            if sp_counts:
+                df = pd.DataFrame({"区分": list(sp_counts), "人数": list(sp_counts.values())})
+                st.bar_chart(df.set_index("区分"), height=180, color="#3E87C7")
+            else:
+                st.caption("—")
 
 
 perf.mark("home: チャート② とくいなもの分布")
