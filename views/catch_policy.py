@@ -20,6 +20,11 @@ from utils.community_tier import (
     recommended_composition,
     top_tier_species,
 )
+from utils.field_encounters import (
+    has_data,
+    recommend_fields,
+    species_fields,
+)
 from utils.food_expectation import composition_string
 
 # 意見が割れていると見なす閾値（統合スコアの最大-最小）。
@@ -61,17 +66,21 @@ for species_name, tier in top_tier_species(_min_tier, reliable_only=not show_pro
     holders = owned_by_species.get(species_name, [])
     comps = [composition_string(p, sp) for p in holders]
     if not holders:
-        status, todo = "未所持 → 捕獲候補", True
+        status, todo, kind = "未所持 → 捕獲候補", True, "未所持"
     elif want == "AAA" and not any(cs == "AAA" for cs in comps):
-        status, todo = f"所持({'/'.join(comps)}) → AAA引き直し候補", True
+        status, todo, kind = f"所持({'/'.join(comps)}) → AAA引き直し候補", True, "引き直し"
     else:
-        status, todo = f"所持({'/'.join(comps)}) ✓", False
-    rows.append((species_name, tier, want, status, todo, holders, specialty,
-                 get_tier_detail(species_name) or {}))
+        status, todo, kind = f"所持({'/'.join(comps)}) ✓", False, "充足"
+    rows.append({
+        "species_name": species_name, "tier": tier, "want": want,
+        "status": status, "todo": todo, "holders": holders,
+        "specialty": specialty, "kind": kind,
+        "detail": get_tier_detail(species_name) or {},
+    })
 
 # ---- とくいタイプ別に分割（存在する得意だけ物理ボタン化） ----
 _SP_ORDER = [("食材", "🥕 食材"), ("きのみ", "🍓 きのみ"), ("スキル", "⚡ スキル"), ("オール", "✨ オール")]
-_counts = {k: sum(1 for r in rows if r[6] == k) for k, _ in _SP_ORDER}
+_counts = {k: sum(1 for r in rows if r["specialty"] == k) for k, _ in _SP_ORDER}
 _opts = [f"{lbl}（{_counts[k]}）" for k, lbl in _SP_ORDER if _counts[k] > 0]
 _opt_to_key = {f"{lbl}（{_counts[k]}）": k for k, lbl in _SP_ORDER if _counts[k] > 0}
 
@@ -89,15 +98,74 @@ sp_pick = st.segmented_control(
 ) or _default
 sel_specialty = _opt_to_key[sp_pick]
 
-only_todo = st.toggle("未所持・引き直し候補のみ", value=False, key="cp_only_todo")
+# ── 所持状況で絞る（既に理想を持っている種を畳めるように細分化） ──
+_KIND_OPTS = ["すべて", "未所持のみ", "引き直しのみ", "未所持＋引き直し"]
+_counts_kind = {k: sum(1 for r in rows if r["kind"] == k) for k in ("未所持", "引き直し", "充足")}
+kind_pick = st.segmented_control(
+    "所持状況",
+    options=_KIND_OPTS,
+    default="すべて",
+    key="cp_kind",
+    help=(
+        f"未所持 {_counts_kind['未所持']} / "
+        f"引き直し {_counts_kind['引き直し']} / "
+        f"充足 {_counts_kind['充足']}（表示中のティア帯での内訳）"
+    ),
+) or "すべて"
+_KIND_FILTER = {
+    "すべて": None,
+    "未所持のみ": {"未所持"},
+    "引き直しのみ": {"引き直し"},
+    "未所持＋引き直し": {"未所持", "引き直し"},
+}[kind_pick]
+
+# ── 今週のマップで出る種だけに絞る ──
+active_week = db.get_setting("user.active_strategy_week", {}) or {}
+active_plan = db.get_party(int(active_week["plan_id"])) if active_week.get("plan_id") else None
+week_field = (active_plan or {}).get("field_name")
+
+field_filter = None
+if week_field and has_data(week_field):
+    if st.toggle(
+        f"今週のマップ（{week_field}）で出る種だけ", value=False, key="cp_week_field",
+        help="そのマップに出現しない種は、今週は狙えないので隠す。",
+    ):
+        field_filter = week_field
+elif week_field:
+    st.caption(f"※ {week_field} の出現データは未取得のため、マップ絞り込みは使えない。")
 
 view = [
     r for r in rows
-    if r[6] == sel_specialty and (r[4] if only_todo else True)
+    if r["specialty"] == sel_specialty
+    and (_KIND_FILTER is None or r["kind"] in _KIND_FILTER)
+    and (field_filter is None or field_filter in species_fields(r["species_name"]))
 ]
-st.caption(f"{sel_specialty}得意 {len(view)} 種を表示中。")
+st.caption(
+    f"{sel_specialty}得意 {len(view)} 種を表示中。"
+    + (f"（{week_field}に出る種のみ）" if field_filter else "")
+)
 
-for species_name, tier, want, status, todo, holders, specialty, detail in view:
+# ── おすすめマップ: 未所持・引き直し候補が最も多く出るフィールド ──
+_wanted = {r["species_name"] for r in rows if r["todo"]}
+if _wanted:
+    recs = recommend_fields(_wanted)
+    if recs:
+        with st.expander(
+            f"🗺 おすすめマップ（狙える候補 {len(_wanted)} 種の出現先）", expanded=False
+        ):
+            st.caption(
+                "表示中のティア帯で「未所持・引き直し候補」になっている種が、"
+                "どのマップに何体出るか。多いマップほど厳選効率が良い。"
+            )
+            for fname, n, names in recs:
+                mark = "▶ " if fname == week_field else ""
+                st.markdown(f"**{mark}{fname}** … {n}種")
+                st.caption("　" + "、".join(names[:14]) + ("…" if len(names) > 14 else ""))
+
+for row in view:
+    species_name = row["species_name"]
+    tier, want, status = row["tier"], row["want"], row["status"]
+    todo, holders, detail = row["todo"], row["holders"], row["detail"]
     n_src = int(detail.get("sources") or 0)
     spread = float(detail.get("spread") or 0.0)
     by_source: dict[str, str] = detail.get("by_source") or {}
@@ -126,6 +194,13 @@ for species_name, tier, want, status, todo, holders, specialty, detail in view:
         cols[1].html(badges)
 
         cols[2].markdown(("🎯 " if todo else "✅ ") + status)
+        fields_of = species_fields(species_name)
+        if fields_of:
+            here = week_field in fields_of if week_field else False
+            cols[2].caption(
+                ("📍 今週のマップに出る： " if here else "出現： ")
+                + "、".join(fields_of)
+            )
         with cols[2]:
             if by_source:
                 with st.popover("📊 評価の内訳", use_container_width=False):
