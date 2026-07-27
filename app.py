@@ -2,6 +2,9 @@ import streamlit as st
 
 import db
 import ui
+from utils import perf
+
+perf.start()  # ?perf=1 のときだけ働く区間計測
 
 # page_icon: プリンの寝顔（ブラウザタブ/ホーム画面追加時のアイコン）
 st.set_page_config(
@@ -19,6 +22,7 @@ st.logo(
 )
 
 db.init_db()
+perf.mark("app.py: テーマ＋init_db")
 
 # ナビは「ユーザーの目的」でグループ化する（ui_design_policy.md）
 pages = {
@@ -64,5 +68,7 @@ with st.sidebar:
                 )
     except Exception:
         pass  # マスコットは飾りなので何があってもアプリを止めない
+
+perf.mark("app.py: ナビ構築＋サイドバー")
 
 nav.run()

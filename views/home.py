@@ -19,9 +19,11 @@ from image_utils import RECIPE_ICON_DIR, field_icon_url, icon_data_url, pokemon_
 from ui import components as c
 from utils.party_logic import RECIPE_CATEGORY_LABELS
 from utils.plan_simulation import capture_improvements, level_improvements, simulate_plan
+from utils import perf
 from utils.play_context import PlayContext, load_play_context, save_play_context
 
 ctx = load_play_context()
+perf.mark("home: load_play_context")
 
 st.html(c.page_banner("ホーム", "green", icon="🏠"))
 
@@ -69,13 +71,17 @@ prof_cols[0].caption(
 if prof_cols[1].button("⚙ 設定", use_container_width=True):
     _profile_dialog()
 
+perf.mark("home: ヘッダ＋設定ボタン")
+
 owned = [dict(r) for r in db.list_pokemon()]
+perf.mark("home: list_pokemon")
 
 
 # ============ ① 今週の攻略プラン ============
 
 active_week = db.get_setting("user.active_strategy_week", {}) or {}
 pt = db.get_party(int(active_week["plan_id"])) if active_week.get("plan_id") else None
+perf.mark("home: get_setting + get_party")
 if pt:
     st.html(c.section_header(f"今週の攻略プラン: {pt['name']}"))
 
@@ -96,6 +102,7 @@ if pt:
         url = icon_data_url(str(RECIPE_ICON_DIR), rec["icon"]) if rec and rec.get("icon") else None
         chips.append(c.icon_chip(url, rname))
     st.html('<div style="display:flex; flex-wrap:wrap; gap:4px;">' + "".join(chips) + "</div>")
+    perf.mark("home: フィールド/きのみ/レシピのチップ")
 
     cards = []
     for mid in (pt.get("member_ids") or [])[:5]:
@@ -116,6 +123,7 @@ if pt:
         ))
     if cards:
         st.html(c.row_scroll(cards))
+    perf.mark("home: メンバー5体のカード")
 
     members = [
         dict(row)
@@ -129,6 +137,8 @@ if pt:
         ),
         None,
     )
+    perf.mark("home: members再取得＋レシピ検索")
+
     if len(members) == 5 and recipe:
         sim = simulate_plan(
             members,
@@ -147,6 +157,8 @@ if pt:
             " / ".join(sim.bottlenecks) if sim.bottlenecks else "なし",
         )
 
+        perf.mark("home: simulate_plan＋指標4つ")
+
         advice_key = f"_home_advice_{pt['id']}:{pt.get('updated_at')}"
         if advice_key not in st.session_state:
             growth = level_improvements(
@@ -156,6 +168,8 @@ if pt:
                 members, recipe, fav_berries=set(fav), ctx=ctx, limit=3
             )
             st.session_state[advice_key] = (growth[:3], catches[:3])
+        perf.mark("home: 育成/捕獲アドバイス計算")
+
         growth, catches = st.session_state[advice_key]
         advice_cols = st.columns(2)
         with advice_cols[0]:
@@ -186,6 +200,9 @@ else:
     st.page_link("views/party.py", label="攻略プランを作る →", icon="🧭")
 
 
+perf.mark("home: ①攻略プラン 仕上げ")
+
+
 # ============ ② 所持ポケモン統計 ============
 
 st.html(c.section_header("所持ポケモン"))
@@ -206,6 +223,8 @@ else:
         c.stat_tile("だいふく評価済", str(rank_evaluated)),
     ]))
 
+    perf.mark("home: 統計タイル5枚")
+
     chart_cols = st.columns(2)
 
     # だいふくランク分布
@@ -223,6 +242,8 @@ else:
         else:
             st.caption("—")
 
+    perf.mark("home: チャート① だいふくランク分布")
+
     # とくいなもの分布
     sp_counts: dict[str, int] = {}
     for p in owned:
@@ -236,6 +257,9 @@ else:
             st.bar_chart(df.set_index("区分"), height=180, color="#3E87C7")
         else:
             st.caption("—")
+
+
+perf.mark("home: チャート② とくいなもの分布")
 
 
 # ============ ③ 最近登録した子 ============
@@ -257,3 +281,6 @@ else:
             mini=True,
         ))
     st.html(c.row_scroll(cards))
+
+perf.mark("home: 最近登録した子")
+perf.render()
