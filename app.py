@@ -24,16 +24,23 @@ st.logo(
 db.init_db()
 perf.mark("app.py: テーマ＋init_db")
 
-# ナビは「ユーザーの目的」でグループ化する（ui_design_policy.md）
+# ナビは「ユーザーの目的」でグループ化する（ui_design_policy.md）。
+# 並びは実際の運用フローの順: ホーム → 今週の手持ちを決める → 箱を見る →
+# 足りないものを捕りに行く → 資料を引く。
 pages = {
-    "今週の運用": [
+    # ホームだけはカテゴリを付けず最上段に置く（毎回ここから始まるため）
+    "": [
         st.Page("views/home.py", title="ホーム", icon="🏠", default=True),
-        st.Page("views/party.py", title="攻略プラン", icon="🧭"),
     ],
-    "個体管理": [
-        st.Page("views/hand.py", title="手札ボード", icon="🧩"),
-        st.Page("views/items.py", title="育成・アイテム戦略", icon="🎁"),
+    "てもち": [
+        st.Page("views/party.py", title="編成", icon="🧭"),
+        st.Page("views/items.py", title="育成・アイテム", icon="🎁"),
+    ],
+    "ボックス": [
+        st.Page("views/hand.py", title="役割", icon="🧩"),
         st.Page("views/owned.py", title="所持ポケデータ", icon="📦"),
+    ],
+    "ほかく": [
         st.Page("views/register.py", title="個体登録", icon="📝"),
         st.Page("views/update.py", title="個体強化・進化", icon="🔧"),
         st.Page("views/edit_record.py", title="登録情報の修正", icon="✏️"),
