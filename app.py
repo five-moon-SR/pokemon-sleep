@@ -41,6 +41,8 @@ pages = {
         st.Page("views/owned.py", title="所持ポケデータ", icon="📦"),
     ],
     "ほかく": [
+        # 「何を狙うか」は捕獲の前の話なので、登録・修正（捕獲後の作業）より先に置く
+        st.Page("views/catch_policy.py", title="強ポケ捕獲方針", icon="🏅"),
         st.Page("views/register.py", title="個体登録", icon="📝"),
         st.Page("views/update.py", title="個体強化・進化", icon="🔧"),
         st.Page("views/edit_record.py", title="登録情報の修正", icon="✏️"),
