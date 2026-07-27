@@ -129,6 +129,7 @@ def render_ingredient() -> None:
     with filter_cols[1]:
         sort_by = st.selectbox(
             "並び替え",
+            filter_mode=None,  # スマホでキーボードを出さない（選択肢が少なく検索不要）
             options=[
                 "登録順",
                 "基礎エナジー（高→低）",
@@ -319,6 +320,7 @@ def render_recipe() -> None:
     with filter_cols[2]:
         sort_by = st.selectbox(
             "並び替え",
+            filter_mode=None,  # スマホでキーボードを出さない（選択肢が少なく検索不要）
             options=[
                 "登録順（カテゴリ→No.）",
                 "Lv1エナジー（高→低）",

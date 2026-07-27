@@ -291,6 +291,7 @@ with st.form(f"update_form_{selected_id}"):
         cur_label = next((lbl for lbl, v in SLEEP_RIBBON_OPTIONS if v == cur_ribbon), ribbon_labels[0])
         new_ribbon_label = st.selectbox(
             "段階",
+            filter_mode=None,  # スマホでキーボードを出さない（選択肢が少なく検索不要）
             options=ribbon_labels,
             index=ribbon_labels.index(cur_label),
             key=f"f_ribbon_{selected_id}",
@@ -358,6 +359,7 @@ with st.form(f"update_form_{selected_id}"):
         options = [cur, *upgrades]
         choice = st.selectbox(
             f"Lv{lv}",
+            filter_mode=None,  # スマホでキーボードを出さない（選択肢が少なく検索不要）
             options=options,
             index=0,
             key=f"f_sub_{lv}_{selected_id}",

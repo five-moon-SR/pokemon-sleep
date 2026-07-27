@@ -48,6 +48,7 @@ sel_field_name = st.selectbox(
     field_options,
     index=field_options.index(saved_field) if saved_field in field_options else 0,
     key="berry_audit_field",
+    filter_mode=None,  # スマホでキーボードを出さない（監査フィールド8件なので検索不要）
 )
 audit_field = sel_field_name if sel_field_name != "（未選択）" else None
 if audit_field != saved_field:

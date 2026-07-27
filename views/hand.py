@@ -107,6 +107,7 @@ with food_tab:
         list(index),
         index=list(index).index(food_holes[0]) if food_holes else 0,
         key="hand_food_detail",
+        filter_mode=None,  # スマホでキーボードを出さない（食材19件なので検索不要）
     )
     detail_providers = index[detail_name]
     active_detail = [p for p in detail_providers if p.per_day_now > 0]

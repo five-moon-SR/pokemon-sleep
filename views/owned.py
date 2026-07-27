@@ -306,12 +306,12 @@ with detail_pop:
     ]
     row4 = st.columns([2, 1])
     with row4[0]:
-        sort_key1 = st.selectbox("並び替え1", options=sortable_cols, index=0, key="o_sk1")
+        sort_key1 = st.selectbox("並び替え1", filter_mode=None, options=sortable_cols, index=0, key="o_sk1")
     with row4[1]:
         sort_dir1 = st.radio("方向1", ["昇順", "降順"], horizontal=True, key="o_dir1")
     row5 = st.columns([2, 1])
     with row5[0]:
-        sort_key2 = st.selectbox("並び替え2", options=["（なし）", *sortable_cols], index=0, key="o_sk2")
+        sort_key2 = st.selectbox("並び替え2", filter_mode=None, options=["（なし）", *sortable_cols], index=0, key="o_sk2")
     with row5[1]:
         sort_dir2 = st.radio("方向2", ["昇順", "降順"], horizontal=True, key="o_dir2")
 

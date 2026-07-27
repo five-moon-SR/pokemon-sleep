@@ -147,12 +147,13 @@ with st.expander("🔍 絞り込み・並び替え", expanded=True):
     ]
     row4 = st.columns([2, 1, 2, 1])
     with row4[0]:
-        sort_key1 = st.selectbox("並び替え1", options=sortable_cols, index=0)
+        sort_key1 = st.selectbox("並び替え1", filter_mode=None, options=sortable_cols, index=0)
     with row4[1]:
         sort_dir1 = st.radio("方向1", ["昇順", "降順"], horizontal=True, key="dir1")
     with row4[2]:
         sort_key2 = st.selectbox(
             "並び替え2",
+            filter_mode=None,  # スマホでキーボードを出さない（選択肢が少なく検索不要）
             options=["（なし）", *sortable_cols],
             index=0,
             key="sort_key2",

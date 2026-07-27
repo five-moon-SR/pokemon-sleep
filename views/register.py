@@ -212,6 +212,7 @@ with basic_cols[1]:
         options=axis_options,
         index=0,
         key="nature_axis",
+        filter_mode=None,  # スマホでキーボードを出さない（性格カテゴリなので検索不要）
         on_change=_reset_nature_pick,
         help="どの軸を上げる性格か。下降軸の組合せで25種が決まる。",
     )
@@ -227,6 +228,7 @@ with basic_cols[1]:
         options=inner_options,
         index=0,
         key="nature_select",
+        filter_mode=None,  # スマホでキーボードを出さない（性格25件なので検索不要）
         format_func=_nature_select_label,
         disabled=axis_choice == "（未指定）",
         help="↓ は下降軸（不利になる軸）。",
@@ -297,6 +299,7 @@ for col, key, unlock_lv in zip(sub_cols, SUB_SLOT_KEYS, SUBSKILL_UNLOCK_LEVELS):
             index=0,
             key=key,
             format_func=_sub_filter_label,
+            filter_mode=None,  # スマホでキーボードを出さない（サブスキル17件なので検索不要）
         )
 
 
@@ -315,6 +318,7 @@ with st.expander("📝 任意項目（ニックネーム / 🎀リボン / メ�
             options=[lbl for lbl, _ in SLEEP_RIBBON_OPTIONS],
             index=0,
             key="sleep_ribbon_select",
+            filter_mode=None,  # スマホでキーボードを出さない（リボン5件なので検索不要）
             help="累積眠時間で自動付与される証。所持数+ や時間短縮（進化残り回数別）に効く。",
         )
     sleep_ribbon_stage = dict(SLEEP_RIBBON_OPTIONS).get(ribbon_label, 0)

@@ -231,6 +231,7 @@ nat_cols = st.columns(2)
 with nat_cols[0]:
     new_axis_choice = st.selectbox(
         "性格カテゴリ",
+        filter_mode=None,  # スマホでキーボードを出さない（選択肢が少なく検索不要）
         options=axis_options,
         index=axis_idx,
         key=f"e_nature_axis_{target_id}",
@@ -258,6 +259,7 @@ else:
 with nat_cols[1]:
     new_nature_choice = st.selectbox(
         "性格",
+        filter_mode=None,  # スマホでキーボードを出さない（選択肢が少なく検索不要）
         options=inner_options,
         index=nature_idx,
         key=f"e_nature_pick_{target_id}",
@@ -353,6 +355,7 @@ for col, lv in zip(sub_cols, SUBSKILL_UNLOCK_LEVELS):
         idx = options.index(cur_val) if cur_val in options else 0
         choice = st.selectbox(
             f"Lv{lv}",
+            filter_mode=None,  # スマホでキーボードを出さない（選択肢が少なく検索不要）
             options=options,
             index=idx,
             format_func=_sub_label,
@@ -376,6 +379,7 @@ with rib_col_sel:
     )
     new_ribbon_label = st.selectbox(
         "段階",
+        filter_mode=None,  # スマホでキーボードを出さない（選択肢が少なく検索不要）
         options=ribbon_labels,
         index=ribbon_labels.index(cur_label),
         key=f"e_ribbon_{target_id}",

@@ -97,6 +97,7 @@ field_name = st.selectbox(
     "フィールド",
     field_names,
     key="strategy_field",
+    filter_mode=None,  # スマホでキーボードを出さない（フィールド8件なので検索不要）
 )
 field = next(f for f in fields if f["name"] == field_name)
 field_url = field_icon_url(field_name)
@@ -267,6 +268,7 @@ picked_recipe = st.selectbox(
     index=recipe_names.index(current_recipe) if current_recipe in recipe_names else 0,
     key=recipe_widget_key,
     format_func=_recipe_label,
+    filter_mode=None,  # スマホでキーボードを出さない（主料理20件強なので検索不要）
 )
 ss["strategy_main_recipe"] = picked_recipe
 recipe = recipe_map[picked_recipe]
