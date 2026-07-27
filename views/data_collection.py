@@ -257,13 +257,13 @@ def _recipe_row_html(r: dict) -> str:
 
     tag_html = (
         f'<span style="background:{style["tag_bg"]};color:#333;'
-        f'padding:1px 6px;border-radius:8px;font-size:11px;white-space:nowrap">'
+        f'padding:1px 6px;border-radius:8px;font-size:12px;white-space:nowrap">'
         f'{html.escape(label)}</span>'
     )
 
     desc = r.get("description") or ""
     desc_html = (
-        f'<div style="color:#666;font-size:11px;margin-top:2px">{html.escape(desc)}</div>'
+        f'<div style="color:#666;font-size:12px;margin-top:2px">{html.escape(desc)}</div>'
         if desc
         else ""
     )
@@ -438,7 +438,7 @@ def _subskill_row_html(r: dict) -> str:
         else ""
     )
     max_badge = (
-        '<span style="background:#fff2cc;color:#7a5a00;font-size:10px;'
+        '<span style="background:#fff2cc;color:#7a5a00;font-size:12px;'
         'padding:1px 5px;border-radius:6px;margin-left:6px;'
         'border:1px solid #e7c878">MAX</span>'
         if r.get("is_max_rank")
@@ -446,7 +446,7 @@ def _subskill_row_html(r: dict) -> str:
     )
     rarity_badge = (
         f'<span style="background:{style["bg"]};color:{style["fg"]};'
-        f'font-weight:600;padding:2px 8px;border-radius:10px;font-size:11px;'
+        f'font-weight:600;padding:2px 8px;border-radius:10px;font-size:12px;'
         f'white-space:nowrap">{html.escape(label)}</span>'
     )
 

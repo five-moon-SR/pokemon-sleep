@@ -306,12 +306,16 @@ h1, h2, h3, [data-testid="stMarkdownContainer"] strong { word-break: auto-phrase
         min-width: 7.5rem !important;
     }
 
-    /* スマホは全体的に一段締める（大きい文字は情報密度を殺す） */
-    html, body, [data-testid="stMarkdownContainer"] p, [data-testid="stMarkdownContainer"] li {
+    /* スマホは全体的に一段締める（大きい文字は情報密度を殺す）。
+       ただし html には掛けない。html に rem 未満を指定すると rem の基準そのものが
+       縮み、0.75rem のキャプションやバッジが 11px まで落ちて日本語が読めなくなる。
+       本文だけを締めて、rem基準(16px)は維持する。 */
+    body, [data-testid="stMarkdownContainer"] p, [data-testid="stMarkdownContainer"] li {
         font-size: 0.92rem;
-        line-height: 1.55;
+        line-height: 1.6;
     }
-    [data-testid="stCaptionContainer"] p { font-size: 0.75rem; }
+    /* 日本語は小さい字が潰れるので、注釈でも12px は確保する */
+    [data-testid="stCaptionContainer"] p { font-size: 0.78rem; }
 
     /* タッチターゲットは高さで確保しつつ文字は控えめに */
     .stButton button, .stFormSubmitButton button, .stDownloadButton button {

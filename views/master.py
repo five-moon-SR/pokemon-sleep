@@ -100,7 +100,7 @@ with st.expander("🔍 絞り込み・並び替え", expanded=True):
         ownership_filter = st.radio(
             f"所持状況（{owned_count_total}/{len(records)}種）",
             ["すべて", "所持のみ", "未所持のみ"],
-            horizontal=False,
+            horizontal=True,   # スマホで3択が縦積みになるのを防ぐ
         )
 
     row2 = st.columns([3, 3])
