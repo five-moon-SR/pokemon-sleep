@@ -58,15 +58,34 @@ def appears_in(species_name: str | None, field_name: str | None) -> bool | None:
     return species_name in field_species(field_name)
 
 
-def recommend_fields(wanted: set[str], limit: int = 8) -> list[tuple[str, int, list[str]]]:
+def is_exclusive(species_name: str | None) -> bool:
+    """1つのフィールドにしか出現しない種か。"""
+    return len(species_fields(species_name)) == 1
+
+
+def recommend_fields(wanted: set[str], limit: int = 8) -> list[dict]:
     """欲しい種族が何体出るかでフィールドを並べる。
 
-    Returns: [(フィールド名, 該当数, 該当する種族名リスト)] を該当数の降順で。
+    単純な該当数だけでは「どこでも取れる種」と「そこでしか取れない種」が同じ重みに
+    なってしまう。実データでは223種中175種(78%)が1マップ専属で、残り48種が複数マップに
+    出る。今週どのマップに行くかの判断では専属の方が重い（他でも取れる種のために
+    1週間を使う理由は薄い）ため、専属数を第1キーにして並べる。
+
+    Returns: [{field, total, exclusive, names, exclusive_names}] を
+             専属数→該当数の降順で。
     """
     rows = []
     for field, names in _by_field().items():
         hit = sorted(wanted & names)
-        if hit:
-            rows.append((field, len(hit), hit))
-    rows.sort(key=lambda x: (-x[1], x[0]))
+        if not hit:
+            continue
+        excl = [n for n in hit if is_exclusive(n)]
+        rows.append({
+            "field": field,
+            "total": len(hit),
+            "exclusive": len(excl),
+            "names": hit,
+            "exclusive_names": excl,
+        })
+    rows.sort(key=lambda r: (-r["exclusive"], -r["total"], r["field"]))
     return rows[:limit]

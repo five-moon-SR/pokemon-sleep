@@ -155,12 +155,26 @@ if _wanted:
         ):
             st.caption(
                 "表示中のティア帯で「未所持・引き直し候補」になっている種が、"
-                "どのマップに何体出るか。多いマップほど厳選効率が良い。"
+                "どのマップに何体出るか。**専属**＝そのマップでしか取れない種で、"
+                "他でも取れる種より優先度が高いので専属数の多い順に並べている。"
             )
-            for fname, n, names in recs:
-                mark = "▶ " if fname == week_field else ""
-                st.markdown(f"**{mark}{fname}** … {n}種")
-                st.caption("　" + "、".join(names[:14]) + ("…" if len(names) > 14 else ""))
+            for r in recs:
+                mark = "▶ " if r["field"] == week_field else ""
+                st.markdown(
+                    f"**{mark}{r['field']}** … 候補{r['total']}種"
+                    + (f"（うち専属 **{r['exclusive']}**）" if r["exclusive"] else "（専属なし）")
+                )
+                if r["exclusive_names"]:
+                    st.caption(
+                        "　専属: " + "、".join(r["exclusive_names"][:12])
+                        + ("…" if len(r["exclusive_names"]) > 12 else "")
+                    )
+                shared = [n for n in r["names"] if n not in set(r["exclusive_names"])]
+                if shared:
+                    st.caption(
+                        "　他でも可: " + "、".join(shared[:10])
+                        + ("…" if len(shared) > 10 else "")
+                    )
 
 for row in view:
     species_name = row["species_name"]
@@ -197,9 +211,13 @@ for row in view:
         fields_of = species_fields(species_name)
         if fields_of:
             here = week_field in fields_of if week_field else False
+            # 1マップ専属なら「そこに行かないと取れない」＝優先度が高い。
+            # 複数マップに出るなら今週を逃しても他で狙えるので急がなくていい。
+            tag = "専属" if len(fields_of) == 1 else f"{len(fields_of)}マップ"
             cols[2].caption(
                 ("📍 今週のマップに出る： " if here else "出現： ")
                 + "、".join(fields_of)
+                + f"（{tag}）"
             )
         with cols[2]:
             if by_source:
