@@ -15,7 +15,7 @@ import pandas as pd
 import streamlit as st
 
 import db
-from image_utils import RECIPE_ICON_DIR, field_icon_url, icon_data_url, pokemon_image_url
+from image_utils import field_icon_url, pokemon_image_url, recipe_icon_url
 from ui import components as c
 from utils.party_logic import RECIPE_CATEGORY_LABELS
 from utils.plan_simulation import capture_improvements, level_improvements, simulate_plan
@@ -101,12 +101,9 @@ if pt:
 
     chips = [c.icon_chip(field_icon_url(field_name), field_name, size=24)]
     chips += [c.berry_chip(b) for b in fav]
-    for rname in [pt.get("main_recipe")]:
-        if not rname:
-            continue
-        rec = next((r for r in db.list_all_recipe_records() if r["name"] == rname), None)
-        url = icon_data_url(str(RECIPE_ICON_DIR), rec["icon"]) if rec and rec.get("icon") else None
-        chips.append(c.icon_chip(url, rname))
+    if pt.get("main_recipe"):
+        rname = pt["main_recipe"]
+        chips.append(c.icon_chip(recipe_icon_url(rname), rname))
     st.html('<div style="display:flex; flex-wrap:wrap; gap:4px;">' + "".join(chips) + "</div>")
     perf.mark("home: フィールド/きのみ/レシピのチップ")
 

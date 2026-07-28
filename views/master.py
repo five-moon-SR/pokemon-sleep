@@ -2,7 +2,7 @@ import pandas as pd
 import streamlit as st
 
 import db
-from image_utils import berry_icon_url, ingredient_icon_url
+from image_utils import berry_icon_url, ingredient_icon_url, pokemon_image_url
 
 st.title("📚 全ポケデータ")
 
@@ -48,6 +48,7 @@ for r in records:
         {
             "所持": owned_counts.get(name, 0),
             "図鑑No": r.get("dex_no"),
+            "姿": pokemon_image_url(name),
             "種族名": name,
             "睡眠": r.get("sleep_type"),
             "得意": r.get("specialty"),
@@ -215,6 +216,7 @@ def _style_owned(df: pd.DataFrame):
 
 
 _IMG_COL_CONFIG = {
+    "姿": st.column_config.ImageColumn("姿", width="small"),
     "🌳": st.column_config.ImageColumn("🌳", width="small"),
     "🥕A": st.column_config.ImageColumn("🥕A", width="small"),
     "🥕B": st.column_config.ImageColumn("🥕B", width="small"),

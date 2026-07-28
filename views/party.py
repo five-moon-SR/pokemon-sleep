@@ -6,7 +6,12 @@ import pandas as pd
 import streamlit as st
 
 import db
-from image_utils import field_icon_url, ingredient_icon_url, pokemon_image_url
+from image_utils import (
+    field_icon_url,
+    ingredient_icon_url,
+    pokemon_image_url,
+    recipe_icon_url,
+)
 from ui import components as c
 from ui.widgets import pokemon_popover_row
 from utils.ingredient_coverage import build_ingredient_index, versatile_mains
@@ -323,9 +328,25 @@ if suggestions:
         with st.container(border=True):
             head, action = st.columns([5, 1])
             healer = "💚ヒーラーあり" if suggestion.has_healer else "ヒーラーなし"
-            head.markdown(
-                f"**#{idx}　{suggestion.recipe_name}**　{healer}  \n"
-                + " / ".join(suggestion.member_labels)
+            # 採用を決める画面なので、料理と5体は名前ではなく絵で判る形にする
+            head.html(
+                '<div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap">'
+                + c.icon_chip(
+                    recipe_icon_url(suggestion.recipe_name),
+                    f"#{idx} {suggestion.recipe_name}",
+                    size=28,
+                )
+                + c.text_badge(healer)
+                + "</div>"
+            )
+            member_imgs = "".join(
+                c.icon_chip(pokemon_image_url(m_row["species_name"]), m_row["species_name"], size=34)
+                for mid in suggestion.member_ids
+                if (m_row := owned_map.get(int(mid)))
+            )
+            head.html(
+                '<div style="display:flex;flex-wrap:wrap;gap:2px;margin-top:2px">'
+                + member_imgs + "</div>"
             )
             head.caption(
                 f"安定度 {sim.stability:.0%}｜{sim.cooked_meals}/21食｜"
@@ -685,6 +706,7 @@ if valid_team:
                 status = "× 担当なし"
             ingredient_rows.append(
                 {
+                    "🥕": ingredient_icon_url(name),
                     "食材": name,
                     "充足": status,
                     "固定5体/日": round(team_daily, 1),
@@ -702,6 +724,7 @@ if valid_team:
             hide_index=True,
             use_container_width=True,
             column_config={
+                "🥕": st.column_config.ImageColumn("🥕", width="small"),
                 "即戦力": st.column_config.NumberColumn("即戦力", format="%d体"),
                 "将来候補": st.column_config.NumberColumn("将来候補", format="%d体"),
             },
@@ -720,6 +743,7 @@ if valid_team:
                     uncovered.append(name)
                 all_food_rows.append(
                     {
+                        "🥕": ingredient_icon_url(name),
                         "食材": name,
                         "現在担当": len(active),
                         "将来候補": len(providers) - len(active),
@@ -734,6 +758,7 @@ if valid_team:
                 hide_index=True,
                 use_container_width=True,
                 column_config={
+                    "🥕": st.column_config.ImageColumn("🥕", width="small"),
                     "現在担当": st.column_config.NumberColumn(
                         "現在担当", format="%d体"
                     ),

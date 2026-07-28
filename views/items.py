@@ -6,6 +6,7 @@ import pandas as pd
 import streamlit as st
 
 import db
+from image_utils import pokemon_image_url
 from ui import components as c
 from utils.item_simulation import (
     analyze_subskill_seed,
@@ -100,6 +101,7 @@ def _impact_list(rows: list[ImpactRow], *, limit: int = 20, unit: str = "") -> N
             subtitle=sub,
             badges=badges,
             right=right,
+            img_url=pokemon_image_url(row.final_species),
         ))
         if len(row.plan_deltas) > 1:
             with st.expander(f"　{row.label}：どのプランが伸びるか（{len(row.plan_deltas)}件）"):

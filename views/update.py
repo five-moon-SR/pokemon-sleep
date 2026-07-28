@@ -21,7 +21,12 @@ from constants import (
     format_nature_label,
     get_subskill_upgrades,
 )
-from image_utils import berry_icon_url, ingredient_icon_url, sleep_ribbon_icon_url
+from image_utils import (
+    berry_icon_url,
+    ingredient_icon_url,
+    pokemon_image_url,
+    sleep_ribbon_icon_url,
+)
 from utils.evaluator import evaluate_at_levels
 
 
@@ -262,6 +267,15 @@ with st.form(f"update_form_{selected_id}"):
             key=f"f_evo_{selected_id}",
             help="ゲーム内で進化済みの場合のみ選択してください。選ぶとメインスキルLvが自動で+1されます。",
         )
+        # 名前だけだと分岐進化で取り違えるので、進化後の姿を並べて見せる
+        evo_imgs = st.columns(max(1, len(evolutions)))
+        for col, e in zip(evo_imgs, evolutions):
+            with col:
+                url = pokemon_image_url(e["to"])
+                if url:
+                    st.image(url, width=72, caption=e["to"])
+                else:
+                    st.caption(e["to"])
     else:
         evo_choice = None
         st.caption(f"💡 「{species_name}」には登録されている進化先がありません。")

@@ -89,6 +89,26 @@ def field_icon_url(field_name: str | None) -> str | None:
 
 
 @st.cache_data
+def _recipe_icon_map() -> dict[str, str]:
+    return {
+        r["name"]: r["icon"]
+        for r in db.list_all_recipe_records()
+        if r.get("icon")
+    }
+
+
+def recipe_icon_url(recipe_name: str | None) -> str | None:
+    """料理アイコンのデータURL。他の5カテゴリと同じ形にそろえた窓口。
+
+    これが無かったせいで home.py と data_collection.py が
+    icon_data_url(RECIPE_ICON_DIR, ...) を手書きで複製していた。
+    """
+    if not recipe_name:
+        return None
+    return icon_data_url(str(RECIPE_ICON_DIR), _recipe_icon_map().get(recipe_name))
+
+
+@st.cache_data
 def _sleep_ribbon_icon_map() -> dict[int, str]:
     return {
         int(r["stage"]): r["icon"]

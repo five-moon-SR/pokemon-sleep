@@ -10,8 +10,8 @@ from image_utils import (
     FIELD_ICON_DIR,
     INGREDIENT_ICON_DIR,
     MAIN_SKILL_ICON_DIR,
-    RECIPE_ICON_DIR,
     icon_data_url as _icon_data_url,
+    recipe_icon_url,
 )
 
 SUBSKILL_RARITY_LABELS = {"gold": "金", "blue": "青", "white": "白"}
@@ -248,7 +248,7 @@ def _recipe_row_html(r: dict) -> str:
     style = RECIPE_CATEGORY_COLORS.get(cat, {"bg": "#fff", "border": "#ccc", "tag_bg": "#eee"})
     label = RECIPE_CATEGORY_LABELS.get(cat, cat)
 
-    img_url = _icon_data_url(str(RECIPE_ICON_DIR), r.get("icon"))
+    img_url = recipe_icon_url(r.get("name"))
     img_html = (
         f'<img src="{img_url}" style="width:42px;height:42px;object-fit:contain">'
         if img_url

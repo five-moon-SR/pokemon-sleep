@@ -11,7 +11,7 @@ from constants import (
     format_nature_label,
     get_subskill_rarity,
 )
-from image_utils import sleep_ribbon_icon_url
+from image_utils import ingredient_icon_url, pokemon_image_url, sleep_ribbon_icon_url
 from ui import components as c
 
 
@@ -182,18 +182,30 @@ if not species:
     st.error("マスターに見つかりませんでした。マスターを再生成してください。")
     st.stop()
 
-# 種族の素性は metric 4枚だと縦を食うので、1〜2行のキャプションに畳む
+# 種族の素性は metric 4枚だと縦を食うので、姿＋チップに畳む。
+# 名前だけだと選び間違いに気づけないので、実際の姿ときのみ・食材の絵を出す。
 berry = species["berry"]
 a = species["ingredients"]["a"]
-st.caption(
-    f"No.{species['dex_no']} ／ {species['sleep_type']} ／ 得意: {species['specialty']}"
-    f" ／ 基準秒: {species['base_assist_seconds']}"
-)
-st.caption(
-    f"🌳 **{berry['name']}** ×{berry['qty']}　／　"
-    f"🥕 **{a['name']}** ×{a['qty'][0] if a['qty'] else '?'}（Lv1〜確定）　／　"
-    f"⚡ **{species['main_skill']}**"
-)
+pv_img, pv_body = st.columns([1, 3])
+with pv_img:
+    img = pokemon_image_url(species_name)
+    if img:
+        st.image(img, width=88)
+with pv_body:
+    st.caption(
+        f"No.{species['dex_no']}／{species['sleep_type']}／得意 {species['specialty']}"
+        f"／基準秒 {species['base_assist_seconds']}"
+    )
+    st.html(
+        '<div style="display:flex;flex-wrap:wrap;gap:4px">'
+        + c.berry_chip(berry["name"], f"{berry['name']} ×{berry['qty']}")
+        + c.icon_chip(
+            ingredient_icon_url(a["name"]),
+            f"{a['name']} ×{a['qty'][0] if a['qty'] else '?'}",
+        )
+        + c.text_badge(f"⚡ {species['main_skill']}")
+        + "</div>"
+    )
 
 
 # ============================================================================
