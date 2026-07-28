@@ -67,6 +67,9 @@ pages = {
     "てもち": [
         st.Page("views/party.py", title="編成", icon="🧭"),
         st.Page("views/items.py", title="育成・アイテム", icon="🎁"),
+        # 料理レベルは編成の数字を直接動かす入力なので「てもち」側に置く
+        # （データ集は読み取り専用の資料置き場という区分を崩さない）
+        st.Page("views/recipe_levels.py", title="料理レベル", icon="🍳"),
     ],
     "ボックス": [
         st.Page("views/hand.py", title="役割", icon="🧩"),

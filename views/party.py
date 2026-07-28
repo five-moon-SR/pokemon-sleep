@@ -444,21 +444,12 @@ if int(picked_level) != saved_levels.get(picked_recipe, recipe_level.MIN_LEVEL):
         st.cache_data.clear()  # 料理エナジーに依存する集計を全部作り直す
         st.rerun()
 
-if saved_levels:
-    with st.expander(f"🍳 登録済みの料理レベル（{len(saved_levels)}件）"):
-        st.caption("ここに無い料理はLv1（未開拓）として計算しています。")
-        for name, lv in sorted(saved_levels.items(), key=lambda x: -x[1]):
-            row = st.columns([3, 1])
-            row[0].markdown(
-                f"{name}　<small>Lv{lv}（×{recipe_level.level_multiplier(lv):.2f}）</small>",
-                unsafe_allow_html=True,
-            )
-            if row[1].button("削除", key=f"del_recipe_level_{name}"):
-                recipe_level.save_recipe_levels(
-                    {k: v for k, v in saved_levels.items() if k != name}
-                )
-                st.cache_data.clear()
-                st.rerun()
+# まとめて入れ直すのは専用ページ側の仕事。ここは「いま選んでいる1品」だけ扱う。
+st.page_link(
+    "views/recipe_levels.py",
+    label=f"🍳 料理レベルを一覧で編集（登録済み {len(saved_levels)}件）",
+    icon="↗️",
+)
 
 requirements = {x["name"]: int(x["count"]) for x in recipe.get("ingredients") or []}
 chips = []
