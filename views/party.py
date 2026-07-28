@@ -17,13 +17,20 @@ from ui.widgets import pokemon_popover_row
 from utils.ingredient_coverage import build_ingredient_index, versatile_mains
 from utils.party_logic import EVENT_BONUSES, RECIPE_CATEGORY_LABELS
 from utils.plan_simulation import (
+    HEAL_CATEGORIES,
+    RANDOM_HEAL_CATEGORIES,
+    TEAM_HEAL_CATEGORIES,
+    _skill_effect,
+    _has_help_bonus,
     capture_improvements,
+    expected_skill_activations_per_day,
     level_improvements,
     simulate_plan,
 )
 from utils.play_context import load_play_context
 from utils.skill_role_coverage import skill_role_audit
 from utils import recipe_level
+from utils.genki import heal_assist_boost
 from utils.recipe_unlock import recipe_gaps
 from utils.strategy_optimizer import (
     generate_all_strategy_plans,
@@ -59,7 +66,7 @@ def _sim_metrics(sim) -> None:
     cols[1].metric("主料理", f"{sim.cooked_per_day:.2f} 回/日")
     cols[2].metric("週期待エナジー", f"{sim.weekly_energy:,.0f}")
     cols[3].metric(
-        "げんきオール効果",
+        "げんき回復の効果",
         f"+{sim.healer_team_boost:.1%}",
         f"{sim.healer_activation_per_day:.2f}回/日",
     )
@@ -796,6 +803,57 @@ if valid_team:
             ]
         )
         st.dataframe(breakdown, hide_index=True, use_container_width=True)
+
+        # ── バフ系スキルの効果量と、それが実際に何%効いているか ──
+        st.markdown("##### バフの効き方")
+        team_help_count = sum(_has_help_bonus(m) for m in members)
+        buff_rows = []
+        for m, master in zip(members, [db.get_species_data(x["species_name"]) or {} for x in members]):
+            skill_cat, amount = _skill_effect(m, master)
+            if skill_cat not in HEAL_CATEGORIES:
+                continue
+            acts = expected_skill_activations_per_day(
+                m, master, team_help_bonus_count=team_help_count
+            )
+            if skill_cat in TEAM_HEAL_CATEGORIES:
+                scope, per_member = "チーム全員", acts
+            elif skill_cat in RANDOM_HEAL_CATEGORIES:
+                scope, per_member = "ランダム1体", acts / max(1, len(members))
+            else:
+                scope, per_member = "自分のみ", acts
+            buff_rows.append({
+                "個体": m.get("nickname") or m["species_name"],
+                "スキル": skill_cat,
+                "対象": scope,
+                "回復量/回": f"{amount:.1f}%",
+                "発動/日": round(acts, 2),
+                "1体あたり": round(per_member, 2),
+                "おてつだい増": f"{heal_assist_boost(per_member, amount):+.1%}",
+            })
+        if team_help_count:
+            buff_rows.append({
+                "個体": f"おてつだいボーナス ×{team_help_count}",
+                "スキル": "サブスキル",
+                "対象": "チーム全員",
+                "回復量/回": "—",
+                "発動/日": "—",
+                "1体あたり": "—",
+                "おてつだい増": f"{0.05 * team_help_count:+.1%}",
+            })
+        if buff_rows:
+            st.dataframe(pd.DataFrame(buff_rows), hide_index=True, use_container_width=True)
+            st.caption(
+                f"げんき回復の合計効果は **{carry_sim.healer_team_boost:+.1%}**。"
+                "げんきは起床時100から10分に1ずつ減り、150で頭打ち。"
+                "回復すると高げんき帯に留まる時間が延びて、おてつだい回数が増えます。"
+                "回復量はメインスキルLvで変わるので、同じスキルでもLvで効きが違います。"
+            )
+        else:
+            st.caption(
+                "げんき回復スキル持ちもおてつだいボーナスもいません。"
+                "ヒーラーを1体入れると、5体全員のおてつだい量が増えます。"
+            )
+
         st.markdown("##### 食材の自給力")
         food_rows = []
         for name, required in requirements.items():

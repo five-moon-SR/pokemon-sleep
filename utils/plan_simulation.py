@@ -26,7 +26,11 @@ from utils.food_expectation import (
     find_food_origin,
     qty_at_slot,
 )
-from utils.genki import DAILY_EFFECTIVE_ASSIST_SECONDS
+from utils.genki import (
+    DAILY_EFFECTIVE_ASSIST_SECONDS,
+    combined_heal_boost,
+    heal_assist_boost,
+)
 from utils.play_context import PlayContext
 from utils.recipe_level import recipe_energy
 from utils.skill_effects import get_skill_effect_amount, get_skill_max_lv
@@ -35,7 +39,13 @@ from utils.sleep_ribbon import get_time_multiplier
 
 
 COOKING_CATEGORIES = {"料理パワーアップS", "料理チャンスS", "料理アシスト"}
+# チーム全員のげんきを回復する（＝全員のおてつだい量が増える）
 TEAM_HEAL_CATEGORIES = {"げんきオールS"}
+# ランダムな味方1体を回復する。5体編成なので1体あたりの期待回数は発動数/5
+RANDOM_HEAL_CATEGORIES = {"げんきエールS"}
+# 自分だけを回復する。チームには波及しない
+SELF_HEAL_CATEGORIES = {"げんきチャージS"}
+HEAL_CATEGORIES = TEAM_HEAL_CATEGORIES | RANDOM_HEAL_CATEGORIES | SELF_HEAL_CATEGORIES
 BASE_GREAT_CHANCE = 0.10
 MAX_GREAT_CHANCE = 0.70
 
@@ -119,14 +129,18 @@ def _skill_effect(pokemon: dict[str, Any], species: dict[str, Any]) -> tuple[str
     return category, float(get_skill_effect_amount(category, level) or 0.0)
 
 
-def _healer_boost(activations: float) -> float:
-    """既存の検証表（1〜5回/日）を線形補間してチーム稼働増分へ変換する。"""
-    points = [0.0, 0.0993, 0.1987, 0.2771, 0.3345, 0.3863]
-    activations = max(0.0, min(float(activations), 5.0))
-    lo = int(activations)
-    hi = min(lo + 1, 5)
-    frac = activations - lo
-    return points[lo] * (1.0 - frac) + points[hi] * frac
+def _healer_boost(heals: list[tuple[float, float]]) -> float:
+    """げんき回復によるチーム稼働の増分。
+
+    heals は (1体あたりの回復回数/日, 1回あたりの回復量%) のリスト。
+    以前は発動回数だけを引く固定表だったので、げんきオールS Lv1（回復5.0%）が
+    Lv6（18.1%）と同じ加点になっていた。回復量まで見て utils.genki の
+    げんき推移モデルから出す。
+
+    ヒーラーが複数いる場合は、各々の増分を掛け合わせると 150 の頭打ちを跨いだ時に
+    超線形に増えてしまう。回復イベントを1本のげんき曲線へ重ねて積分する。
+    """
+    return combined_heal_boost(heals)
 
 
 def _meal_fractions(ctx: PlayContext) -> list[float]:
@@ -169,13 +183,25 @@ def simulate_plan(
         )
         for p, s in zip(members, masters)
     ]
-    healer_acts = sum(
-        acts
-        for p, s, acts in zip(members, masters, base_activations)
-        if _skill_effect(p, s)[0] in TEAM_HEAL_CATEGORIES
-    )
-    activity_boost = 1.0 + _healer_boost(healer_acts)
-    activations = [a * activity_boost for a in base_activations]
+    # チームに効く回復（げんきオール＝全員 / げんきエール＝ランダム1体）を集める。
+    # げんきチャージは自分だけなので、その個体の取り分にだけ後で掛ける。
+    team_heals: list[tuple[float, float]] = []
+    self_heals: list[float] = [0.0] * len(members)
+    healer_acts = 0.0
+    for idx, (p, s, acts) in enumerate(zip(members, masters, base_activations)):
+        category, amount = _skill_effect(p, s)
+        if category in TEAM_HEAL_CATEGORIES:
+            team_heals.append((acts, amount))
+            healer_acts += acts
+        elif category in RANDOM_HEAL_CATEGORIES and members:
+            # ランダム1体なので、1体あたりの期待回数は発動数 ÷ 編成人数
+            team_heals.append((acts / len(members), amount))
+            healer_acts += acts
+        elif category in SELF_HEAL_CATEGORIES:
+            self_heals[idx] = heal_assist_boost(acts, amount)
+    activity_boost = 1.0 + _healer_boost(team_heals)
+    member_boost = [activity_boost * (1.0 + extra) for extra in self_heals]
+    activations = [a * b for a, b in zip(base_activations, member_boost)]
 
     supply: dict[str, float] = {}
     berry_daily = 0.0
@@ -184,11 +210,11 @@ def simulate_plan(
     food_mult = 2.0 if "food_2x" in event_set else 1.0
     berry_field_bonus = 1.0 if "berry_2x" in event_set else 0.0
 
-    for p, s, acts in zip(members, masters, activations):
+    for p, s, acts, boost in zip(members, masters, activations, member_boost):
         for name, qty in expected_ingredients_per_day(
             p, s, ctx, team_help_bonus_count=team_help
         ).items():
-            supply[name] = supply.get(name, 0.0) + qty * activity_boost * food_mult
+            supply[name] = supply.get(name, 0.0) + qty * boost * food_mult
         berry_daily += expected_berry_per_day(
             p,
             s,
@@ -196,7 +222,7 @@ def simulate_plan(
             fav_berries=fav_berries,
             field_bonus=berry_field_bonus,
             team_help_bonus_count=team_help,
-        )["energy"] * activity_boost
+        )["energy"] * boost
         category, effect = _skill_effect(p, s)
         if category == "料理パワーアップS":
             pot_acts += acts
@@ -204,10 +230,10 @@ def simulate_plan(
         elif category in {"料理チャンスS", "料理アシスト"}:
             chance_acts += acts
             chance_effect = max(chance_effect, effect if category == "料理チャンスS" else 1.0)
-        elif category not in TEAM_HEAL_CATEGORIES:
+        elif category not in HEAL_CATEGORIES:
             direct_skill_daily += expected_skill_energy_per_day(
                 p, s, team_help_bonus_count=team_help
-            ) * activity_boost
+            ) * boost
 
     inventory = {k: float(v) for k, v in (starting_inventory or {}).items() if v > 0}
     requirements = {

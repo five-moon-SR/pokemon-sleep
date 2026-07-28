@@ -22,7 +22,6 @@ BERRY_ICON_DIR = ROOT / "貼り付けデータ集" / "画像集" / "きのみ"
 INGREDIENT_ICON_DIR = ROOT / "貼り付けデータ集" / "画像集" / "食材"
 FIELD_ICON_DIR = ROOT / "貼り付けデータ集" / "画像集" / "フィールド"
 RECIPE_ICON_DIR = ROOT / "貼り付けデータ集" / "画像集" / "料理"
-MAIN_SKILL_ICON_DIR = ROOT / "貼り付けデータ集" / "画像集" / "メインスキル"
 SLEEP_RIBBON_ICON_DIR = ROOT / "貼り付けデータ集" / "画像集" / "おやすみリボン"
 
 

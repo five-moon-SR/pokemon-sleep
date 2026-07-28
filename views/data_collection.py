@@ -9,7 +9,6 @@ from image_utils import (
     BERRY_ICON_DIR,
     FIELD_ICON_DIR,
     INGREDIENT_ICON_DIR,
-    MAIN_SKILL_ICON_DIR,
     icon_data_url as _icon_data_url,
     recipe_icon_url,
 )
@@ -384,7 +383,6 @@ def render_main_skill() -> None:
 
     rows = [
         {
-            "アイコン": _icon_data_url(str(MAIN_SKILL_ICON_DIR), r.get("category_icon")),
             "分類": r.get("category"),
             "スキル名": r.get("name"),
             "説明": r.get("description"),
@@ -420,7 +418,6 @@ def render_main_skill() -> None:
         hide_index=True,
         use_container_width=True,
         column_config={
-            "アイコン": st.column_config.ImageColumn("", width="small"),
             "最大Lv": st.column_config.NumberColumn(format="%d"),
         },
     )
