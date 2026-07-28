@@ -31,18 +31,19 @@ from utils.food_expectation import composition_string
 SPREAD_ALERT = 0.30
 
 
-def _pre_evolutions_of(species_name: str) -> tuple[str, ...]:
-    """進化前の種族一覧。utils.evaluator に無い環境でも落ちないようにする。
+# 進化前の逆引きが使えているか。使えない場合、黙って0件になると
+# 「進化前を持っていない」と区別が付かないので、UIに明示する。
+PRE_EVO_AVAILABLE = True
+try:
+    from utils.evaluator import pre_evolutions_of as _pre_evolutions_of
+except ImportError:  # pragma: no cover
+    # Streamlit Cloud はページスクリプトを毎回読み直す一方、import 済みの
+    # utils.* はプロセス起動時のまま更新されない。新しいページが古い utils を
+    # 参照するとここに来る（コンテナ再起動で解消する）。
+    PRE_EVO_AVAILABLE = False
 
-    Streamlit Cloud はページスクリプトを毎回読み直す一方、import 済みモジュールは
-    プロセス起動時のまま更新されない。新しいページが古い utils を参照して
-    ImportError になる事故が起きたため、取得できない場合は空で縮退する。
-    """
-    try:
-        from utils.evaluator import pre_evolutions_of
-    except ImportError:
+    def _pre_evolutions_of(species_name: str) -> tuple[str, ...]:
         return ()
-    return pre_evolutions_of(species_name)
 
 st.html(c.page_banner("強ポケ捕獲方針", "green", icon="🏅"))
 st.caption(
@@ -112,6 +113,14 @@ for species_name, tier in top_tier_species(_min_tier, reliable_only=not show_pro
         "detail": get_tier_detail(species_name) or {},
     })
 
+# 件数は表示中のとくいタイプに限定して数える。全体で数えると、タブを切り替えても
+# 数字が変わらず、表示しているリストと対応しない。
+def _kind_counts(specialty: str | None) -> dict[str, int]:
+    target = [r for r in rows if specialty is None or r["specialty"] == specialty]
+    return {k: sum(1 for r in target if r["kind"] == k)
+            for k in ("未所持", "進化前所持", "引き直し", "充足")}
+
+
 # ---- とくいタイプ別に分割（存在する得意だけ物理ボタン化） ----
 # ラベルに件数を入れると4択がスマホ幅(390px)で2段に折り返すので、件数は下の
 # キャプションに逃がしてボタンは最短にする。
@@ -133,12 +142,11 @@ sp_pick = st.segmented_control(
     "とくいタイプ", options=_opts, key="cp_specialty", label_visibility="collapsed",
 ) or _default
 sel_specialty = _opt_to_key[sp_pick]
+_counts_kind = _kind_counts(sel_specialty)
 
 # ── 所持状況で絞る（既に理想を持っている種を畳めるように細分化） ──
 # こちらもスマホ幅で折り返さないよう最短ラベルにする。
 _KIND_OPTS = ["すべて", "未所持", "進化前", "引き直し"]
-_counts_kind = {k: sum(1 for r in rows if r["kind"] == k)
-                for k in ("未所持", "進化前所持", "引き直し", "充足")}
 kind_pick = st.segmented_control(
     "所持状況",
     options=_KIND_OPTS,
@@ -168,6 +176,12 @@ if week_field and has_data(week_field):
         field_filter = week_field
 elif week_field:
     st.caption(f"※ {week_field} の出現データは未取得のため、マップ絞り込みは使えない。")
+
+if not PRE_EVO_AVAILABLE:
+    st.warning(
+        "進化前の判定が今は使えません（アプリの再起動待ち）。"
+        "最終進化形を持っていなくても「未所持」と表示されます。"
+    )
 
 view = [
     r for r in rows
