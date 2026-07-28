@@ -120,6 +120,12 @@ RESET_KEYS = [
 ]
 
 
+def _reset_form() -> None:
+    """入力欄を全部クリア（on_click から呼ぶと次の実行前に効くので rerun 不要）。"""
+    for k in RESET_KEYS:
+        st.session_state.pop(k, None)
+
+
 def _bump_level(delta: int) -> None:
     """lv_input を delta だけ増減（[0, 65] にクランプ）。"""
     cur = int(st.session_state.get("lv_input", 0) or 0)
@@ -145,10 +151,7 @@ header_cols = st.columns([4, 1])
 with header_cols[0]:
     st.markdown("**1️⃣ ポケモンを選ぶ**")
 with header_cols[1]:
-    if st.button("🔄 入力リセット", help="全フォームをクリア"):
-        for k in RESET_KEYS:
-            st.session_state.pop(k, None)
-        st.rerun()
+    st.button("🔄 入力リセット", help="全フォームをクリア", on_click=_reset_form)
 
 label_to_name = {_searchable_label(n): n for n in species_names}
 selected_label = st.selectbox(
@@ -431,3 +434,13 @@ if submit and ready:
             "「育成後」は最終進化形 × Lv60 想定（メインスキルLvは進化ぶん加算）。"
             "詳しい内訳は ボックス → 所持ポケデータ で見られます。"
         )
+
+    # 連続登録の動線。評価を見た流れでそのまま次の個体へ入れる
+    st.button(
+        "🆕 次のポケモンを入力",
+        type="primary",
+        key="reset_after_register",
+        on_click=_reset_form,
+        use_container_width=True,
+        help="入力を全部クリアして種族選択に戻る",
+    )
