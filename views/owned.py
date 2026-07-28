@@ -40,6 +40,32 @@ from utils.evaluator import (
 from utils.item_simulation import simulate_items
 from utils.food_expectation import composition_string
 from ui import components as uic
+from utils.release_candidates import release_candidates
+from utils.roster_impact import (
+    baseline_insertions,
+    item_impact_ranking,
+    load_plan_portfolio,
+)
+
+
+@st.cache_data(show_spinner=False, ttl=300)
+def _release_impact(owned_rows: list[dict], _plan_count: int) -> dict:
+    """アイテム投資で実改善が出る個体を拾うためのランキング一式。
+
+    育成・アイテムページと同じ計算。ここでは「伸びる個体は手放さない」の
+    判定にだけ使うので、順位ではなく weighted_delta>0 かどうかを見る。
+    """
+    from utils.play_context import load_play_context
+
+    ctx = load_play_context()
+    plans = load_plan_portfolio({int(p["id"]): p for p in owned_rows}, ctx=ctx)
+    base_map = baseline_insertions(owned_rows, plans, ctx=ctx)
+    return {
+        kind: item_impact_ranking(
+            owned_rows, kind, plans=plans, base_map=base_map, ctx=ctx
+        )
+        for kind in ("level", "main", "sub", "mint")
+    }
 from ui.widgets import pokemon_popover_row
 
 # ランク並び替え用の順位（SS=0, S=1, ..., D=5）。
@@ -850,3 +876,54 @@ else:
 st.divider()
 st.info("レベル上げ・各種たね・まっしろミントの優先度は「育成・アイテム戦略」でまとめて比較できます。")
 st.page_link("views/items.py", label="育成・アイテム戦略を開く", icon="🎁")
+
+
+# ---------------------------------------------------------------------------
+# 処分候補
+# ---------------------------------------------------------------------------
+# 削除は取り消せないので、ここは一覧を出すだけ。DBには触らない。
+# 判定は消去法ではなく「残す理由が1つも無い」ことの確認として組む。
+st.divider()
+with st.expander("🗑 処分候補（手放してよさそうな個体）"):
+    st.caption(
+        "色違い・定番プランのメンバー・アイテム投資で伸びる個体・ティアA以上・"
+        "同じ進化系統で上位2体、のいずれかに当たる個体は候補から外しています。"
+    )
+    if st.button("処分候補を出す", key="release_calc"):
+        with st.spinner("残す理由が無い個体を探しています…"):
+            plan_ids = {
+                int(pid)
+                for plan in db.list_parties()
+                if plan.get("recipe_category")
+                for pid in (plan.get("member_ids") or [])
+            }
+            investable: set[int] = set()
+            try:
+                impact = _release_impact(owned, len(plan_ids))
+                investable = {
+                    r.pokemon_id for rows in impact.values() for r in rows
+                    if r.weighted_delta > 0
+                }
+            except Exception as exc:  # 投資判定が出せなくても一覧自体は出す
+                st.caption(f"アイテム投資の判定は今回省きました（{exc}）")
+            st.session_state["_release_rows"] = release_candidates(
+                owned, plan_member_ids=plan_ids, investable_ids=investable
+            )
+
+    rows = st.session_state.get("_release_rows")
+    if rows is not None:
+        if not rows:
+            st.success("手放してよさそうな個体は見つかりませんでした。")
+        else:
+            st.caption(f"{len(rows)} 体。育成後の弱い順です。")
+            for r in rows:
+                st.html(uic.result_row(
+                    title=f"{r.label}（{r.species_name} Lv{r.level}）",
+                    subtitle=f"{r.composition}｜育成後 {r.potential_total:.1f}｜"
+                             f"上位互換: {'・'.join(r.better_ones) or 'なし'}",
+                    badges=[uic.text_badge(f"ティア {r.tier or '未評価'}")],
+                    img_url=pokemon_image_url(r.species_name),
+                ))
+            st.caption(
+                "※ アプリからは削除しません。ゲーム内で逃がすかどうかの判断材料です。"
+            )
