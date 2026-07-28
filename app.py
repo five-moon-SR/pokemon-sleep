@@ -19,6 +19,34 @@ st.set_page_config(
 
 ui.apply_theme()
 
+# ── 起動時の自己診断 ─────────────────────────────────────────────────
+# 本番で views/home.py の `from image_utils import ...` が ImportError になり、
+# しかも Cloud はエラー本文を伏字にするため原因が読めなかった。
+# ここで先に取り込んで、失敗したら**伏せられない形**で中身を出す。
+# （image_utils は streamlit 内部の streamlit.elements.lib.image_utils と
+#   同名なので、別物を掴んでいないかも併せて確認する）
+try:
+    import image_utils as _img
+
+    _missing = [
+        n for n in (
+            "berry_icon_url", "ingredient_icon_url", "field_icon_url",
+            "recipe_icon_url", "sleep_ribbon_icon_url", "pokemon_image_url",
+        )
+        if not hasattr(_img, n)
+    ]
+    if _missing:
+        st.error(
+            "image_utils の読み込みがおかしい。\n\n"
+            f"- 足りない名前: {_missing}\n"
+            f"- 実際に読んだファイル: `{getattr(_img, '__file__', '不明')}`\n"
+            f"- 持っている名前: {[n for n in dir(_img) if not n.startswith('_')]}"
+        )
+        st.stop()
+except ImportError as exc:  # 取り込み自体が落ちた場合の生メッセージ
+    st.error(f"image_utils を取り込めない: {type(exc).__name__}: {exc}")
+    st.stop()
+
 st.logo(
     "https://www.serebii.net/pokemonsleep/logo.png",
     size="large",
@@ -65,7 +93,7 @@ with st.sidebar:
     try:
         from datetime import date
 
-        from image_utils import pokemon_image_url
+        pokemon_image_url = _img.pokemon_image_url
 
         # 飾りのために毎リラン所持一覧を引いていたので、日付ごとにキャッシュする
         @st.cache_data(show_spinner=False, ttl=3600)
