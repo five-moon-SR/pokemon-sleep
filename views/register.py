@@ -12,6 +12,7 @@ from constants import (
     get_subskill_rarity,
 )
 from image_utils import sleep_ribbon_icon_url
+from ui import components as c
 
 
 def _sub_sort_key(name: str) -> tuple[int, str]:
@@ -142,7 +143,7 @@ if not species_names:
 
 header_cols = st.columns([4, 1])
 with header_cols[0]:
-    st.markdown("### 1️⃣ ポケモンを選ぶ")
+    st.markdown("**1️⃣ ポケモンを選ぶ**")
 with header_cols[1]:
     if st.button("🔄 入力リセット", help="全フォームをクリア"):
         for k in RESET_KEYS:
@@ -169,30 +170,28 @@ if not species:
     st.error("マスターに見つかりませんでした。マスターを再生成してください。")
     st.stop()
 
-info_cols = st.columns(4)
-info_cols[0].metric("図鑑No", species["dex_no"])
-info_cols[1].metric("睡眠", species["sleep_type"])
-info_cols[2].metric("得意", species["specialty"])
-info_cols[3].metric("基準秒", f"{species['base_assist_seconds']}")
-
+# 種族の素性は metric 4枚だと縦を食うので、1〜2行のキャプションに畳む
 berry = species["berry"]
 a = species["ingredients"]["a"]
 st.caption(
-    f"🌳 きのみ: **{berry['name']}** ×{berry['qty']}　／　"
-    f"🥕 食A確定（Lv1〜）: **{a['name']}** ×{a['qty'][0] if a['qty'] else '?'}　／　"
-    f"⚡ メインスキル: **{species['main_skill']}**"
+    f"No.{species['dex_no']} ／ {species['sleep_type']} ／ 得意: {species['specialty']}"
+    f" ／ 基準秒: {species['base_assist_seconds']}"
+)
+st.caption(
+    f"🌳 **{berry['name']}** ×{berry['qty']}　／　"
+    f"🥕 **{a['name']}** ×{a['qty'][0] if a['qty'] else '?'}（Lv1〜確定）　／　"
+    f"⚡ **{species['main_skill']}**"
 )
 
 
 # ============================================================================
-# ステップ2: 基本情報の手入力 ------------------------------------------------
+# ステップ2: Lv --------------------------------------------------------------
 # ============================================================================
 
-st.divider()
-st.markdown("### 2️⃣ 基本情報")
+st.markdown("**2️⃣ Lv**")
 
-basic_cols = st.columns([2, 3, 2])
-with basic_cols[0]:
+lv_cols = st.columns([2, 1, 1])
+with lv_cols[0]:
     lv_input = st.number_input(
         "Lv",
         min_value=0,
@@ -200,12 +199,79 @@ with basic_cols[0]:
         value=0,
         step=1,
         key="lv_input",
+        label_visibility="collapsed",
         help="0=未指定。捕獲時Lv＝現在Lv として保存。",
     )
-    bcol_m, bcol_p = st.columns(2)
-    bcol_m.button("-10", on_click=_bump_level, args=(-10,), key="lv_minus_10", use_container_width=True)
-    bcol_p.button("+10", on_click=_bump_level, args=(10,), key="lv_plus_10", use_container_width=True)
-with basic_cols[1]:
+lv_cols[1].button("-10", on_click=_bump_level, args=(-10,), key="lv_minus_10", use_container_width=True)
+lv_cols[2].button("+10", on_click=_bump_level, args=(10,), key="lv_plus_10", use_container_width=True)
+
+
+# ============================================================================
+# ステップ3: 食材スロット2・3 -----------------------------------------------
+# ============================================================================
+
+st.markdown(
+    f"**3️⃣ 食材パターン**　<small>スロット1は {a['name'] if a else '—'} で確定</small>",
+    unsafe_allow_html=True,
+)
+
+slot2_opts = _slot2_options(species)
+slot3_opts = _slot3_options(species)
+
+# スロット1は種族で確定なので入力欄を置かず、2列ぶんの幅をスロット2/3に回す
+col_s2, col_s3 = st.columns(2)
+with col_s2:
+    slot2_label = st.radio(
+        "スロット2（Lv30〜）",
+        options=[lbl for lbl, _ in slot2_opts],
+        index=None,
+        key="slot2_radio",
+        help="Lv30で解放。抽選候補は事前に判るので、Lv未到達でも先行入力可。",
+    )
+with col_s3:
+    slot3_label = st.radio(
+        "スロット3（Lv60〜）",
+        options=[lbl for lbl, _ in slot3_opts],
+        index=None,
+        key="slot3_radio",
+        help="Lv60で解放。抽選候補は事前に判るので、Lv未到達でも先行入力可。",
+    )
+
+
+# ============================================================================
+# ステップ4: サブスキル ------------------------------------------------------
+# ============================================================================
+
+st.markdown(
+    "**4️⃣ サブスキル**　<small>金→青→白の順。未解放でも判っていれば先行入力可</small>",
+    unsafe_allow_html=True,
+)
+
+_SUB_OPTIONS = ["（未入力）", *sorted(SUBSKILL_OPTIONS, key=_sub_sort_key)]
+
+sub_choices: dict[str, str | None] = {}
+# 5列だとスマホで選択中の名前が「（未入…」まで潰れて読めないので2列
+sub_cols = [c2 for _ in range(3) for c2 in st.columns(2)]
+for col, key, unlock_lv in zip(sub_cols, SUB_SLOT_KEYS, SUBSKILL_UNLOCK_LEVELS):
+    with col:
+        sub_choices[key] = st.selectbox(
+            f"Lv{unlock_lv}",
+            options=_SUB_OPTIONS,
+            index=0,
+            key=key,
+            format_func=_sub_filter_label,
+            filter_mode=None,  # スマホでキーボードを出さない（サブスキル17件なので検索不要）
+        )
+
+
+# ============================================================================
+# ステップ5: せいかく --------------------------------------------------------
+# ============================================================================
+
+st.markdown("**5️⃣ せいかく**")
+
+nature_cols = st.columns(2)
+with nature_cols[0]:
     axis_options = ["（未指定）", *(label for label, _ in NATURE_AXIS_GROUPS)]
     axis_choice = st.selectbox(
         "性格カテゴリ",
@@ -223,6 +289,7 @@ with basic_cols[1]:
             inner_options.extend(natures)
             break
 
+with nature_cols[1]:
     nature_choice = st.selectbox(
         "性格",
         options=inner_options,
@@ -233,7 +300,14 @@ with basic_cols[1]:
         disabled=axis_choice == "（未指定）",
         help="↓ は下降軸（不利になる軸）。",
     )
-with basic_cols[2]:
+
+
+# ============================================================================
+# 任意項目 ------------------------------------------------------------------
+# ============================================================================
+
+with st.expander("📝 任意項目（メインスキルLv / ニックネーム / 🎀リボン / メモ）", expanded=False):
+    # メインスキルLv は捕獲時点で 1 のことがほとんどなので、既定値のまま畳んでおく。
     main_skill_lv_input = st.number_input(
         "メインスキルLv",
         min_value=1,
@@ -241,74 +315,9 @@ with basic_cols[2]:
         value=1,
         step=1,
         key="main_skill_lv_input",
-        help="捕獲時点で既に上昇済みなら指定。未上昇は 1。",
+        help="捕獲時点で既に上昇済みなら指定。未上昇は 1（通常はこのまま）。",
     )
 
-
-# ============================================================================
-# ステップ3: 食材スロット2・3 -----------------------------------------------
-# ============================================================================
-
-st.divider()
-st.markdown("### 3️⃣ 食材スロット2・3")
-st.caption("Lv1のスロット1は食A確定。スロット2/3は Lv30/Lv60 で解放されますが、抽選候補は事前に確認できるので、Lv未到達でも先行入力可。")
-
-slot2_opts = _slot2_options(species)
-slot3_opts = _slot3_options(species)
-
-col_s1, col_s2, col_s3 = st.columns(3)
-with col_s1:
-    st.text_input(
-        "スロット1（Lv1〜・確定）",
-        value=a["name"] if a else "",
-        disabled=True,
-    )
-with col_s2:
-    slot2_label = st.radio(
-        "スロット2（Lv30〜）",
-        options=[lbl for lbl, _ in slot2_opts],
-        index=None,
-        key="slot2_radio",
-    )
-with col_s3:
-    slot3_label = st.radio(
-        "スロット3（Lv60〜）",
-        options=[lbl for lbl, _ in slot3_opts],
-        index=None,
-        key="slot3_radio",
-    )
-
-
-# ============================================================================
-# ステップ4: サブスキル ------------------------------------------------------
-# ============================================================================
-
-st.divider()
-st.markdown("### 4️⃣ サブスキル")
-st.caption("Lv10/25/50/75/100 で解放。表示は 金→青→白→名前順。Lv未到達でも、解放後の中身が判っているなら先行入力可。")
-
-_SUB_OPTIONS = ["（未入力）", *sorted(SUBSKILL_OPTIONS, key=_sub_sort_key)]
-
-sub_choices: dict[str, str | None] = {}
-sub_cols = st.columns(5)
-for col, key, unlock_lv in zip(sub_cols, SUB_SLOT_KEYS, SUBSKILL_UNLOCK_LEVELS):
-    with col:
-        sub_choices[key] = st.selectbox(
-            f"Lv{unlock_lv}",
-            options=_SUB_OPTIONS,
-            index=0,
-            key=key,
-            format_func=_sub_filter_label,
-            filter_mode=None,  # スマホでキーボードを出さない（サブスキル17件なので検索不要）
-        )
-
-
-# ============================================================================
-# 任意項目 ------------------------------------------------------------------
-# ============================================================================
-
-st.divider()
-with st.expander("📝 任意項目（ニックネーム / 🎀リボン / メモ）", expanded=False):
     nickname = st.text_input("ニックネーム", key="nickname_input")
 
     rib_col_sel, rib_col_img = st.columns([3, 1])
@@ -332,19 +341,17 @@ with st.expander("📝 任意項目（ニックネーム / 🎀リボン / メ�
 
 # ============================================================================
 # 登録ボタン -----------------------------------------------------------------
-# ============================================================================
-
-st.divider()
+# ={76}
 
 errors: list[str] = []
 if lv_input <= 0:
     errors.append("Lvを1以上で指定")
-if nature_choice == "（未指定）":
-    errors.append("性格を指定")
 if slot2_opts and lv_input >= 30 and not slot2_label:
     errors.append("食材スロット2を選択")
 if slot3_opts and lv_input >= 60 and not slot3_label:
     errors.append("食材スロット3を選択")
+if nature_choice == "（未指定）":
+    errors.append("性格を指定")
 
 ready = not errors
 submit = st.button(
@@ -390,3 +397,37 @@ if submit and ready:
     if row_data["nickname"]:
         msg += f"「{row_data['nickname']}」"
     st.success(msg)
+
+    # 登録直後にその場で評価を出す（所持ポケデータへ回らないと判らないのは面倒なので）
+    from utils.evaluator import evaluate_and_save, evaluate_potential
+
+    try:
+        ev = evaluate_and_save(new_id)
+        pot = evaluate_potential(db.get_pokemon(new_id))
+    except Exception as exc:  # 評価が転んでも「登録は成功した」事実は消さない
+        st.caption(f"評価の計算に失敗しました（登録自体は完了しています）: {exc}")
+    else:
+        st.toast(
+            f"{nickname_val}の評価 ｜ 現在 {ev.species_rank}（種族内 {ev.species_total:.1f}）"
+            f" → 育成後 {pot.species_rank}（{pot.species_total:.1f}）",
+            icon="⭐",
+        )
+
+        st.markdown(c.section_header("この個体の評価"), unsafe_allow_html=True)
+        st.markdown(
+            c.stat_tiles([
+                c.stat_tile("現在 種族内", f"{ev.species_total:.1f}", ev.species_rank),
+                c.stat_tile("現在 全体", f"{ev.global_total:.1f}", ev.global_rank),
+                c.stat_tile("育成後 種族内", f"{pot.species_total:.1f}", pot.species_rank),
+                c.stat_tile("育成後 全体", f"{pot.global_total:.1f}", pot.global_rank),
+            ]),
+            unsafe_allow_html=True,
+        )
+        if ev.strengths:
+            st.markdown("**強み**: " + " / ".join(ev.strengths))
+        if ev.weaknesses:
+            st.markdown("**弱み**: " + " / ".join(ev.weaknesses))
+        st.caption(
+            "「育成後」は最終進化形 × Lv60 想定（メインスキルLvは進化ぶん加算）。"
+            "詳しい内訳は ボックス → 所持ポケデータ で見られます。"
+        )
