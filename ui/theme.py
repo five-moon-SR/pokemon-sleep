@@ -354,6 +354,18 @@ h1, h2, h3, [data-testid="stMarkdownContainer"] strong { word-break: auto-phrase
         -webkit-overflow-scrolling: touch;
     }
 }
+
+/* 数値入力の − + は既定だと 32px 幅にアイコン 8px で指では押しにくいので広げる */
+[data-testid="stNumberInputStepDown"],
+[data-testid="stNumberInputStepUp"] {
+    min-width: 2.9rem;
+    align-self: stretch;
+}
+[data-testid="stNumberInputStepDown"] svg,
+[data-testid="stNumberInputStepUp"] svg {
+    width: 1.15rem;
+    height: 1.15rem;
+}
 </style>
 """
 

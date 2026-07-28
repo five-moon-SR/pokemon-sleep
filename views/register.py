@@ -108,6 +108,7 @@ SLEEP_RIBBON_OPTIONS: list[tuple[str, int]] = [
 RESET_KEYS = [
     "species_select",
     "lv_input",
+    "lv_step",
     "nature_axis",
     "nature_select",
     "main_skill_lv_input",
@@ -118,6 +119,14 @@ RESET_KEYS = [
     "note_input",
     "sleep_ribbon_select",
 ]
+
+
+def _apply_lv_step() -> None:
+    """±ボタンの選択を Lv に反映して、選択自体は解除する（同じ幅を連打できるように）。"""
+    delta = st.session_state.get("lv_step")
+    if delta:
+        _bump_level(int(delta))
+    st.session_state.lv_step = None
 
 
 def _reset_form() -> None:
@@ -193,7 +202,7 @@ st.caption(
 
 st.markdown("**2️⃣ Lv**")
 
-lv_cols = st.columns([2, 1, 1])
+lv_cols = st.columns([1, 1])
 with lv_cols[0]:
     lv_input = st.number_input(
         "Lv",
@@ -205,8 +214,19 @@ with lv_cols[0]:
         label_visibility="collapsed",
         help="0=未指定。捕獲時Lv＝現在Lv として保存。",
     )
-lv_cols[1].button("-10", on_click=_bump_level, args=(-10,), key="lv_minus_10", use_container_width=True)
-lv_cols[2].button("+10", on_click=_bump_level, args=(10,), key="lv_plus_10", use_container_width=True)
+with lv_cols[1]:
+    # ±1 は入力欄そのものの − + で足りるので、ボタンは10刻みだけ。
+    # st.button の列は最小幅でスマホだと折り返すので、横に詰まる segmented control で置く
+    st.segmented_control(
+        "Lv調整",
+        options=[-10, 10],
+        format_func=lambda v: f"{v:+d}",
+        selection_mode="single",
+        default=None,
+        key="lv_step",
+        label_visibility="collapsed",
+        on_change=_apply_lv_step,
+    )
 
 
 # ============================================================================
