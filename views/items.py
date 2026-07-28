@@ -70,48 +70,73 @@ def _stance_badge(row: ImpactRow) -> str:
     return c.text_badge("ベンチ")
 
 
+def _impact_row(row: ImpactRow, index: int, unit: str, *, actionable: bool) -> None:
+    """投資候補1行。actionable=False は実戦の改善が無い（評価値だけの）候補。"""
+    if actionable:
+        # 今週ぶんが一番動かしやすい数字なので先に出し、合計は根拠として下に添える
+        head = (
+            f"今週 <b>+{row.this_week_delta:,.0f}</b> en"
+            if row.this_week_delta > 0
+            else "今週 <b>—</b>"
+        )
+        right = f"{head}<br><small>全{len(row.plan_deltas)}プラン計 +{row.raw_delta:,.0f}</small>"
+    else:
+        right = f"育成後評価 <b>{row.eval_delta:+.1f}</b>"
+    badges = [_stance_badge(row)]
+    if row.tier:
+        badges.append(c.text_badge(f"ティア {row.tier}"))
+    top = row.plan_deltas[0] if row.plan_deltas else None
+    sub = row.detail
+    if row.seeds_required and unit:
+        sub += f"｜あと {row.seeds_required}{unit}"
+    # 内訳が複数あるときは下の展開に同じ情報が出るので、主行では繰り返さない。
+    # 詰め込むと2行に収まらず、肝心の「何をするか」まで切れてしまう。
+    if top and len(row.plan_deltas) == 1:
+        swap = f"（{top.replaced_label} と交代）" if top.replaced_label else ""
+        sub += f"｜{top.plan_name} +{top.delta:,.0f}en{swap}"
+    st.html(c.result_row(
+        title=f"#{index} {row.label}",
+        subtitle=sub,
+        badges=badges,
+        right=right,
+        img_url=pokemon_image_url(row.final_species),
+    ))
+    if len(row.plan_deltas) > 1:
+        with st.expander(f"　{row.label}：どのプランが伸びるか（{len(row.plan_deltas)}件）"):
+            for d in row.plan_deltas[:BREAKDOWN_LIMIT]:
+                mark = "★今週 " if d.is_this_week else ""
+                how = f"（{d.replaced_label} と交代）" if d.replaced_label else "（そのまま強化）"
+                st.markdown(f"- {mark}**{d.plan_name}** +{d.delta:,.0f} en/週 {how}")
+            rest = len(row.plan_deltas) - BREAKDOWN_LIMIT
+            if rest > 0:
+                st.caption(f"ほか {rest} プランでも伸びます")
+
+
 def _impact_list(rows: list[ImpactRow], *, limit: int = 20, unit: str = "") -> None:
-    """投資候補を1行ずつ並べる。週エナジー改善が主、評価値は補助。"""
+    """投資候補を並べる。
+
+    「今週 +N en」と「評価 +N.N」を同じリストに混ぜると単位が読めなくなるので、
+    実戦で動く候補と、評価値しか動かない候補は節を分ける。
+    """
     if not rows:
         st.html(c.empty_state("使えるアイテムの当てがありません。"))
         return
-    for index, row in enumerate(rows[:limit], 1):
-        # 今週ぶんが一番動かしやすい数字なので先に出し、合計は根拠として下に添える
-        if row.weighted_delta > 0:
-            head = (
-                f"今週 <b>+{row.this_week_delta:,.0f}</b> en"
-                if row.this_week_delta > 0
-                else "今週 <b>—</b>"
+    actionable = [r for r in rows if r.weighted_delta > 0]
+    eval_only = [r for r in rows if r.weighted_delta <= 0]
+
+    for index, row in enumerate(actionable[:limit], 1):
+        _impact_row(row, index, unit, actionable=True)
+
+    if eval_only:
+        rest = limit - len(actionable)
+        if rest > 0:
+            st.markdown("---")
+            st.caption(
+                "ここから下は**登録済みプランの週エナジーが動かない**候補です。"
+                "育成後評価の伸びだけで並べています。"
             )
-            right = f"{head}<br><small>全{len(row.plan_deltas)}プラン計 +{row.raw_delta:,.0f}</small>"
-        else:
-            right = f"評価 <b>{row.eval_delta:+.1f}</b><br><small>実戦の改善なし</small>"
-        badges = [_stance_badge(row)]
-        if row.tier:
-            badges.append(c.text_badge(f"ティア {row.tier}"))
-        top = row.plan_deltas[0] if row.plan_deltas else None
-        sub = row.detail
-        if row.seeds_required and unit:
-            sub += f"｜あと {row.seeds_required}{unit}"
-        if top:
-            swap = f"（{top.replaced_label} と交代）" if top.replaced_label else ""
-            sub += f"｜最大は {top.plan_name} +{top.delta:,.0f}en{swap}"
-        st.html(c.result_row(
-            title=f"#{index} {row.label}",
-            subtitle=sub,
-            badges=badges,
-            right=right,
-            img_url=pokemon_image_url(row.final_species),
-        ))
-        if len(row.plan_deltas) > 1:
-            with st.expander(f"　{row.label}：どのプランが伸びるか（{len(row.plan_deltas)}件）"):
-                for d in row.plan_deltas[:BREAKDOWN_LIMIT]:
-                    mark = "★今週 " if d.is_this_week else ""
-                    how = f"（{d.replaced_label} と交代）" if d.replaced_label else "（そのまま強化）"
-                    st.markdown(f"- {mark}**{d.plan_name}** +{d.delta:,.0f} en/週 {how}")
-                rest = len(row.plan_deltas) - BREAKDOWN_LIMIT
-                if rest > 0:
-                    st.caption(f"ほか {rest} プランでも伸びます")
+            for index, row in enumerate(eval_only[:rest], 1):
+                _impact_row(row, index, unit, actionable=False)
 
 
 st.html(c.page_banner("育成・アイテム戦略", "green", icon="🎁"))

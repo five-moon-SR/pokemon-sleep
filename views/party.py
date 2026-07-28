@@ -223,7 +223,8 @@ if ss.get("_strategy_loaded_key") != strategy_key:
     ss["strategy_main_recipe"] = plan.get("main_recipe") if plan else None
     ss["strategy_note"] = plan.get("note") or "" if plan else ""
     ss.pop("_strategy_suggestions", None)
-    ss.pop("_capture_results", None)
+    for _k in [k for k in ss if str(k).startswith("_capture_results")]:
+        ss.pop(_k, None)
 
 is_active = bool(plan and active_week.get("plan_id") == plan.get("id"))
 if is_active:
@@ -848,15 +849,18 @@ if valid_team:
             st.caption("この主料理に対する明確な育成改善候補はありません。")
 
         st.markdown("##### 捕獲・厳選候補")
+        # 格納先がプラン共通の固定キーだったので、フィールドや主料理を変えても
+        # 前のプランの結果が出続けていた。ボタンと同じ粒度のキーにする。
+        capture_key = f"_capture_results_{strategy_key}_{picked_recipe}"
         if st.button("🎯 捕獲候補を計算", key=f"capture_{strategy_key}"):
-            with st.spinner("未所持の最終進化AAA個体を各枠へ入れて比較中…"):
-                ss["_capture_results"] = capture_improvements(
+            with st.spinner("未所持の最終進化個体を各枠へ入れて比較中…"):
+                ss[capture_key] = capture_improvements(
                     members,
                     recipe,
                     fav_berries=fav_berries,
                     ctx=ctx,
                 )
-        captures = ss.get("_capture_results") or []
+        captures = ss.get(capture_key) or []
         plan_fit_counts = {
             x["species_name"]: _plan_fit_count(x["species_name"])
             for x in captures
@@ -879,7 +883,7 @@ if valid_team:
         ]
         if capture_rows:
             st.dataframe(pd.DataFrame(capture_rows), hide_index=True, use_container_width=True)
-        elif "_capture_results" in ss:
+        elif capture_key in ss:
             st.caption("現在の5体を明確に改善する未所持候補はありません。")
 else:
     st.info("固定メンバーを5体選ぶと、今週の見通しと育成・捕獲候補を表示します。")

@@ -269,7 +269,8 @@ def result_row(
         if badges else ""
     )
     r = (
-        f'<div class="ps-card-sub" style="margin-left:auto; text-align:right; flex:0 0 auto;">{right}</div>'
+        f'<div class="ps-card-sub ps-nowrap" style="margin-left:auto; text-align:right; '
+        f'flex:0 0 auto;">{right}</div>'
         if right else ""
     )
     return (

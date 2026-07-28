@@ -18,8 +18,9 @@ import db
 from image_utils import field_icon_url, pokemon_image_url, recipe_icon_url
 from ui import components as c
 from utils.party_logic import RECIPE_CATEGORY_LABELS
-from utils.plan_simulation import capture_improvements, level_improvements, simulate_plan
-from utils import perf
+from utils.plan_simulation import capture_improvements, simulate_plan
+from utils import perf, recipe_level
+from utils.roster_impact import item_impact_ranking
 from utils.play_context import PlayContext, load_play_context, save_play_context
 
 ctx = load_play_context()
@@ -165,11 +166,20 @@ if pt:
 
         perf.mark("home: simulate_plan＋指標4つ")
 
-        advice_key = f"_home_advice_{pt['id']}:{pt.get('updated_at')}"
+        # 育成おすすめは「育成・アイテム」ページと同じ物差し（全定番プランの
+        # 週エナジー実改善・今週は重み2倍）を使う。ページごとに順位が違うと
+        # どれを信じればいいか分からなくなるため。
+        # キャッシュキーには所持状態も混ぜる（レベルを上げても更新されなかった）。
+        roster_sig = ";".join(
+            f"{p['id']}:{p.get('current_level')}:{p.get('main_skill_level')}"
+            for p in sorted(owned, key=lambda x: int(x["id"]))
+        )
+        advice_key = (
+            f"_home_advice_{pt['id']}:{pt.get('updated_at')}:"
+            f"{hash(roster_sig)}:{hash(recipe_level.levels_signature())}"
+        )
         if advice_key not in st.session_state:
-            growth = level_improvements(
-                members, recipe, fav_berries=set(fav), ctx=ctx
-            )
+            growth = item_impact_ranking(owned, "level")
             catches = capture_improvements(
                 members, recipe, fav_berries=set(fav), ctx=ctx, limit=3
             )
@@ -182,10 +192,16 @@ if pt:
             if growth:
                 st.markdown("**育てる**")
                 for item in growth:
-                    st.markdown(
-                        f"- {item['label']} → **Lv{item['target_level']}**"
-                        f"　週 {item['energy_delta']:+,.0f} en"
-                    )
+                    if item.weighted_delta > 0:
+                        gain = (
+                            f"今週 {item.this_week_delta:+,.0f} en"
+                            if item.this_week_delta > 0
+                            else f"全プラン {item.raw_delta:+,.0f} en"
+                        )
+                    else:
+                        gain = f"育成後評価 {item.eval_delta:+.1f}"
+                    st.markdown(f"- {item.label} → **{item.detail}**　{gain}")
+                st.caption("並びは登録済みプランの週エナジー改善（今週は重み2倍）。")
             if catches:
                 st.markdown("**捕まえる**")
                 for item in catches:
@@ -195,6 +211,7 @@ if pt:
                     )
             if not growth and not catches:
                 st.caption("いまの編成で伸ばせる余地は見つからなかった。")
+            st.page_link("views/items.py", label="投資先をすべて見る →", icon="🎁")
 
     meta_cols = st.columns([3, 1])
     category = pt.get("recipe_category")

@@ -126,12 +126,21 @@ h1, h2, h3, [data-testid="stMarkdownContainer"] strong { word-break: auto-phrase
     overflow: hidden;
     text-overflow: ellipsis;
 }
+/* 1行省略にすると、育成おすすめの「なぜこの個体か」という根拠が
+   まるごと "…" に消える。2行までは折り返して読ませる。 */
 .ps-card .ps-card-sub {
     color: var(--ps-ink-dim);
     font-size: 0.78rem;
-    white-space: nowrap;
+    line-height: 1.45;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
     overflow: hidden;
-    text-overflow: ellipsis;
+}
+/* 右端の数値だけは折り返さない（幅を奪ってタイトルを潰すため） */
+.ps-card .ps-card-sub.ps-nowrap {
+    display: block;
+    white-space: nowrap;
 }
 
 /* カードグリッド（owned カードモード等）: スマホで2列に落ちる */

@@ -328,7 +328,12 @@ def capture_improvements(
     ctx: PlayContext,
     limit: int = 12,
 ) -> list[dict[str, Any]]:
-    """未所持の最終進化AAA理想個体を各枠へ入れた改善量を試算する。"""
+    """未所持の最終進化個体を各枠へ入れた改善量を試算する。
+
+    合成する個体は Lv60・無補正・メインスキル最大で、食材枠は必要食材を優先した
+    貪欲選択。**サブスキルは一切載せていない**ので AAA 理想個体ではなく、
+    おてつだいボーナスや食材確率アップで伸びる種族は過小評価になる。
+    """
     from utils.ingredient_coverage import _final_evolutions
 
     baseline = simulate_plan(members, recipe, fav_berries=fav_berries, ctx=ctx)
