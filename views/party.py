@@ -18,7 +18,11 @@ from utils.plan_simulation import (
 )
 from utils.play_context import load_play_context
 from utils.skill_role_coverage import skill_role_audit
-from utils.strategy_optimizer import suggest_strategy_plans
+from utils.strategy_optimizer import (
+    generate_all_strategy_plans,
+    plan_slots,
+    suggest_strategy_plans,
+)
 
 
 ACTIVE_WEEK_KEY = "user.active_strategy_week"
@@ -85,6 +89,104 @@ if not ss.get("_strategy_entry_initialized_v2"):
             ss["strategy_category"] = active_category
         if active_field in field_names:
             ss["strategy_field"] = active_field
+
+_all_slots = plan_slots()
+_registered = {
+    (str(p.get("field_name")), str(p.get("recipe_category")))
+    for p in db.list_parties()
+    if p.get("field_name") and p.get("recipe_category")
+}
+_empty_slots = [s for s in _all_slots if s not in _registered]
+
+with st.expander(
+    f"🗂 定番プランの充足 {len(_registered)}/{len(_all_slots)} 枠",
+    expanded=bool(_empty_slots) and len(_registered) < 3,
+):
+    st.caption(
+        "フィールド × 料理カテゴリの全組合せを埋めておくと、"
+        "育成・アイテムページの投資先が「実際にどのプランがいくら伸びるか」で並びます。"
+        "1枠1秒ほどなので全部でも20秒前後です。"
+    )
+    if _empty_slots:
+        st.markdown("**未登録**: " + "、".join(
+            f"{f}（{RECIPE_CATEGORY_LABELS[c]}）" for f, c in _empty_slots[:6]
+        ) + (f" ほか{len(_empty_slots) - 6}枠" if len(_empty_slots) > 6 else ""))
+    else:
+        st.markdown("全枠が埋まっています。")
+
+    def _run_bulk(overwrite: bool) -> None:
+        """一括生成を実行して、枠ごとの結果を session_state に置く。"""
+        bar = st.progress(0.0, text="準備中…")
+        results = []
+        for res in generate_all_strategy_plans(overwrite=overwrite, ctx=ctx):
+            results.append(res)
+            bar.progress(len(results) / len(_all_slots), text=res.label)
+        bar.empty()
+        ss["_bulk_plan_results"] = results
+        ss["_bulk_plan_confirm"] = False
+        ss["_strategy_loaded_key"] = None
+
+    if ss.get("_bulk_plan_confirm"):
+        st.warning(
+            f"登録済みの {len(_registered)} 枠を自動提案で**上書き**しますか？"
+            "手で組んだ編成も置き換わります。"
+        )
+        yes_col, only_col, no_col = st.columns(3)
+        if yes_col.button("上書きする", type="primary", use_container_width=True):
+            _run_bulk(True)
+            st.rerun()
+        if only_col.button("空き枠だけ", use_container_width=True, disabled=not _empty_slots):
+            _run_bulk(False)
+            st.rerun()
+        if no_col.button("やめる", use_container_width=True):
+            ss["_bulk_plan_confirm"] = False
+            st.rerun()
+    elif st.button("✨ まとめて自動生成", use_container_width=True):
+        if _registered:
+            ss["_bulk_plan_confirm"] = True
+            st.rerun()
+        else:
+            _run_bulk(False)
+            st.rerun()
+
+    _results = ss.get("_bulk_plan_results")
+    if _results:
+        _created = [r for r in _results if r.status == "created"]
+        _updated = [r for r in _results if r.status == "updated"]
+        _same = [r for r in _results if r.status == "unchanged"]
+        _skipped = [r for r in _results if r.status == "skipped"]
+        _failed = [r for r in _results if r.status == "failed"]
+        st.success(
+            "　".join(filter(None, [
+                f"新規 {len(_created)}" if _created else "",
+                f"変更 {len(_updated)}" if _updated else "",
+                f"変更なし {len(_same)}" if _same else "",
+                f"スキップ {len(_skipped)}" if _skipped else "",
+                f"失敗 {len(_failed)}" if _failed else "",
+            ])) or "変化はありませんでした"
+        )
+        for r in sorted(_updated, key=lambda x: -x.energy_delta):
+            arrow = f"{r.prev_weekly_energy:,.0f} → **{r.weekly_energy:,.0f}** en/週（{r.energy_delta:+,.0f}）"
+            st.markdown(f"**🔁 {r.label}**　{arrow}")
+            if r.recipe_changed:
+                st.markdown(f"　主料理 {r.prev_recipe} → **{r.recipe_name}**")
+            if r.members_out or r.members_in:
+                st.markdown(
+                    f"　メンバー {'・'.join(r.members_out) or '—'}"
+                    f" → **{'・'.join(r.members_in) or '—'}**"
+                )
+        for r in sorted(_created, key=lambda x: -x.weekly_energy):
+            st.markdown(
+                f"**🆕 {r.label}**　{r.recipe_name}　"
+                f"{r.weekly_energy:,.0f} en/週・安定 {r.stability:.0%}<br>"
+                f"　<small>{' / '.join(r.member_labels or [])}</small>",
+                unsafe_allow_html=True,
+            )
+        for r in _failed:
+            st.warning(f"{r.label}：{r.reason}")
+        if st.button("結果を閉じる", key="bulk_plan_clear"):
+            ss.pop("_bulk_plan_results", None)
+            st.rerun()
 
 category = st.radio(
     "料理カテゴリ",
