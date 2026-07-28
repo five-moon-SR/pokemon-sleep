@@ -118,6 +118,7 @@ RESET_KEYS = [
     "nickname_input",
     "note_input",
     "sleep_ribbon_select",
+    "is_shiny_input",
 ]
 
 
@@ -354,6 +355,11 @@ with st.expander("📝 任意項目（メインスキルLv / ニックネーム 
     )
 
     nickname = st.text_input("ニックネーム", key="nickname_input")
+    is_shiny = st.toggle(
+        "✨ 色違い",
+        key="is_shiny_input",
+        help="色違いは強さと関係ありませんが、処分候補から必ず除外されます。",
+    )
 
     rib_col_sel, rib_col_img = st.columns([3, 1])
     with rib_col_sel:
@@ -425,6 +431,7 @@ if submit and ready:
         "subskill_lv75": _sub_value(sub_choices.get("sub_lv75_select")),
         "subskill_lv100": _sub_value(sub_choices.get("sub_lv100_select")),
         "sleep_ribbon_stage": int(sleep_ribbon_stage),
+        "is_shiny": bool(is_shiny),
         "note": note.strip() or None,
     }
     new_id = db.insert_pokemon(row_data)

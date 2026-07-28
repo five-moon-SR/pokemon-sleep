@@ -244,6 +244,10 @@ def init_db(force: bool = False) -> None:
     _execute(
         f"alter table {SCHEMA}.party add column if not exists recipe_category text"
     )
+    # 色違いは強さと無関係だが「弱くても手放さない」判断材料になるので個体に持たせる
+    _execute(
+        f"alter table {SCHEMA}.pokemon add column if not exists is_shiny boolean default false"
+    )
     _migrate_party_recipe_categories()
     _normalize_strategy_plan_uniqueness()
     # 途中で落ちた場合は次の呼び出しでやり直せるよう、最後に立てる。

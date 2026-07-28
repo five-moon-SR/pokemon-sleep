@@ -386,6 +386,13 @@ with rib_col_sel:
         help="累積眠時間で自動付与される証。所持数+ や時間短縮（進化残り回数別）に効く。",
     )
 new_ribbon = dict(SLEEP_RIBBON_OPTIONS).get(new_ribbon_label, 0)
+cur_shiny = bool(target.get("is_shiny"))
+new_shiny = st.toggle(
+    "✨ 色違い",
+    value=cur_shiny,
+    key=f"e_shiny_{target_id}",
+    help="色違いは強さと関係ありませんが、処分候補から必ず除外されます。",
+)
 with rib_col_img:
     url = sleep_ribbon_icon_url(new_ribbon)
     if url:
@@ -491,6 +498,11 @@ if save_clicked:
     if int(new_ribbon) != cur_ribbon:
         updates["sleep_ribbon_stage"] = int(new_ribbon)
         msgs.append(f"おやすみリボン: 段階{cur_ribbon} → 段階{new_ribbon}")
+
+    # ✨ 色違い
+    if bool(new_shiny) != cur_shiny:
+        updates["is_shiny"] = bool(new_shiny)
+        msgs.append(f"色違い: {'あり' if new_shiny else 'なし'}")
 
     # メモ
     new_note_val = new_note.strip() or None
