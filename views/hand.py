@@ -1,4 +1,14 @@
-"""編成や料理を決める前に、所持全体の役割充足を眺める手札ボード。"""
+"""ボックス全体の役割充足度（食材・きのみ・スキル）を棚卸しするページ。
+
+編成やレシピを決める前に「何が足りていないか」を見る場所。
+
+きのみ充足度は utils/berry_coverage.py に実装があったのに、
+それを出すページがナビ未登録で到達不能になっていた（この統合で削除）。
+食材・スキルと同じ土俵に並べて、3軸そろえてここで見る。
+
+用語は編成ページ（views/party.py）に合わせる:
+  即戦力 = 現在のLv・構成で供給できる個体 / 将来候補 = 候補枠にはあるが供給ゼロ
+"""
 
 from __future__ import annotations
 
@@ -6,10 +16,24 @@ import pandas as pd
 import streamlit as st
 
 import db
+from image_utils import berry_icon_url, ingredient_icon_url, pokemon_image_url
 from ui import components as c
 from ui.widgets import pokemon_popover_row
+from utils.berry_coverage import (
+    berry_audit,
+    favorite_holes,
+    load_audit_field,
+    load_random_favs,
+    resolve_fav_berries,
+    save_audit_field,
+    save_random_favs,
+)
+from utils.berry_coverage import TOP_N as BERRY_TOP_N
 from utils.ingredient_coverage import build_ingredient_index, versatile_mains
-from utils.skill_role_coverage import TOP_N, skill_role_audit
+from utils.skill_role_coverage import TOP_N, role_holes, skill_role_audit
+
+# 食材は編成に1〜2体置ける想定。ここを満たせば「充足」
+FOOD_TOP_N = 2
 
 
 @st.cache_data(show_spinner=False, ttl=300)
@@ -22,8 +46,55 @@ def _skill_roles(owned_rows: list[dict], main_skill_max: bool) -> list:
     return skill_role_audit(owned_rows, main_skill_max=main_skill_max)
 
 
-st.html(c.page_banner("手札ボード", "bag", icon="🧩"))
-st.caption("フィールド・料理・固定5体を決めずに、ボックス全体の食材とスキル役割を棚卸しする。")
+@st.cache_data(show_spinner=False, ttl=300)
+def _berries(owned_rows: list[dict], fav: tuple[str, ...]) -> list:
+    return berry_audit(owned_rows, set(fav))
+
+
+def _fill_ratio(count: int, need: int) -> float:
+    return min(1.0, count / need) if need else 0.0
+
+
+def _status_label(count: int, need: int) -> str:
+    """充足の言い方をページ全体でそろえる（記号だけだと意味が読めない）。"""
+    if count >= need:
+        return "充足"
+    if count > 0:
+        return f"あと{need - count}体"
+    return "担当ゼロ"
+
+
+def _coverage_table(
+    rows: list[dict],
+    *,
+    icon_col: str,
+    height: int,
+) -> None:
+    """充足度テーブル。列幅と高さを明示して、表の中で二重スクロールさせない。"""
+    st.dataframe(
+        pd.DataFrame(rows),
+        hide_index=True,
+        use_container_width=True,
+        height=height,
+        column_config={
+            icon_col: st.column_config.ImageColumn(icon_col, width="small"),
+            "充足": st.column_config.ProgressColumn(
+                "充足", format="%.0f%%", min_value=0, max_value=100, width="small"
+            ),
+            "状態": st.column_config.TextColumn("状態", width="small"),
+            "即戦力": st.column_config.NumberColumn("即戦力", format="%d体", width="small"),
+            "将来候補": st.column_config.NumberColumn("将来候補", format="%d体", width="small"),
+            "供給/日": st.column_config.NumberColumn("供給/日", format="%.1f", width="small"),
+            "エナジー/日": st.column_config.NumberColumn("エナジー/日", format="%.0f", width="small"),
+        },
+    )
+
+
+st.html(c.page_banner("役割", "bag", icon="🧩"))
+st.caption(
+    "編成を決める前に、ボックス全体で食材・きのみ・スキルの担当が"
+    "どこまで埋まっているかを見る。"
+)
 
 db.init_db()
 owned = [dict(row) for row in db.list_pokemon()]
@@ -33,74 +104,69 @@ if not owned:
     st.stop()
 
 index = _ingredient_index(owned)
-active_food_count = sum(
-    any(provider.per_day_now > 0 for provider in providers)
-    for providers in index.values()
-)
-food_holes = [
-    name
+food_active = {
+    name: [p for p in providers if p.per_day_now > 0]
     for name, providers in index.items()
-    if not any(provider.per_day_now > 0 for provider in providers)
-]
+}
+food_holes = [name for name, active in food_active.items() if not active]
+
+audit_field = load_audit_field()
+random_favs = load_random_favs()
+fav_berries = resolve_fav_berries(audit_field, random_favs)
+berry_covs = _berries(owned, tuple(sorted(fav_berries)))
+berry_holes = favorite_holes(berry_covs)
+
+skill_covs = _skill_roles(owned, False)
+skill_holes = role_holes(skill_covs)
 
 st.html(
     c.stat_tiles(
         [
             c.stat_tile("所持個体", f"{len(owned)}", sub="体"),
             c.stat_tile(
-                "食材カバー",
-                f"{active_food_count}/{len(index)}",
-                sub="現在供給あり",
+                "食材の穴", f"{len(food_holes)}", sub=f"/{len(index)}種"
             ),
-            c.stat_tile("食材の穴", f"{len(food_holes)}", sub="担当ゼロ"),
+            c.stat_tile(
+                "好物きのみの穴", f"{len(berry_holes)}", sub=f"/{len(fav_berries) or '—'}種"
+            ),
+            c.stat_tile(
+                "スキル役割の穴", f"{len(skill_holes)}", sub=f"/{len(skill_covs)}役割"
+            ),
         ]
     )
 )
 
-food_tab, skill_tab = st.tabs(["🥕 食材充足", "🎯 スキル役割"])
+food_tab, berry_tab, skill_tab = st.tabs(["🥕 食材", "🌳 きのみ", "🎯 スキル"])
 
+
+# ── 食材 ────────────────────────────────────────────────────────────────
 with food_tab:
     st.caption(
-        "現在のLv・食材構成で供給できる個体を担当として集計。"
-        "編成に1〜2体置ける想定で、2体以上なら充足とみなします。"
+        f"現在のLv・食材構成で供給できる個体を数えています。編成枠の都合で"
+        f"**{FOOD_TOP_N}体そろえば充足**、1体なら「あと1体」、0体が穴です。"
     )
-    food_rows = []
-    for name, providers in index.items():
-        active = [p for p in providers if p.per_day_now > 0]
-        idle = [p for p in providers if p.per_day_now <= 0]
-        if len(active) >= 2:
-            status = "◎ 充足"
-        elif len(active) == 1:
-            status = "○ 1体"
-        else:
-            status = "× 担当ゼロ"
-        food_rows.append(
-            {
-                "食材": name,
-                "充足": status,
-                "現在担当": len(active),
-                "候補枠": len(idle),
-                "主力": " / ".join(
-                    f"{p.label} {p.per_day_now:.1f}/日" for p in active[:2]
-                )
-                or "—",
-            }
-        )
-    st.dataframe(
-        pd.DataFrame(food_rows),
-        hide_index=True,
-        use_container_width=True,
-        column_config={
-            "現在担当": st.column_config.NumberColumn("現在担当", format="%d体"),
-            "候補枠": st.column_config.NumberColumn("候補枠", format="%d体"),
-        },
-    )
-    st.caption(
-        "候補枠は、その種族の食材候補にはあるものの現在供給ゼロの個体。"
-        "未解放Lvや別の食材構成も含みます。"
-    )
+    food_rows = [
+        {
+            "🥕": ingredient_icon_url(name),
+            "食材": name,
+            "充足": _fill_ratio(len(active), FOOD_TOP_N) * 100,
+            "状態": _status_label(len(active), FOOD_TOP_N),
+            "供給/日": sum(p.per_day_now for p in active[:FOOD_TOP_N]),
+            "即戦力": len(active),
+            "将来候補": len(index[name]) - len(active),
+        }
+        for name, active in food_active.items()
+    ]
+    food_rows.sort(key=lambda r: (r["充足"], r["供給/日"]))
+    _coverage_table(food_rows, icon_col="🥕", height=380)
+
     if food_holes:
-        st.warning("現在担当がいない食材：" + " / ".join(food_holes))
+        st.html(
+            '<div style="display:flex;flex-wrap:wrap;gap:4px;margin:6px 0">'
+            + "".join(c.ingredient_chip(n) for n in food_holes)
+            + "</div>"
+        )
+        st.caption("↑ 現在の担当がゼロの食材。")
 
     detail_name = st.selectbox(
         "担当個体を見る食材",
@@ -108,24 +174,23 @@ with food_tab:
         index=list(index).index(food_holes[0]) if food_holes else 0,
         key="hand_food_detail",
         filter_mode=None,  # スマホでキーボードを出さない（食材19件なので検索不要）
+        help="穴がある場合は、その先頭を最初に選んでいます。",
     )
     detail_providers = index[detail_name]
-    active_detail = [p for p in detail_providers if p.per_day_now > 0]
-    idle_detail = [p for p in detail_providers if p.per_day_now <= 0]
-    for provider in active_detail[:5]:
+    for provider in [p for p in detail_providers if p.per_day_now > 0][:5]:
         pokemon_popover_row(
             owned_by_id.get(int(provider.pokemon_id)),
             label=provider.label,
             img_species=provider.species_name,
-            badges_text="現在担当",
+            badges_text="即戦力",
             caption=f"{provider.per_day_now:.1f}個/日",
         )
-    for provider in idle_detail[:3]:
+    for provider in [p for p in detail_providers if p.per_day_now <= 0][:3]:
         pokemon_popover_row(
             owned_by_id.get(int(provider.pokemon_id)),
             label=provider.label,
             img_species=provider.species_name,
-            badges_text="候補枠",
+            badges_text="将来候補",
             caption=(
                 f"{provider.slot.upper()}枠・Lv{provider.unlock_lv}解放"
                 f"{'済' if provider.unlocked else '前'}"
@@ -147,6 +212,89 @@ with food_tab:
                 ),
             )
 
+
+# ── きのみ ──────────────────────────────────────────────────────────────
+with berry_tab:
+    fields = db.list_all_field_records()
+    field_names = [f["name"] for f in fields]
+    pick_cols = st.columns([2, 3])
+    with pick_cols[0]:
+        picked_field = st.selectbox(
+            "監査フィールド",
+            ["（好物なし）"] + field_names,
+            index=(field_names.index(audit_field) + 1) if audit_field in field_names else 0,
+            key="hand_berry_field",
+            filter_mode=None,  # スマホでキーボードを出さない（8件なので検索不要）
+            help="好物きのみは獲得エナジーが2倍になるので、どのフィールドで見るかで穴が変わります。",
+        )
+    chosen_field = None if picked_field == "（好物なし）" else picked_field
+    field_rec = next((f for f in fields if f["name"] == chosen_field), None)
+    with pick_cols[1]:
+        if field_rec and field_rec.get("favorite_berries_random"):
+            picked_random = st.multiselect(
+                "今週の好みきのみ（最大3種）",
+                [b["name"] for b in db.list_all_berry_records()],
+                default=random_favs,
+                max_selections=3,
+                key="hand_berry_random",
+            )
+        else:
+            picked_random = random_favs
+    if chosen_field != audit_field or list(picked_random) != list(random_favs):
+        save_audit_field(chosen_field)
+        save_random_favs(list(picked_random))
+        st.cache_data.clear()
+        st.rerun()
+
+    st.caption(
+        f"好物きのみ（×2）を優先して並べています。編成枠の都合で"
+        f"**{BERRY_TOP_N}体そろえば充足**とみなします。"
+    )
+    berry_rows = [
+        {
+            "🌳": berry_icon_url(cov.berry["name"]),
+            "きのみ": cov.berry["name"] + ("　★好物" if cov.is_favorite else ""),
+            "充足": _fill_ratio(len(cov.providers), BERRY_TOP_N) * 100,
+            "状態": _status_label(len(cov.providers), BERRY_TOP_N),
+            "エナジー/日": cov.top_energy,
+            "即戦力": len(cov.providers),
+        }
+        for cov in berry_covs
+    ]
+    _coverage_table(berry_rows, icon_col="🌳", height=380)
+
+    if berry_holes:
+        st.html(
+            '<div style="display:flex;flex-wrap:wrap;gap:4px;margin:6px 0">'
+            + "".join(c.berry_chip(n) for n in berry_holes)
+            + "</div>"
+        )
+        st.caption("↑ 好物（×2）なのに担当がゼロのきのみ。ここが一番もったいない。")
+    elif fav_berries:
+        st.success("好物きのみはすべて担当がいます。")
+
+    berry_names = [cov.berry["name"] for cov in berry_covs]
+    berry_detail = st.selectbox(
+        "担当個体を見るきのみ",
+        berry_names,
+        index=berry_names.index(berry_holes[0]) if berry_holes else 0,
+        key="hand_berry_detail",
+        filter_mode=None,  # スマホでキーボードを出さない（18件なので検索不要）
+    )
+    cov = next(x for x in berry_covs if x.berry["name"] == berry_detail)
+    for provider in cov.providers[:5]:
+        pokemon_popover_row(
+            owned_by_id.get(int(provider.pokemon_id)),
+            label=provider.label,
+            img_species=provider.species_name,
+            badges_text=f"{provider.energy_per_day:,.0f} en/日",
+            caption=f"Lv{provider.level}｜{provider.count_per_day:.1f}個/日",
+        )
+    if not cov.providers:
+        st.html(c.empty_state("このきのみを持つ所持個体はいません。"))
+
+
+# ── スキル ──────────────────────────────────────────────────────────────
 with skill_tab:
     max_skill = st.toggle(
         "メインスキルLv最大の天井で見る",
@@ -154,57 +302,48 @@ with skill_tab:
         help="OFFでは進化後の想定Lv、ONでは育て切った最大Lvで比較します。",
     )
     coverages = _skill_roles(owned, max_skill)
-    skill_rows = []
-    for coverage in coverages:
-        count = len(coverage.providers)
-        if count >= TOP_N:
-            status = "◎ 充足"
-        elif count == 1:
-            status = "○ 1体"
-        else:
-            status = "× 担当ゼロ"
-        skill_rows.append(
-            {
-                "役割": coverage.label,
-                "充足": status,
-                "所持": count,
-                "主力": " / ".join(p.label for p in coverage.top) or "—",
-            }
-        )
-    st.dataframe(
-        pd.DataFrame(skill_rows),
-        hide_index=True,
-        use_container_width=True,
-        column_config={
-            "所持": st.column_config.NumberColumn("所持", format="%d体"),
-        },
-    )
     st.caption(
-        "最終進化後のメインスキルで判定。編成に1〜2体置ける想定で、"
-        f"各役割の上位{TOP_N}体を主力として扱います。"
+        f"最終進化後のメインスキルで判定。編成枠の都合で**{TOP_N}体そろえば充足**とみなします。"
     )
+    skill_rows = [
+        {
+            # 担当ゼロだと None がそのまま "None" と描画されるので空文字にする
+            "🎯": (pokemon_image_url(cov.top[0].species_name) or "") if cov.top else "",
+            "役割": cov.label,
+            "充足": _fill_ratio(len(cov.providers), TOP_N) * 100,
+            "状態": _status_label(len(cov.providers), TOP_N),
+            "即戦力": len(cov.providers),
+            "主力": " / ".join(p.label for p in cov.top) or "—",
+        }
+        for cov in coverages
+    ]
+    _coverage_table(skill_rows, icon_col="🎯", height=360)
 
-    for coverage in coverages:
-        with st.expander(
-            f"{coverage.label} — "
-            + (
-                " / ".join(p.label for p in coverage.top)
-                if coverage.top
-                else "担当ゼロ"
-            )
-        ):
-            st.caption("対象スキル：" + " / ".join(sorted(coverage.categories)))
-            if not coverage.top:
-                st.html(c.empty_state("この役割を担える所持個体はいません。"))
-            for provider in coverage.top:
-                pokemon_popover_row(
-                    owned_by_id.get(int(provider.pokemon_id)),
-                    label=provider.label,
-                    img_species=provider.species_name,
-                    badges_text=f"育成後 {provider.potential_rank}",
-                    caption=(
-                        f"最終進化 {provider.final_species}｜"
-                        f"スキル軸 {provider.skill_axis:.0f}/100｜"
-                        f"想定MSLv{provider.main_skill_level}"
-                    ),
-                )
+    if skill_holes:
+        st.warning("担当がいない役割：" + " / ".join(skill_holes))
+
+    # 以前は役割9件ぶんの expander を全部畳んで縦に積んでいた。
+    # 均質なカードの等間隔積みは読みにくいので、1つ選んで中身を出す形にする。
+    labels = [cov.label for cov in coverages]
+    picked_role = st.selectbox(
+        "担当個体を見る役割",
+        labels,
+        index=labels.index(skill_holes[0]) if skill_holes else 0,
+        key="hand_skill_detail",
+        filter_mode=None,  # スマホでキーボードを出さない（9件なので検索不要）
+    )
+    role = next(x for x in coverages if x.label == picked_role)
+    st.caption("対象スキル：" + " / ".join(sorted(role.categories)))
+    if not role.top:
+        st.html(c.empty_state("この役割を担える所持個体はいません。"))
+    for provider in role.top:
+        pokemon_popover_row(
+            owned_by_id.get(int(provider.pokemon_id)),
+            label=provider.label,
+            img_species=provider.species_name,
+            badges_text=f"育成後 {provider.potential_rank}",
+            caption=(
+                f"{provider.final_species}｜スキル軸 {provider.skill_axis:.0f}"
+                f"｜MSLv{provider.main_skill_level}"
+            ),
+        )

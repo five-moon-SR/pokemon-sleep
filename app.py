@@ -11,9 +11,10 @@ st.set_page_config(
     page_title="ポケスリ管理",
     page_icon="https://www.serebii.net/pokemonsleep/pokemon/39.png",
     layout="wide",
-    # 既定の "auto" はスマホ幅で常に折りたたむ。開くボタンが小さくて押しにくい
-    # ページなので、最初から開いた状態で見せる。
-    initial_sidebar_state="expanded",
+    # initial_sidebar_state は既定の "auto" のまま。
+    # "expanded" にするとスマホでは毎回サイドバーが本文を覆ってしまい、
+    # 開くより閉じる手間の方が増える。開きにくさは展開ボタンを46pxに
+    # 広げること（ui/theme.py）で解いている。
 )
 
 ui.apply_theme()
