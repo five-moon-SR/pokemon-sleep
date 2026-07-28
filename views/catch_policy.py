@@ -15,7 +15,6 @@ import db
 from image_utils import pokemon_image_url
 from ui import components as c
 from ui.widgets import pokemon_status_popover
-from utils.evaluator import pre_evolutions_of
 from utils.community_tier import (
     get_tier_detail,
     recommended_composition,
@@ -30,6 +29,20 @@ from utils.food_expectation import composition_string
 
 # 意見が割れていると見なす閾値（統合スコアの最大-最小）。
 SPREAD_ALERT = 0.30
+
+
+def _pre_evolutions_of(species_name: str) -> tuple[str, ...]:
+    """進化前の種族一覧。utils.evaluator に無い環境でも落ちないようにする。
+
+    Streamlit Cloud はページスクリプトを毎回読み直す一方、import 済みモジュールは
+    プロセス起動時のまま更新されない。新しいページが古い utils を参照して
+    ImportError になる事故が起きたため、取得できない場合は空で縮退する。
+    """
+    try:
+        from utils.evaluator import pre_evolutions_of
+    except ImportError:
+        return ()
+    return pre_evolutions_of(species_name)
 
 st.html(c.page_banner("強ポケ捕獲方針", "green", icon="🏅"))
 st.caption(
@@ -71,7 +84,7 @@ for species_name, tier in top_tier_species(_min_tier, reliable_only=not show_pro
     # 捕獲候補として一から狙う必要はないので区別して出す。
     pre_holders: list[tuple[str, dict, str]] = []
     if not holders:
-        for pre_name in pre_evolutions_of(species_name):
+        for pre_name in _pre_evolutions_of(species_name):
             pre_sp = db.get_species_data(pre_name) or {}
             for hp in owned_by_species.get(pre_name, []):
                 pre_holders.append((pre_name, hp, composition_string(hp, pre_sp)))
