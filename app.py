@@ -70,6 +70,8 @@ pages = {
         # 料理レベルは編成の数字を直接動かす入力なので「てもち」側に置く
         # （データ集は読み取り専用の資料置き場という区分を崩さない）
         st.Page("views/recipe_levels.py", title="料理レベル", icon="🍳"),
+        # 週エナジー以外の目的（かけら稼ぎ・リボン稼ぎ）で1日だけ組む編成
+        st.Page("views/goal_party.py", title="目的別編成", icon="🌙"),
     ],
     "ボックス": [
         st.Page("views/hand.py", title="役割", icon="🧩"),

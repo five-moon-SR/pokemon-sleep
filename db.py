@@ -248,6 +248,12 @@ def init_db(force: bool = False) -> None:
     _execute(
         f"alter table {SCHEMA}.pokemon add column if not exists is_shiny boolean default false"
     )
+    # おやすみリボンは「一緒に寝た累計時間」(200/500/1000/2000h)で段階が上がる。
+    # 段階しか持っていないと「あと少しで上がる子」を優先できないので、
+    # 分かる個体だけ累計時間を入れられるようにする（null = 未入力）。
+    _execute(
+        f"alter table {SCHEMA}.pokemon add column if not exists sleep_hours double precision"
+    )
     _migrate_party_recipe_categories()
     _normalize_strategy_plan_uniqueness()
     # 途中で落ちた場合は次の呼び出しでやり直せるよう、最後に立てる。
