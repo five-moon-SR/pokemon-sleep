@@ -380,6 +380,42 @@ def final_evolution_of(species_name: str) -> str:
     return cur
 
 
+@lru_cache(maxsize=1)
+def _backward_evolution_map() -> dict[str, list[str]]:
+    """進化系列の to → [from] 辞書。分岐進化があるので値はリスト。"""
+    out: dict[str, list[str]] = {}
+    for e in db.list_all_evolution_records():
+        frm, to = e.get("from"), e.get("to")
+        if frm and to:
+            out.setdefault(to, []).append(frm)
+    return out
+
+
+@lru_cache(maxsize=None)
+def pre_evolutions_of(species_name: str) -> tuple[str, ...]:
+    """その種族に進化しうる、手前の種族すべて（進化段階が浅い順）。
+
+    フシギバナ → ("フシギダネ", "フシギソウ")。
+    「まだ最終形は持っていないが、進化前なら持っている」を判定するのに使う。
+    """
+    bmap = _backward_evolution_map()
+    seen: set[str] = set()
+    frontier = [species_name]
+    order: list[str] = []
+    while frontier:
+        nxt: list[str] = []
+        for cur in frontier:
+            for prev in bmap.get(cur, []):
+                if prev in seen or prev == species_name:
+                    continue
+                seen.add(prev)
+                order.append(prev)
+                nxt.append(prev)
+        frontier = nxt
+    # 手前ほど後ろに積まれるので、進化段階が浅い順に直す
+    return tuple(reversed(order))
+
+
 # サブスキルランクUPアイテム（S→M）の写像。評価に効くもののみ。
 # きのみの数S は M が無く、最大所持数系は評価非関与のため対象外。
 SUBSKILL_RANK_UP: dict[str, str] = {

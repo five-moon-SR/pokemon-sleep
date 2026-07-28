@@ -60,5 +60,38 @@ class CommunityTierTest(unittest.TestCase):
             self.assertTrue(is_reliable(n))
 
 
+
+
+class PreEvolutionTest(unittest.TestCase):
+    """進化前の逆引き（捕獲方針で「進化前なら持っている」を出すのに使う）。"""
+
+    def test_three_stage_line(self) -> None:
+        from utils.evaluator import pre_evolutions_of
+        self.assertEqual(pre_evolutions_of("フシギバナ"), ("フシギダネ", "フシギソウ"))
+
+    def test_two_stage_line(self) -> None:
+        from utils.evaluator import pre_evolutions_of
+        self.assertEqual(pre_evolutions_of("サンドパン"), ("サンド",))
+
+    def test_base_form_has_none(self) -> None:
+        from utils.evaluator import pre_evolutions_of
+        self.assertEqual(pre_evolutions_of("フシギダネ"), ())
+
+    def test_standalone_species_has_none(self) -> None:
+        from utils.evaluator import pre_evolutions_of
+        for n in ("カモネギ", "メタモン", "ダークライ"):
+            self.assertEqual(pre_evolutions_of(n), (), f"{n} に進化前がある扱いになっている")
+
+    def test_branching_line_collects_all_paths(self) -> None:
+        """イーブイ系のような分岐でも、手前の種を取りこぼさない。"""
+        from utils.evaluator import pre_evolutions_of
+        self.assertIn("イーブイ", pre_evolutions_of("エーフィ"))
+
+    def test_no_self_reference(self) -> None:
+        from utils.evaluator import pre_evolutions_of
+        for n in ("フシギバナ", "エーフィ", "サンドパン"):
+            self.assertNotIn(n, pre_evolutions_of(n))
+
+
 if __name__ == "__main__":
     unittest.main()

@@ -15,6 +15,7 @@ import db
 from image_utils import pokemon_image_url
 from ui import components as c
 from ui.widgets import pokemon_status_popover
+from utils.evaluator import pre_evolutions_of
 from utils.community_tier import (
     get_tier_detail,
     recommended_composition,
@@ -65,16 +66,36 @@ for species_name, tier in top_tier_species(_min_tier, reliable_only=not show_pro
     specialty = sp.get("specialty") or "オール"
     holders = owned_by_species.get(species_name, [])
     comps = [composition_string(p, sp) for p in holders]
+
+    # 最終形は未所持でも、進化前を持っていれば「育てれば手に入る」。
+    # 捕獲候補として一から狙う必要はないので区別して出す。
+    pre_holders: list[tuple[str, dict, str]] = []
     if not holders:
-        status, todo, kind = "未所持 → 捕獲候補", True, "未所持"
-    elif want == "AAA" and not any(cs == "AAA" for cs in comps):
-        status, todo, kind = f"所持({'/'.join(comps)}) → AAA引き直し候補", True, "引き直し"
+        for pre_name in pre_evolutions_of(species_name):
+            pre_sp = db.get_species_data(pre_name) or {}
+            for hp in owned_by_species.get(pre_name, []):
+                pre_holders.append((pre_name, hp, composition_string(hp, pre_sp)))
+
+    if holders:
+        if want == "AAA" and not any(cs == "AAA" for cs in comps):
+            status, todo, kind = f"所持({'/'.join(comps)}) → AAA引き直し候補", True, "引き直し"
+        else:
+            status, todo, kind = f"所持({'/'.join(comps)}) ✓", False, "充足"
+    elif pre_holders:
+        # 狙い構成を満たす進化前が居るなら、捕獲ではなく育成で解決できる
+        good = [c for _, _, c in pre_holders if want != "AAA" or c == "AAA"]
+        label = " / ".join(f"{n}({c})" for n, _, c in pre_holders[:3])
+        if good:
+            status, todo, kind = f"進化前を所持 {label} → 育てれば入手", False, "進化前所持"
+        else:
+            status, todo, kind = f"進化前を所持 {label} → 構成が狙いと違う", True, "引き直し"
     else:
-        status, todo, kind = f"所持({'/'.join(comps)}) ✓", False, "充足"
+        status, todo, kind = "未所持 → 捕獲候補", True, "未所持"
     rows.append({
         "species_name": species_name, "tier": tier, "want": want,
         "status": status, "todo": todo, "holders": holders,
         "specialty": specialty, "kind": kind,
+        "pre_holders": pre_holders,
         "detail": get_tier_detail(species_name) or {},
     })
 
@@ -102,21 +123,22 @@ sel_specialty = _opt_to_key[sp_pick]
 
 # ── 所持状況で絞る（既に理想を持っている種を畳めるように細分化） ──
 # こちらもスマホ幅で折り返さないよう最短ラベルにする。
-_KIND_OPTS = ["すべて", "未所持", "引き直し", "両方"]
-_counts_kind = {k: sum(1 for r in rows if r["kind"] == k) for k in ("未所持", "引き直し", "充足")}
+_KIND_OPTS = ["すべて", "未所持", "進化前", "引き直し"]
+_counts_kind = {k: sum(1 for r in rows if r["kind"] == k)
+                for k in ("未所持", "進化前所持", "引き直し", "充足")}
 kind_pick = st.segmented_control(
     "所持状況",
     options=_KIND_OPTS,
     default="すべて",
     key="cp_kind",
     label_visibility="collapsed",
-    help="「両方」は未所持＋引き直し候補。件数は下の行に出る。",
+    help="「進化前」は最終形は未所持だが進化前を持っている種。件数は下の行に出る。",
 ) or "すべて"
 _KIND_FILTER = {
     "すべて": None,
     "未所持": {"未所持"},
+    "進化前": {"進化前所持"},
     "引き直し": {"引き直し"},
-    "両方": {"未所持", "引き直し"},
 }[kind_pick]
 
 # ── 今週のマップで出る種だけに絞る ──
@@ -143,8 +165,8 @@ view = [
 # ボタンから外した件数はここにまとめる（スマホで折り返さないため）
 st.caption(
     f"{sel_specialty}得意 **{len(view)}** 種を表示中"
-    + f"　｜　未所持 {_counts_kind['未所持']} ・ 引き直し {_counts_kind['引き直し']} ・ "
-      f"充足 {_counts_kind['充足']}"
+    + f"　｜　未所持 {_counts_kind['未所持']} ・ 進化前 {_counts_kind['進化前所持']} ・ "
+      f"引き直し {_counts_kind['引き直し']} ・ 充足 {_counts_kind['充足']}"
     + (f"　｜　{week_field}に出る種のみ" if field_filter else "")
 )
 
@@ -183,6 +205,7 @@ for row in view:
     species_name = row["species_name"]
     tier, want, status = row["tier"], row["want"], row["status"]
     todo, holders, detail = row["todo"], row["holders"], row["detail"]
+    pre_holders = row["pre_holders"]
     n_src = int(detail.get("sources") or 0)
     spread = float(detail.get("spread") or 0.0)
     by_source: dict[str, str] = detail.get("by_source") or {}
@@ -212,7 +235,9 @@ for row in view:
         head[1].markdown(f"**{species_name}**")
         head[1].html(badges)
 
-        st.markdown(("🎯 " if todo else "✅ ") + status)
+        # 進化前を持っている＝捕獲ではなく育成で解決できるので別アイコンにする
+        icon = "🎯 " if todo else ("🌱 " if row["kind"] == "進化前所持" else "✅ ")
+        st.markdown(icon + status)
         fields_of = species_fields(species_name)
         if fields_of:
             here = week_field in fields_of if week_field else False
@@ -243,4 +268,9 @@ for row in view:
             for hp in holders:
                 pokemon_status_popover(
                     hp, label=f"🔍 {hp.get('nickname') or species_name}",
+                )
+            # 進化前を持っている場合はその個体も開けるようにする
+            for pre_name, hp, _comp in pre_holders[:3]:
+                pokemon_status_popover(
+                    hp, label=f"🌱 {hp.get('nickname') or pre_name}",
                 )
