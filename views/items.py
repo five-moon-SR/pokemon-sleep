@@ -7,18 +7,18 @@ import streamlit as st
 
 import db
 from ui import components as c
-from ui.widgets import pokemon_popover_row
 from utils.item_simulation import (
     analyze_subskill_seed,
-    level_up_priorities,
-    main_skill_item_priorities,
-    nature_item_priorities,
     simulate_items,
-    subskill_item_priorities,
     subskill_seed_paths,
 )
-from utils.plan_simulation import level_improvements
 from utils.play_context import load_play_context
+from utils.roster_impact import (
+    ImpactRow,
+    baseline_insertions,
+    item_impact_ranking,
+    load_plan_portfolio,
+)
 
 
 INVENTORY_KEY = "user.item_inventory"
@@ -34,14 +34,81 @@ def _label(p: dict) -> str:
     return f"{p.get('nickname') or p['species_name']}｜{p['species_name']} Lv{level}"
 
 
-@st.cache_data(show_spinner=False, ttl=300)
-def _rankings(owned_rows: list[dict]) -> dict:
+@st.cache_data(show_spinner="投資先を計算中…", ttl=300)
+def _impact(owned_rows: list[dict], _signature: str) -> dict:
+    """全プランの週エナジー改善で4種のアイテムを並べる。
+
+    _signature にプラン構成を畳んで渡すことで、編成を保存し直したら
+    キャッシュが外れるようにしている（プランはこの関数の引数に現れないため）。
+    """
+    ctx = load_play_context()
+    owned_by_id = {int(p["id"]): p for p in owned_rows}
+    plans = load_plan_portfolio(owned_by_id, ctx=ctx)
+    base_map = baseline_insertions(owned_rows, plans, ctx=ctx)
     return {
-        "level": level_up_priorities(owned_rows),
-        "main": main_skill_item_priorities(owned_rows),
-        "sub": subskill_item_priorities(owned_rows),
-        "mint": nature_item_priorities(owned_rows),
+        "plans": plans,
+        **{
+            kind: item_impact_ranking(
+                owned_rows, kind, plans=plans, base_map=base_map, ctx=ctx
+            )
+            for kind in ("level", "main", "sub", "mint")
+        },
     }
+
+
+# 内訳は全部並べると読めないので、上位だけ出して残りは件数で示す
+BREAKDOWN_LIMIT = 5
+
+
+def _stance_badge(row: ImpactRow) -> str:
+    if row.enters_plan:
+        return c.text_badge("🆕 定番入り")
+    if row.in_plan:
+        return c.text_badge("使用中")
+    return c.text_badge("ベンチ")
+
+
+def _impact_list(rows: list[ImpactRow], *, limit: int = 20, unit: str = "") -> None:
+    """投資候補を1行ずつ並べる。週エナジー改善が主、評価値は補助。"""
+    if not rows:
+        st.html(c.empty_state("使えるアイテムの当てがありません。"))
+        return
+    for index, row in enumerate(rows[:limit], 1):
+        # 今週ぶんが一番動かしやすい数字なので先に出し、合計は根拠として下に添える
+        if row.weighted_delta > 0:
+            head = (
+                f"今週 <b>+{row.this_week_delta:,.0f}</b> en"
+                if row.this_week_delta > 0
+                else "今週 <b>—</b>"
+            )
+            right = f"{head}<br><small>全{len(row.plan_deltas)}プラン計 +{row.raw_delta:,.0f}</small>"
+        else:
+            right = f"評価 <b>{row.eval_delta:+.1f}</b><br><small>実戦の改善なし</small>"
+        badges = [_stance_badge(row)]
+        if row.tier:
+            badges.append(c.text_badge(f"ティア {row.tier}"))
+        top = row.plan_deltas[0] if row.plan_deltas else None
+        sub = row.detail
+        if row.seeds_required and unit:
+            sub += f"｜あと {row.seeds_required}{unit}"
+        if top:
+            swap = f"（{top.replaced_label} と交代）" if top.replaced_label else ""
+            sub += f"｜最大は {top.plan_name} +{top.delta:,.0f}en{swap}"
+        st.html(c.result_row(
+            title=f"#{index} {row.label}",
+            subtitle=sub,
+            badges=badges,
+            right=right,
+        ))
+        if len(row.plan_deltas) > 1:
+            with st.expander(f"　{row.label}：どのプランが伸びるか（{len(row.plan_deltas)}件）"):
+                for d in row.plan_deltas[:BREAKDOWN_LIMIT]:
+                    mark = "★今週 " if d.is_this_week else ""
+                    how = f"（{d.replaced_label} と交代）" if d.replaced_label else "（そのまま強化）"
+                    st.markdown(f"- {mark}**{d.plan_name}** +{d.delta:,.0f} en/週 {how}")
+                rest = len(row.plan_deltas) - BREAKDOWN_LIMIT
+                if rest > 0:
+                    st.caption(f"ほか {rest} プランでも伸びます")
 
 
 st.html(c.page_banner("育成・アイテム戦略", "green", icon="🎁"))
@@ -84,12 +151,17 @@ with st.expander("アイテム在庫", expanded=True):
             db.set_setting(INVENTORY_KEY, inventory)
             st.success("アイテム在庫を保存しました")
 
-rankings = _rankings(owned)
 saved_plans = [plan for plan in db.list_parties() if plan.get("recipe_category")]
-plan_memberships: dict[int, list[str]] = {}
-for plan in saved_plans:
-    for pokemon_id in plan.get("member_ids") or []:
-        plan_memberships.setdefault(int(pokemon_id), []).append(plan["name"])
+plan_signature = "|".join(
+    f"{plan['id']}:{plan.get('updated_at')}:{plan.get('main_recipe')}:{plan.get('member_ids')}"
+    for plan in sorted(saved_plans, key=lambda x: int(x["id"]))
+) + f"|week={(db.get_setting('user.active_strategy_week', {}) or {}).get('plan_id')}"
+
+impact = _impact(owned, plan_signature)
+plans = impact["plans"]
+field_count = len(db.list_all_field_records())
+slots_total = field_count * 3
+this_week = next((p for p in plans if p.is_this_week), None)
 
 st.html(
     c.stat_tiles(
@@ -97,128 +169,52 @@ st.html(
             c.stat_tile("メイン種", str(int(inventory["main_skill_seed"])), sub="個"),
             c.stat_tile("サブ種", str(int(inventory["subskill_seed"])), sub="個"),
             c.stat_tile("ミント", str(int(inventory["neutralizing_mint"])), sub="最大2個"),
+            c.stat_tile("定番プラン", f"{len(plans)}/{slots_total}", sub="フィールド×料理"),
         ]
     )
 )
+
+if not plans:
+    st.warning(
+        "定番プランが1件も揃っていないので、実戦での改善量が測れません。"
+        "「てもち → 編成」で各フィールドの編成を保存すると、"
+        "ここが評価値順ではなく**週エナジーの実改善順**になります。"
+    )
+    st.caption("いまは育成後評価の伸び（×種族ティア）で並べています。")
+else:
+    head = f"今週は **{this_week.name}** を重く見ています。" if this_week else (
+        "今週のプランが未設定なので、全プランを同じ重みで見ています。"
+    )
+    st.caption(
+        f"{head} 登録済み {len(plans)} プランの週エナジーが"
+        f"どれだけ伸びるかで並べています（ベンチは差し込んで伸びれば上位に来ます）。"
+        + (f" 残り {slots_total - len(plans)} 枠を埋めるほど精度が上がります。"
+           if len(plans) < slots_total else "")
+    )
 
 level_tab, main_tab, sub_tab, mint_tab, detail_tab = st.tabs(
     ["🌱 レベル上げ", "⚡ メイン種", "⭐ サブ種", "🌿 ミント", "🔎 個体比較"]
 )
 
 with level_tab:
-    st.markdown("##### 保存済み攻略プラン内の優先度")
-    st.caption("固定5体をLv30・60へ上げた時の、主料理を含む週期待エナジー改善。")
-    ctx = load_play_context()
-    recipes = {recipe["name"]: recipe for recipe in db.list_all_recipe_records()}
-    fields = {field["name"]: field for field in db.list_all_field_records()}
-    plan_rows = []
-    for plan in saved_plans:
-        recipe = recipes.get(plan.get("main_recipe"))
-        field = fields.get(plan.get("field_name"))
-        members = [
-            owned_by_id[int(pokemon_id)]
-            for pokemon_id in (plan.get("member_ids") or [])
-            if int(pokemon_id) in owned_by_id
-        ]
-        if not recipe or not field or len(members) != 5:
-            continue
-        favorites = {x["name"] for x in (field.get("favorite_berries") or [])}
-        for result in level_improvements(
-            members,
-            recipe,
-            fav_berries=favorites,
-            ctx=ctx,
-        ):
-            if result["energy_delta"] <= 0 and result["stability_delta"] <= 0:
-                continue
-            plan_rows.append(
-                {
-                    "プラン": plan["name"],
-                    "個体": result["label"],
-                    "目標": f"Lv{result['target_level']}",
-                    "安定度": f"{result['stability_delta']:+.0%}",
-                    "週改善": result["energy_delta"],
-                }
-            )
-    plan_rows.sort(key=lambda row: -row["週改善"])
-    if plan_rows:
-        st.dataframe(
-            pd.DataFrame(plan_rows[:20]),
-            hide_index=True,
-            use_container_width=True,
-            column_config={
-                "週改善": st.column_config.NumberColumn(
-                    "週改善", format="%+.0f en"
-                )
-            },
-        )
-    else:
-        st.html(c.empty_state("比較できる保存済み攻略プランがありません。"))
-
-    st.markdown("##### 手札全体の次マイルストーン")
-    st.caption("食材枠・サブスキル解放までの汎用評価改善を、必要Lv数で割った効率順。")
-    level_rows = [
-        {
-            "個体": item.label,
-            "現在": f"Lv{item.current_level}",
-            "目標": f"Lv{item.target_level}",
-            "解放": item.unlock,
-            "改善": round(item.delta, 1),
-            "1Lv効率": round(item.delta_per_level, 2),
-            "使用プラン": " / ".join(plan_memberships.get(item.pokemon_id, [])) or "—",
-        }
-        for item in rankings["level"][:30]
-    ]
-    st.dataframe(pd.DataFrame(level_rows), hide_index=True, use_container_width=True)
+    st.caption("次の解放マイルストーンまで上げた時の実改善。食材枠（Lv30/60）が特に効きます。")
+    _impact_list(impact["level"], unit="Lv")
 
 with main_tab:
-    st.caption("最終進化・Lv60時点でメインスキルのたねを1個使った改善順。進化によるLv上昇は先に加味。")
-    for index, item in enumerate(rankings["main"][:20], 1):
-        pokemon_popover_row(
-            owned_by_id.get(item.pokemon_id),
-            label=f"#{index} {item.label}",
-            img_species=item.final_species,
-            badges_text=f"+{item.delta:.1f}",
-            caption=(
-                f"{item.detail}｜最大まで残り{item.seeds_required}個｜"
-                f"使用プラン {' / '.join(plan_memberships.get(item.pokemon_id, [])) or 'なし'}"
-            ),
-        )
+    st.caption("メインスキルのたね1個で、メインスキルLvを1つ上げた時の実改善。")
+    _impact_list(impact["main"], unit="個")
 
 with sub_tab:
     st.caption(
-        "現在解放済みで、強化先を別枠に持っていないサブスキルだけが抽選対象。"
-        "候補1個なら確定、複数ならランダムです。"
+        "解放済みかつ強化先を別枠に持たないサブスキルだけが抽選対象。"
+        "複数候補ならランダムなので、ここは期待値（分岐の確率で均した値）です。"
     )
-    for index, item in enumerate(rankings["sub"][:20], 1):
-        lottery = "確定" if item.probability >= 1 else f"各{item.probability:.0%}"
-        range_text = (
-            f"{item.worst_delta:+.1f}〜{item.best_delta:+.1f}"
-            if item.worst_delta is not None and item.best_delta is not None
-            else f"{item.delta:+.1f}"
-        )
-        pokemon_popover_row(
-            owned_by_id.get(item.pokemon_id),
-            label=f"#{index} {item.label}",
-            img_species=item.species_name,
-            badges_text=f"期待 +{item.delta:.1f}",
-            caption=f"{lottery}｜幅 {range_text}｜{item.detail}",
-        )
+    _impact_list(impact["sub"])
 
 with mint_tab:
     st.warning("まっしろミントは最大2個所持・使用後に元へ戻せません。プラス補正も消える点に注意。")
-    st.caption("最終進化・Lv60時点で、性格補正を完全に無効化した時の改善順。")
-    for index, item in enumerate(rankings["mint"][:20], 1):
-        pokemon_popover_row(
-            owned_by_id.get(item.pokemon_id),
-            label=f"#{index} {item.label}",
-            img_species=item.final_species,
-            badges_text=f"+{item.delta:.1f}",
-            caption=(
-                f"{item.detail}｜"
-                f"使用プラン {' / '.join(plan_memberships.get(item.pokemon_id, [])) or 'なし'}"
-            ),
-        )
+    st.caption("性格補正を完全に無効化した時の実改善。下降補正で損している個体ほど伸びます。")
+    _impact_list(impact["mint"])
 
 with detail_tab:
     selected_id = st.selectbox(
