@@ -11,6 +11,9 @@ st.set_page_config(
     page_title="ポケスリ管理",
     page_icon="https://www.serebii.net/pokemonsleep/pokemon/39.png",
     layout="wide",
+    # 既定の "auto" はスマホ幅で常に折りたたむ。開くボタンが小さくて押しにくい
+    # ページなので、最初から開いた状態で見せる。
+    initial_sidebar_state="expanded",
 )
 
 ui.apply_theme()
@@ -63,7 +66,12 @@ with st.sidebar:
 
         from image_utils import pokemon_image_url
 
-        owned_species = sorted({r["species_name"] for r in db.list_pokemon()})
+        # 飾りのために毎リラン所持一覧を引いていたので、日付ごとにキャッシュする
+        @st.cache_data(show_spinner=False, ttl=3600)
+        def _mascot_species(day: int) -> list[str]:
+            return sorted({r["species_name"] for r in db.list_pokemon()})
+
+        owned_species = _mascot_species(date.today().toordinal())
         if owned_species:
             pick = owned_species[date.today().toordinal() % len(owned_species)]
             url = pokemon_image_url(pick)

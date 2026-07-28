@@ -279,9 +279,35 @@ h1, h2, h3, [data-testid="stMarkdownContainer"] strong { word-break: auto-phrase
     color: var(--ps-moon);
     font-weight: 700;
 }
-[data-testid="stLogo"] {
+/* ロゴの拡大はサイドバー内に限定する。
+   今の Streamlit は畳んでもロゴをヘッダへ出さないが、バージョンによっては出る。
+   その時 height:3.2rem + margin:auto がヘッダで効くと展開ボタンを押しのけるので、
+   スコープを切って、ヘッダ側には控えめな指定を用意しておく。 */
+[data-testid="stSidebar"] [data-testid="stLogo"] {
     height: 3.2rem;
     margin: 0.4rem auto 0.2rem;
+}
+[data-testid="stHeader"] [data-testid="stLogo"] {
+    height: 1.9rem;
+    margin: 0 0 0 0.25rem;
+}
+
+/* サイドバーを開くボタン。アプリ内の他のボタンは46〜48pxまで広げているのに、
+   ここだけ 28px のままで、一番小さいタップ対象がメニューを開くボタンだった。
+   Streamlit 側が width/height を直接当てているので !important で上書きする。
+   stExpandSidebarButton は button 要素そのもので、子孫セレクタでは当たらない。 */
+button[data-testid="stExpandSidebarButton"],
+[data-testid="stSidebarCollapsedControl"] button,
+[data-testid="stSidebarCollapseButton"] button {
+    width: 46px !important;
+    height: 46px !important;
+}
+button[data-testid="stExpandSidebarButton"] [data-testid="stIconMaterial"],
+[data-testid="stSidebarCollapsedControl"] [data-testid="stIconMaterial"],
+[data-testid="stSidebarCollapseButton"] [data-testid="stIconMaterial"] {
+    font-size: 1.6rem !important;
+    width: 1.6rem !important;
+    height: 1.6rem !important;
 }
 
 /* ===== スマホ最適化（旧 ui.py apply_mobile_css から移設） ===== */

@@ -71,11 +71,13 @@ prof_cols[0].caption(
 if prof_cols[1].button("⚙ 設定", use_container_width=True):
     _profile_dialog()
 
-# よく使う導線を上に置く（ホームから2タップで目的のページに着けるように）
-nav_cols = st.columns(3)
+# よく使う導線を上に置く（ホームから2タップで目的のページに着けるように）。
+# 役割ページはサイドバー以外からのリンクが1つも無かったので、ここに入れる。
+nav_cols = st.columns(4)
 nav_cols[0].page_link("views/party.py", label="編成", icon="🧭", use_container_width=True)
 nav_cols[1].page_link("views/register.py", label="登録", icon="📝", use_container_width=True)
-nav_cols[2].page_link("views/catch_policy.py", label="捕獲方針", icon="🏅", use_container_width=True)
+nav_cols[2].page_link("views/catch_policy.py", label="捕獲", icon="🏅", use_container_width=True)
+nav_cols[3].page_link("views/hand.py", label="役割", icon="🧩", use_container_width=True)
 
 perf.mark("home: ヘッダ＋設定ボタン")
 
