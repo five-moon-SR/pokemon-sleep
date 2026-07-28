@@ -11,6 +11,7 @@ import db
 from image_utils import ingredient_icon_url
 from utils.food_expectation import expected_berry_per_day, expected_ingredients_per_day
 from utils.play_context import load_play_context
+from utils.recipe_level import recipe_energy
 
 _play_ctx_cache = None
 
@@ -320,16 +321,13 @@ def _ingredient_chip(name: str, qty: float) -> str:
 
 
 def _recipe_base_energy(recipe: dict) -> int:
-    """レシピの基準エナジー。Lv60 → Lv30 → Lv1 の順でフォールバック。
+    """登録済みの料理レベルで見た、そのレシピ1回ぶんのエナジー。
 
-    新レシピ8件は Lv30 以降が null なので Lv1 値が使われる。
-    どれも null なら 0（評価上はほぼ最低スコア）。
+    以前は常に energy_lv60（作り込み済み）を採用していたため、まだ育てていない
+    料理を3倍に過大評価していた。今は utils.recipe_level が保存済みのレベルを
+    参照する（未登録は Lv1＝未開拓）。ごちゃまぜ系は基準が 0 なので 0 のまま。
     """
-    return int(
-        (recipe.get("energy_lv60") or 0)
-        or (recipe.get("energy_lv30") or 0)
-        or (recipe.get("energy_lv1") or 0)
-    )
+    return int(recipe_energy(recipe))
 
 
 def _main_recipe_recommendations(

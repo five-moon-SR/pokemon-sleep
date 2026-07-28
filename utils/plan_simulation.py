@@ -28,6 +28,7 @@ from utils.food_expectation import (
 )
 from utils.genki import DAILY_EFFECTIVE_ASSIST_SECONDS
 from utils.play_context import PlayContext
+from utils.recipe_level import recipe_energy
 from utils.skill_effects import get_skill_effect_amount, get_skill_max_lv
 from utils.skill_expectation import expected_skill_energy_per_day
 from utils.sleep_ribbon import get_time_multiplier
@@ -214,12 +215,9 @@ def simulate_plan(
         for ing in (recipe.get("ingredients") or [])
     }
     total_required = int(recipe.get("total_ingredients") or sum(requirements.values()))
-    base_energy = float(
-        recipe.get("energy_lv60")
-        or recipe.get("energy_lv30")
-        or recipe.get("energy_lv1")
-        or 0
-    )
+    # 同じ計算を party_logic 側にも持たせると必ず片方が腐るので、
+    # 料理エナジーは utils.recipe_level 一本に寄せる（登録済みの料理レベルを反映）。
+    base_energy = recipe_energy(recipe)
     meal_fractions = _meal_fractions(ctx)
     cooked = conditional = 0
     dish_energy = 0.0

@@ -18,6 +18,7 @@ from utils.plan_simulation import (
 )
 from utils.play_context import load_play_context
 from utils.skill_role_coverage import skill_role_audit
+from utils import recipe_level
 from utils.strategy_optimizer import (
     generate_all_strategy_plans,
     plan_slots,
@@ -374,6 +375,60 @@ picked_recipe = st.selectbox(
 )
 ss["strategy_main_recipe"] = picked_recipe
 recipe = recipe_map[picked_recipe]
+
+# ── 料理レベル ────────────────────────────────────────────────────────
+# 料理エナジーはレベルで最大3.58倍まで変わる。全レシピをLv60前提で計算していた頃は
+# まだ作っていない料理を過大評価していたので、使う料理だけレベルを登録してもらう。
+if recipe_level.load_error():
+    st.warning(
+        "料理レベルの設定が読み込めませんでした。全料理をLv1として計算しています"
+        f"（{recipe_level.load_error()}）。"
+    )
+saved_levels = recipe_level.load_recipe_levels()
+lv_cols = st.columns([1, 2])
+with lv_cols[0]:
+    picked_level = st.number_input(
+        "料理レベル",
+        min_value=recipe_level.MIN_LEVEL,
+        max_value=recipe_level.MAX_LEVEL,
+        value=saved_levels.get(picked_recipe, recipe_level.MIN_LEVEL),
+        step=1,
+        key=f"recipe_level_{strategy_key}_{picked_recipe}",
+        help="この料理を作り込んだレベル。上限70。未登録はLv1（未開拓）として計算します。",
+    )
+with lv_cols[1]:
+    base = recipe_level.base_energy(recipe)
+    if base > 0:
+        now = recipe_level.recipe_energy(recipe, picked_level)
+        st.markdown(
+            f"**{now:,.0f} en** / 1回　"
+            f"<small>Lv{picked_level}（×{recipe_level.level_multiplier(picked_level):.2f}）"
+            f"　上限Lv70なら {recipe_level.recipe_energy(recipe, 70):,.0f}</small>",
+            unsafe_allow_html=True,
+        )
+    else:
+        st.caption("ごちゃまぜ系はレシピレベルの恩恵を受けません。")
+if int(picked_level) != saved_levels.get(picked_recipe, recipe_level.MIN_LEVEL):
+    if st.button("この料理レベルを保存", key=f"save_recipe_level_{strategy_key}"):
+        recipe_level.save_recipe_levels({**saved_levels, picked_recipe: int(picked_level)})
+        st.cache_data.clear()  # 料理エナジーに依存する集計を全部作り直す
+        st.rerun()
+
+if saved_levels:
+    with st.expander(f"🍳 登録済みの料理レベル（{len(saved_levels)}件）"):
+        st.caption("ここに無い料理はLv1（未開拓）として計算しています。")
+        for name, lv in sorted(saved_levels.items(), key=lambda x: -x[1]):
+            row = st.columns([3, 1])
+            row[0].markdown(
+                f"{name}　<small>Lv{lv}（×{recipe_level.level_multiplier(lv):.2f}）</small>",
+                unsafe_allow_html=True,
+            )
+            if row[1].button("削除", key=f"del_recipe_level_{name}"):
+                recipe_level.save_recipe_levels(
+                    {k: v for k, v in saved_levels.items() if k != name}
+                )
+                st.cache_data.clear()
+                st.rerun()
 
 requirements = {x["name"]: int(x["count"]) for x in recipe.get("ingredients") or []}
 chips = []

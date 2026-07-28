@@ -12,6 +12,7 @@ from utils.item_simulation import (
     simulate_items,
     subskill_seed_paths,
 )
+from utils import recipe_level
 from utils.play_context import load_play_context
 from utils.roster_impact import (
     ImpactRow,
@@ -156,6 +157,8 @@ plan_signature = "|".join(
     f"{plan['id']}:{plan.get('updated_at')}:{plan.get('main_recipe')}:{plan.get('member_ids')}"
     for plan in sorted(saved_plans, key=lambda x: int(x["id"]))
 ) + f"|week={(db.get_setting('user.active_strategy_week', {}) or {}).get('plan_id')}"
+# 料理レベルを変えると週エナジーが動くので、署名に混ぜないと古い順位が返る
+plan_signature += "|lv=" + recipe_level.levels_signature()
 
 impact = _impact(owned, plan_signature)
 plans = impact["plans"]
