@@ -24,6 +24,7 @@ from utils.plan_simulation import (
 from utils.play_context import load_play_context
 from utils.skill_role_coverage import skill_role_audit
 from utils import recipe_level
+from utils.recipe_unlock import recipe_gaps
 from utils.strategy_optimizer import (
     generate_all_strategy_plans,
     plan_slots,
@@ -594,8 +595,8 @@ if valid_team:
         event_set=event_set,
         starting_inventory=starting_inventory,
     )
-    overview_tab, hand_tab, analysis_tab, growth_tab = st.tabs(
-        ["📋 今週の見通し", "🧩 手札・役割", "🔬 詳細分析", "🌱 育成・捕獲"]
+    overview_tab, hand_tab, analysis_tab, growth_tab, unlock_tab = st.tabs(
+        ["📋 今週の見通し", "🧩 手札・役割", "🔬 詳細分析", "🌱 育成・捕獲", "🍳 強い料理を狙う"]
     )
     with overview_tab:
         _sim_metrics(carry_sim)
@@ -885,5 +886,56 @@ if valid_team:
             st.dataframe(pd.DataFrame(capture_rows), hide_index=True, use_container_width=True)
         elif capture_key in ss:
             st.caption("現在の5体を明確に改善する未所持候補はありません。")
+    # ── 🍳 強い料理を狙う ────────────────────────────────────────────────
+    # capture_improvements は主料理を1品に固定するので、必要食材を2つ以上
+    # 欠いた料理では素の編成も候補入り編成も1食も作れず、差分が0に潰れて
+    # 「候補なし」になっていた。ここは料理側からたどって、
+    # 「作れるまであと何が足りないか・誰を捕まえればいいか」を出す。
+    with unlock_tab:
+        st.caption(
+            f"{RECIPE_CATEGORY_LABELS[category]}の中で、エナジーの高い料理から"
+            "「作れるまでに何が足りないか」を並べます。"
+            "不足食材ごとに、それを供給できる**未所持の最終進化種**を"
+            "種族ティアと出現マップつきで挙げます。"
+        )
+        gaps = recipe_gaps(owned, recipes, ctx=ctx, limit=8)
+        for gap in gaps:
+            rec_name = gap.recipe["name"]
+            head = c.icon_chip(recipe_icon_url(rec_name), rec_name, size=28)
+            if gap.cookable:
+                state = c.text_badge("✅ 今の手札で作れる")
+            else:
+                state = c.text_badge(f"あと {gap.missing_count} 種の食材")
+            with st.container(border=True):
+                st.html(
+                    '<div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap">'
+                    + head + state + "</div>"
+                )
+                lv_note = (
+                    f"Lv{gap.level} で {gap.energy_now:,.0f} en/回"
+                    if gap.level > 1
+                    else f"Lv1（未開拓）で {gap.energy_now:,.0f} en/回"
+                )
+                st.caption(
+                    f"{lv_note}　／　Lv60まで育てれば {gap.energy_at_60:,.0f} en/回"
+                )
+                if gap.needed_species:
+                    st.markdown(
+                        "**最短で狙うなら**：" + "、".join(gap.needed_species)
+                    )
+                for m in gap.missing:
+                    cand = "、".join(
+                        f"{cd['species_name']}"
+                        + (f"（{cd['tier']}）" if cd["tier"] else "")
+                        + (f"／{cd['fields'][0]}" if cd["fields"] else "")
+                        for cd in m.candidates
+                    ) or "候補になる未所持種がいません"
+                    st.markdown(
+                        f"- **{m.name}**　{m.supplied_per_day:.0f} / "
+                        f"{m.required_per_day:.0f} 個/日　→　{cand}"
+                    )
+        if not gaps:
+            st.html(c.empty_state("このカテゴリに対象レシピがありません。"))
+
 else:
     st.info("固定メンバーを5体選ぶと、今週の見通しと育成・捕獲候補を表示します。")
