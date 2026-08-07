@@ -22,12 +22,14 @@ STATUS_ORDER = {
     "開催中": 0,
     "予定": 1,
     "公式予告": 2,
-    "終了": 3,
+    "Sleep公式未確認": 3,
+    "終了": 4,
 }
 STATUS_COLORS = {
     "開催中": "--ps-sp-food",
     "予定": "--ps-rank-s",
     "公式予告": "--ps-sp-skill",
+    "Sleep公式未確認": "--ps-rank-a",
     "終了": "--ps-ink-dim",
 }
 

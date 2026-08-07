@@ -28,12 +28,15 @@ STRATEGY_DIRECTION_KEY = "user.strategy_direction"
 DEFAULT_STRATEGY_DIRECTION = {
     "title": "ジンジャー担当を確保する",
     "priority": "最優先: ヨーギラスを捕まえる",
+    "maps": ["トープ洞窟", "ワカクサ本島"],
     "body": (
         "いま一番のウィークポイントは、あったかジンジャーを安定して拾える食材ポケモンが"
-        "足りないこと。まずはヨーギラス系統を狙い、将来的なジンジャー担当を作る。"
+        "足りないこと。まずはトープ洞窟かワカクサ本島でヨーギラスを狙い、将来的な"
+        "ジンジャー担当を作る。進化後まで見るなら、サナギラスはトープ洞窟/ワカクサ本島 EX、"
+        "バンギラスはウノハナ雪原/ワカクサ本島 EXも候補。"
     ),
     "next_steps": [
-        "ヨーギラスが出るマップを優先して睡眠リサーチする",
+        "トープ洞窟かワカクサ本島でヨーギラスを優先して睡眠リサーチする",
         "ジンジャー枠を2枠以上持つ個体を候補にする",
         "ヒーラー更新や他食材の補強は、ジンジャー担当確保の次点で見る",
     ],
@@ -51,9 +54,13 @@ def _eff_lv(p: dict) -> int:
 
 def _load_strategy_direction() -> dict:
     saved = db.get_setting(STRATEGY_DIRECTION_KEY, {}) or {}
+    maps = saved.get("maps")
+    if isinstance(maps, str):
+        maps = [m.strip() for m in maps.replace("、", "/").split("/") if m.strip()]
     return {
         "title": saved.get("title") or DEFAULT_STRATEGY_DIRECTION["title"],
         "priority": saved.get("priority") or DEFAULT_STRATEGY_DIRECTION["priority"],
+        "maps": list(maps or DEFAULT_STRATEGY_DIRECTION["maps"]),
         "body": saved.get("body") or DEFAULT_STRATEGY_DIRECTION["body"],
         "next_steps": list(saved.get("next_steps") or DEFAULT_STRATEGY_DIRECTION["next_steps"]),
     }
@@ -64,6 +71,18 @@ def _save_strategy_direction(direction: dict) -> None:
 
 
 def _direction_card(direction: dict) -> str:
+    maps = [
+        str(m).strip()
+        for m in direction.get("maps", [])
+        if str(m).strip()
+    ]
+    map_chips = "".join(
+        '<span style="display:inline-flex;align-items:center;border:1px solid '
+        'color-mix(in srgb,var(--ps-sp-food) 28%,#fff);background:#fff;'
+        'border-radius:999px;padding:3px 9px;font-size:.78rem;font-weight:800;">'
+        f'{html.escape(map_name)}</span>'
+        for map_name in maps
+    )
     steps = "".join(
         f"<li>{html.escape(str(step))}</li>"
         for step in direction.get("next_steps", [])
@@ -79,7 +98,14 @@ def _direction_card(direction: dict) -> str:
         '<div style="font-size:.78rem;color:var(--ps-ink-dim);font-weight:800;letter-spacing:.08em;">直近の方針</div>'
         f'<h3 style="margin:.12rem 0 .2rem;font-size:1.08rem;">{html.escape(str(direction["title"]))}</h3>'
         f'<div style="font-weight:900;color:var(--ps-sp-food);">{html.escape(str(direction["priority"]))}</div>'
-        f'<p style="margin:.35rem 0;color:var(--ps-ink);line-height:1.55;">{html.escape(str(direction["body"]))}</p>'
+        + (
+            '<div style="display:flex;gap:5px;flex-wrap:wrap;margin:.35rem 0 .1rem;">'
+            '<span style="font-size:.78rem;color:var(--ps-ink-dim);font-weight:800;padding:3px 0;">出現マップ</span>'
+            f'{map_chips}</div>'
+            if map_chips
+            else ""
+        )
+        + f'<p style="margin:.35rem 0;color:var(--ps-ink);line-height:1.55;">{html.escape(str(direction["body"]))}</p>'
         + (f'<ul style="margin:.35rem 0 0;padding-left:1.2rem;line-height:1.55;">{steps}</ul>' if steps else "")
         + '</div></div></section>'
     )
@@ -91,6 +117,12 @@ def _strategy_direction_dialog() -> None:
     with st.form("strategy_direction_form"):
         title = st.text_input("見出し", value=direction["title"])
         priority = st.text_input("最優先", value=direction["priority"])
+        maps_text = st.text_area(
+            "出現マップ（1行1件）",
+            value="\n".join(direction["maps"]),
+            height=80,
+            help="例: ヨーギラスなら トープ洞窟 / ワカクサ本島",
+        )
         body = st.text_area("理由・背景", value=direction["body"], height=110)
         steps_text = st.text_area(
             "次にやること（1行1件）",
@@ -101,6 +133,7 @@ def _strategy_direction_dialog() -> None:
             _save_strategy_direction({
                 "title": title.strip() or DEFAULT_STRATEGY_DIRECTION["title"],
                 "priority": priority.strip() or DEFAULT_STRATEGY_DIRECTION["priority"],
+                "maps": [s.strip() for s in maps_text.splitlines() if s.strip()],
                 "body": body.strip() or DEFAULT_STRATEGY_DIRECTION["body"],
                 "next_steps": [s.strip() for s in steps_text.splitlines() if s.strip()],
             })
