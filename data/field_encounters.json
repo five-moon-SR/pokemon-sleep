@@ -10,11 +10,6 @@
    "source": "https://wikiwiki.jp/poke_sleep/リサーチフィールド/ワカクサ本島",
    "encounters": [
     {
-     "species_name": "トゲキッス",
-     "dex_no": "0468",
-     "sleep_type": "すやすや"
-    },
-    {
      "species_name": "フシギダネ",
      "dex_no": "0001",
      "sleep_type": "うとうと",
@@ -415,16 +410,6 @@
      "dex_no": "0913",
      "sleep_type": "ぐっすり",
      "specialty": "食材"
-    },
-    {
-     "species_name": "バリヤード",
-     "dex_no": "0122",
-     "sleep_type": "すやすや"
-    },
-    {
-     "species_name": "マネネ",
-     "dex_no": "0439",
-     "sleep_type": "ぐっすり"
     },
     {
      "species_name": "キャタピー",
@@ -1230,23 +1215,8 @@
      "specialty": "食材"
     },
     {
-     "species_name": "ミニリュウ",
-     "dex_no": "0147",
-     "sleep_type": "うとうと"
-    },
-    {
-     "species_name": "ハクリュー",
-     "dex_no": "0148",
-     "sleep_type": "うとうと"
-    },
-    {
-     "species_name": "カイリュー",
-     "dex_no": "0149",
-     "sleep_type": "うとうと"
-    },
-    {
-     "species_name": "トゲピー",
-     "dex_no": "0175",
+     "species_name": "ウェルカモ",
+     "dex_no": "0913",
      "sleep_type": "ぐっすり"
     },
     {
@@ -1254,6 +1224,12 @@
      "dex_no": "0084",
      "sleep_type": "ぐっすり",
      "specialty": "きのみ"
+    },
+    {
+     "species_name": "ミニリュウ",
+     "dex_no": "0147",
+     "sleep_type": "うとうと",
+     "specialty": "食材"
     },
     {
      "species_name": "アチャモ",
@@ -1511,11 +1487,6 @@
      "sleep_type": "うとうと"
     },
     {
-     "species_name": "メタモン",
-     "dex_no": "0132",
-     "sleep_type": "すやすや"
-    },
-    {
      "species_name": "マネネ",
      "dex_no": "0439",
      "sleep_type": "ぐっすり",
@@ -1718,7 +1689,148 @@
   {
    "field_name": "ワカクサ本島 EX",
    "source": "https://wikiwiki.jp/poke_sleep/リサーチフィールド/EXモード/ワカクサ本島EX",
-   "encounters": []
+   "encounters": [
+    {
+     "species_name": "ヘルガー",
+     "dex_no": "0229",
+     "sleep_type": "うとうと"
+    },
+    {
+     "species_name": "バンギラス",
+     "dex_no": "0248",
+     "sleep_type": "うとうと"
+    },
+    {
+     "species_name": "ヤミラミ",
+     "dex_no": "0302",
+     "sleep_type": "うとうと"
+    },
+    {
+     "species_name": "チルタリス",
+     "dex_no": "0334",
+     "sleep_type": "うとうと"
+    },
+    {
+     "species_name": "フワライド",
+     "dex_no": "0426",
+     "sleep_type": "うとうと"
+    },
+    {
+     "species_name": "ラウドボーン",
+     "dex_no": "0911",
+     "sleep_type": "うとうと"
+    },
+    {
+     "species_name": "ウインディ",
+     "dex_no": "0059",
+     "sleep_type": "すやすや"
+    },
+    {
+     "species_name": "デンリュウ",
+     "dex_no": "0181",
+     "sleep_type": "すやすや"
+    },
+    {
+     "species_name": "ラルトス",
+     "dex_no": "0280",
+     "sleep_type": "すやすや"
+    },
+    {
+     "species_name": "キルリア",
+     "dex_no": "0281",
+     "sleep_type": "すやすや"
+    },
+    {
+     "species_name": "サーナイト",
+     "dex_no": "0282",
+     "sleep_type": "すやすや"
+    },
+    {
+     "species_name": "アチゲータ",
+     "dex_no": "0910",
+     "sleep_type": "すやすや"
+    },
+    {
+     "species_name": "パモット",
+     "dex_no": "0922",
+     "sleep_type": "すやすや"
+    },
+    {
+     "species_name": "パーモット",
+     "dex_no": "0923",
+     "sleep_type": "すやすや"
+    },
+    {
+     "species_name": "イワーク",
+     "dex_no": "0095",
+     "sleep_type": "ぐっすり"
+    },
+    {
+     "species_name": "ハガネール",
+     "dex_no": "0208",
+     "sleep_type": "ぐっすり"
+    },
+    {
+     "species_name": "サナギラス",
+     "dex_no": "0247",
+     "sleep_type": "ぐっすり"
+    },
+    {
+     "species_name": "ココドラ",
+     "dex_no": "0304",
+     "sleep_type": "ぐっすり"
+    },
+    {
+     "species_name": "コドラ",
+     "dex_no": "0305",
+     "sleep_type": "ぐっすり"
+    },
+    {
+     "species_name": "ボスゴドラ",
+     "dex_no": "0306",
+     "sleep_type": "ぐっすり"
+    },
+    {
+     "species_name": "トドグラー",
+     "dex_no": "0364",
+     "sleep_type": "ぐっすり"
+    },
+    {
+     "species_name": "トドゼルガ",
+     "dex_no": "0365",
+     "sleep_type": "ぐっすり"
+    },
+    {
+     "species_name": "ユキカブリ",
+     "dex_no": "0459",
+     "sleep_type": "ぐっすり"
+    },
+    {
+     "species_name": "ユキノオー",
+     "dex_no": "0460",
+     "sleep_type": "ぐっすり"
+    },
+    {
+     "species_name": "エルレイド",
+     "dex_no": "0475",
+     "sleep_type": "ぐっすり"
+    },
+    {
+     "species_name": "ウェルカモ",
+     "dex_no": "0913",
+     "sleep_type": "ぐっすり"
+    },
+    {
+     "species_name": "ウェーニバル",
+     "dex_no": "0914",
+     "sleep_type": "ぐっすり"
+    },
+    {
+     "species_name": "ハルクジラ",
+     "dex_no": "0975",
+     "sleep_type": "ぐっすり"
+    }
+   ]
   }
  ]
 }

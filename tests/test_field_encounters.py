@@ -7,7 +7,6 @@ from pathlib import Path
 from utils.field_encounters import (
     appears_in,
     field_species,
-    has_data,
     is_exclusive,
     recommend_fields,
     species_fields,
@@ -32,6 +31,7 @@ class FieldEncounterTest(unittest.TestCase):
         self.assertIn("カイリュー", field_species("アンバー渓谷"))
         self.assertIn("ゲンガー", field_species("ゴールド旧発電所"))
         self.assertIn("カメックス", field_species("シアンの砂浜"))
+        self.assertIn("サーナイト", field_species("ワカクサ本島 EX"))
 
     def test_species_fields_is_reverse_of_field_species(self) -> None:
         for f in FIELDS:
@@ -41,8 +41,6 @@ class FieldEncounterTest(unittest.TestCase):
 
     def test_missing_field_is_undecidable_not_false(self) -> None:
         """出現データが無いフィールドは False ではなく None（＝絞り込まない）。"""
-        self.assertFalse(has_data("ワカクサ本島 EX"))
-        self.assertIsNone(appears_in("カイリュー", "ワカクサ本島 EX"))
         self.assertIsNone(appears_in("カイリュー", "存在しないマップ"))
 
     def test_appears_in_is_boolean_when_data_exists(self) -> None:
