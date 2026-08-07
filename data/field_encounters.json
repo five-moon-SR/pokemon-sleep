@@ -10,33 +10,21 @@
    "source": "https://wikiwiki.jp/poke_sleep/リサーチフィールド/ワカクサ本島",
    "encounters": [
     {
-     "species_name": "フシギダネ",
-     "dex_no": "0001",
-     "sleep_type": "うとうと",
-     "specialty": "食材"
-    },
-    {
-     "species_name": "ヒトカゲ",
-     "dex_no": "0004",
-     "sleep_type": "すやすや",
-     "specialty": "食材"
-    },
-    {
-     "species_name": "ゼニガメ",
-     "dex_no": "0007",
-     "sleep_type": "ぐっすり",
-     "specialty": "食材"
-    },
-    {
      "species_name": "キャタピー",
      "dex_no": "0010",
      "sleep_type": "うとうと",
      "specialty": "きのみ"
     },
     {
-     "species_name": "ロコン",
-     "dex_no": "0037",
-     "sleep_type": "すやすや",
+     "species_name": "アーボ",
+     "dex_no": "0023",
+     "sleep_type": "うとうと",
+     "specialty": "きのみ"
+    },
+    {
+     "species_name": "マンキー",
+     "dex_no": "0056",
+     "sleep_type": "うとうと",
      "specialty": "きのみ"
     },
     {
@@ -44,6 +32,36 @@
      "dex_no": "0069",
      "sleep_type": "うとうと",
      "specialty": "食材"
+    },
+    {
+     "species_name": "ゴース",
+     "dex_no": "0092",
+     "sleep_type": "うとうと",
+     "specialty": "食材"
+    },
+    {
+     "species_name": "グレッグル",
+     "dex_no": "0453",
+     "sleep_type": "うとうと",
+     "specialty": "食材"
+    },
+    {
+     "species_name": "コラッタ",
+     "dex_no": "0019",
+     "sleep_type": "すやすや",
+     "specialty": "きのみ"
+    },
+    {
+     "species_name": "ディグダ",
+     "dex_no": "0050",
+     "sleep_type": "すやすや",
+     "specialty": "食材"
+    },
+    {
+     "species_name": "メリープ",
+     "dex_no": "0179",
+     "sleep_type": "すやすや",
+     "specialty": "スキル"
     },
     {
      "species_name": "イシツブテ",
@@ -64,218 +82,14 @@
      "specialty": "きのみ"
     },
     {
-     "species_name": "ゴース",
-     "dex_no": "0092",
-     "sleep_type": "うとうと",
-     "specialty": "食材"
-    },
-    {
-     "species_name": "イーブイ",
-     "dex_no": "0133",
-     "sleep_type": "すやすや",
-     "specialty": "スキル"
-    },
-    {
-     "species_name": "チコリータ",
-     "dex_no": "0152",
-     "sleep_type": "うとうと",
-     "specialty": "きのみ"
-    },
-    {
-     "species_name": "ヒノアラシ",
-     "dex_no": "0155",
-     "sleep_type": "すやすや",
-     "specialty": "きのみ"
-    },
-    {
-     "species_name": "ワニノコ",
-     "dex_no": "0158",
+     "species_name": "カラカラ",
+     "dex_no": "0104",
      "sleep_type": "ぐっすり",
      "specialty": "きのみ"
     },
     {
      "species_name": "ピチュー",
      "dex_no": "0172",
-     "sleep_type": "ぐっすり",
-     "specialty": "きのみ"
-    },
-    {
-     "species_name": "ププリン",
-     "dex_no": "0174",
-     "sleep_type": "ぐっすり",
-     "specialty": "スキル"
-    },
-    {
-     "species_name": "ウパー",
-     "dex_no": "0194",
-     "sleep_type": "ぐっすり",
-     "specialty": "食材"
-    },
-    {
-     "species_name": "ヨーギラス",
-     "dex_no": "0246",
-     "sleep_type": "ぐっすり",
-     "specialty": "食材"
-    },
-    {
-     "species_name": "タマザラシ",
-     "dex_no": "0363",
-     "sleep_type": "ぐっすり",
-     "specialty": "きのみ"
-    },
-    {
-     "species_name": "ピンプク",
-     "dex_no": "0440",
-     "sleep_type": "ぐっすり",
-     "specialty": "食材"
-    },
-    {
-     "species_name": "キュワワー",
-     "dex_no": "0764",
-     "sleep_type": "すやすや",
-     "specialty": "食材"
-    },
-    {
-     "species_name": "ニャオハ",
-     "dex_no": "0906",
-     "sleep_type": "うとうと",
-     "specialty": "食材"
-    },
-    {
-     "species_name": "ホゲータ",
-     "dex_no": "0909",
-     "sleep_type": "すやすや",
-     "specialty": "食材"
-    },
-    {
-     "species_name": "クワッス",
-     "dex_no": "0912",
-     "sleep_type": "ぐっすり",
-     "specialty": "食材"
-    },
-    {
-     "species_name": "パモ",
-     "dex_no": "0921",
-     "sleep_type": "すやすや",
-     "specialty": "スキル"
-    }
-   ]
-  },
-  {
-   "field_name": "シアンの砂浜",
-   "source": "https://wikiwiki.jp/poke_sleep/リサーチフィールド/シアンの砂浜",
-   "encounters": [
-    {
-     "species_name": "ゼニガメ",
-     "dex_no": "0007",
-     "sleep_type": "ぐっすり",
-     "specialty": "食材"
-    },
-    {
-     "species_name": "カメール",
-     "dex_no": "0008",
-     "sleep_type": "ぐっすり",
-     "specialty": "食材"
-    },
-    {
-     "species_name": "カメックス",
-     "dex_no": "0009",
-     "sleep_type": "ぐっすり",
-     "specialty": "食材"
-    },
-    {
-     "species_name": "ピッピ",
-     "dex_no": "0035",
-     "sleep_type": "すやすや",
-     "specialty": "きのみ"
-    },
-    {
-     "species_name": "ピクシー",
-     "dex_no": "0036",
-     "sleep_type": "すやすや",
-     "specialty": "きのみ"
-    },
-    {
-     "species_name": "プリン",
-     "dex_no": "0039",
-     "sleep_type": "すやすや",
-     "specialty": "スキル"
-    },
-    {
-     "species_name": "プクリン",
-     "dex_no": "0040",
-     "sleep_type": "すやすや",
-     "specialty": "スキル"
-    },
-    {
-     "species_name": "コダック",
-     "dex_no": "0054",
-     "sleep_type": "うとうと",
-     "specialty": "スキル"
-    },
-    {
-     "species_name": "ゴルダック",
-     "dex_no": "0055",
-     "sleep_type": "ぐっすり",
-     "specialty": "スキル"
-    },
-    {
-     "species_name": "ヤドン",
-     "dex_no": "0079",
-     "sleep_type": "すやすや",
-     "specialty": "スキル"
-    },
-    {
-     "species_name": "ヤドラン",
-     "dex_no": "0080",
-     "sleep_type": "すやすや",
-     "specialty": "スキル"
-    },
-    {
-     "species_name": "カモネギ",
-     "dex_no": "0083",
-     "sleep_type": "ぐっすり",
-     "specialty": "食材"
-    },
-    {
-     "species_name": "ドードー",
-     "dex_no": "0084",
-     "sleep_type": "ぐっすり",
-     "specialty": "きのみ"
-    },
-    {
-     "species_name": "ドードリオ",
-     "dex_no": "0085",
-     "sleep_type": "ぐっすり",
-     "specialty": "きのみ"
-    },
-    {
-     "species_name": "シャワーズ",
-     "dex_no": "0134",
-     "sleep_type": "ぐっすり",
-     "specialty": "スキル"
-    },
-    {
-     "species_name": "ワニノコ",
-     "dex_no": "0158",
-     "sleep_type": "ぐっすり",
-     "specialty": "きのみ"
-    },
-    {
-     "species_name": "アリゲイツ",
-     "dex_no": "0159",
-     "sleep_type": "ぐっすり",
-     "specialty": "きのみ"
-    },
-    {
-     "species_name": "オーダイル",
-     "dex_no": "0160",
-     "sleep_type": "ぐっすり",
-     "specialty": "きのみ"
-    },
-    {
-     "species_name": "ピィ",
-     "dex_no": "0173",
      "sleep_type": "ぐっすり",
      "specialty": "きのみ"
     },
@@ -292,173 +106,59 @@
      "specialty": "スキル"
     },
     {
-     "species_name": "トゲチック",
-     "dex_no": "0176",
-     "sleep_type": "すやすや",
-     "specialty": "スキル"
-    },
-    {
-     "species_name": "ウパー",
-     "dex_no": "0194",
-     "sleep_type": "ぐっすり",
-     "specialty": "食材"
-    },
-    {
-     "species_name": "ヌオー",
-     "dex_no": "0195",
-     "sleep_type": "ぐっすり",
-     "specialty": "食材"
-    },
-    {
-     "species_name": "ヤドキング",
-     "dex_no": "0199",
-     "sleep_type": "すやすや",
-     "specialty": "スキル"
-    },
-    {
-     "species_name": "デリバード",
-     "dex_no": "0225",
-     "sleep_type": "うとうと",
-     "specialty": "食材"
-    },
-    {
-     "species_name": "スイクン",
-     "dex_no": "0245",
-     "sleep_type": "ぐっすり",
-     "specialty": "スキル"
-    },
-    {
-     "species_name": "ミズゴロウ",
-     "dex_no": "0258",
-     "sleep_type": "ぐっすり",
-     "specialty": "きのみ"
-    },
-    {
      "species_name": "チルット",
      "dex_no": "0333",
      "sleep_type": "ぐっすり",
      "specialty": "きのみ"
     },
     {
-     "species_name": "ポッチャマ",
-     "dex_no": "0393",
+     "species_name": "ソーナノ",
+     "dex_no": "0360",
+     "sleep_type": "ぐっすり",
+     "specialty": "スキル"
+    },
+    {
+     "species_name": "タマザラシ",
+     "dex_no": "0363",
      "sleep_type": "ぐっすり",
      "specialty": "きのみ"
     },
     {
-     "species_name": "ポッタイシ",
-     "dex_no": "0394",
-     "sleep_type": "ぐっすり",
-     "specialty": "きのみ"
-    },
-    {
-     "species_name": "トゲキッス",
-     "dex_no": "0468",
-     "sleep_type": "すやすや",
-     "specialty": "スキル"
-    },
-    {
-     "species_name": "ワシボン",
-     "dex_no": "0627",
+     "species_name": "ウソハチ",
+     "dex_no": "0438",
      "sleep_type": "ぐっすり",
      "specialty": "スキル"
     },
     {
-     "species_name": "ウォーグル",
-     "dex_no": "0628",
-     "sleep_type": "ぐっすり",
+     "species_name": "フシギダネ",
+     "dex_no": "0001",
+     "sleep_type": "うとうと",
+     "specialty": "食材"
+    },
+    {
+     "species_name": "コダック",
+     "dex_no": "0054",
+     "sleep_type": "うとうと",
      "specialty": "スキル"
     },
     {
-     "species_name": "ニンフィア",
-     "dex_no": "0700",
-     "sleep_type": "すやすや",
-     "specialty": "スキル"
-    },
-    {
-     "species_name": "アブリー",
-     "dex_no": "0742",
-     "sleep_type": "すやすや",
-     "specialty": "食材"
-    },
-    {
-     "species_name": "アブリボン",
-     "dex_no": "0743",
-     "sleep_type": "すやすや",
-     "specialty": "食材"
-    },
-    {
-     "species_name": "キュワワー",
-     "dex_no": "0764",
-     "sleep_type": "すやすや",
-     "specialty": "食材"
-    },
-    {
-     "species_name": "ウッウ",
-     "dex_no": "0845",
-     "sleep_type": "ぐっすり",
-     "specialty": "食材"
-    },
-    {
-     "species_name": "クワッス",
-     "dex_no": "0912",
-     "sleep_type": "ぐっすり",
-     "specialty": "食材"
-    },
-    {
-     "species_name": "ウェルカモ",
-     "dex_no": "0913",
-     "sleep_type": "ぐっすり",
-     "specialty": "食材"
-    },
-    {
-     "species_name": "キャタピー",
-     "dex_no": "0010",
+     "species_name": "チコリータ",
+     "dex_no": "0152",
      "sleep_type": "うとうと",
      "specialty": "きのみ"
     },
     {
-     "species_name": "マダツボミ",
-     "dex_no": "0069",
+     "species_name": "デルビル",
+     "dex_no": "0228",
      "sleep_type": "うとうと",
-     "specialty": "食材"
+     "specialty": "きのみ"
     },
     {
-     "species_name": "ガルーラ",
-     "dex_no": "0115",
-     "sleep_type": "すやすや",
-     "specialty": "食材"
-    },
-    {
-     "species_name": "カイロス",
-     "dex_no": "0127",
-     "sleep_type": "うとうと",
-     "specialty": "食材"
-    },
-    {
-     "species_name": "イーブイ",
-     "dex_no": "0133",
-     "sleep_type": "すやすや",
-     "specialty": "スキル"
-    },
-    {
-     "species_name": "キモリ",
-     "dex_no": "0252",
+     "species_name": "ゴクリン",
+     "dex_no": "0316",
      "sleep_type": "うとうと",
      "specialty": "スキル"
     },
-    {
-     "species_name": "ホゲータ",
-     "dex_no": "0909",
-     "sleep_type": "すやすや",
-     "specialty": "食材"
-    }
-   ]
-  },
-  {
-   "field_name": "トープ洞窟",
-   "source": "https://wikiwiki.jp/poke_sleep/リサーチフィールド/トープ洞窟",
-   "encounters": [
     {
      "species_name": "ヒトカゲ",
      "dex_no": "0004",
@@ -466,52 +166,10 @@
      "specialty": "食材"
     },
     {
-     "species_name": "リザード",
-     "dex_no": "0005",
+     "species_name": "ニャース",
+     "dex_no": "0052",
      "sleep_type": "すやすや",
-     "specialty": "食材"
-    },
-    {
-     "species_name": "リザードン",
-     "dex_no": "0006",
-     "sleep_type": "すやすや",
-     "specialty": "食材"
-    },
-    {
-     "species_name": "サンド",
-     "dex_no": "0027",
-     "sleep_type": "ぐっすり",
      "specialty": "スキル"
-    },
-    {
-     "species_name": "サンドパン",
-     "dex_no": "0028",
-     "sleep_type": "ぐっすり",
-     "specialty": "スキル"
-    },
-    {
-     "species_name": "ロコン",
-     "dex_no": "0037",
-     "sleep_type": "すやすや",
-     "specialty": "きのみ"
-    },
-    {
-     "species_name": "キュウコン",
-     "dex_no": "0038",
-     "sleep_type": "すやすや",
-     "specialty": "きのみ"
-    },
-    {
-     "species_name": "ディグダ",
-     "dex_no": "0050",
-     "sleep_type": "すやすや",
-     "specialty": "食材"
-    },
-    {
-     "species_name": "ダグトリオ",
-     "dex_no": "0051",
-     "sleep_type": "すやすや",
-     "specialty": "食材"
     },
     {
      "species_name": "ガーディ",
@@ -520,50 +178,8 @@
      "specialty": "スキル"
     },
     {
-     "species_name": "ウインディ",
-     "dex_no": "0059",
-     "sleep_type": "すやすや",
-     "specialty": "スキル"
-    },
-    {
-     "species_name": "イシツブテ",
-     "dex_no": "0074",
-     "sleep_type": "ぐっすり",
-     "specialty": "食材"
-    },
-    {
-     "species_name": "ゴローン",
-     "dex_no": "0075",
-     "sleep_type": "ぐっすり",
-     "specialty": "食材"
-    },
-    {
-     "species_name": "ゴローニャ",
-     "dex_no": "0076",
-     "sleep_type": "ぐっすり",
-     "specialty": "食材"
-    },
-    {
-     "species_name": "イワーク",
-     "dex_no": "0095",
-     "sleep_type": "ぐっすり",
-     "specialty": "きのみ"
-    },
-    {
-     "species_name": "カラカラ",
-     "dex_no": "0104",
-     "sleep_type": "ぐっすり",
-     "specialty": "きのみ"
-    },
-    {
-     "species_name": "ガラガラ",
-     "dex_no": "0105",
-     "sleep_type": "ぐっすり",
-     "specialty": "きのみ"
-    },
-    {
-     "species_name": "ブースター",
-     "dex_no": "0136",
+     "species_name": "ヤドン",
+     "dex_no": "0079",
      "sleep_type": "すやすや",
      "specialty": "スキル"
     },
@@ -574,14 +190,32 @@
      "specialty": "きのみ"
     },
     {
-     "species_name": "マグマラシ",
-     "dex_no": "0156",
+     "species_name": "ナマケロ",
+     "dex_no": "0287",
      "sleep_type": "すやすや",
      "specialty": "きのみ"
     },
     {
-     "species_name": "バクフーン",
-     "dex_no": "0157",
+     "species_name": "ゼニガメ",
+     "dex_no": "0007",
+     "sleep_type": "ぐっすり",
+     "specialty": "食材"
+    },
+    {
+     "species_name": "ワニノコ",
+     "dex_no": "0158",
+     "sleep_type": "ぐっすり",
+     "specialty": "きのみ"
+    },
+    {
+     "species_name": "ピィ",
+     "dex_no": "0173",
+     "sleep_type": "ぐっすり",
+     "specialty": "きのみ"
+    },
+    {
+     "species_name": "ピカチュウ",
+     "dex_no": "0025",
      "sleep_type": "すやすや",
      "specialty": "きのみ"
     },
@@ -592,8 +226,32 @@
      "specialty": "スキル"
     },
     {
-     "species_name": "エンテイ",
-     "dex_no": "0244",
+     "species_name": "リオル",
+     "dex_no": "0447",
+     "sleep_type": "ぐっすり",
+     "specialty": "スキル"
+    },
+    {
+     "species_name": "ピッピ",
+     "dex_no": "0035",
+     "sleep_type": "すやすや",
+     "specialty": "きのみ"
+    },
+    {
+     "species_name": "プリン",
+     "dex_no": "0039",
+     "sleep_type": "すやすや",
+     "specialty": "スキル"
+    },
+    {
+     "species_name": "イーブイ",
+     "dex_no": "0133",
+     "sleep_type": "すやすや",
+     "specialty": "スキル"
+    },
+    {
+     "species_name": "ソーナンス",
+     "dex_no": "0202",
      "sleep_type": "すやすや",
      "specialty": "スキル"
     },
@@ -604,10 +262,52 @@
      "specialty": "食材"
     },
     {
-     "species_name": "サナギラス",
-     "dex_no": "0247",
-     "sleep_type": "ぐっすり",
+     "species_name": "トランセル",
+     "dex_no": "0011",
+     "sleep_type": "うとうと",
+     "specialty": "きのみ"
+    },
+    {
+     "species_name": "キモリ",
+     "dex_no": "0252",
+     "sleep_type": "うとうと",
+     "specialty": "スキル"
+    },
+    {
+     "species_name": "カゲボウズ",
+     "dex_no": "0353",
+     "sleep_type": "うとうと",
+     "specialty": "きのみ"
+    },
+    {
+     "species_name": "ナエトル",
+     "dex_no": "0387",
+     "sleep_type": "うとうと",
+     "specialty": "スキル"
+    },
+    {
+     "species_name": "オンバット",
+     "dex_no": "0714",
+     "sleep_type": "うとうと",
+     "specialty": "スキル"
+    },
+    {
+     "species_name": "ニャオハ",
+     "dex_no": "0906",
+     "sleep_type": "うとうと",
      "specialty": "食材"
+    },
+    {
+     "species_name": "ロコン",
+     "dex_no": "0037",
+     "sleep_type": "すやすや",
+     "specialty": "きのみ"
+    },
+    {
+     "species_name": "ネイティ",
+     "dex_no": "0177",
+     "sleep_type": "すやすや",
+     "specialty": "きのみ"
     },
     {
      "species_name": "アチャモ",
@@ -616,50 +316,68 @@
      "specialty": "きのみ"
     },
     {
-     "species_name": "ヌマクロー",
-     "dex_no": "0259",
-     "sleep_type": "ぐっすり",
-     "specialty": "きのみ"
-    },
-    {
-     "species_name": "ラグラージ",
-     "dex_no": "0260",
-     "sleep_type": "ぐっすり",
-     "specialty": "きのみ"
-    },
-    {
-     "species_name": "ナックラー",
-     "dex_no": "0328",
-     "sleep_type": "ぐっすり",
-     "specialty": "食材"
-    },
-    {
-     "species_name": "ビブラーバ",
-     "dex_no": "0329",
-     "sleep_type": "ぐっすり",
-     "specialty": "食材"
-    },
-    {
-     "species_name": "フライゴン",
-     "dex_no": "0330",
-     "sleep_type": "ぐっすり",
-     "specialty": "食材"
-    },
-    {
-     "species_name": "ドダイトス",
-     "dex_no": "0389",
-     "sleep_type": "ぐっすり",
-     "specialty": "スキル"
-    },
-    {
      "species_name": "ヒコザル",
      "dex_no": "0390",
      "sleep_type": "すやすや",
      "specialty": "スキル"
     },
     {
-     "species_name": "ウソハチ",
-     "dex_no": "0438",
+     "species_name": "ムンナ",
+     "dex_no": "0517",
+     "sleep_type": "すやすや",
+     "specialty": "きのみ"
+    },
+    {
+     "species_name": "アブリー",
+     "dex_no": "0742",
+     "sleep_type": "すやすや",
+     "specialty": "食材"
+    },
+    {
+     "species_name": "ホゲータ",
+     "dex_no": "0909",
+     "sleep_type": "すやすや",
+     "specialty": "食材"
+    },
+    {
+     "species_name": "パモ",
+     "dex_no": "0921",
+     "sleep_type": "すやすや",
+     "specialty": "スキル"
+    },
+    {
+     "species_name": "サンド",
+     "dex_no": "0027",
+     "sleep_type": "ぐっすり",
+     "specialty": "スキル"
+    },
+    {
+     "species_name": "ウパー",
+     "dex_no": "0194",
+     "sleep_type": "ぐっすり",
+     "specialty": "食材"
+    },
+    {
+     "species_name": "ミズゴロウ",
+     "dex_no": "0258",
+     "sleep_type": "ぐっすり",
+     "specialty": "きのみ"
+    },
+    {
+     "species_name": "ポッチャマ",
+     "dex_no": "0393",
+     "sleep_type": "ぐっすり",
+     "specialty": "きのみ"
+    },
+    {
+     "species_name": "ピンプク",
+     "dex_no": "0440",
+     "sleep_type": "ぐっすり",
+     "specialty": "食材"
+    },
+    {
+     "species_name": "ワシボン",
+     "dex_no": "0627",
      "sleep_type": "ぐっすり",
      "specialty": "スキル"
     },
@@ -670,52 +388,118 @@
      "specialty": "きのみ"
     },
     {
-     "species_name": "ガチゴラス",
-     "dex_no": "0697",
+     "species_name": "エレズン",
+     "dex_no": "0848",
      "sleep_type": "ぐっすり",
-     "specialty": "きのみ"
+     "specialty": "スキル"
     },
     {
-     "species_name": "ホゲータ",
-     "dex_no": "0909",
-     "sleep_type": "すやすや",
+     "species_name": "クワッス",
+     "dex_no": "0912",
+     "sleep_type": "ぐっすり",
      "specialty": "食材"
     },
     {
-     "species_name": "アチゲータ",
-     "dex_no": "0910",
-     "sleep_type": "すやすや",
+     "species_name": "アルクジラ",
+     "dex_no": "0974",
+     "sleep_type": "ぐっすり",
      "specialty": "食材"
     },
     {
-     "species_name": "ゴース",
-     "dex_no": "0092",
+     "species_name": "ウツドン",
+     "dex_no": "0070",
      "sleep_type": "うとうと",
      "specialty": "食材"
     },
     {
-     "species_name": "デルビル",
-     "dex_no": "0228",
+     "species_name": "ウパー(パルデア)",
+     "dex_no": "0194",
+     "sleep_type": "うとうと",
+     "specialty": "食材"
+    },
+    {
+     "species_name": "マルノーム",
+     "dex_no": "0317",
+     "sleep_type": "うとうと",
+     "specialty": "スキル"
+    },
+    {
+     "species_name": "ドクロッグ",
+     "dex_no": "0454",
+     "sleep_type": "うとうと",
+     "specialty": "食材"
+    },
+    {
+     "species_name": "モココ",
+     "dex_no": "0180",
+     "sleep_type": "すやすや",
+     "specialty": "スキル"
+    },
+    {
+     "species_name": "レアコイル",
+     "dex_no": "0082",
+     "sleep_type": "ぐっすり",
+     "specialty": "スキル"
+    },
+    {
+     "species_name": "ガラガラ",
+     "dex_no": "0105",
+     "sleep_type": "ぐっすり",
+     "specialty": "きのみ"
+    },
+    {
+     "species_name": "ヤルキモノ",
+     "dex_no": "0288",
      "sleep_type": "うとうと",
      "specialty": "きのみ"
     },
     {
-     "species_name": "ミズゴロウ",
-     "dex_no": "0258",
-     "sleep_type": "ぐっすり",
-     "specialty": "きのみ"
-    }
-   ]
-  },
-  {
-   "field_name": "ウノハナ雪原",
-   "source": "https://wikiwiki.jp/poke_sleep/リサーチフィールド/ウノハナ雪原",
-   "encounters": [
+     "species_name": "フワンテ",
+     "dex_no": "0425",
+     "sleep_type": "うとうと",
+     "specialty": "スキル"
+    },
     {
-     "species_name": "コラッタ",
-     "dex_no": "0019",
-     "sleep_type": "すやすや",
+     "species_name": "ゴローン",
+     "dex_no": "0075",
+     "sleep_type": "ぐっすり",
+     "specialty": "食材"
+    },
+    {
+     "species_name": "フシギソウ",
+     "dex_no": "0002",
+     "sleep_type": "うとうと",
+     "specialty": "食材"
+    },
+    {
+     "species_name": "アーボック",
+     "dex_no": "0024",
+     "sleep_type": "うとうと",
      "specialty": "きのみ"
+    },
+    {
+     "species_name": "オコリザル",
+     "dex_no": "0057",
+     "sleep_type": "うとうと",
+     "specialty": "きのみ"
+    },
+    {
+     "species_name": "ゴースト",
+     "dex_no": "0093",
+     "sleep_type": "うとうと",
+     "specialty": "食材"
+    },
+    {
+     "species_name": "ベイリーフ",
+     "dex_no": "0153",
+     "sleep_type": "うとうと",
+     "specialty": "きのみ"
+    },
+    {
+     "species_name": "リザード",
+     "dex_no": "0005",
+     "sleep_type": "すやすや",
+     "specialty": "食材"
     },
     {
      "species_name": "ラッタ",
@@ -724,26 +508,32 @@
      "specialty": "きのみ"
     },
     {
-     "species_name": "ニャース",
-     "dex_no": "0052",
+     "species_name": "マグマラシ",
+     "dex_no": "0156",
+     "sleep_type": "すやすや",
+     "specialty": "きのみ"
+    },
+    {
+     "species_name": "トゲチック",
+     "dex_no": "0176",
      "sleep_type": "すやすや",
      "specialty": "スキル"
     },
     {
-     "species_name": "ペルシアン",
-     "dex_no": "0053",
-     "sleep_type": "すやすや",
-     "specialty": "スキル"
-    },
-    {
-     "species_name": "ラッキー",
-     "dex_no": "0113",
-     "sleep_type": "すやすや",
+     "species_name": "カメール",
+     "dex_no": "0008",
+     "sleep_type": "ぐっすり",
      "specialty": "食材"
     },
     {
-     "species_name": "ガルーラ",
-     "dex_no": "0115",
+     "species_name": "アリゲイツ",
+     "dex_no": "0159",
+     "sleep_type": "ぐっすり",
+     "specialty": "きのみ"
+    },
+    {
+     "species_name": "ダグトリオ",
+     "dex_no": "0051",
      "sleep_type": "すやすや",
      "specialty": "食材"
     },
@@ -754,16 +544,10 @@
      "specialty": "食材"
     },
     {
-     "species_name": "イーブイ",
-     "dex_no": "0133",
-     "sleep_type": "すやすや",
-     "specialty": "スキル"
-    },
-    {
-     "species_name": "ブラッキー",
-     "dex_no": "0197",
-     "sleep_type": "うとうと",
-     "specialty": "スキル"
+     "species_name": "ドードリオ",
+     "dex_no": "0085",
+     "sleep_type": "ぐっすり",
+     "specialty": "きのみ"
     },
     {
      "species_name": "ヤミカラス",
@@ -778,50 +562,32 @@
      "specialty": "きのみ"
     },
     {
-     "species_name": "デルビル",
-     "dex_no": "0228",
-     "sleep_type": "うとうと",
-     "specialty": "きのみ"
-    },
-    {
-     "species_name": "ヘルガー",
-     "dex_no": "0229",
-     "sleep_type": "うとうと",
-     "specialty": "きのみ"
-    },
-    {
-     "species_name": "ハピナス",
-     "dex_no": "0242",
+     "species_name": "ペルシアン",
+     "dex_no": "0053",
      "sleep_type": "すやすや",
-     "specialty": "食材"
+     "specialty": "スキル"
     },
     {
-     "species_name": "バンギラス",
-     "dex_no": "0248",
+     "species_name": "ヤドラン",
+     "dex_no": "0080",
+     "sleep_type": "すやすや",
+     "specialty": "スキル"
+    },
+    {
+     "species_name": "カイロス",
+     "dex_no": "0127",
      "sleep_type": "うとうと",
      "specialty": "食材"
     },
     {
-     "species_name": "ナマケロ",
-     "dex_no": "0287",
-     "sleep_type": "すやすや",
-     "specialty": "きのみ"
-    },
-    {
-     "species_name": "ヤルキモノ",
-     "dex_no": "0288",
+     "species_name": "ヘラクロス",
+     "dex_no": "0214",
      "sleep_type": "うとうと",
-     "specialty": "きのみ"
+     "specialty": "スキル"
     },
     {
-     "species_name": "ケッキング",
-     "dex_no": "0289",
-     "sleep_type": "すやすや",
-     "specialty": "きのみ"
-    },
-    {
-     "species_name": "ヤミラミ",
-     "dex_no": "0302",
+     "species_name": "ジュプトル",
+     "dex_no": "0253",
      "sleep_type": "うとうと",
      "specialty": "スキル"
     },
@@ -832,34 +598,196 @@
      "specialty": "食材"
     },
     {
-     "species_name": "タマザラシ",
-     "dex_no": "0363",
-     "sleep_type": "ぐっすり",
-     "specialty": "きのみ"
-    },
-    {
-     "species_name": "トドグラー",
-     "dex_no": "0364",
-     "sleep_type": "ぐっすり",
-     "specialty": "きのみ"
-    },
-    {
-     "species_name": "トドゼルガ",
-     "dex_no": "0365",
-     "sleep_type": "ぐっすり",
-     "specialty": "きのみ"
-    },
-    {
-     "species_name": "ドンカラス",
-     "dex_no": "0430",
+     "species_name": "ハヤシガメ",
+     "dex_no": "0388",
      "sleep_type": "うとうと",
      "specialty": "スキル"
     },
     {
-     "species_name": "ピンプク",
-     "dex_no": "0440",
+     "species_name": "ニャローテ",
+     "dex_no": "0907",
+     "sleep_type": "うとうと",
+     "specialty": "食材"
+    },
+    {
+     "species_name": "ガルーラ",
+     "dex_no": "0115",
+     "sleep_type": "すやすや",
+     "specialty": "食材"
+    },
+    {
+     "species_name": "デデンネ",
+     "dex_no": "0702",
+     "sleep_type": "すやすや",
+     "specialty": "スキル"
+    },
+    {
+     "species_name": "ワカシャモ",
+     "dex_no": "0256",
+     "sleep_type": "ぐっすり",
+     "specialty": "きのみ"
+    },
+    {
+     "species_name": "ヌマクロー",
+     "dex_no": "0259",
+     "sleep_type": "ぐっすり",
+     "specialty": "きのみ"
+    },
+    {
+     "species_name": "モウカザル",
+     "dex_no": "0391",
+     "sleep_type": "ぐっすり",
+     "specialty": "スキル"
+    },
+    {
+     "species_name": "ポッタイシ",
+     "dex_no": "0394",
+     "sleep_type": "ぐっすり",
+     "specialty": "きのみ"
+    },
+    {
+     "species_name": "デリバード",
+     "dex_no": "0225",
+     "sleep_type": "うとうと",
+     "specialty": "食材"
+    },
+    {
+     "species_name": "キュワワー",
+     "dex_no": "0764",
+     "sleep_type": "すやすや",
+     "specialty": "食材"
+    },
+    {
+     "species_name": "オンバーン",
+     "dex_no": "0715",
+     "sleep_type": "うとうと",
+     "specialty": "スキル"
+    },
+    {
+     "species_name": "ネイティオ",
+     "dex_no": "0178",
+     "sleep_type": "すやすや",
+     "specialty": "きのみ"
+    },
+    {
+     "species_name": "アブリボン",
+     "dex_no": "0743",
+     "sleep_type": "すやすや",
+     "specialty": "食材"
+    },
+    {
+     "species_name": "サンドパン",
+     "dex_no": "0028",
+     "sleep_type": "ぐっすり",
+     "specialty": "スキル"
+    },
+    {
+     "species_name": "ウォーグル",
+     "dex_no": "0628",
+     "sleep_type": "ぐっすり",
+     "specialty": "スキル"
+    },
+    {
+     "species_name": "バタフリー",
+     "dex_no": "0012",
+     "sleep_type": "うとうと",
+     "specialty": "きのみ"
+    },
+    {
+     "species_name": "ジュペッタ",
+     "dex_no": "0354",
+     "sleep_type": "うとうと",
+     "specialty": "きのみ"
+    },
+    {
+     "species_name": "ラッキー",
+     "dex_no": "0113",
+     "sleep_type": "すやすや",
+     "specialty": "食材"
+    },
+    {
+     "species_name": "プラスル",
+     "dex_no": "0311",
+     "sleep_type": "すやすや",
+     "specialty": "スキル"
+    },
+    {
+     "species_name": "マイナン",
+     "dex_no": "0312",
+     "sleep_type": "すやすや",
+     "specialty": "スキル"
+    },
+    {
+     "species_name": "キュウコン",
+     "dex_no": "0038",
+     "sleep_type": "すやすや",
+     "specialty": "きのみ"
+    },
+    {
+     "species_name": "ヌオー",
+     "dex_no": "0195",
      "sleep_type": "ぐっすり",
      "specialty": "食材"
+    },
+    {
+     "species_name": "ウッウ",
+     "dex_no": "0845",
+     "sleep_type": "ぐっすり",
+     "specialty": "食材"
+    },
+    {
+     "species_name": "ウツボット",
+     "dex_no": "0071",
+     "sleep_type": "うとうと",
+     "specialty": "食材"
+    },
+    {
+     "species_name": "ミミッキュ",
+     "dex_no": "0778",
+     "sleep_type": "うとうと",
+     "specialty": "スキル"
+    },
+    {
+     "species_name": "ドオー",
+     "dex_no": "0980",
+     "sleep_type": "うとうと",
+     "specialty": "食材"
+    },
+    {
+     "species_name": "プクリン",
+     "dex_no": "0040",
+     "sleep_type": "すやすや",
+     "specialty": "スキル"
+    },
+    {
+     "species_name": "ピクシー",
+     "dex_no": "0036",
+     "sleep_type": "すやすや",
+     "specialty": "きのみ"
+    },
+    {
+     "species_name": "ニンフィア",
+     "dex_no": "0700",
+     "sleep_type": "すやすや",
+     "specialty": "スキル"
+    },
+    {
+     "species_name": "カモネギ",
+     "dex_no": "0083",
+     "sleep_type": "ぐっすり",
+     "specialty": "食材"
+    },
+    {
+     "species_name": "クチート",
+     "dex_no": "0303",
+     "sleep_type": "ぐっすり",
+     "specialty": "食材"
+    },
+    {
+     "species_name": "ツボツボ",
+     "dex_no": "0213",
+     "sleep_type": "うとうと",
+     "specialty": "スキル"
     },
     {
      "species_name": "ミカルゲ",
@@ -868,21 +796,93 @@
      "specialty": "食材"
     },
     {
-     "species_name": "ユキカブリ",
-     "dex_no": "0459",
-     "sleep_type": "ぐっすり",
-     "specialty": "食材"
-    },
-    {
-     "species_name": "ユキノオー",
-     "dex_no": "0460",
-     "sleep_type": "ぐっすり",
-     "specialty": "食材"
-    },
-    {
-     "species_name": "マニューラ",
-     "dex_no": "0461",
+     "species_name": "ジジーロン",
+     "dex_no": "0780",
      "sleep_type": "うとうと",
+     "specialty": "食材"
+    },
+    {
+     "species_name": "ライチュウ",
+     "dex_no": "0026",
+     "sleep_type": "すやすや",
+     "specialty": "きのみ"
+    },
+    {
+     "species_name": "トゲデマル",
+     "dex_no": "0777",
+     "sleep_type": "ぐっすり",
+     "specialty": "スキル"
+    },
+    {
+     "species_name": "フシギバナ",
+     "dex_no": "0003",
+     "sleep_type": "うとうと",
+     "specialty": "食材"
+    },
+    {
+     "species_name": "メガニウム",
+     "dex_no": "0154",
+     "sleep_type": "うとうと",
+     "specialty": "きのみ"
+    },
+    {
+     "species_name": "ブラッキー",
+     "dex_no": "0197",
+     "sleep_type": "うとうと",
+     "specialty": "スキル"
+    },
+    {
+     "species_name": "リーフィア",
+     "dex_no": "0470",
+     "sleep_type": "うとうと",
+     "specialty": "スキル"
+    },
+    {
+     "species_name": "リザードン",
+     "dex_no": "0006",
+     "sleep_type": "すやすや",
+     "specialty": "食材"
+    },
+    {
+     "species_name": "サンダース",
+     "dex_no": "0135",
+     "sleep_type": "すやすや",
+     "specialty": "スキル"
+    },
+    {
+     "species_name": "ブースター",
+     "dex_no": "0136",
+     "sleep_type": "すやすや",
+     "specialty": "スキル"
+    },
+    {
+     "species_name": "バクフーン",
+     "dex_no": "0157",
+     "sleep_type": "すやすや",
+     "specialty": "きのみ"
+    },
+    {
+     "species_name": "エーフィ",
+     "dex_no": "0196",
+     "sleep_type": "すやすや",
+     "specialty": "スキル"
+    },
+    {
+     "species_name": "カメックス",
+     "dex_no": "0009",
+     "sleep_type": "ぐっすり",
+     "specialty": "食材"
+    },
+    {
+     "species_name": "シャワーズ",
+     "dex_no": "0134",
+     "sleep_type": "ぐっすり",
+     "specialty": "スキル"
+    },
+    {
+     "species_name": "オーダイル",
+     "dex_no": "0160",
+     "sleep_type": "ぐっすり",
      "specialty": "きのみ"
     },
     {
@@ -892,10 +892,40 @@
      "specialty": "スキル"
     },
     {
-     "species_name": "ダークライ",
-     "dex_no": "0491",
+     "species_name": "トゲキッス",
+     "dex_no": "0468",
+     "sleep_type": "すやすや",
+     "specialty": "スキル"
+    },
+    {
+     "species_name": "ジュカイン",
+     "dex_no": "0254",
      "sleep_type": "うとうと",
-     "specialty": "オール"
+     "specialty": "スキル"
+    },
+    {
+     "species_name": "ドンカラス",
+     "dex_no": "0430",
+     "sleep_type": "うとうと",
+     "specialty": "スキル"
+    },
+    {
+     "species_name": "マニューラ",
+     "dex_no": "0461",
+     "sleep_type": "うとうと",
+     "specialty": "きのみ"
+    },
+    {
+     "species_name": "ストリンダー(ハイ)",
+     "dex_no": "0849",
+     "sleep_type": "うとうと",
+     "specialty": "スキル"
+    },
+    {
+     "species_name": "ストリンダー(ロー)",
+     "dex_no": "0849",
+     "sleep_type": "うとうと",
+     "specialty": "スキル"
     },
     {
      "species_name": "マスカーニャ",
@@ -904,26 +934,813 @@
      "specialty": "食材"
     },
     {
-     "species_name": "アルクジラ",
-     "dex_no": "0974",
+     "species_name": "ハピナス",
+     "dex_no": "0242",
+     "sleep_type": "すやすや",
+     "specialty": "食材"
+    },
+    {
+     "species_name": "ケッキング",
+     "dex_no": "0289",
+     "sleep_type": "すやすや",
+     "specialty": "きのみ"
+    },
+    {
+     "species_name": "ムシャーナ",
+     "dex_no": "0518",
+     "sleep_type": "すやすや",
+     "specialty": "きのみ"
+    },
+    {
+     "species_name": "バシャーモ",
+     "dex_no": "0257",
+     "sleep_type": "ぐっすり",
+     "specialty": "きのみ"
+    },
+    {
+     "species_name": "ラグラージ",
+     "dex_no": "0260",
+     "sleep_type": "ぐっすり",
+     "specialty": "きのみ"
+    },
+    {
+     "species_name": "ドダイトス",
+     "dex_no": "0389",
+     "sleep_type": "ぐっすり",
+     "specialty": "スキル"
+    },
+    {
+     "species_name": "ゴウカザル",
+     "dex_no": "0392",
+     "sleep_type": "ぐっすり",
+     "specialty": "スキル"
+    },
+    {
+     "species_name": "エンペルト",
+     "dex_no": "0395",
+     "sleep_type": "ぐっすり",
+     "specialty": "きのみ"
+    },
+    {
+     "species_name": "ジバコイル",
+     "dex_no": "0462",
+     "sleep_type": "ぐっすり",
+     "specialty": "スキル"
+    },
+    {
+     "species_name": "ガチゴラス",
+     "dex_no": "0697",
+     "sleep_type": "ぐっすり",
+     "specialty": "きのみ"
+    },
+    {
+     "species_name": "ラティアス",
+     "dex_no": "0380",
+     "sleep_type": "うとうと",
+     "specialty": "スキル"
+    },
+    {
+     "species_name": "ラティオス",
+     "dex_no": "0381",
+     "sleep_type": "うとうと",
+     "specialty": "スキル"
+    },
+    {
+     "species_name": "ライコウ",
+     "dex_no": "0243",
+     "sleep_type": "すやすや",
+     "specialty": "スキル"
+    },
+    {
+     "species_name": "エンテイ",
+     "dex_no": "0244",
+     "sleep_type": "すやすや",
+     "specialty": "スキル"
+    },
+    {
+     "species_name": "クレセリア",
+     "dex_no": "0488",
+     "sleep_type": "すやすや",
+     "specialty": "スキル"
+    },
+    {
+     "species_name": "スイクン",
+     "dex_no": "0245",
+     "sleep_type": "ぐっすり",
+     "specialty": "スキル"
+    }
+   ]
+  },
+  {
+   "field_name": "シアンの砂浜",
+   "source": "https://wikiwiki.jp/poke_sleep/リサーチフィールド/シアンの砂浜",
+   "encounters": [
+    {
+     "species_name": "キャタピー",
+     "dex_no": "0010",
+     "sleep_type": "うとうと",
+     "specialty": "きのみ"
+    },
+    {
+     "species_name": "コダック",
+     "dex_no": "0054",
+     "sleep_type": "うとうと",
+     "specialty": "スキル"
+    },
+    {
+     "species_name": "マダツボミ",
+     "dex_no": "0069",
+     "sleep_type": "うとうと",
+     "specialty": "食材"
+    },
+    {
+     "species_name": "ゴクリン",
+     "dex_no": "0316",
+     "sleep_type": "うとうと",
+     "specialty": "スキル"
+    },
+    {
+     "species_name": "グレッグル",
+     "dex_no": "0453",
+     "sleep_type": "うとうと",
+     "specialty": "食材"
+    },
+    {
+     "species_name": "ピカチュウ",
+     "dex_no": "0025",
+     "sleep_type": "すやすや",
+     "specialty": "きのみ"
+    },
+    {
+     "species_name": "ピッピ",
+     "dex_no": "0035",
+     "sleep_type": "すやすや",
+     "specialty": "きのみ"
+    },
+    {
+     "species_name": "プリン",
+     "dex_no": "0039",
+     "sleep_type": "すやすや",
+     "specialty": "スキル"
+    },
+    {
+     "species_name": "ヤドン",
+     "dex_no": "0079",
+     "sleep_type": "すやすや",
+     "specialty": "スキル"
+    },
+    {
+     "species_name": "イーブイ",
+     "dex_no": "0133",
+     "sleep_type": "すやすや",
+     "specialty": "スキル"
+    },
+    {
+     "species_name": "ゼニガメ",
+     "dex_no": "0007",
      "sleep_type": "ぐっすり",
      "specialty": "食材"
     },
     {
-     "species_name": "ハルクジラ",
-     "dex_no": "0975",
+     "species_name": "ワニノコ",
+     "dex_no": "0158",
+     "sleep_type": "ぐっすり",
+     "specialty": "きのみ"
+    },
+    {
+     "species_name": "ピィ",
+     "dex_no": "0173",
+     "sleep_type": "ぐっすり",
+     "specialty": "きのみ"
+    },
+    {
+     "species_name": "ププリン",
+     "dex_no": "0174",
+     "sleep_type": "ぐっすり",
+     "specialty": "スキル"
+    },
+    {
+     "species_name": "ウソッキー",
+     "dex_no": "0185",
+     "sleep_type": "ぐっすり",
+     "specialty": "スキル"
+    },
+    {
+     "species_name": "ウソハチ",
+     "dex_no": "0438",
+     "sleep_type": "ぐっすり",
+     "specialty": "スキル"
+    },
+    {
+     "species_name": "マネネ",
+     "dex_no": "0439",
      "sleep_type": "ぐっすり",
      "specialty": "食材"
     },
     {
-     "species_name": "ルカリオ",
-     "dex_no": "0448",
-     "sleep_type": "ぐっすり"
+     "species_name": "キモリ",
+     "dex_no": "0252",
+     "sleep_type": "うとうと",
+     "specialty": "スキル"
     },
+    {
+     "species_name": "アブリー",
+     "dex_no": "0742",
+     "sleep_type": "すやすや",
+     "specialty": "食材"
+    },
+    {
+     "species_name": "ホゲータ",
+     "dex_no": "0909",
+     "sleep_type": "すやすや",
+     "specialty": "食材"
+    },
+    {
+     "species_name": "ウパー",
+     "dex_no": "0194",
+     "sleep_type": "ぐっすり",
+     "specialty": "食材"
+    },
+    {
+     "species_name": "ポッチャマ",
+     "dex_no": "0393",
+     "sleep_type": "ぐっすり",
+     "specialty": "きのみ"
+    },
+    {
+     "species_name": "ワシボン",
+     "dex_no": "0627",
+     "sleep_type": "ぐっすり",
+     "specialty": "スキル"
+    },
+    {
+     "species_name": "ドクロッグ",
+     "dex_no": "0454",
+     "sleep_type": "うとうと",
+     "specialty": "食材"
+    },
+    {
+     "species_name": "バリヤード",
+     "dex_no": "0122",
+     "sleep_type": "すやすや",
+     "specialty": "食材"
+    },
+    {
+     "species_name": "カメール",
+     "dex_no": "0008",
+     "sleep_type": "ぐっすり",
+     "specialty": "食材"
+    },
+    {
+     "species_name": "アリゲイツ",
+     "dex_no": "0159",
+     "sleep_type": "ぐっすり",
+     "specialty": "きのみ"
+    },
+    {
+     "species_name": "メタモン",
+     "dex_no": "0132",
+     "sleep_type": "すやすや",
+     "specialty": "食材"
+    },
+    {
+     "species_name": "ゴルダック",
+     "dex_no": "0055",
+     "sleep_type": "ぐっすり",
+     "specialty": "スキル"
+    },
+    {
+     "species_name": "ヤドラン",
+     "dex_no": "0080",
+     "sleep_type": "すやすや",
+     "specialty": "スキル"
+    },
+    {
+     "species_name": "カイロス",
+     "dex_no": "0127",
+     "sleep_type": "うとうと",
+     "specialty": "食材"
+    },
+    {
+     "species_name": "ヘラクロス",
+     "dex_no": "0214",
+     "sleep_type": "うとうと",
+     "specialty": "スキル"
+    },
+    {
+     "species_name": "ジュプトル",
+     "dex_no": "0253",
+     "sleep_type": "うとうと",
+     "specialty": "スキル"
+    },
+    {
+     "species_name": "ガルーラ",
+     "dex_no": "0115",
+     "sleep_type": "すやすや",
+     "specialty": "食材"
+    },
+    {
+     "species_name": "アチゲータ",
+     "dex_no": "0910",
+     "sleep_type": "すやすや",
+     "specialty": "食材"
+    },
+    {
+     "species_name": "ポッタイシ",
+     "dex_no": "0394",
+     "sleep_type": "ぐっすり",
+     "specialty": "きのみ"
+    },
+    {
+     "species_name": "キュワワー",
+     "dex_no": "0764",
+     "sleep_type": "すやすや",
+     "specialty": "食材"
+    },
+    {
+     "species_name": "アブリボン",
+     "dex_no": "0743",
+     "sleep_type": "すやすや",
+     "specialty": "食材"
+    },
+    {
+     "species_name": "ヌオー",
+     "dex_no": "0195",
+     "sleep_type": "ぐっすり",
+     "specialty": "食材"
+    },
+    {
+     "species_name": "ウッウ",
+     "dex_no": "0845",
+     "sleep_type": "ぐっすり",
+     "specialty": "食材"
+    },
+    {
+     "species_name": "プクリン",
+     "dex_no": "0040",
+     "sleep_type": "すやすや",
+     "specialty": "スキル"
+    },
+    {
+     "species_name": "ピクシー",
+     "dex_no": "0036",
+     "sleep_type": "すやすや",
+     "specialty": "きのみ"
+    },
+    {
+     "species_name": "カモネギ",
+     "dex_no": "0083",
+     "sleep_type": "ぐっすり",
+     "specialty": "食材"
+    },
+    {
+     "species_name": "ツボツボ",
+     "dex_no": "0213",
+     "sleep_type": "うとうと",
+     "specialty": "スキル"
+    },
+    {
+     "species_name": "ヤドキング",
+     "dex_no": "0199",
+     "sleep_type": "すやすや",
+     "specialty": "スキル"
+    },
+    {
+     "species_name": "カメックス",
+     "dex_no": "0009",
+     "sleep_type": "ぐっすり",
+     "specialty": "食材"
+    },
+    {
+     "species_name": "シャワーズ",
+     "dex_no": "0134",
+     "sleep_type": "ぐっすり",
+     "specialty": "スキル"
+    },
+    {
+     "species_name": "オーダイル",
+     "dex_no": "0160",
+     "sleep_type": "ぐっすり",
+     "specialty": "きのみ"
+    },
+    {
+     "species_name": "ジュカイン",
+     "dex_no": "0254",
+     "sleep_type": "うとうと",
+     "specialty": "スキル"
+    },
+    {
+     "species_name": "ラウドボーン",
+     "dex_no": "0911",
+     "sleep_type": "うとうと",
+     "specialty": "食材"
+    },
+    {
+     "species_name": "エンペルト",
+     "dex_no": "0395",
+     "sleep_type": "ぐっすり",
+     "specialty": "きのみ"
+    },
+    {
+     "species_name": "スイクン",
+     "dex_no": "0245",
+     "sleep_type": "ぐっすり",
+     "specialty": "スキル"
+    }
+   ]
+  },
+  {
+   "field_name": "トープ洞窟",
+   "source": "https://wikiwiki.jp/poke_sleep/リサーチフィールド/トープ洞窟",
+   "encounters": [
+    {
+     "species_name": "ゴース",
+     "dex_no": "0092",
+     "sleep_type": "うとうと",
+     "specialty": "食材"
+    },
+    {
+     "species_name": "デルビル",
+     "dex_no": "0228",
+     "sleep_type": "うとうと",
+     "specialty": "きのみ"
+    },
+    {
+     "species_name": "ヒトカゲ",
+     "dex_no": "0004",
+     "sleep_type": "すやすや",
+     "specialty": "食材"
+    },
+    {
+     "species_name": "ピッピ",
+     "dex_no": "0035",
+     "sleep_type": "すやすや",
+     "specialty": "きのみ"
+    },
+    {
+     "species_name": "ディグダ",
+     "dex_no": "0050",
+     "sleep_type": "すやすや",
+     "specialty": "食材"
+    },
+    {
+     "species_name": "ガーディ",
+     "dex_no": "0058",
+     "sleep_type": "すやすや",
+     "specialty": "スキル"
+    },
+    {
+     "species_name": "ヒノアラシ",
+     "dex_no": "0155",
+     "sleep_type": "すやすや",
+     "specialty": "きのみ"
+    },
+    {
+     "species_name": "イシツブテ",
+     "dex_no": "0074",
+     "sleep_type": "ぐっすり",
+     "specialty": "食材"
+    },
+    {
+     "species_name": "カラカラ",
+     "dex_no": "0104",
+     "sleep_type": "ぐっすり",
+     "specialty": "きのみ"
+    },
+    {
+     "species_name": "ピィ",
+     "dex_no": "0173",
+     "sleep_type": "ぐっすり",
+     "specialty": "きのみ"
+    },
+    {
+     "species_name": "ヨーギラス",
+     "dex_no": "0246",
+     "sleep_type": "ぐっすり",
+     "specialty": "食材"
+    },
+    {
+     "species_name": "リオル",
+     "dex_no": "0447",
+     "sleep_type": "ぐっすり",
+     "specialty": "スキル"
+    },
+    {
+     "species_name": "ナエトル",
+     "dex_no": "0387",
+     "sleep_type": "うとうと",
+     "specialty": "スキル"
+    },
+    {
+     "species_name": "オンバット",
+     "dex_no": "0714",
+     "sleep_type": "うとうと",
+     "specialty": "スキル"
+    },
+    {
+     "species_name": "ロコン",
+     "dex_no": "0037",
+     "sleep_type": "すやすや",
+     "specialty": "きのみ"
+    },
+    {
+     "species_name": "ヒコザル",
+     "dex_no": "0390",
+     "sleep_type": "すやすや",
+     "specialty": "スキル"
+    },
+    {
+     "species_name": "ホゲータ",
+     "dex_no": "0909",
+     "sleep_type": "すやすや",
+     "specialty": "食材"
+    },
+    {
+     "species_name": "サンド",
+     "dex_no": "0027",
+     "sleep_type": "ぐっすり",
+     "specialty": "スキル"
+    },
+    {
+     "species_name": "ミズゴロウ",
+     "dex_no": "0258",
+     "sleep_type": "ぐっすり",
+     "specialty": "きのみ"
+    },
+    {
+     "species_name": "チゴラス",
+     "dex_no": "0696",
+     "sleep_type": "ぐっすり",
+     "specialty": "きのみ"
+    },
+    {
+     "species_name": "ウパー(パルデア)",
+     "dex_no": "0194",
+     "sleep_type": "うとうと",
+     "specialty": "食材"
+    },
+    {
+     "species_name": "ガラガラ",
+     "dex_no": "0105",
+     "sleep_type": "ぐっすり",
+     "specialty": "きのみ"
+    },
+    {
+     "species_name": "ナックラー",
+     "dex_no": "0328",
+     "sleep_type": "ぐっすり",
+     "specialty": "食材"
+    },
+    {
+     "species_name": "ヘルガー",
+     "dex_no": "0229",
+     "sleep_type": "うとうと",
+     "specialty": "きのみ"
+    },
+    {
+     "species_name": "ゴローン",
+     "dex_no": "0075",
+     "sleep_type": "ぐっすり",
+     "specialty": "食材"
+    },
+    {
+     "species_name": "ゴースト",
+     "dex_no": "0093",
+     "sleep_type": "うとうと",
+     "specialty": "食材"
+    },
+    {
+     "species_name": "リザード",
+     "dex_no": "0005",
+     "sleep_type": "すやすや",
+     "specialty": "食材"
+    },
+    {
+     "species_name": "マグマラシ",
+     "dex_no": "0156",
+     "sleep_type": "すやすや",
+     "specialty": "きのみ"
+    },
+    {
+     "species_name": "ダグトリオ",
+     "dex_no": "0051",
+     "sleep_type": "すやすや",
+     "specialty": "食材"
+    },
+    {
+     "species_name": "メタモン",
+     "dex_no": "0132",
+     "sleep_type": "すやすや",
+     "specialty": "食材"
+    },
+    {
+     "species_name": "サナギラス",
+     "dex_no": "0247",
+     "sleep_type": "ぐっすり",
+     "specialty": "食材"
+    },
+    {
+     "species_name": "ヤミラミ",
+     "dex_no": "0302",
+     "sleep_type": "うとうと",
+     "specialty": "スキル"
+    },
+    {
+     "species_name": "イワーク",
+     "dex_no": "0095",
+     "sleep_type": "ぐっすり",
+     "specialty": "きのみ"
+    },
+    {
+     "species_name": "ハヤシガメ",
+     "dex_no": "0388",
+     "sleep_type": "うとうと",
+     "specialty": "スキル"
+    },
+    {
+     "species_name": "アチゲータ",
+     "dex_no": "0910",
+     "sleep_type": "すやすや",
+     "specialty": "食材"
+    },
+    {
+     "species_name": "ヌマクロー",
+     "dex_no": "0259",
+     "sleep_type": "ぐっすり",
+     "specialty": "きのみ"
+    },
+    {
+     "species_name": "モウカザル",
+     "dex_no": "0391",
+     "sleep_type": "ぐっすり",
+     "specialty": "スキル"
+    },
+    {
+     "species_name": "ビブラーバ",
+     "dex_no": "0329",
+     "sleep_type": "ぐっすり",
+     "specialty": "食材"
+    },
+    {
+     "species_name": "オンバーン",
+     "dex_no": "0715",
+     "sleep_type": "うとうと",
+     "specialty": "スキル"
+    },
+    {
+     "species_name": "サンドパン",
+     "dex_no": "0028",
+     "sleep_type": "ぐっすり",
+     "specialty": "スキル"
+    },
+    {
+     "species_name": "キュウコン",
+     "dex_no": "0038",
+     "sleep_type": "すやすや",
+     "specialty": "きのみ"
+    },
+    {
+     "species_name": "ドオー",
+     "dex_no": "0980",
+     "sleep_type": "うとうと",
+     "specialty": "食材"
+    },
+    {
+     "species_name": "ピクシー",
+     "dex_no": "0036",
+     "sleep_type": "すやすや",
+     "specialty": "きのみ"
+    },
+    {
+     "species_name": "ゲンガー",
+     "dex_no": "0094",
+     "sleep_type": "うとうと",
+     "specialty": "食材"
+    },
+    {
+     "species_name": "ツボツボ",
+     "dex_no": "0213",
+     "sleep_type": "うとうと",
+     "specialty": "スキル"
+    },
+    {
+     "species_name": "ゴローニャ",
+     "dex_no": "0076",
+     "sleep_type": "ぐっすり",
+     "specialty": "食材"
+    },
+    {
+     "species_name": "ブラッキー",
+     "dex_no": "0197",
+     "sleep_type": "うとうと",
+     "specialty": "スキル"
+    },
+    {
+     "species_name": "リザードン",
+     "dex_no": "0006",
+     "sleep_type": "すやすや",
+     "specialty": "食材"
+    },
+    {
+     "species_name": "ブースター",
+     "dex_no": "0136",
+     "sleep_type": "すやすや",
+     "specialty": "スキル"
+    },
+    {
+     "species_name": "バクフーン",
+     "dex_no": "0157",
+     "sleep_type": "すやすや",
+     "specialty": "きのみ"
+    },
+    {
+     "species_name": "ウインディ",
+     "dex_no": "0059",
+     "sleep_type": "すやすや",
+     "specialty": "スキル"
+    },
+    {
+     "species_name": "ハガネール",
+     "dex_no": "0208",
+     "sleep_type": "ぐっすり",
+     "specialty": "きのみ"
+    },
+    {
+     "species_name": "ラウドボーン",
+     "dex_no": "0911",
+     "sleep_type": "うとうと",
+     "specialty": "食材"
+    },
+    {
+     "species_name": "ラグラージ",
+     "dex_no": "0260",
+     "sleep_type": "ぐっすり",
+     "specialty": "きのみ"
+    },
+    {
+     "species_name": "ドダイトス",
+     "dex_no": "0389",
+     "sleep_type": "ぐっすり",
+     "specialty": "スキル"
+    },
+    {
+     "species_name": "ゴウカザル",
+     "dex_no": "0392",
+     "sleep_type": "ぐっすり",
+     "specialty": "スキル"
+    },
+    {
+     "species_name": "ガチゴラス",
+     "dex_no": "0697",
+     "sleep_type": "ぐっすり",
+     "specialty": "きのみ"
+    },
+    {
+     "species_name": "エンテイ",
+     "dex_no": "0244",
+     "sleep_type": "すやすや",
+     "specialty": "スキル"
+    },
+    {
+     "species_name": "バンギラス",
+     "dex_no": "0248",
+     "sleep_type": "うとうと",
+     "specialty": "食材"
+    },
+    {
+     "species_name": "フライゴン",
+     "dex_no": "0330",
+     "sleep_type": "ぐっすり",
+     "specialty": "食材"
+    }
+   ]
+  },
+  {
+   "field_name": "ウノハナ雪原",
+   "source": "https://wikiwiki.jp/poke_sleep/リサーチフィールド/ウノハナ雪原",
+   "encounters": [
     {
      "species_name": "マンキー",
      "dex_no": "0056",
      "sleep_type": "うとうと",
+     "specialty": "きのみ"
+    },
+    {
+     "species_name": "ゴクリン",
+     "dex_no": "0316",
+     "sleep_type": "うとうと",
+     "specialty": "スキル"
+    },
+    {
+     "species_name": "コラッタ",
+     "dex_no": "0019",
+     "sleep_type": "すやすや",
+     "specialty": "きのみ"
+    },
+    {
+     "species_name": "ピッピ",
+     "dex_no": "0035",
+     "sleep_type": "すやすや",
      "specialty": "きのみ"
     },
     {
@@ -933,10 +1750,22 @@
      "specialty": "スキル"
     },
     {
-     "species_name": "デリバード",
-     "dex_no": "0225",
-     "sleep_type": "うとうと",
-     "specialty": "食材"
+     "species_name": "ナマケロ",
+     "dex_no": "0287",
+     "sleep_type": "すやすや",
+     "specialty": "きのみ"
+    },
+    {
+     "species_name": "パモ",
+     "dex_no": "0921",
+     "sleep_type": "すやすや",
+     "specialty": "スキル"
+    },
+    {
+     "species_name": "ピィ",
+     "dex_no": "0173",
+     "sleep_type": "ぐっすり",
+     "specialty": "きのみ"
     },
     {
      "species_name": "チルット",
@@ -945,8 +1774,224 @@
      "specialty": "きのみ"
     },
     {
-     "species_name": "パモ",
-     "dex_no": "0921",
+     "species_name": "タマザラシ",
+     "dex_no": "0363",
+     "sleep_type": "ぐっすり",
+     "specialty": "きのみ"
+    },
+    {
+     "species_name": "ポッチャマ",
+     "dex_no": "0393",
+     "sleep_type": "ぐっすり",
+     "specialty": "きのみ"
+    },
+    {
+     "species_name": "ピンプク",
+     "dex_no": "0440",
+     "sleep_type": "ぐっすり",
+     "specialty": "食材"
+    },
+    {
+     "species_name": "リオル",
+     "dex_no": "0447",
+     "sleep_type": "ぐっすり",
+     "specialty": "スキル"
+    },
+    {
+     "species_name": "ユキカブリ",
+     "dex_no": "0459",
+     "sleep_type": "ぐっすり",
+     "specialty": "食材"
+    },
+    {
+     "species_name": "アルクジラ",
+     "dex_no": "0974",
+     "sleep_type": "ぐっすり",
+     "specialty": "食材"
+    },
+    {
+     "species_name": "マルノーム",
+     "dex_no": "0317",
+     "sleep_type": "うとうと",
+     "specialty": "スキル"
+    },
+    {
+     "species_name": "モココ",
+     "dex_no": "0180",
+     "sleep_type": "すやすや",
+     "specialty": "スキル"
+    },
+    {
+     "species_name": "トドグラー",
+     "dex_no": "0364",
+     "sleep_type": "ぐっすり",
+     "specialty": "きのみ"
+    },
+    {
+     "species_name": "ヤルキモノ",
+     "dex_no": "0288",
+     "sleep_type": "うとうと",
+     "specialty": "きのみ"
+    },
+    {
+     "species_name": "オコリザル",
+     "dex_no": "0057",
+     "sleep_type": "うとうと",
+     "specialty": "きのみ"
+    },
+    {
+     "species_name": "ラッタ",
+     "dex_no": "0020",
+     "sleep_type": "すやすや",
+     "specialty": "きのみ"
+    },
+    {
+     "species_name": "メタモン",
+     "dex_no": "0132",
+     "sleep_type": "すやすや",
+     "specialty": "食材"
+    },
+    {
+     "species_name": "ヤミカラス",
+     "dex_no": "0198",
+     "sleep_type": "うとうと",
+     "specialty": "スキル"
+    },
+    {
+     "species_name": "ニューラ",
+     "dex_no": "0215",
+     "sleep_type": "うとうと",
+     "specialty": "きのみ"
+    },
+    {
+     "species_name": "チルタリス",
+     "dex_no": "0334",
+     "sleep_type": "うとうと",
+     "specialty": "きのみ"
+    },
+    {
+     "species_name": "アブソル",
+     "dex_no": "0359",
+     "sleep_type": "うとうと",
+     "specialty": "食材"
+    },
+    {
+     "species_name": "パモット",
+     "dex_no": "0922",
+     "sleep_type": "すやすや",
+     "specialty": "スキル"
+    },
+    {
+     "species_name": "ポッタイシ",
+     "dex_no": "0394",
+     "sleep_type": "ぐっすり",
+     "specialty": "きのみ"
+    },
+    {
+     "species_name": "デリバード",
+     "dex_no": "0225",
+     "sleep_type": "うとうと",
+     "specialty": "食材"
+    },
+    {
+     "species_name": "ラッキー",
+     "dex_no": "0113",
+     "sleep_type": "すやすや",
+     "specialty": "食材"
+    },
+    {
+     "species_name": "ウッウ",
+     "dex_no": "0845",
+     "sleep_type": "ぐっすり",
+     "specialty": "食材"
+    },
+    {
+     "species_name": "デンリュウ",
+     "dex_no": "0181",
+     "sleep_type": "すやすや",
+     "specialty": "スキル"
+    },
+    {
+     "species_name": "トドゼルガ",
+     "dex_no": "0365",
+     "sleep_type": "ぐっすり",
+     "specialty": "きのみ"
+    },
+    {
+     "species_name": "ルカリオ",
+     "dex_no": "0448",
+     "sleep_type": "ぐっすり",
+     "specialty": "スキル"
+    },
+    {
+     "species_name": "ユキノオー",
+     "dex_no": "0460",
+     "sleep_type": "ぐっすり",
+     "specialty": "食材"
+    },
+    {
+     "species_name": "ピクシー",
+     "dex_no": "0036",
+     "sleep_type": "すやすや",
+     "specialty": "きのみ"
+    },
+    {
+     "species_name": "ミカルゲ",
+     "dex_no": "0442",
+     "sleep_type": "うとうと",
+     "specialty": "食材"
+    },
+    {
+     "species_name": "グレイシア",
+     "dex_no": "0471",
+     "sleep_type": "ぐっすり",
+     "specialty": "スキル"
+    },
+    {
+     "species_name": "ドンカラス",
+     "dex_no": "0430",
+     "sleep_type": "うとうと",
+     "specialty": "スキル"
+    },
+    {
+     "species_name": "マニューラ",
+     "dex_no": "0461",
+     "sleep_type": "うとうと",
+     "specialty": "きのみ"
+    },
+    {
+     "species_name": "ハピナス",
+     "dex_no": "0242",
+     "sleep_type": "すやすや",
+     "specialty": "食材"
+    },
+    {
+     "species_name": "ケッキング",
+     "dex_no": "0289",
+     "sleep_type": "すやすや",
+     "specialty": "きのみ"
+    },
+    {
+     "species_name": "エンペルト",
+     "dex_no": "0395",
+     "sleep_type": "ぐっすり",
+     "specialty": "きのみ"
+    },
+    {
+     "species_name": "ハルクジラ",
+     "dex_no": "0975",
+     "sleep_type": "ぐっすり",
+     "specialty": "食材"
+    },
+    {
+     "species_name": "クレセリア",
+     "dex_no": "0488",
+     "sleep_type": "すやすや",
+     "specialty": "スキル"
+    },
+    {
+     "species_name": "パーモット",
+     "dex_no": "0923",
      "sleep_type": "すやすや",
      "specialty": "スキル"
     }
@@ -963,30 +2008,6 @@
      "specialty": "食材"
     },
     {
-     "species_name": "フシギソウ",
-     "dex_no": "0002",
-     "sleep_type": "うとうと",
-     "specialty": "食材"
-    },
-    {
-     "species_name": "フシギバナ",
-     "dex_no": "0003",
-     "sleep_type": "うとうと",
-     "specialty": "食材"
-    },
-    {
-     "species_name": "マンキー",
-     "dex_no": "0056",
-     "sleep_type": "うとうと",
-     "specialty": "きのみ"
-    },
-    {
-     "species_name": "オコリザル",
-     "dex_no": "0057",
-     "sleep_type": "うとうと",
-     "specialty": "きのみ"
-    },
-    {
      "species_name": "マダツボミ",
      "dex_no": "0069",
      "sleep_type": "うとうと",
@@ -999,22 +2020,10 @@
      "specialty": "食材"
     },
     {
-     "species_name": "ウツボット",
-     "dex_no": "0071",
+     "species_name": "ミニリュウ",
+     "dex_no": "0147",
      "sleep_type": "うとうと",
      "specialty": "食材"
-    },
-    {
-     "species_name": "バリヤード",
-     "dex_no": "0122",
-     "sleep_type": "すやすや",
-     "specialty": "食材"
-    },
-    {
-     "species_name": "ミュウ",
-     "dex_no": "0151",
-     "sleep_type": "すやすや",
-     "specialty": "オール"
     },
     {
      "species_name": "チコリータ",
@@ -1023,93 +2032,9 @@
      "specialty": "きのみ"
     },
     {
-     "species_name": "ベイリーフ",
-     "dex_no": "0153",
-     "sleep_type": "うとうと",
-     "specialty": "きのみ"
-    },
-    {
-     "species_name": "メガニウム",
-     "dex_no": "0154",
-     "sleep_type": "うとうと",
-     "specialty": "きのみ"
-    },
-    {
-     "species_name": "ネイティ",
-     "dex_no": "0177",
-     "sleep_type": "すやすや",
-     "specialty": "きのみ"
-    },
-    {
-     "species_name": "ネイティオ",
-     "dex_no": "0178",
-     "sleep_type": "すやすや",
-     "specialty": "きのみ"
-    },
-    {
-     "species_name": "エーフィ",
-     "dex_no": "0196",
-     "sleep_type": "すやすや",
-     "specialty": "スキル"
-    },
-    {
-     "species_name": "ソーナンス",
-     "dex_no": "0202",
-     "sleep_type": "すやすや",
-     "specialty": "スキル"
-    },
-    {
      "species_name": "キモリ",
      "dex_no": "0252",
      "sleep_type": "うとうと",
-     "specialty": "スキル"
-    },
-    {
-     "species_name": "ジュプトル",
-     "dex_no": "0253",
-     "sleep_type": "うとうと",
-     "specialty": "スキル"
-    },
-    {
-     "species_name": "ジュカイン",
-     "dex_no": "0254",
-     "sleep_type": "うとうと",
-     "specialty": "スキル"
-    },
-    {
-     "species_name": "ワカシャモ",
-     "dex_no": "0256",
-     "sleep_type": "ぐっすり",
-     "specialty": "きのみ"
-    },
-    {
-     "species_name": "バシャーモ",
-     "dex_no": "0257",
-     "sleep_type": "ぐっすり",
-     "specialty": "きのみ"
-    },
-    {
-     "species_name": "ラルトス",
-     "dex_no": "0280",
-     "sleep_type": "すやすや",
-     "specialty": "スキル"
-    },
-    {
-     "species_name": "キルリア",
-     "dex_no": "0281",
-     "sleep_type": "すやすや",
-     "specialty": "スキル"
-    },
-    {
-     "species_name": "サーナイト",
-     "dex_no": "0282",
-     "sleep_type": "すやすや",
-     "specialty": "スキル"
-    },
-    {
-     "species_name": "ソーナノ",
-     "dex_no": "0360",
-     "sleep_type": "ぐっすり",
      "specialty": "スキル"
     },
     {
@@ -1119,56 +2044,44 @@
      "specialty": "スキル"
     },
     {
-     "species_name": "ハヤシガメ",
-     "dex_no": "0388",
+     "species_name": "ニャオハ",
+     "dex_no": "0906",
      "sleep_type": "うとうと",
-     "specialty": "スキル"
-    },
-    {
-     "species_name": "モウカザル",
-     "dex_no": "0391",
-     "sleep_type": "ぐっすり",
-     "specialty": "スキル"
-    },
-    {
-     "species_name": "ゴウカザル",
-     "dex_no": "0392",
-     "sleep_type": "ぐっすり",
-     "specialty": "スキル"
-    },
-    {
-     "species_name": "マネネ",
-     "dex_no": "0439",
-     "sleep_type": "ぐっすり",
      "specialty": "食材"
     },
     {
-     "species_name": "リオル",
-     "dex_no": "0447",
-     "sleep_type": "ぐっすり",
+     "species_name": "ピッピ",
+     "dex_no": "0035",
+     "sleep_type": "すやすや",
+     "specialty": "きのみ"
+    },
+    {
+     "species_name": "ニャース",
+     "dex_no": "0052",
+     "sleep_type": "すやすや",
      "specialty": "スキル"
     },
     {
-     "species_name": "ルカリオ",
-     "dex_no": "0448",
-     "sleep_type": "ぐっすり",
+     "species_name": "ネイティ",
+     "dex_no": "0177",
+     "sleep_type": "すやすや",
+     "specialty": "きのみ"
+    },
+    {
+     "species_name": "ソーナンス",
+     "dex_no": "0202",
+     "sleep_type": "すやすや",
      "specialty": "スキル"
     },
     {
-     "species_name": "リーフィア",
-     "dex_no": "0470",
-     "sleep_type": "うとうと",
-     "specialty": "スキル"
+     "species_name": "アチャモ",
+     "dex_no": "0255",
+     "sleep_type": "すやすや",
+     "specialty": "きのみ"
     },
     {
-     "species_name": "エルレイド",
-     "dex_no": "0475",
-     "sleep_type": "ぐっすり",
-     "specialty": "スキル"
-    },
-    {
-     "species_name": "クレセリア",
-     "dex_no": "0488",
+     "species_name": "ラルトス",
+     "dex_no": "0280",
      "sleep_type": "すやすや",
      "specialty": "スキル"
     },
@@ -1179,14 +2092,122 @@
      "specialty": "きのみ"
     },
     {
-     "species_name": "ムシャーナ",
-     "dex_no": "0518",
-     "sleep_type": "すやすや",
+     "species_name": "ドードー",
+     "dex_no": "0084",
+     "sleep_type": "ぐっすり",
      "specialty": "きのみ"
+    },
+    {
+     "species_name": "ピィ",
+     "dex_no": "0173",
+     "sleep_type": "ぐっすり",
+     "specialty": "きのみ"
+    },
+    {
+     "species_name": "トゲピー",
+     "dex_no": "0175",
+     "sleep_type": "ぐっすり",
+     "specialty": "スキル"
+    },
+    {
+     "species_name": "ソーナノ",
+     "dex_no": "0360",
+     "sleep_type": "ぐっすり",
+     "specialty": "スキル"
     },
     {
      "species_name": "ヌイコグマ",
      "dex_no": "0759",
+     "sleep_type": "ぐっすり",
+     "specialty": "食材"
+    },
+    {
+     "species_name": "クワッス",
+     "dex_no": "0912",
+     "sleep_type": "ぐっすり",
+     "specialty": "食材"
+    },
+    {
+     "species_name": "フシギソウ",
+     "dex_no": "0002",
+     "sleep_type": "うとうと",
+     "specialty": "食材"
+    },
+    {
+     "species_name": "ベイリーフ",
+     "dex_no": "0153",
+     "sleep_type": "うとうと",
+     "specialty": "きのみ"
+    },
+    {
+     "species_name": "トゲチック",
+     "dex_no": "0176",
+     "sleep_type": "すやすや",
+     "specialty": "スキル"
+    },
+    {
+     "species_name": "メタモン",
+     "dex_no": "0132",
+     "sleep_type": "すやすや",
+     "specialty": "食材"
+    },
+    {
+     "species_name": "ドードリオ",
+     "dex_no": "0085",
+     "sleep_type": "ぐっすり",
+     "specialty": "きのみ"
+    },
+    {
+     "species_name": "ペルシアン",
+     "dex_no": "0053",
+     "sleep_type": "すやすや",
+     "specialty": "スキル"
+    },
+    {
+     "species_name": "キルリア",
+     "dex_no": "0281",
+     "sleep_type": "すやすや",
+     "specialty": "スキル"
+    },
+    {
+     "species_name": "ハクリュー",
+     "dex_no": "0148",
+     "sleep_type": "うとうと",
+     "specialty": "食材"
+    },
+    {
+     "species_name": "ジュプトル",
+     "dex_no": "0253",
+     "sleep_type": "うとうと",
+     "specialty": "スキル"
+    },
+    {
+     "species_name": "ハヤシガメ",
+     "dex_no": "0388",
+     "sleep_type": "うとうと",
+     "specialty": "スキル"
+    },
+    {
+     "species_name": "ニャローテ",
+     "dex_no": "0907",
+     "sleep_type": "うとうと",
+     "specialty": "食材"
+    },
+    {
+     "species_name": "デデンネ",
+     "dex_no": "0702",
+     "sleep_type": "すやすや",
+     "specialty": "スキル"
+    },
+    {
+     "species_name": "ワカシャモ",
+     "dex_no": "0256",
+     "sleep_type": "ぐっすり",
+     "specialty": "きのみ"
+    },
+    {
+     "species_name": "ウェルカモ",
+     "dex_no": "0913",
      "sleep_type": "ぐっすり",
      "specialty": "食材"
     },
@@ -1197,16 +2218,82 @@
      "specialty": "食材"
     },
     {
-     "species_name": "ニャオハ",
-     "dex_no": "0906",
+     "species_name": "ウツボット",
+     "dex_no": "0071",
      "sleep_type": "うとうと",
      "specialty": "食材"
     },
     {
-     "species_name": "ニャローテ",
-     "dex_no": "0907",
+     "species_name": "ピクシー",
+     "dex_no": "0036",
+     "sleep_type": "すやすや",
+     "specialty": "きのみ"
+    },
+    {
+     "species_name": "ジジーロン",
+     "dex_no": "0780",
      "sleep_type": "うとうと",
      "specialty": "食材"
+    },
+    {
+     "species_name": "フシギバナ",
+     "dex_no": "0003",
+     "sleep_type": "うとうと",
+     "specialty": "食材"
+    },
+    {
+     "species_name": "メガニウム",
+     "dex_no": "0154",
+     "sleep_type": "うとうと",
+     "specialty": "きのみ"
+    },
+    {
+     "species_name": "リーフィア",
+     "dex_no": "0470",
+     "sleep_type": "うとうと",
+     "specialty": "スキル"
+    },
+    {
+     "species_name": "エーフィ",
+     "dex_no": "0196",
+     "sleep_type": "すやすや",
+     "specialty": "スキル"
+    },
+    {
+     "species_name": "ジュカイン",
+     "dex_no": "0254",
+     "sleep_type": "うとうと",
+     "specialty": "スキル"
+    },
+    {
+     "species_name": "マスカーニャ",
+     "dex_no": "0908",
+     "sleep_type": "うとうと",
+     "specialty": "食材"
+    },
+    {
+     "species_name": "サーナイト",
+     "dex_no": "0282",
+     "sleep_type": "すやすや",
+     "specialty": "スキル"
+    },
+    {
+     "species_name": "ムシャーナ",
+     "dex_no": "0518",
+     "sleep_type": "すやすや",
+     "specialty": "きのみ"
+    },
+    {
+     "species_name": "バシャーモ",
+     "dex_no": "0257",
+     "sleep_type": "ぐっすり",
+     "specialty": "きのみ"
+    },
+    {
+     "species_name": "ドダイトス",
+     "dex_no": "0389",
+     "sleep_type": "ぐっすり",
+     "specialty": "スキル"
     },
     {
      "species_name": "ウェーニバル",
@@ -1215,38 +2302,39 @@
      "specialty": "食材"
     },
     {
-     "species_name": "ウェルカモ",
-     "dex_no": "0913",
-     "sleep_type": "ぐっすり"
-    },
-    {
-     "species_name": "ドードー",
-     "dex_no": "0084",
-     "sleep_type": "ぐっすり",
-     "specialty": "きのみ"
-    },
-    {
-     "species_name": "ミニリュウ",
-     "dex_no": "0147",
+     "species_name": "ラティアス",
+     "dex_no": "0380",
      "sleep_type": "うとうと",
-     "specialty": "食材"
+     "specialty": "スキル"
     },
     {
-     "species_name": "アチャモ",
-     "dex_no": "0255",
-     "sleep_type": "すやすや",
-     "specialty": "きのみ"
+     "species_name": "ラティオス",
+     "dex_no": "0381",
+     "sleep_type": "うとうと",
+     "specialty": "スキル"
     },
     {
-     "species_name": "デデンネ",
-     "dex_no": "0702",
+     "species_name": "クレセリア",
+     "dex_no": "0488",
      "sleep_type": "すやすや",
      "specialty": "スキル"
     },
     {
-     "species_name": "クワッス",
-     "dex_no": "0912",
+     "species_name": "スイクン",
+     "dex_no": "0245",
      "sleep_type": "ぐっすり",
+     "specialty": "スキル"
+    },
+    {
+     "species_name": "エルレイド",
+     "dex_no": "0475",
+     "sleep_type": "ぐっすり",
+     "specialty": "スキル"
+    },
+    {
+     "species_name": "カイリュー",
+     "dex_no": "0149",
+     "sleep_type": "うとうと",
      "specialty": "食材"
     }
    ]
@@ -1256,16 +2344,64 @@
    "source": "https://wikiwiki.jp/poke_sleep/リサーチフィールド/ゴールド旧発電所",
    "encounters": [
     {
+     "species_name": "キャタピー",
+     "dex_no": "0010",
+     "sleep_type": "うとうと",
+     "specialty": "きのみ"
+    },
+    {
+     "species_name": "トランセル",
+     "dex_no": "0011",
+     "sleep_type": "うとうと",
+     "specialty": "きのみ"
+    },
+    {
+     "species_name": "ゴース",
+     "dex_no": "0092",
+     "sleep_type": "うとうと",
+     "specialty": "食材"
+    },
+    {
+     "species_name": "カゲボウズ",
+     "dex_no": "0353",
+     "sleep_type": "うとうと",
+     "specialty": "きのみ"
+    },
+    {
+     "species_name": "フワンテ",
+     "dex_no": "0425",
+     "sleep_type": "うとうと",
+     "specialty": "スキル"
+    },
+    {
+     "species_name": "アゴジムシ",
+     "dex_no": "0736",
+     "sleep_type": "うとうと",
+     "specialty": "食材"
+    },
+    {
      "species_name": "ピカチュウ",
      "dex_no": "0025",
      "sleep_type": "すやすや",
      "specialty": "きのみ"
     },
     {
-     "species_name": "ライチュウ",
-     "dex_no": "0026",
+     "species_name": "ピッピ",
+     "dex_no": "0035",
      "sleep_type": "すやすや",
      "specialty": "きのみ"
+    },
+    {
+     "species_name": "コリンク",
+     "dex_no": "0403",
+     "sleep_type": "すやすや",
+     "specialty": "食材"
+    },
+    {
+     "species_name": "パモ",
+     "dex_no": "0921",
+     "sleep_type": "すやすや",
+     "specialty": "スキル"
     },
     {
      "species_name": "コイル",
@@ -1280,10 +2416,28 @@
      "specialty": "スキル"
     },
     {
-     "species_name": "ゴース",
-     "dex_no": "0092",
-     "sleep_type": "うとうと",
+     "species_name": "ピチュー",
+     "dex_no": "0172",
+     "sleep_type": "ぐっすり",
+     "specialty": "きのみ"
+    },
+    {
+     "species_name": "ピィ",
+     "dex_no": "0173",
+     "sleep_type": "ぐっすり",
+     "specialty": "きのみ"
+    },
+    {
+     "species_name": "ココドラ",
+     "dex_no": "0304",
+     "sleep_type": "ぐっすり",
      "specialty": "食材"
+    },
+    {
+     "species_name": "エレズン",
+     "dex_no": "0848",
+     "sleep_type": "ぐっすり",
+     "specialty": "スキル"
     },
     {
      "species_name": "ゴースト",
@@ -1292,63 +2446,39 @@
      "specialty": "食材"
     },
     {
-     "species_name": "ゲンガー",
-     "dex_no": "0094",
+     "species_name": "メタモン",
+     "dex_no": "0132",
+     "sleep_type": "すやすや",
+     "specialty": "食材"
+    },
+    {
+     "species_name": "ヤミカラス",
+     "dex_no": "0198",
+     "sleep_type": "うとうと",
+     "specialty": "スキル"
+    },
+    {
+     "species_name": "デデンネ",
+     "dex_no": "0702",
+     "sleep_type": "すやすや",
+     "specialty": "スキル"
+    },
+    {
+     "species_name": "パモット",
+     "dex_no": "0922",
+     "sleep_type": "すやすや",
+     "specialty": "スキル"
+    },
+    {
+     "species_name": "デンヂムシ",
+     "dex_no": "0737",
      "sleep_type": "うとうと",
      "specialty": "食材"
     },
     {
-     "species_name": "サンダース",
-     "dex_no": "0135",
+     "species_name": "ルクシオ",
+     "dex_no": "0404",
      "sleep_type": "すやすや",
-     "specialty": "スキル"
-    },
-    {
-     "species_name": "ピチュー",
-     "dex_no": "0172",
-     "sleep_type": "ぐっすり",
-     "specialty": "きのみ"
-    },
-    {
-     "species_name": "メリープ",
-     "dex_no": "0179",
-     "sleep_type": "すやすや",
-     "specialty": "スキル"
-    },
-    {
-     "species_name": "モココ",
-     "dex_no": "0180",
-     "sleep_type": "すやすや",
-     "specialty": "スキル"
-    },
-    {
-     "species_name": "デンリュウ",
-     "dex_no": "0181",
-     "sleep_type": "すやすや",
-     "specialty": "スキル"
-    },
-    {
-     "species_name": "ハガネール",
-     "dex_no": "0208",
-     "sleep_type": "ぐっすり",
-     "specialty": "きのみ"
-    },
-    {
-     "species_name": "ライコウ",
-     "dex_no": "0243",
-     "sleep_type": "すやすや",
-     "specialty": "スキル"
-    },
-    {
-     "species_name": "クチート",
-     "dex_no": "0303",
-     "sleep_type": "ぐっすり",
-     "specialty": "食材"
-    },
-    {
-     "species_name": "ココドラ",
-     "dex_no": "0304",
-     "sleep_type": "ぐっすり",
      "specialty": "食材"
     },
     {
@@ -1358,10 +2488,16 @@
      "specialty": "食材"
     },
     {
-     "species_name": "ボスゴドラ",
-     "dex_no": "0306",
-     "sleep_type": "ぐっすり",
-     "specialty": "食材"
+     "species_name": "バタフリー",
+     "dex_no": "0012",
+     "sleep_type": "うとうと",
+     "specialty": "きのみ"
+    },
+    {
+     "species_name": "ジュペッタ",
+     "dex_no": "0354",
+     "sleep_type": "うとうと",
+     "specialty": "きのみ"
     },
     {
      "species_name": "プラスル",
@@ -1376,50 +2512,68 @@
      "specialty": "スキル"
     },
     {
-     "species_name": "カゲボウズ",
-     "dex_no": "0353",
-     "sleep_type": "うとうと",
-     "specialty": "きのみ"
-    },
-    {
-     "species_name": "ジュペッタ",
-     "dex_no": "0354",
-     "sleep_type": "うとうと",
-     "specialty": "きのみ"
-    },
-    {
-     "species_name": "エンペルト",
-     "dex_no": "0395",
-     "sleep_type": "ぐっすり",
-     "specialty": "きのみ"
-    },
-    {
-     "species_name": "コリンク",
-     "dex_no": "0403",
-     "sleep_type": "すやすや",
-     "specialty": "食材"
-    },
-    {
-     "species_name": "ルクシオ",
-     "dex_no": "0404",
-     "sleep_type": "すやすや",
-     "specialty": "食材"
-    },
-    {
-     "species_name": "レントラー",
-     "dex_no": "0405",
-     "sleep_type": "すやすや",
-     "specialty": "食材"
-    },
-    {
-     "species_name": "フワンテ",
-     "dex_no": "0425",
+     "species_name": "ミミッキュ",
+     "dex_no": "0778",
      "sleep_type": "うとうと",
      "specialty": "スキル"
     },
     {
+     "species_name": "ピクシー",
+     "dex_no": "0036",
+     "sleep_type": "すやすや",
+     "specialty": "きのみ"
+    },
+    {
+     "species_name": "カモネギ",
+     "dex_no": "0083",
+     "sleep_type": "ぐっすり",
+     "specialty": "食材"
+    },
+    {
+     "species_name": "クチート",
+     "dex_no": "0303",
+     "sleep_type": "ぐっすり",
+     "specialty": "食材"
+    },
+    {
+     "species_name": "ゲンガー",
+     "dex_no": "0094",
+     "sleep_type": "うとうと",
+     "specialty": "食材"
+    },
+    {
      "species_name": "フワライド",
      "dex_no": "0426",
+     "sleep_type": "うとうと",
+     "specialty": "スキル"
+    },
+    {
+     "species_name": "ライチュウ",
+     "dex_no": "0026",
+     "sleep_type": "すやすや",
+     "specialty": "きのみ"
+    },
+    {
+     "species_name": "トゲデマル",
+     "dex_no": "0777",
+     "sleep_type": "ぐっすり",
+     "specialty": "スキル"
+    },
+    {
+     "species_name": "サンダース",
+     "dex_no": "0135",
+     "sleep_type": "すやすや",
+     "specialty": "スキル"
+    },
+    {
+     "species_name": "ハガネール",
+     "dex_no": "0208",
+     "sleep_type": "ぐっすり",
+     "specialty": "きのみ"
+    },
+    {
+     "species_name": "ドンカラス",
+     "dex_no": "0430",
      "sleep_type": "うとうと",
      "specialty": "スキル"
     },
@@ -1430,38 +2584,14 @@
      "specialty": "スキル"
     },
     {
-     "species_name": "デデンネ",
-     "dex_no": "0702",
+     "species_name": "レントラー",
+     "dex_no": "0405",
      "sleep_type": "すやすや",
-     "specialty": "スキル"
-    },
-    {
-     "species_name": "トゲデマル",
-     "dex_no": "0777",
-     "sleep_type": "ぐっすり",
-     "specialty": "スキル"
-    },
-    {
-     "species_name": "ミミッキュ",
-     "dex_no": "0778",
-     "sleep_type": "うとうと",
-     "specialty": "スキル"
-    },
-    {
-     "species_name": "ラウドボーン",
-     "dex_no": "0911",
-     "sleep_type": "うとうと",
      "specialty": "食材"
     },
     {
-     "species_name": "パモ",
-     "dex_no": "0921",
-     "sleep_type": "すやすや",
-     "specialty": "スキル"
-    },
-    {
-     "species_name": "パモット",
-     "dex_no": "0922",
+     "species_name": "ライコウ",
+     "dex_no": "0243",
      "sleep_type": "すやすや",
      "specialty": "スキル"
     },
@@ -1472,24 +2602,15 @@
      "specialty": "スキル"
     },
     {
-     "species_name": "アゴジムシ",
-     "dex_no": "0736",
-     "sleep_type": "うとうと"
-    },
-    {
-     "species_name": "デンヂムシ",
-     "dex_no": "0737",
-     "sleep_type": "うとうと"
+     "species_name": "ボスゴドラ",
+     "dex_no": "0306",
+     "sleep_type": "ぐっすり",
+     "specialty": "食材"
     },
     {
      "species_name": "クワガノン",
      "dex_no": "0738",
-     "sleep_type": "うとうと"
-    },
-    {
-     "species_name": "マネネ",
-     "dex_no": "0439",
-     "sleep_type": "ぐっすり",
+     "sleep_type": "うとうと",
      "specialty": "食材"
     }
    ]
@@ -1793,144 +2914,994 @@
    "source": "https://wikiwiki.jp/poke_sleep/リサーチフィールド/EXモード/ワカクサ本島EX",
    "encounters": [
     {
-     "species_name": "ヘルガー",
-     "dex_no": "0229",
-     "sleep_type": "うとうと"
+     "species_name": "フシギダネ",
+     "dex_no": "0001",
+     "sleep_type": "うとうと",
+     "specialty": "食材"
     },
     {
-     "species_name": "バンギラス",
-     "dex_no": "0248",
-     "sleep_type": "うとうと"
+     "species_name": "キャタピー",
+     "dex_no": "0010",
+     "sleep_type": "うとうと",
+     "specialty": "きのみ"
     },
     {
-     "species_name": "ヤミラミ",
-     "dex_no": "0302",
-     "sleep_type": "うとうと"
+     "species_name": "トランセル",
+     "dex_no": "0011",
+     "sleep_type": "うとうと",
+     "specialty": "きのみ"
     },
     {
-     "species_name": "チルタリス",
-     "dex_no": "0334",
-     "sleep_type": "うとうと"
+     "species_name": "チコリータ",
+     "dex_no": "0152",
+     "sleep_type": "うとうと",
+     "specialty": "きのみ"
     },
     {
-     "species_name": "フワライド",
-     "dex_no": "0426",
-     "sleep_type": "うとうと"
+     "species_name": "デルビル",
+     "dex_no": "0228",
+     "sleep_type": "うとうと",
+     "specialty": "きのみ"
     },
     {
-     "species_name": "ラウドボーン",
-     "dex_no": "0911",
-     "sleep_type": "うとうと"
+     "species_name": "キモリ",
+     "dex_no": "0252",
+     "sleep_type": "うとうと",
+     "specialty": "スキル"
     },
     {
-     "species_name": "ウインディ",
-     "dex_no": "0059",
-     "sleep_type": "すやすや"
+     "species_name": "カゲボウズ",
+     "dex_no": "0353",
+     "sleep_type": "うとうと",
+     "specialty": "きのみ"
     },
     {
-     "species_name": "デンリュウ",
-     "dex_no": "0181",
-     "sleep_type": "すやすや"
+     "species_name": "ナエトル",
+     "dex_no": "0387",
+     "sleep_type": "うとうと",
+     "specialty": "スキル"
+    },
+    {
+     "species_name": "オンバット",
+     "dex_no": "0714",
+     "sleep_type": "うとうと",
+     "specialty": "スキル"
+    },
+    {
+     "species_name": "ニャオハ",
+     "dex_no": "0906",
+     "sleep_type": "うとうと",
+     "specialty": "食材"
+    },
+    {
+     "species_name": "ヒトカゲ",
+     "dex_no": "0004",
+     "sleep_type": "すやすや",
+     "specialty": "食材"
+    },
+    {
+     "species_name": "ピカチュウ",
+     "dex_no": "0025",
+     "sleep_type": "すやすや",
+     "specialty": "きのみ"
+    },
+    {
+     "species_name": "ピッピ",
+     "dex_no": "0035",
+     "sleep_type": "すやすや",
+     "specialty": "きのみ"
+    },
+    {
+     "species_name": "ロコン",
+     "dex_no": "0037",
+     "sleep_type": "すやすや",
+     "specialty": "きのみ"
+    },
+    {
+     "species_name": "ニャース",
+     "dex_no": "0052",
+     "sleep_type": "すやすや",
+     "specialty": "スキル"
+    },
+    {
+     "species_name": "ガーディ",
+     "dex_no": "0058",
+     "sleep_type": "すやすや",
+     "specialty": "スキル"
+    },
+    {
+     "species_name": "イーブイ",
+     "dex_no": "0133",
+     "sleep_type": "すやすや",
+     "specialty": "スキル"
+    },
+    {
+     "species_name": "ヒノアラシ",
+     "dex_no": "0155",
+     "sleep_type": "すやすや",
+     "specialty": "きのみ"
+    },
+    {
+     "species_name": "ネイティ",
+     "dex_no": "0177",
+     "sleep_type": "すやすや",
+     "specialty": "きのみ"
+    },
+    {
+     "species_name": "メリープ",
+     "dex_no": "0179",
+     "sleep_type": "すやすや",
+     "specialty": "スキル"
+    },
+    {
+     "species_name": "モココ",
+     "dex_no": "0180",
+     "sleep_type": "すやすや",
+     "specialty": "スキル"
+    },
+    {
+     "species_name": "アチャモ",
+     "dex_no": "0255",
+     "sleep_type": "すやすや",
+     "specialty": "きのみ"
     },
     {
      "species_name": "ラルトス",
      "dex_no": "0280",
-     "sleep_type": "すやすや"
+     "sleep_type": "すやすや",
+     "specialty": "スキル"
     },
     {
-     "species_name": "キルリア",
-     "dex_no": "0281",
-     "sleep_type": "すやすや"
+     "species_name": "ナマケロ",
+     "dex_no": "0287",
+     "sleep_type": "すやすや",
+     "specialty": "きのみ"
     },
     {
-     "species_name": "サーナイト",
-     "dex_no": "0282",
-     "sleep_type": "すやすや"
+     "species_name": "ヒコザル",
+     "dex_no": "0390",
+     "sleep_type": "すやすや",
+     "specialty": "スキル"
     },
     {
-     "species_name": "アチゲータ",
-     "dex_no": "0910",
-     "sleep_type": "すやすや"
+     "species_name": "ムンナ",
+     "dex_no": "0517",
+     "sleep_type": "すやすや",
+     "specialty": "きのみ"
     },
     {
-     "species_name": "パモット",
-     "dex_no": "0922",
-     "sleep_type": "すやすや"
+     "species_name": "アブリー",
+     "dex_no": "0742",
+     "sleep_type": "すやすや",
+     "specialty": "食材"
     },
     {
-     "species_name": "パーモット",
-     "dex_no": "0923",
-     "sleep_type": "すやすや"
+     "species_name": "ホゲータ",
+     "dex_no": "0909",
+     "sleep_type": "すやすや",
+     "specialty": "食材"
     },
     {
-     "species_name": "イワーク",
-     "dex_no": "0095",
-     "sleep_type": "ぐっすり"
+     "species_name": "パモ",
+     "dex_no": "0921",
+     "sleep_type": "すやすや",
+     "specialty": "スキル"
     },
     {
-     "species_name": "ハガネール",
-     "dex_no": "0208",
-     "sleep_type": "ぐっすり"
+     "species_name": "ゼニガメ",
+     "dex_no": "0007",
+     "sleep_type": "ぐっすり",
+     "specialty": "食材"
     },
     {
-     "species_name": "サナギラス",
-     "dex_no": "0247",
-     "sleep_type": "ぐっすり"
+     "species_name": "サンド",
+     "dex_no": "0027",
+     "sleep_type": "ぐっすり",
+     "specialty": "スキル"
+    },
+    {
+     "species_name": "コイル",
+     "dex_no": "0081",
+     "sleep_type": "ぐっすり",
+     "specialty": "スキル"
+    },
+    {
+     "species_name": "ドードー",
+     "dex_no": "0084",
+     "sleep_type": "ぐっすり",
+     "specialty": "きのみ"
+    },
+    {
+     "species_name": "ドードリオ",
+     "dex_no": "0085",
+     "sleep_type": "ぐっすり",
+     "specialty": "きのみ"
+    },
+    {
+     "species_name": "カラカラ",
+     "dex_no": "0104",
+     "sleep_type": "ぐっすり",
+     "specialty": "きのみ"
+    },
+    {
+     "species_name": "ワニノコ",
+     "dex_no": "0158",
+     "sleep_type": "ぐっすり",
+     "specialty": "きのみ"
+    },
+    {
+     "species_name": "ピチュー",
+     "dex_no": "0172",
+     "sleep_type": "ぐっすり",
+     "specialty": "きのみ"
+    },
+    {
+     "species_name": "ピィ",
+     "dex_no": "0173",
+     "sleep_type": "ぐっすり",
+     "specialty": "きのみ"
+    },
+    {
+     "species_name": "ウソッキー",
+     "dex_no": "0185",
+     "sleep_type": "ぐっすり",
+     "specialty": "スキル"
+    },
+    {
+     "species_name": "ヨーギラス",
+     "dex_no": "0246",
+     "sleep_type": "ぐっすり",
+     "specialty": "食材"
+    },
+    {
+     "species_name": "ミズゴロウ",
+     "dex_no": "0258",
+     "sleep_type": "ぐっすり",
+     "specialty": "きのみ"
     },
     {
      "species_name": "ココドラ",
      "dex_no": "0304",
-     "sleep_type": "ぐっすり"
+     "sleep_type": "ぐっすり",
+     "specialty": "食材"
     },
     {
-     "species_name": "コドラ",
-     "dex_no": "0305",
-     "sleep_type": "ぐっすり"
+     "species_name": "チルット",
+     "dex_no": "0333",
+     "sleep_type": "ぐっすり",
+     "specialty": "きのみ"
     },
     {
-     "species_name": "ボスゴドラ",
-     "dex_no": "0306",
-     "sleep_type": "ぐっすり"
+     "species_name": "タマザラシ",
+     "dex_no": "0363",
+     "sleep_type": "ぐっすり",
+     "specialty": "きのみ"
     },
     {
-     "species_name": "トドグラー",
-     "dex_no": "0364",
-     "sleep_type": "ぐっすり"
+     "species_name": "ポッチャマ",
+     "dex_no": "0393",
+     "sleep_type": "ぐっすり",
+     "specialty": "きのみ"
     },
     {
-     "species_name": "トドゼルガ",
-     "dex_no": "0365",
-     "sleep_type": "ぐっすり"
+     "species_name": "ウソハチ",
+     "dex_no": "0438",
+     "sleep_type": "ぐっすり",
+     "specialty": "スキル"
+    },
+    {
+     "species_name": "ピンプク",
+     "dex_no": "0440",
+     "sleep_type": "ぐっすり",
+     "specialty": "食材"
     },
     {
      "species_name": "ユキカブリ",
      "dex_no": "0459",
-     "sleep_type": "ぐっすり"
+     "sleep_type": "ぐっすり",
+     "specialty": "食材"
     },
     {
-     "species_name": "ユキノオー",
-     "dex_no": "0460",
-     "sleep_type": "ぐっすり"
+     "species_name": "ワシボン",
+     "dex_no": "0627",
+     "sleep_type": "ぐっすり",
+     "specialty": "スキル"
     },
     {
-     "species_name": "エルレイド",
-     "dex_no": "0475",
-     "sleep_type": "ぐっすり"
+     "species_name": "チゴラス",
+     "dex_no": "0696",
+     "sleep_type": "ぐっすり",
+     "specialty": "きのみ"
+    },
+    {
+     "species_name": "エレズン",
+     "dex_no": "0848",
+     "sleep_type": "ぐっすり",
+     "specialty": "スキル"
+    },
+    {
+     "species_name": "クワッス",
+     "dex_no": "0912",
+     "sleep_type": "ぐっすり",
+     "specialty": "食材"
+    },
+    {
+     "species_name": "アルクジラ",
+     "dex_no": "0974",
+     "sleep_type": "ぐっすり",
+     "specialty": "食材"
+    },
+    {
+     "species_name": "フシギソウ",
+     "dex_no": "0002",
+     "sleep_type": "うとうと",
+     "specialty": "食材"
+    },
+    {
+     "species_name": "ベイリーフ",
+     "dex_no": "0153",
+     "sleep_type": "うとうと",
+     "specialty": "きのみ"
+    },
+    {
+     "species_name": "ウパー(パルデア)",
+     "dex_no": "0194",
+     "sleep_type": "うとうと",
+     "specialty": "食材"
+    },
+    {
+     "species_name": "ヘルガー",
+     "dex_no": "0229",
+     "sleep_type": "うとうと",
+     "specialty": "きのみ"
+    },
+    {
+     "species_name": "ジュプトル",
+     "dex_no": "0253",
+     "sleep_type": "うとうと",
+     "specialty": "スキル"
+    },
+    {
+     "species_name": "ヤルキモノ",
+     "dex_no": "0288",
+     "sleep_type": "うとうと",
+     "specialty": "きのみ"
+    },
+    {
+     "species_name": "チルタリス",
+     "dex_no": "0334",
+     "sleep_type": "うとうと",
+     "specialty": "きのみ"
+    },
+    {
+     "species_name": "ハヤシガメ",
+     "dex_no": "0388",
+     "sleep_type": "うとうと",
+     "specialty": "スキル"
+    },
+    {
+     "species_name": "フワンテ",
+     "dex_no": "0425",
+     "sleep_type": "うとうと",
+     "specialty": "スキル"
+    },
+    {
+     "species_name": "ニャローテ",
+     "dex_no": "0907",
+     "sleep_type": "うとうと",
+     "specialty": "食材"
+    },
+    {
+     "species_name": "リザード",
+     "dex_no": "0005",
+     "sleep_type": "すやすや",
+     "specialty": "食材"
+    },
+    {
+     "species_name": "ペルシアン",
+     "dex_no": "0053",
+     "sleep_type": "すやすや",
+     "specialty": "スキル"
+    },
+    {
+     "species_name": "マグマラシ",
+     "dex_no": "0156",
+     "sleep_type": "すやすや",
+     "specialty": "きのみ"
+    },
+    {
+     "species_name": "キルリア",
+     "dex_no": "0281",
+     "sleep_type": "すやすや",
+     "specialty": "スキル"
+    },
+    {
+     "species_name": "アチゲータ",
+     "dex_no": "0910",
+     "sleep_type": "すやすや",
+     "specialty": "食材"
+    },
+    {
+     "species_name": "カメール",
+     "dex_no": "0008",
+     "sleep_type": "ぐっすり",
+     "specialty": "食材"
+    },
+    {
+     "species_name": "レアコイル",
+     "dex_no": "0082",
+     "sleep_type": "ぐっすり",
+     "specialty": "スキル"
+    },
+    {
+     "species_name": "ガラガラ",
+     "dex_no": "0105",
+     "sleep_type": "ぐっすり",
+     "specialty": "きのみ"
+    },
+    {
+     "species_name": "アリゲイツ",
+     "dex_no": "0159",
+     "sleep_type": "ぐっすり",
+     "specialty": "きのみ"
+    },
+    {
+     "species_name": "サナギラス",
+     "dex_no": "0247",
+     "sleep_type": "ぐっすり",
+     "specialty": "食材"
+    },
+    {
+     "species_name": "ワカシャモ",
+     "dex_no": "0256",
+     "sleep_type": "ぐっすり",
+     "specialty": "きのみ"
+    },
+    {
+     "species_name": "ヌマクロー",
+     "dex_no": "0259",
+     "sleep_type": "ぐっすり",
+     "specialty": "きのみ"
+    },
+    {
+     "species_name": "トドグラー",
+     "dex_no": "0364",
+     "sleep_type": "ぐっすり",
+     "specialty": "きのみ"
+    },
+    {
+     "species_name": "モウカザル",
+     "dex_no": "0391",
+     "sleep_type": "ぐっすり",
+     "specialty": "スキル"
+    },
+    {
+     "species_name": "ポッタイシ",
+     "dex_no": "0394",
+     "sleep_type": "ぐっすり",
+     "specialty": "きのみ"
     },
     {
      "species_name": "ウェルカモ",
      "dex_no": "0913",
-     "sleep_type": "ぐっすり"
+     "sleep_type": "ぐっすり",
+     "specialty": "食材"
+    },
+    {
+     "species_name": "ヤミカラス",
+     "dex_no": "0198",
+     "sleep_type": "うとうと",
+     "specialty": "スキル"
+    },
+    {
+     "species_name": "ニューラ",
+     "dex_no": "0215",
+     "sleep_type": "うとうと",
+     "specialty": "きのみ"
+    },
+    {
+     "species_name": "ヤミラミ",
+     "dex_no": "0302",
+     "sleep_type": "うとうと",
+     "specialty": "スキル"
+    },
+    {
+     "species_name": "ジュペッタ",
+     "dex_no": "0354",
+     "sleep_type": "うとうと",
+     "specialty": "きのみ"
+    },
+    {
+     "species_name": "キュウコン",
+     "dex_no": "0038",
+     "sleep_type": "すやすや",
+     "specialty": "きのみ"
+    },
+    {
+     "species_name": "メタモン",
+     "dex_no": "0132",
+     "sleep_type": "すやすや",
+     "specialty": "食材"
+    },
+    {
+     "species_name": "パモット",
+     "dex_no": "0922",
+     "sleep_type": "すやすや",
+     "specialty": "スキル"
+    },
+    {
+     "species_name": "コドラ",
+     "dex_no": "0305",
+     "sleep_type": "ぐっすり",
+     "specialty": "食材"
+    },
+    {
+     "species_name": "バタフリー",
+     "dex_no": "0012",
+     "sleep_type": "うとうと",
+     "specialty": "きのみ"
+    },
+    {
+     "species_name": "カイロス",
+     "dex_no": "0127",
+     "sleep_type": "うとうと",
+     "specialty": "食材"
+    },
+    {
+     "species_name": "ヘラクロス",
+     "dex_no": "0214",
+     "sleep_type": "うとうと",
+     "specialty": "スキル"
+    },
+    {
+     "species_name": "アブソル",
+     "dex_no": "0359",
+     "sleep_type": "うとうと",
+     "specialty": "食材"
+    },
+    {
+     "species_name": "ライチュウ",
+     "dex_no": "0026",
+     "sleep_type": "すやすや",
+     "specialty": "きのみ"
+    },
+    {
+     "species_name": "ガルーラ",
+     "dex_no": "0115",
+     "sleep_type": "すやすや",
+     "specialty": "食材"
+    },
+    {
+     "species_name": "デンリュウ",
+     "dex_no": "0181",
+     "sleep_type": "すやすや",
+     "specialty": "スキル"
+    },
+    {
+     "species_name": "デデンネ",
+     "dex_no": "0702",
+     "sleep_type": "すやすや",
+     "specialty": "スキル"
+    },
+    {
+     "species_name": "キュワワー",
+     "dex_no": "0764",
+     "sleep_type": "すやすや",
+     "specialty": "食材"
+    },
+    {
+     "species_name": "イワーク",
+     "dex_no": "0095",
+     "sleep_type": "ぐっすり",
+     "specialty": "きのみ"
+    },
+    {
+     "species_name": "トドゼルガ",
+     "dex_no": "0365",
+     "sleep_type": "ぐっすり",
+     "specialty": "きのみ"
+    },
+    {
+     "species_name": "ユキノオー",
+     "dex_no": "0460",
+     "sleep_type": "ぐっすり",
+     "specialty": "食材"
+    },
+    {
+     "species_name": "ウッウ",
+     "dex_no": "0845",
+     "sleep_type": "ぐっすり",
+     "specialty": "食材"
+    },
+    {
+     "species_name": "ブラッキー",
+     "dex_no": "0197",
+     "sleep_type": "うとうと",
+     "specialty": "スキル"
+    },
+    {
+     "species_name": "ツボツボ",
+     "dex_no": "0213",
+     "sleep_type": "うとうと",
+     "specialty": "スキル"
+    },
+    {
+     "species_name": "デリバード",
+     "dex_no": "0225",
+     "sleep_type": "うとうと",
+     "specialty": "食材"
+    },
+    {
+     "species_name": "ミカルゲ",
+     "dex_no": "0442",
+     "sleep_type": "うとうと",
+     "specialty": "食材"
+    },
+    {
+     "species_name": "リーフィア",
+     "dex_no": "0470",
+     "sleep_type": "うとうと",
+     "specialty": "スキル"
+    },
+    {
+     "species_name": "オンバーン",
+     "dex_no": "0715",
+     "sleep_type": "うとうと",
+     "specialty": "スキル"
+    },
+    {
+     "species_name": "ミミッキュ",
+     "dex_no": "0778",
+     "sleep_type": "うとうと",
+     "specialty": "スキル"
+    },
+    {
+     "species_name": "ジジーロン",
+     "dex_no": "0780",
+     "sleep_type": "うとうと",
+     "specialty": "食材"
+    },
+    {
+     "species_name": "ドオー",
+     "dex_no": "0980",
+     "sleep_type": "うとうと",
+     "specialty": "食材"
+    },
+    {
+     "species_name": "ラッキー",
+     "dex_no": "0113",
+     "sleep_type": "すやすや",
+     "specialty": "食材"
+    },
+    {
+     "species_name": "サンダース",
+     "dex_no": "0135",
+     "sleep_type": "すやすや",
+     "specialty": "スキル"
+    },
+    {
+     "species_name": "ブースター",
+     "dex_no": "0136",
+     "sleep_type": "すやすや",
+     "specialty": "スキル"
+    },
+    {
+     "species_name": "ネイティオ",
+     "dex_no": "0178",
+     "sleep_type": "すやすや",
+     "specialty": "きのみ"
+    },
+    {
+     "species_name": "エーフィ",
+     "dex_no": "0196",
+     "sleep_type": "すやすや",
+     "specialty": "スキル"
+    },
+    {
+     "species_name": "ニンフィア",
+     "dex_no": "0700",
+     "sleep_type": "すやすや",
+     "specialty": "スキル"
+    },
+    {
+     "species_name": "アブリボン",
+     "dex_no": "0743",
+     "sleep_type": "すやすや",
+     "specialty": "食材"
+    },
+    {
+     "species_name": "サンドパン",
+     "dex_no": "0028",
+     "sleep_type": "ぐっすり",
+     "specialty": "スキル"
+    },
+    {
+     "species_name": "カモネギ",
+     "dex_no": "0083",
+     "sleep_type": "ぐっすり",
+     "specialty": "食材"
+    },
+    {
+     "species_name": "シャワーズ",
+     "dex_no": "0134",
+     "sleep_type": "ぐっすり",
+     "specialty": "スキル"
+    },
+    {
+     "species_name": "クチート",
+     "dex_no": "0303",
+     "sleep_type": "ぐっすり",
+     "specialty": "食材"
+    },
+    {
+     "species_name": "グレイシア",
+     "dex_no": "0471",
+     "sleep_type": "ぐっすり",
+     "specialty": "スキル"
+    },
+    {
+     "species_name": "ウォーグル",
+     "dex_no": "0628",
+     "sleep_type": "ぐっすり",
+     "specialty": "スキル"
+    },
+    {
+     "species_name": "トゲデマル",
+     "dex_no": "0777",
+     "sleep_type": "ぐっすり",
+     "specialty": "スキル"
+    },
+    {
+     "species_name": "フシギバナ",
+     "dex_no": "0003",
+     "sleep_type": "うとうと",
+     "specialty": "食材"
+    },
+    {
+     "species_name": "メガニウム",
+     "dex_no": "0154",
+     "sleep_type": "うとうと",
+     "specialty": "きのみ"
+    },
+    {
+     "species_name": "リザードン",
+     "dex_no": "0006",
+     "sleep_type": "すやすや",
+     "specialty": "食材"
+    },
+    {
+     "species_name": "ピクシー",
+     "dex_no": "0036",
+     "sleep_type": "すやすや",
+     "specialty": "きのみ"
+    },
+    {
+     "species_name": "ウインディ",
+     "dex_no": "0059",
+     "sleep_type": "すやすや",
+     "specialty": "スキル"
+    },
+    {
+     "species_name": "バクフーン",
+     "dex_no": "0157",
+     "sleep_type": "すやすや",
+     "specialty": "きのみ"
+    },
+    {
+     "species_name": "カメックス",
+     "dex_no": "0009",
+     "sleep_type": "ぐっすり",
+     "specialty": "食材"
+    },
+    {
+     "species_name": "オーダイル",
+     "dex_no": "0160",
+     "sleep_type": "ぐっすり",
+     "specialty": "きのみ"
+    },
+    {
+     "species_name": "ジバコイル",
+     "dex_no": "0462",
+     "sleep_type": "ぐっすり",
+     "specialty": "スキル"
+    },
+    {
+     "species_name": "サーナイト",
+     "dex_no": "0282",
+     "sleep_type": "すやすや",
+     "specialty": "スキル"
+    },
+    {
+     "species_name": "ケッキング",
+     "dex_no": "0289",
+     "sleep_type": "すやすや",
+     "specialty": "きのみ"
+    },
+    {
+     "species_name": "ムシャーナ",
+     "dex_no": "0518",
+     "sleep_type": "すやすや",
+     "specialty": "きのみ"
+    },
+    {
+     "species_name": "ストリンダー(ハイ)",
+     "dex_no": "0849",
+     "sleep_type": "うとうと",
+     "specialty": "スキル"
+    },
+    {
+     "species_name": "ストリンダー(ロー)",
+     "dex_no": "0849",
+     "sleep_type": "うとうと",
+     "specialty": "スキル"
+    },
+    {
+     "species_name": "マスカーニャ",
+     "dex_no": "0908",
+     "sleep_type": "うとうと",
+     "specialty": "食材"
+    },
+    {
+     "species_name": "ラウドボーン",
+     "dex_no": "0911",
+     "sleep_type": "うとうと",
+     "specialty": "食材"
+    },
+    {
+     "species_name": "プラスル",
+     "dex_no": "0311",
+     "sleep_type": "すやすや",
+     "specialty": "スキル"
+    },
+    {
+     "species_name": "マイナン",
+     "dex_no": "0312",
+     "sleep_type": "すやすや",
+     "specialty": "スキル"
+    },
+    {
+     "species_name": "ガチゴラス",
+     "dex_no": "0697",
+     "sleep_type": "ぐっすり",
+     "specialty": "きのみ"
     },
     {
      "species_name": "ウェーニバル",
      "dex_no": "0914",
-     "sleep_type": "ぐっすり"
+     "sleep_type": "ぐっすり",
+     "specialty": "食材"
     },
     {
      "species_name": "ハルクジラ",
      "dex_no": "0975",
-     "sleep_type": "ぐっすり"
+     "sleep_type": "ぐっすり",
+     "specialty": "食材"
+    },
+    {
+     "species_name": "バンギラス",
+     "dex_no": "0248",
+     "sleep_type": "うとうと",
+     "specialty": "食材"
+    },
+    {
+     "species_name": "ジュカイン",
+     "dex_no": "0254",
+     "sleep_type": "うとうと",
+     "specialty": "スキル"
+    },
+    {
+     "species_name": "ドンカラス",
+     "dex_no": "0430",
+     "sleep_type": "うとうと",
+     "specialty": "スキル"
+    },
+    {
+     "species_name": "マニューラ",
+     "dex_no": "0461",
+     "sleep_type": "うとうと",
+     "specialty": "きのみ"
+    },
+    {
+     "species_name": "ハピナス",
+     "dex_no": "0242",
+     "sleep_type": "すやすや",
+     "specialty": "食材"
+    },
+    {
+     "species_name": "パーモット",
+     "dex_no": "0923",
+     "sleep_type": "すやすや",
+     "specialty": "スキル"
+    },
+    {
+     "species_name": "ハガネール",
+     "dex_no": "0208",
+     "sleep_type": "ぐっすり",
+     "specialty": "きのみ"
+    },
+    {
+     "species_name": "バシャーモ",
+     "dex_no": "0257",
+     "sleep_type": "ぐっすり",
+     "specialty": "きのみ"
+    },
+    {
+     "species_name": "ラグラージ",
+     "dex_no": "0260",
+     "sleep_type": "ぐっすり",
+     "specialty": "きのみ"
+    },
+    {
+     "species_name": "ボスゴドラ",
+     "dex_no": "0306",
+     "sleep_type": "ぐっすり",
+     "specialty": "食材"
+    },
+    {
+     "species_name": "ドダイトス",
+     "dex_no": "0389",
+     "sleep_type": "ぐっすり",
+     "specialty": "スキル"
+    },
+    {
+     "species_name": "ゴウカザル",
+     "dex_no": "0392",
+     "sleep_type": "ぐっすり",
+     "specialty": "スキル"
+    },
+    {
+     "species_name": "エンペルト",
+     "dex_no": "0395",
+     "sleep_type": "ぐっすり",
+     "specialty": "きのみ"
+    },
+    {
+     "species_name": "エルレイド",
+     "dex_no": "0475",
+     "sleep_type": "ぐっすり",
+     "specialty": "スキル"
+    },
+    {
+     "species_name": "ライコウ",
+     "dex_no": "0243",
+     "sleep_type": "すやすや",
+     "specialty": "スキル"
+    },
+    {
+     "species_name": "ラティアス",
+     "dex_no": "0380",
+     "sleep_type": "うとうと",
+     "specialty": "スキル"
+    },
+    {
+     "species_name": "ラティオス",
+     "dex_no": "0381",
+     "sleep_type": "うとうと",
+     "specialty": "スキル"
+    },
+    {
+     "species_name": "エンテイ",
+     "dex_no": "0244",
+     "sleep_type": "すやすや",
+     "specialty": "スキル"
+    },
+    {
+     "species_name": "クレセリア",
+     "dex_no": "0488",
+     "sleep_type": "すやすや",
+     "specialty": "スキル"
+    },
+    {
+     "species_name": "スイクン",
+     "dex_no": "0245",
+     "sleep_type": "ぐっすり",
+     "specialty": "スキル"
+    },
+    {
+     "species_name": "フワライド",
+     "dex_no": "0426",
+     "sleep_type": "うとうと",
+     "specialty": "スキル"
     }
    ]
   }
