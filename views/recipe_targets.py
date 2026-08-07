@@ -353,7 +353,7 @@ def _change_recipe_level(recipe_name: str, delta: int) -> None:
     st.cache_data.clear()
 
 
-def _render_level_card(recipe: dict) -> None:
+def _render_level_row(recipe: dict) -> None:
     name = recipe.get("name") or "—"
     level = recipe_level.get_recipe_level(name)
     icon = recipe_icon_url(name)
@@ -362,23 +362,14 @@ def _render_level_card(recipe: dict) -> None:
     disabled_plus = level >= recipe_level.MAX_LEVEL
 
     with st.container(border=True):
-        st.html(
-            '<div class="rt-level-card">'
-            f'<div class="rt-level-img">{img}</div>'
-            '<div class="rt-level-main">'
-            f'<div class="rt-level-name">{html.escape(name)}</div>'
-            f'<div class="rt-level-value">Lv{level}</div>'
-            '</div></div>'
-        )
-        cols = st.columns([1, 1, 1])
-        if cols[0].button("−", key=f"recipe_lv_minus_{name}", disabled=disabled_minus, use_container_width=True):
+        img_col, name_col, lv_col, minus_col, plus_col = st.columns([0.8, 4.2, 1.0, 1.0, 1.0])
+        img_col.html(f'<div class="rt-level-img">{img}</div>')
+        name_col.html(f'<div class="rt-level-name">{html.escape(name)}</div>')
+        lv_col.html(f'<div class="rt-level-current">Lv{level}</div>')
+        if minus_col.button("−1", key=f"recipe_lv_minus_{name}", disabled=disabled_minus, use_container_width=True):
             _change_recipe_level(name, -1)
             st.rerun()
-        cols[1].markdown(
-            f"<div class='rt-level-center'>Lv{level}</div>",
-            unsafe_allow_html=True,
-        )
-        if cols[2].button("+", key=f"recipe_lv_plus_{name}", disabled=disabled_plus, use_container_width=True):
+        if plus_col.button("+1", key=f"recipe_lv_plus_{name}", disabled=disabled_plus, use_container_width=True):
             _change_recipe_level(name, 1)
             st.rerun()
 
@@ -393,7 +384,7 @@ def _render_level_editor(recipes_by_category: dict[str, list[dict]]) -> None:
     saved = recipe_level.load_recipe_levels()
     total = sum(len(rows) for rows in recipes_by_category.values())
     st.caption(
-        f"料理名とイラストだけ見て、ゲーム内で上がった分を `+` / `−` で反映します。"
+        f"ゲーム内で上がった分だけ、料理ごとに `+1` / `−1` を押します。"
         f"登録済み **{len(saved)}件** / 全{total}品。"
     )
 
@@ -404,11 +395,8 @@ def _render_level_editor(recipes_by_category: dict[str, list[dict]]) -> None:
             if not rows:
                 st.html(c.empty_state("このカテゴリに対象料理がありません。"))
                 continue
-            for start in range(0, len(rows), 3):
-                cols = st.columns(3)
-                for col, recipe in zip(cols, rows[start:start + 3], strict=False):
-                    with col:
-                        _render_level_card(recipe)
+            for recipe in rows:
+                _render_level_row(recipe)
 
     if saved:
         with st.expander("全部 Lv1 に戻す"):
@@ -478,14 +466,11 @@ st.html(
     '.rt-progress{height:6px;border-radius:999px;background:#eee;overflow:hidden;margin:8px 0 4px;}'
     '.rt-progress div{height:100%;background:var(--ps-sp-food);border-radius:999px;}'
     '.rt-subrow{display:flex;flex-wrap:wrap;gap:4px;margin-top:7px;}'
-    '.rt-level-card{display:flex;align-items:center;gap:10px;min-height:64px;}'
-    '.rt-level-img{width:54px;height:54px;display:flex;align-items:center;justify-content:center;flex:0 0 auto;}'
+    '.rt-level-img{height:48px;display:flex;align-items:center;justify-content:center;}'
     '.rt-level-img img{max-width:54px;max-height:54px;object-fit:contain;}'
-    '.rt-level-main{min-width:0;}'
-    '.rt-level-name{font-weight:800;line-height:1.25;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}'
-    '.rt-level-value{color:var(--ps-ink-dim);font-weight:800;font-variant-numeric:tabular-nums;margin-top:2px;}'
-    '.rt-level-center{text-align:center;font-weight:900;font-variant-numeric:tabular-nums;line-height:38px;color:var(--ps-ink);}'
-    '@media (max-width:480px){.rt-cand-grid{grid-template-columns:1fr;}.rt-recipe-head{border-radius:12px;padding:10px;}.rt-level-name{white-space:normal;}}'
+    '.rt-level-name{min-height:48px;display:flex;align-items:center;font-weight:850;line-height:1.25;}'
+    '.rt-level-current{min-height:48px;display:flex;align-items:center;justify-content:center;font-size:1.05rem;font-weight:900;font-variant-numeric:tabular-nums;color:var(--ps-sp-food);}'
+    '@media (max-width:480px){.rt-cand-grid{grid-template-columns:1fr;}.rt-recipe-head{border-radius:12px;padding:10px;}.rt-level-name{font-size:.9rem;}}'
     '</style>'
 )
 
