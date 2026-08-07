@@ -18,6 +18,7 @@ import pandas as pd
 import streamlit as st
 
 import db
+from constants import NATURES
 from image_utils import berry_icon_url, ingredient_icon_url, pokemon_image_url
 from ui import components as c
 from ui.widgets import pokemon_popover_row
@@ -39,6 +40,13 @@ from utils.skill_role_coverage import TOP_N, role_holes, skill_role_audit
 
 # 食材は編成に1〜2体置ける想定。ここを満たせば「充足」
 FOOD_TOP_N = 2
+NATURE_AXIS_SHORT = {
+    "speed": "おてスピ",
+    "energy_recovery": "げんき",
+    "ingredient": "食材",
+    "skill": "スキル",
+    "exp": "EXP",
+}
 
 
 @st.cache_data(show_spinner=False, ttl=300)
@@ -193,6 +201,27 @@ def _slot_chip_html(label: str, ingredient_name: str | None, target_name: str) -
     )
 
 
+def _nature_up_down_label(nature: str | None) -> str:
+    if not nature:
+        return "未設定"
+    mods = NATURES.get(nature)
+    if mods is None:
+        return str(nature)
+    ups = [
+        f"{NATURE_AXIS_SHORT.get(axis, axis)}↑"
+        for axis, value in mods.items()
+        if value > 0
+    ]
+    downs = [
+        f"{NATURE_AXIS_SHORT.get(axis, axis)}↓"
+        for axis, value in mods.items()
+        if value < 0
+    ]
+    if not ups and not downs:
+        return f"{nature} 無補正"
+    return f"{nature} {'/'.join([*ups, *downs])}"
+
+
 def _recommendation_detail_card(p: dict, target_name: str) -> str:
     species = db.get_species_data(p.get("species_name") or "") or {}
     img_url = pokemon_image_url(p.get("species_name") or "")
@@ -220,6 +249,7 @@ def _recommendation_detail_card(p: dict, target_name: str) -> str:
         if p.get(f"subskill_lv{lv}")
     ]
     sub_text = " / ".join(str(s) for s in subs) if subs else "—"
+    nature_text = _nature_up_down_label(p.get("nature"))
     return (
         '<article class="rec-detail-card">'
         '<div class="rec-detail-head">'
@@ -229,10 +259,11 @@ def _recommendation_detail_card(p: dict, target_name: str) -> str:
         f'<div class="rec-detail-meta">{html.escape(str(p.get("species_name") or "—"))}'
         f' / Lv{html.escape(str(lv))} / {html.escape(comp)}'
         f' / 対象{target_count}枠</div>'
+        f'<div class="rec-detail-nature">性格: {html.escape(nature_text)}</div>'
         '</div>'
         '</div>'
         f'<div class="rec-detail-slots">{slot_html}</div>'
-        f'<div class="rec-detail-sub">サブ: {html.escape(sub_text)}</div>'
+        f'<div class="rec-detail-sub">サブ(開放順): {html.escape(sub_text)}</div>'
         '</article>'
     )
 
@@ -265,6 +296,7 @@ def _recommendation_detail_html(target_name: str, row, owned_rows: list[dict]) -
         '.rec-detail-main{min-width:0;}'
         '.rec-detail-name{font-weight:800;font-size:.95rem;line-height:1.25;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}'
         '.rec-detail-meta{color:var(--ps-ink-dim);font-size:12px;line-height:1.35;margin-top:2px;}'
+        '.rec-detail-nature{color:var(--ps-ink);font-size:12px;line-height:1.35;margin-top:2px;}'
         '.rec-detail-slots{display:flex;flex-wrap:wrap;gap:5px;margin-top:8px;}'
         '.rec-slot{display:inline-flex;align-items:center;gap:3px;border:1px solid #e2e2e2;background:#fff;border-radius:999px;'
         'padding:3px 7px;font-size:12px;line-height:1.35;white-space:nowrap;}'
