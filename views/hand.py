@@ -96,17 +96,67 @@ def _coverage_table(
 def _species_chip_html(species_name: str) -> str:
     img_url = pokemon_image_url(species_name)
     img = (
-        f'<img src="{img_url}" style="width:18px;height:18px;object-fit:contain;'
-        f'vertical-align:middle;margin-right:4px">'
+        f'<img src="{img_url}" loading="lazy" style="width:22px;height:22px;object-fit:contain;'
+        f'flex:0 0 auto">'
         if img_url
         else ""
     )
     return (
-        f'<span style="display:inline-flex;align-items:center;gap:2px;'
+        f'<span class="rec-species-chip" style="display:inline-flex;align-items:center;gap:4px;'
         f'background:#fff;border:1px solid #e2e2e2;border-radius:999px;'
-        f'padding:2px 8px;margin:1px 4px 1px 0;white-space:nowrap;font-size:12px">'
+        f'padding:3px 8px;white-space:nowrap;font-size:12px">'
         f'{img}{html.escape(species_name)}</span>'
     )
+
+
+def _recommendation_status_html(label: str) -> str:
+    colors = {
+        "理想": ("#dff2e3", "#2f7a38"),
+        "即戦力": ("#e5f0ff", "#245c9e"),
+        "実用": ("#fff3cd", "#8a6500"),
+        "要育成": ("#fff3cd", "#8a6500"),
+        "未所持": ("#f1f1f1", "#666"),
+    }
+    bg, fg = colors.get(label, ("#f1f1f1", "#666"))
+    return (
+        f'<span class="rec-status" style="background:{bg};color:{fg};">'
+        f'{html.escape(label)}</span>'
+    )
+
+
+def _recommendation_hit_html(row) -> tuple[str, str]:
+    """カード内の主役表示と Lv60 指標を返す。"""
+    best = row.best_clear_hit or row.best_any_hit
+    if not best:
+        return (
+            '<div class="rec-owned rec-empty">おすすめ種族の所持なし</div>',
+            '<div class="rec-metric rec-metric-empty"><span>Lv60期待</span><strong>—</strong></div>',
+        )
+
+    support = (
+        f'<span>支援 {best.food_supports}</span>'
+        if row.best_clear_hit
+        else '<span>支援は未判定</span>'
+    )
+    body = (
+        '<div class="rec-owned">'
+        f'<div class="rec-owned-name">{html.escape(best.label)}</div>'
+        '<div class="rec-owned-meta">'
+        f'<span>{html.escape(best.species_name)}</span>'
+        f'<span>{html.escape(best.composition)}</span>'
+        f'<span>食材 {best.food_score:.1f}%</span>'
+        f'{support}'
+        '</div>'
+        '</div>'
+    )
+    metric = (
+        '<div class="rec-metric">'
+        '<span>Lv60期待</span>'
+        f'<strong>{best.lv60_target_per_day:.1f}</strong>'
+        '<small>個/日</small>'
+        '</div>'
+    )
+    return body, metric
 
 
 def _ingredient_recommendation_html(rows) -> str:
@@ -114,63 +164,57 @@ def _ingredient_recommendation_html(rows) -> str:
     for row in rows:
         icon = ingredient_icon_url(row.ingredient_name)
         icon_html = (
-            f'<img src="{icon}" style="width:28px;height:28px;object-fit:contain">'
+            f'<img src="{icon}" loading="lazy" style="width:34px;height:34px;object-fit:contain">'
             if icon
             else ""
         )
         rec_html = "".join(_species_chip_html(name) for name in row.recommended_species)
-        if row.best_clear_hit:
-            best = row.best_clear_hit
-            status = (
-                '<span style="background:#dff2e3;color:#2f7a38;'
-                'padding:2px 8px;border-radius:999px;font-size:12px;font-weight:700">'
-                f'{html.escape(best.fit_label)}</span>'
-            )
-            detail = (
-                f'{html.escape(best.label)} ({html.escape(best.composition)}) '
-                f'食材 {best.food_score:.1f}% / 支援 {best.food_supports} / '
-                f'Lv60 {best.lv60_target_per_day:.1f}個/日'
-            )
-        elif row.best_any_hit:
-            best = row.best_any_hit
-            status = (
-                '<span style="background:#fff3cd;color:#8a6500;'
-                'padding:2px 8px;border-radius:999px;font-size:12px;font-weight:700">'
-                '要育成</span>'
-            )
-            detail = (
-                f'{html.escape(best.label)} ({html.escape(best.composition)}) '
-                f'食材 {best.food_score:.1f}% / Lv60 {best.lv60_target_per_day:.1f}個/日'
-            )
-        else:
-            status = (
-                '<span style="background:#f1f1f1;color:#666;'
-                'padding:2px 8px;border-radius:999px;font-size:12px;font-weight:700">'
-                '未所持</span>'
-            )
-            detail = "おすすめ種族の所持なし"
+        status = _recommendation_status_html(row.status_label)
+        owned_html, metric_html = _recommendation_hit_html(row)
 
         parts.append(
-            '<tr style="border-bottom:1px solid #eee">'
-            f'<td style="padding:8px 8px;white-space:nowrap">{icon_html}</td>'
-            f'<td style="padding:8px 8px;white-space:nowrap;font-weight:600">{html.escape(row.ingredient_name)}</td>'
-            f'<td style="padding:8px 8px">{rec_html}</td>'
-            f'<td style="padding:8px 8px;white-space:nowrap">{status}</td>'
-            f'<td style="padding:8px 8px;color:#555">{detail}</td>'
-            '</tr>'
+            '<article class="rec-card">'
+            '<div class="rec-head">'
+            f'<div class="rec-icon">{icon_html}</div>'
+            '<div class="rec-title-block">'
+            f'<div class="rec-title">{html.escape(row.ingredient_name)}</div>'
+            f'<div class="rec-status-line">{status}</div>'
+            '</div>'
+            f'{metric_html}'
+            '</div>'
+            f'<div class="rec-species-row">{rec_html}</div>'
+            f'{owned_html}'
+            '</article>'
         )
 
     return (
-        '<table style="width:100%;border-collapse:collapse;font-size:13px">'
-        '<thead><tr style="background:#f6f6f6">'
-        '<th style="text-align:left;padding:8px">画像</th>'
-        '<th style="text-align:left;padding:8px">食材</th>'
-        '<th style="text-align:left;padding:8px">攻略おすすめ</th>'
-        '<th style="text-align:left;padding:8px">判定</th>'
-        '<th style="text-align:left;padding:8px">手持ち状況</th>'
-        '</tr></thead>'
-        f'<tbody>{"".join(parts)}</tbody>'
-        '</table>'
+        '<style>'
+        '.rec-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:10px;}'
+        '.rec-card{background:var(--ps-dusk);border:1px solid var(--ps-line);border-radius:12px;'
+        'padding:10px;box-shadow:0 2px 6px rgba(90,70,30,.08);min-width:0;}'
+        '.rec-head{display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:8px;align-items:center;}'
+        '.rec-icon{width:38px;height:38px;display:flex;align-items:center;justify-content:center;}'
+        '.rec-title{font-weight:800;font-size:.96rem;line-height:1.25;word-break:keep-all;overflow-wrap:anywhere;}'
+        '.rec-status-line{margin-top:3px;}'
+        '.rec-status{display:inline-block;padding:2px 8px;border-radius:999px;font-size:12px;font-weight:800;white-space:nowrap;}'
+        '.rec-metric{min-width:74px;text-align:right;line-height:1.05;color:var(--ps-ink);}'
+        '.rec-metric span{display:block;font-size:10px;color:var(--ps-ink-dim);white-space:nowrap;}'
+        '.rec-metric strong{font-size:1.08rem;font-variant-numeric:tabular-nums;}'
+        '.rec-metric small{font-size:10px;color:var(--ps-ink-dim);margin-left:1px;white-space:nowrap;}'
+        '.rec-metric-empty strong{color:var(--ps-ink-dim);}'
+        '.rec-species-row{display:flex;gap:5px;overflow-x:auto;-webkit-overflow-scrolling:touch;padding:8px 0 7px;margin:0 -2px;}'
+        '.rec-owned{border-top:1px solid rgba(0,0,0,.08);padding-top:7px;min-width:0;}'
+        '.rec-owned-name{font-weight:700;font-size:.86rem;line-height:1.25;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}'
+        '.rec-owned-meta{display:flex;flex-wrap:wrap;gap:4px 6px;margin-top:3px;color:var(--ps-ink-dim);font-size:12px;line-height:1.35;}'
+        '.rec-owned-meta span{white-space:nowrap;}'
+        '.rec-empty{color:var(--ps-ink-dim);font-size:12px;line-height:1.35;}'
+        '@media (max-width:480px){.rec-grid{grid-template-columns:1fr;}'
+        '.rec-card{border-radius:10px;padding:9px;}'
+        '.rec-head{grid-template-columns:auto minmax(0,1fr) auto;}'
+        '.rec-title{font-size:.92rem;}'
+        '.rec-metric{min-width:68px;}}'
+        '</style>'
+        f'<div class="rec-grid">{"".join(parts)}</div>'
     )
 
 
@@ -320,7 +364,7 @@ with rec_tab:
             ]
         )
     )
-    st.markdown(_ingredient_recommendation_html(rec_rows), unsafe_allow_html=True)
+    st.html(_ingredient_recommendation_html(rec_rows))
     st.caption(
         "※ ここでの上位表示は、攻略おすすめ種族のうち食材軸が十分強い個体を"
         "理想 / 即戦力 / 実用 の順で拾った目安。"
