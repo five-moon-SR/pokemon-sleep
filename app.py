@@ -56,6 +56,73 @@ st.logo(
 db.init_db()
 perf.mark("app.py: テーマ＋init_db")
 
+
+def _profile_gate() -> bool:
+    """4桁PINでプロフィールを選んでから本体へ進む。"""
+    profiles = db.list_profiles()
+    if not profiles:
+        st.error("プロフィールがありません。DB初期化を確認してください。")
+        return False
+
+    active_id = st.session_state.get(db.PROFILE_SESSION_KEY)
+    active = next((p for p in profiles if int(p["id"]) == int(active_id or 0)), None)
+
+    with st.sidebar:
+        st.markdown("### プロフィール")
+        if active:
+            db.set_current_profile_id(int(active["id"]))
+            st.success(f"{active['name']} で使用中")
+            if st.button("プロフィールを切り替える", use_container_width=True):
+                st.session_state.pop(db.PROFILE_SESSION_KEY, None)
+                st.rerun()
+            return True
+
+        options = {f"{p['name']}": int(p["id"]) for p in profiles}
+        with st.form("profile_login_form"):
+            selected_name = st.selectbox("ユーザー", list(options.keys()))
+            pin = st.text_input("4桁PIN", type="password", max_chars=4)
+            submitted = st.form_submit_button("入る", type="primary", use_container_width=True)
+        if submitted:
+            profile_id = options[selected_name]
+            if db.verify_profile_pin(profile_id, pin):
+                st.session_state[db.PROFILE_SESSION_KEY] = profile_id
+                st.rerun()
+            else:
+                st.error("PINが違います")
+
+        with st.expander("新しいプロフィールを作る"):
+            with st.form("profile_create_form"):
+                name = st.text_input("名前", placeholder="例: 友達A")
+                new_pin = st.text_input("4桁PINを設定", type="password", max_chars=4)
+                create = st.form_submit_button("作成", use_container_width=True)
+            if create:
+                try:
+                    profile_id = db.create_profile(name, new_pin)
+                    st.session_state[db.PROFILE_SESSION_KEY] = profile_id
+                    st.rerun()
+                except Exception as exc:
+                    st.error(str(exc))
+
+    st.html(
+        """
+        <section style="max-width:520px;margin:12vh auto 0;padding:20px;border-radius:18px;
+        background:linear-gradient(135deg,#fff,#F0F8FF);border:1px solid var(--ps-line);
+        box-shadow:0 10px 28px rgba(45,57,80,.10);">
+          <div style="font-size:.8rem;font-weight:900;color:var(--ps-ink-dim);letter-spacing:.08em;">PROFILE LOCK</div>
+          <h2 style="margin:.25rem 0 .45rem;">プロフィールを選んでPINを入力</h2>
+          <p style="line-height:1.65;margin:0;color:var(--ps-ink);">
+            登録ポケモン、編成、料理レベル、ユーザー設定はプロフィールごとに分かれます。
+            既存データは「なお」に入っています。
+          </p>
+        </section>
+        """
+    )
+    return False
+
+
+if not _profile_gate():
+    st.stop()
+
 # ナビは「ユーザーの目的」でグループ化する（ui_design_policy.md）。
 # 並びは実際の運用フローの順: ホーム → 今週の手持ちを決める → 箱を見る →
 # 足りないものを捕りに行く → 資料を引く。
