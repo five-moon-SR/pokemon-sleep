@@ -12,6 +12,8 @@
 
 from __future__ import annotations
 
+import html
+
 import pandas as pd
 import streamlit as st
 
@@ -30,6 +32,7 @@ from utils.berry_coverage import (
 )
 from utils.berry_coverage import TOP_N as BERRY_TOP_N
 from utils.ingredient_coverage import build_ingredient_index, versatile_mains
+from utils.ingredient_coverage import ingredient_recommendation_rows
 from utils.skill_role_coverage import TOP_N, role_holes, skill_role_audit
 
 # 食材は編成に1〜2体置ける想定。ここを満たせば「充足」
@@ -90,6 +93,86 @@ def _coverage_table(
     )
 
 
+def _species_chip_html(species_name: str) -> str:
+    img_url = pokemon_image_url(species_name)
+    img = (
+        f'<img src="{img_url}" style="width:18px;height:18px;object-fit:contain;'
+        f'vertical-align:middle;margin-right:4px">'
+        if img_url
+        else ""
+    )
+    return (
+        f'<span style="display:inline-flex;align-items:center;gap:2px;'
+        f'background:#fff;border:1px solid #e2e2e2;border-radius:999px;'
+        f'padding:2px 8px;margin:1px 4px 1px 0;white-space:nowrap;font-size:12px">'
+        f'{img}{html.escape(species_name)}</span>'
+    )
+
+
+def _ingredient_recommendation_html(rows) -> str:
+    parts = []
+    for row in rows:
+        icon = ingredient_icon_url(row.ingredient_name)
+        icon_html = (
+            f'<img src="{icon}" style="width:28px;height:28px;object-fit:contain">'
+            if icon
+            else ""
+        )
+        rec_html = "".join(_species_chip_html(name) for name in row.recommended_species)
+        if row.best_clear_hit:
+            best = row.best_clear_hit
+            status = (
+                '<span style="background:#dff2e3;color:#2f7a38;'
+                'padding:2px 8px;border-radius:999px;font-size:12px;font-weight:700">'
+                'クリア</span>'
+            )
+            detail = (
+                f'AAA / {html.escape(best.label)} ({html.escape(best.composition)}) '
+                f'食材 {best.food_score:.1f}%'
+            )
+        elif row.best_any_hit:
+            best = row.best_any_hit
+            status = (
+                '<span style="background:#fff3cd;color:#8a6500;'
+                'padding:2px 8px;border-radius:999px;font-size:12px;font-weight:700">'
+                '要育成</span>'
+            )
+            detail = (
+                f'{html.escape(best.label)} ({html.escape(best.composition)}) '
+                f'食材 {best.food_score:.1f}%'
+            )
+        else:
+            status = (
+                '<span style="background:#f1f1f1;color:#666;'
+                'padding:2px 8px;border-radius:999px;font-size:12px;font-weight:700">'
+                '未所持</span>'
+            )
+            detail = "おすすめ種族の所持なし"
+
+        parts.append(
+            '<tr style="border-bottom:1px solid #eee">'
+            f'<td style="padding:8px 8px;white-space:nowrap">{icon_html}</td>'
+            f'<td style="padding:8px 8px;white-space:nowrap;font-weight:600">{html.escape(row.ingredient_name)}</td>'
+            f'<td style="padding:8px 8px">{rec_html}</td>'
+            f'<td style="padding:8px 8px;white-space:nowrap">{status}</td>'
+            f'<td style="padding:8px 8px;color:#555">{detail}</td>'
+            '</tr>'
+        )
+
+    return (
+        '<table style="width:100%;border-collapse:collapse;font-size:13px">'
+        '<thead><tr style="background:#f6f6f6">'
+        '<th style="text-align:left;padding:8px">画像</th>'
+        '<th style="text-align:left;padding:8px">食材</th>'
+        '<th style="text-align:left;padding:8px">攻略おすすめ</th>'
+        '<th style="text-align:left;padding:8px">判定</th>'
+        '<th style="text-align:left;padding:8px">手持ち状況</th>'
+        '</tr></thead>'
+        f'<tbody>{"".join(parts)}</tbody>'
+        '</table>'
+    )
+
+
 st.html(c.page_banner("役割", "bag", icon="🧩"))
 st.caption(
     "編成を決める前に、ボックス全体で食材・きのみ・スキルの担当が"
@@ -136,7 +219,9 @@ st.html(
     )
 )
 
-food_tab, berry_tab, skill_tab = st.tabs(["🥕 食材", "🌳 きのみ", "🎯 スキル"])
+food_tab, rec_tab, berry_tab, skill_tab = st.tabs(
+    ["🥕 食材", "📖 攻略おすすめ", "🌳 きのみ", "🎯 スキル"]
+)
 
 
 # ── 食材 ────────────────────────────────────────────────────────────────
@@ -211,6 +296,33 @@ with food_tab:
                     f"{name} {daily:.1f}/日" for name, daily in main.duties
                 ),
             )
+
+
+# ── 攻略おすすめ ───────────────────────────────────────────────────────
+with rec_tab:
+    st.caption(
+        "攻略ページでよく挙がる食材ごとのおすすめ種族を、イラスト付きで並べた参照表。"
+        f"クリア判定は **AAA** かつ **食材軸評価 {80:.0f}% 以上** の所持個体で見ています。"
+    )
+    rec_rows = ingredient_recommendation_rows(owned)
+    total_ingredients = len(rec_rows)
+    clear_count = sum(1 for r in rec_rows if r.cleared)
+    any_count = sum(1 for r in rec_rows if r.best_any_hit)
+    st.html(
+        c.stat_tiles(
+            [
+                c.stat_tile("クリア済み", f"{clear_count}", sub=f"/{total_ingredients}食材"),
+                c.stat_tile("要育成", f"{any_count - clear_count}", sub=f"/{total_ingredients}食材"),
+                c.stat_tile("未所持", f"{total_ingredients - any_count}", sub=f"/{total_ingredients}食材"),
+            ]
+        )
+    )
+    st.markdown(_ingredient_recommendation_html(rec_rows), unsafe_allow_html=True)
+    st.caption(
+        "※ ここでの「クリア」は、攻略おすすめ種族の AAA 個体を所持し、"
+        "食材軸が十分強いと見なせる場合の目安。"
+        "実運用はレシピや鍋容量でも変わるので、最終判断は食材担当ページと合わせて見るといい。"
+    )
 
 
 # ── きのみ ──────────────────────────────────────────────────────────────

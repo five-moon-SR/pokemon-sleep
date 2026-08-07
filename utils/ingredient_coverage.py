@@ -20,8 +20,10 @@ from dataclasses import dataclass, field
 from typing import Any
 
 import db
+from utils.evaluator import evaluate_potential
 from utils.food_expectation import (
     _effective_level,
+    composition_string,
     expected_ingredients_per_day,
     qty_at_slot,
 )
@@ -29,6 +31,34 @@ from utils.community_tier import get_tier, tier_weight
 from utils.party_logic import _main_recipe_pace, _recipe_base_energy, get_play_ctx
 
 TARGET_RECIPES_KEY = "user.target_recipes"
+
+# 攻略ページでよく挙がる「食材ごとのおすすめ種族」。
+# 2026-08 時点で確認した Game8 / ポケらく の定番候補を、アプリ内参照用に固定しておく。
+INGREDIENT_RECOMMENDATIONS: dict[str, list[str]] = {
+    "おいしいシッポ": ["ヤドン", "メタモン"],
+    "ずっしりカボチャ": ["バケッチャ", "ミカルゲ"],
+    "ふといながねぎ": ["カモネギ", "ウェーニバル"],
+    "あじわいキノコ": ["ウパー", "ゴース"],
+    "つやつやアボカド": ["ナックラー", "フライゴン", "ジジーロン"],
+    "めざましコーヒー": ["アゴジムシ", "パルデアウパー", "クワガノン"],
+    "リラックスカカオ": ["ゼニガメ", "パルデアウパー", "アブソル", "ドオー"],
+    "ワカクサコーン": ["ヌイコグマ", "キテルグマ"],
+    "げきからハーブ": ["ミニリュウ", "ゴース", "カイリュー"],
+    "ほっこりポテト": ["アルクジラ", "ニャオハ", "ハルクジラ", "マスカーニャ"],
+    "ピュアなオイル": ["ウッウ", "グレッグル", "ドクロッグ", "レントラー"],
+    "とくせんエッグ": ["ピンプク", "ハピナス", "デリバード"],
+    "あんみんトマト": ["コリンク", "マダツボミ", "ユキノオー", "レントラー"],
+    "あったかジンジャー": ["ヨーギラス", "バンギラス", "ガルーラ"],
+    "マメミート": ["ココドラ", "ヒトカゲ", "ボスゴドラ", "キテルグマ"],
+    "あまいミツ": ["フシギダネ", "アブリー", "フシギバナ"],
+    "ワカクサ大豆": ["ジジーロン", "イシツブテ", "ウェーニバル", "バンギラス"],
+    "モーモーミルク": ["ゼニガメ", "カメックス"],
+    "とくせんリンゴ": ["ホゲータ", "ラウドボーン", "アブソル"],
+}
+
+# 食材ごとの「ここまで来たら実用上クリア」とみなす食材軸評価値。
+# AAA でも食材軸が弱い個体は、攻略観点ではまだ追う余地がある。
+CLEAR_FOOD_SCORE_THRESHOLD = 80.0
 
 # 食材スロット解放Lv（slot1=Lv1, slot2=Lv30, slot3=Lv60）
 _SLOT_UNLOCK = {"a": 1, "b": 30, "c": 60}
@@ -151,6 +181,90 @@ def versatile_mains(
         vm.duties.sort(key=lambda d: -d[1])
     out.sort(key=lambda vm: (-len(vm.duties), -vm.total_per_day))
     return out
+
+
+@dataclass
+class IngredientClearHit:
+    pokemon_id: int
+    label: str
+    species_name: str
+    composition: str
+    food_score: float
+    rank: str
+
+
+@dataclass
+class IngredientRecommendationRow:
+    ingredient_name: str
+    recommended_species: list[str]
+    best_clear_hit: IngredientClearHit | None
+    best_any_hit: IngredientClearHit | None
+
+    @property
+    def cleared(self) -> bool:
+        return self.best_clear_hit is not None
+
+    @property
+    def status_label(self) -> str:
+        if self.best_clear_hit:
+            return "クリア"
+        if self.best_any_hit:
+            return "要育成"
+        return "未所持"
+
+
+def ingredient_recommendation_rows(
+    owned_rows: list[dict[str, Any]],
+) -> list[IngredientRecommendationRow]:
+    """食材ごとのおすすめ種族と、所持 AAA 個体によるクリア判定を返す。
+
+    クリア判定:
+      - 攻略サイトで挙がるおすすめ種族のうちどれかを所持
+      - その個体が AAA
+      - 食材軸評価が一定以上（CLEAR_FOOD_SCORE_THRESHOLD）
+    """
+    owned_species: dict[str, list[tuple[dict[str, Any], dict[str, Any], str, float, str]]] = {}
+    for p in owned_rows:
+        species = db.get_species_data(p["species_name"]) or {}
+        comp = composition_string(p, species)
+        eval_res = evaluate_potential(p)
+        owned_species.setdefault(p["species_name"], []).append(
+            (p, species, comp, float(eval_res.species_food), eval_res.species_rank)
+        )
+
+    rows: list[IngredientRecommendationRow] = []
+    for ingredient in db.list_all_ingredient_records():
+        name = ingredient["name"]
+        rec_species = INGREDIENT_RECOMMENDATIONS.get(name, [])
+        any_hit: IngredientClearHit | None = None
+        clear_hit: IngredientClearHit | None = None
+
+        for species_name in rec_species:
+            for p, _species, comp, food_score, rank in owned_species.get(species_name, []):
+                hit = IngredientClearHit(
+                    pokemon_id=int(p["id"]),
+                    label=p.get("nickname") or p["species_name"],
+                    species_name=species_name,
+                    composition=comp,
+                    food_score=food_score,
+                    rank=rank,
+                )
+                if any_hit is None or hit.food_score > any_hit.food_score:
+                    any_hit = hit
+                if comp == "AAA" and food_score >= CLEAR_FOOD_SCORE_THRESHOLD:
+                    if clear_hit is None or hit.food_score > clear_hit.food_score:
+                        clear_hit = hit
+
+        rows.append(
+            IngredientRecommendationRow(
+                ingredient_name=name,
+                recommended_species=list(rec_species),
+                best_clear_hit=clear_hit,
+                best_any_hit=any_hit,
+            )
+        )
+
+    return rows
 
 
 # ---------------------------------------------------------------------------
