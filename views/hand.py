@@ -12,13 +12,11 @@
 
 from __future__ import annotations
 
-import html
-
 import pandas as pd
 import streamlit as st
 
 import db
-from constants import NATURES, format_ingredient_short, format_subskill_short
+from constants import format_ingredient_short
 from image_utils import berry_icon_url, ingredient_icon_url, pokemon_image_url
 from ui import components as c
 from ui.widgets import pokemon_popover_row
@@ -33,20 +31,10 @@ from utils.berry_coverage import (
 )
 from utils.berry_coverage import TOP_N as BERRY_TOP_N
 from utils.ingredient_coverage import build_ingredient_index, versatile_mains
-from utils.ingredient_coverage import ingredient_recommendation_rows
-from utils.evaluator import final_evolution_of
-from utils.food_expectation import composition_string, expected_ingredients_per_day
 from utils.skill_role_coverage import TOP_N, role_holes, skill_role_audit
 
 # 食材は編成に1〜2体置ける想定。ここを満たせば「充足」
 FOOD_TOP_N = 2
-NATURE_AXIS_SHORT = {
-    "speed": "おてスピ",
-    "energy_recovery": "げんき",
-    "ingredient": "食材",
-    "skill": "スキル",
-    "exp": "EXP",
-}
 
 
 @st.cache_data(show_spinner=False, ttl=300)
@@ -103,320 +91,10 @@ def _coverage_table(
     )
 
 
-def _species_chip_html(species_name: str) -> str:
-    img_url = pokemon_image_url(species_name)
-    img = (
-        f'<img src="{img_url}" loading="lazy" style="width:22px;height:22px;object-fit:contain;'
-        f'flex:0 0 auto">'
-        if img_url
-        else ""
-    )
-    return (
-        f'<span class="rec-species-chip" style="display:inline-flex;align-items:center;gap:4px;'
-        f'background:#fff;border:1px solid #e2e2e2;border-radius:999px;'
-        f'padding:3px 8px;white-space:nowrap;font-size:12px">'
-        f'{img}{html.escape(species_name)}</span>'
-    )
-
-
-def _recommendation_status_html(label: str) -> str:
-    colors = {
-        "理想": ("#dff2e3", "#2f7a38"),
-        "即戦力": ("#e5f0ff", "#245c9e"),
-        "実用": ("#fff3cd", "#8a6500"),
-        "要育成": ("#fff3cd", "#8a6500"),
-        "未所持": ("#f1f1f1", "#666"),
-    }
-    bg, fg = colors.get(label, ("#f1f1f1", "#666"))
-    return (
-        f'<span class="rec-status" style="background:{bg};color:{fg};">'
-        f'{html.escape(label)}</span>'
-    )
-
-
-def _recommendation_hit_html(row) -> tuple[str, str]:
-    """カード内の主役表示と Lv60 指標を返す。"""
-    best = row.best_clear_hit or row.best_any_hit
-    if not best:
-        return (
-            '<div class="rec-owned rec-empty">おすすめ種族の所持なし</div>',
-            '<div class="rec-metric rec-metric-empty"><span>Lv60期待</span><strong>—</strong></div>',
-        )
-
-    support = (
-        f'<span>支援 {best.food_supports}</span>'
-        if row.best_clear_hit
-        else '<span>支援は未判定</span>'
-    )
-    body = (
-        '<div class="rec-owned">'
-        f'<div class="rec-owned-name">{html.escape(best.label)}</div>'
-        '<div class="rec-owned-meta">'
-        f'<span>{html.escape(best.species_name)}</span>'
-        f'<span>{html.escape(best.composition)}</span>'
-        f'<span>食材 {best.food_score:.1f}%</span>'
-        f'{support}'
-        '</div>'
-        '</div>'
-    )
-    metric = (
-        '<div class="rec-metric">'
-        '<span>Lv60期待</span>'
-        f'<strong>{best.lv60_target_per_day:.1f}</strong>'
-        '<small>個/日</small>'
-        '</div>'
-    )
-    return body, metric
-
-
-def _recommended_family_names(recommended_species: list[str]) -> set[str]:
-    finals = {
-        final_evolution_of(name)
-        for name in recommended_species
-        if db.get_species_data(name)
-    }
-    return {
-        sp["species_name"]
-        for sp in db.list_all_master_records()
-        if final_evolution_of(sp.get("species_name") or "") in finals
-    }
-
-
-def _slot_chip_html(label: str, ingredient_name: str | None, target_name: str) -> str:
-    if not ingredient_name:
-        return (
-            '<span class="rec-slot rec-slot-empty">'
-            f'<b>{html.escape(label)}</b><span>未入力</span></span>'
-        )
-    icon = ingredient_icon_url(ingredient_name)
-    icon_html = (
-        f'<img src="{icon}" loading="lazy" style="width:18px;height:18px;object-fit:contain">'
-        if icon
-        else ""
-    )
-    active = " rec-slot-target" if ingredient_name == target_name else ""
-    return (
-        f'<span class="rec-slot{active}">'
-        f'<b>{html.escape(label)}</b>{icon_html}'
-        f'<span title="{html.escape(ingredient_name)}">'
-        f'{html.escape(format_ingredient_short(ingredient_name))}</span></span>'
-    )
-
-
-def _nature_up_down_label(nature: str | None) -> str:
-    if not nature:
-        return "未設定"
-    mods = NATURES.get(nature)
-    if mods is None:
-        return str(nature)
-    ups = [
-        f"{NATURE_AXIS_SHORT.get(axis, axis)}↑"
-        for axis, value in mods.items()
-        if value > 0
-    ]
-    downs = [
-        f"{NATURE_AXIS_SHORT.get(axis, axis)}↓"
-        for axis, value in mods.items()
-        if value < 0
-    ]
-    if not ups and not downs:
-        return f"{nature} 無補正"
-    return f"{nature} {'/'.join([*ups, *downs])}"
-
-
-def _lv60_target_supply(p: dict, target_name: str) -> float:
-    final_name = final_evolution_of(p.get("species_name") or "")
-    species = (
-        db.get_species_data(final_name)
-        or db.get_species_data(p.get("species_name") or "")
-        or {}
-    )
-    boosted = dict(p)
-    boosted["species_name"] = final_name
-    boosted["current_level"] = 60
-    return expected_ingredients_per_day(boosted, species).get(target_name, 0.0)
-
-
-def _recommendation_detail_card(p: dict, target_name: str, lv60_daily: float) -> str:
-    species = db.get_species_data(p.get("species_name") or "") or {}
-    img_url = pokemon_image_url(p.get("species_name") or "")
-    img = (
-        f'<img src="{img_url}" loading="lazy" style="width:52px;height:52px;object-fit:contain">'
-        if img_url
-        else ""
-    )
-    label = p.get("nickname") or p.get("species_name") or "—"
-    lv = p.get("current_level") or p.get("caught_level") or p.get("level") or "—"
-    comp = composition_string(p, species)
-    slots = [
-        p.get("ingredient_1") or ((species.get("ingredients") or {}).get("a") or {}).get("name"),
-        p.get("ingredient_2"),
-        p.get("ingredient_3"),
-    ]
-    target_count = sum(1 for name in slots if name == target_name)
-    slot_html = "".join(
-        _slot_chip_html(label, name, target_name)
-        for label, name in zip(("Lv1", "Lv30", "Lv60"), slots, strict=False)
-    )
-    subs = [
-        p.get(f"subskill_lv{lv}")
-        for lv in (10, 25, 50, 75, 100)
-        if p.get(f"subskill_lv{lv}")
-    ]
-    sub_html = (
-        "".join(c.subskill_chip(str(s)) for s in subs)
-        if subs
-        else '<span class="rec-sub-empty">—</span>'
-    )
-    nature_text = _nature_up_down_label(p.get("nature"))
-    return (
-        '<article class="rec-detail-card">'
-        '<div class="rec-detail-head">'
-        f'<div class="rec-detail-img">{img}</div>'
-        '<div class="rec-detail-main">'
-        f'<div class="rec-detail-name">{html.escape(str(label))}</div>'
-        f'<div class="rec-detail-meta">{html.escape(str(p.get("species_name") or "—"))}'
-        f' / Lv{html.escape(str(lv))} / {html.escape(comp)}'
-        f' / 対象{target_count}枠</div>'
-        f'<div class="rec-detail-nature">性格: {html.escape(nature_text)}</div>'
-        '</div>'
-        '<div class="rec-detail-daily">'
-        '<span>Lv60期待</span>'
-        f'<strong>{lv60_daily:.1f}</strong>'
-        '<small>個/日</small>'
-        '</div>'
-        '</div>'
-        f'<div class="rec-detail-slots">{slot_html}</div>'
-        f'<div class="rec-detail-sub"><span class="rec-detail-sub-label">サブ(開放順)</span>{sub_html}</div>'
-        '</article>'
-    )
-
-
-def _recommendation_detail_html(target_name: str, row, owned_rows: list[dict]) -> str:
-    family_names = _recommended_family_names(row.recommended_species)
-    matched = [
-        p for p in owned_rows
-        if (p.get("species_name") or "") in family_names
-    ]
-    matched_with_supply = [
-        (p, _lv60_target_supply(p, target_name))
-        for p in matched
-    ]
-    matched_with_supply.sort(key=lambda item: (
-        -item[1],
-        final_evolution_of(item[0].get("species_name") or ""),
-        item[0].get("species_name") or "",
-        -(int(item[0].get("current_level") or item[0].get("caught_level") or item[0].get("level") or 0)),
-    ))
-    family_label = "、".join(sorted(family_names)) if family_names else "—"
-    cards = (
-        "".join(
-            _recommendation_detail_card(p, target_name, lv60_daily)
-            for p, lv60_daily in matched_with_supply
-        )
-        if matched_with_supply
-        else '<div class="rec-detail-empty">おすすめ進化系統の所持個体はまだいません。</div>'
-    )
-    return (
-        '<style>'
-        '.rec-detail-wrap{margin-top:10px;}'
-        '.rec-family{color:var(--ps-ink-dim);font-size:12px;line-height:1.45;margin:0 0 8px;}'
-        '.rec-detail-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:8px;}'
-        '.rec-detail-card{background:var(--ps-dusk);border:1px solid var(--ps-line);border-radius:12px;padding:10px;min-width:0;}'
-        '.rec-detail-head{display:flex;gap:8px;align-items:center;min-width:0;}'
-        '.rec-detail-img{width:54px;height:54px;display:flex;align-items:center;justify-content:center;flex:0 0 auto;}'
-        '.rec-detail-main{min-width:0;flex:1 1 auto;}'
-        '.rec-detail-name{font-weight:800;font-size:.95rem;line-height:1.25;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}'
-        '.rec-detail-meta{color:var(--ps-ink-dim);font-size:12px;line-height:1.35;margin-top:2px;}'
-        '.rec-detail-nature{color:var(--ps-ink);font-size:12px;line-height:1.35;margin-top:2px;}'
-        '.rec-detail-daily{min-width:76px;text-align:right;line-height:1.05;flex:0 0 auto;}'
-        '.rec-detail-daily span{display:block;color:var(--ps-ink-dim);font-size:10px;white-space:nowrap;}'
-        '.rec-detail-daily strong{font-size:1.18rem;font-variant-numeric:tabular-nums;color:var(--ps-sp-food);}'
-        '.rec-detail-daily small{font-size:10px;color:var(--ps-ink-dim);margin-left:1px;white-space:nowrap;}'
-        '.rec-detail-slots{display:flex;flex-wrap:wrap;gap:5px;margin-top:8px;}'
-        '.rec-slot{display:inline-flex;align-items:center;gap:3px;border:1px solid #e2e2e2;background:#fff;border-radius:999px;'
-        'padding:3px 7px;font-size:12px;line-height:1.35;white-space:nowrap;}'
-        '.rec-slot b{font-size:10px;color:var(--ps-ink-dim);}'
-        '.rec-slot-target{border-color:#2f7a38;background:#dff2e3;color:#245a2b;font-weight:700;}'
-        '.rec-slot-empty{color:var(--ps-ink-dim);background:#f6f6f6;}'
-        '.rec-detail-sub{border-top:1px solid rgba(0,0,0,.08);margin-top:8px;padding-top:6px;display:flex;flex-wrap:wrap;gap:4px;align-items:center;}'
-        '.rec-detail-sub-label{color:var(--ps-ink-dim);font-size:12px;margin-right:2px;}'
-        '.rec-sub-empty{color:var(--ps-ink-dim);font-size:12px;}'
-        '.rec-detail-empty{background:#f6f6f6;border:1px dashed #ddd;border-radius:12px;padding:12px;color:var(--ps-ink-dim);font-size:13px;}'
-        '@media (max-width:480px){.rec-detail-grid{grid-template-columns:1fr;}.rec-detail-card{border-radius:10px;padding:9px;}}'
-        '</style>'
-        '<div class="rec-detail-wrap">'
-        f'<div class="rec-family">対象食材: {html.escape(format_ingredient_short(target_name))}'
-        f' / 対象進化系統: {html.escape(family_label)}</div>'
-        f'<div class="rec-detail-grid">{cards}</div>'
-        '</div>'
-    )
-
-
-def _ingredient_recommendation_html(rows) -> str:
-    parts = []
-    for row in rows:
-        icon = ingredient_icon_url(row.ingredient_name)
-        icon_html = (
-            f'<img src="{icon}" loading="lazy" style="width:34px;height:34px;object-fit:contain">'
-            if icon
-            else ""
-        )
-        rec_html = "".join(_species_chip_html(name) for name in row.recommended_species)
-        status = _recommendation_status_html(row.status_label)
-        owned_html, metric_html = _recommendation_hit_html(row)
-
-        parts.append(
-            '<article class="rec-card">'
-            '<div class="rec-head">'
-            f'<div class="rec-icon">{icon_html}</div>'
-            '<div class="rec-title-block">'
-            f'<div class="rec-title" title="{html.escape(row.ingredient_name)}">'
-            f'{html.escape(format_ingredient_short(row.ingredient_name))}</div>'
-            f'<div class="rec-status-line">{status}</div>'
-            '</div>'
-            f'{metric_html}'
-            '</div>'
-            f'<div class="rec-species-row">{rec_html}</div>'
-            f'{owned_html}'
-            '</article>'
-        )
-
-    return (
-        '<style>'
-        '.rec-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:10px;}'
-        '.rec-card{background:var(--ps-dusk);border:1px solid var(--ps-line);border-radius:12px;'
-        'padding:10px;box-shadow:0 2px 6px rgba(90,70,30,.08);min-width:0;}'
-        '.rec-head{display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:8px;align-items:center;}'
-        '.rec-icon{width:38px;height:38px;display:flex;align-items:center;justify-content:center;}'
-        '.rec-title{font-weight:800;font-size:.96rem;line-height:1.25;word-break:keep-all;overflow-wrap:anywhere;}'
-        '.rec-status-line{margin-top:3px;}'
-        '.rec-status{display:inline-block;padding:2px 8px;border-radius:999px;font-size:12px;font-weight:800;white-space:nowrap;}'
-        '.rec-metric{min-width:74px;text-align:right;line-height:1.05;color:var(--ps-ink);}'
-        '.rec-metric span{display:block;font-size:10px;color:var(--ps-ink-dim);white-space:nowrap;}'
-        '.rec-metric strong{font-size:1.08rem;font-variant-numeric:tabular-nums;}'
-        '.rec-metric small{font-size:10px;color:var(--ps-ink-dim);margin-left:1px;white-space:nowrap;}'
-        '.rec-metric-empty strong{color:var(--ps-ink-dim);}'
-        '.rec-species-row{display:flex;gap:5px;overflow-x:auto;-webkit-overflow-scrolling:touch;padding:8px 0 7px;margin:0 -2px;}'
-        '.rec-owned{border-top:1px solid rgba(0,0,0,.08);padding-top:7px;min-width:0;}'
-        '.rec-owned-name{font-weight:700;font-size:.86rem;line-height:1.25;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}'
-        '.rec-owned-meta{display:flex;flex-wrap:wrap;gap:4px 6px;margin-top:3px;color:var(--ps-ink-dim);font-size:12px;line-height:1.35;}'
-        '.rec-owned-meta span{white-space:nowrap;}'
-        '.rec-empty{color:var(--ps-ink-dim);font-size:12px;line-height:1.35;}'
-        '@media (max-width:480px){.rec-grid{grid-template-columns:1fr;}'
-        '.rec-card{border-radius:10px;padding:9px;}'
-        '.rec-head{grid-template-columns:auto minmax(0,1fr) auto;}'
-        '.rec-title{font-size:.92rem;}'
-        '.rec-metric{min-width:68px;}}'
-        '</style>'
-        f'<div class="rec-grid">{"".join(parts)}</div>'
-    )
-
-
 st.html(c.page_banner("役割", "bag", icon="🧩"))
 st.caption(
     "編成を決める前に、ボックス全体で食材・きのみ・スキルの担当が"
-    "どこまで埋まっているかを見る。"
+    "どこまで埋まっているかをざっくり棚卸しする。"
 )
 
 db.init_db()
@@ -459,9 +137,7 @@ st.html(
     )
 )
 
-food_tab, rec_tab, berry_tab, skill_tab = st.tabs(
-    ["🥕 食材", "📖 攻略おすすめ", "🌳 きのみ", "🎯 スキル"]
-)
+food_tab, berry_tab, skill_tab = st.tabs(["🥕 食材", "🌳 きのみ", "🎯 スキル"])
 
 
 # ── 食材 ────────────────────────────────────────────────────────────────
@@ -538,30 +214,6 @@ with food_tab:
                     for name, daily in main.duties
                 ),
             )
-
-
-# ── 攻略おすすめ ───────────────────────────────────────────────────────
-with rec_tab:
-    st.caption(
-        "食材を1つ選ぶと、攻略おすすめ種族の進化系統を横断して、"
-        "手持ち個体を **Lv60時の対象食材期待値が多い順** に並べます。"
-        "期待値は最終進化・Lv60・食材3枠目解放後の概算です。"
-    )
-    rec_rows = ingredient_recommendation_rows(owned)
-    detail_target = None
-    if rec_rows:
-        detail_target = st.selectbox(
-            "食材",
-            [r.ingredient_name for r in rec_rows],
-            index=0,
-            format_func=format_ingredient_short,
-            key="hand_rec_detail_ingredient",
-            filter_mode=None,
-        )
-    if detail_target:
-        detail_row = next((r for r in rec_rows if r.ingredient_name == detail_target), None)
-        if detail_row:
-            st.html(_recommendation_detail_html(detail_target, detail_row, owned))
 
 
 # ── きのみ ──────────────────────────────────────────────────────────────
