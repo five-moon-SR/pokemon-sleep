@@ -124,11 +124,11 @@ def _ingredient_recommendation_html(rows) -> str:
             status = (
                 '<span style="background:#dff2e3;color:#2f7a38;'
                 'padding:2px 8px;border-radius:999px;font-size:12px;font-weight:700">'
-                'クリア</span>'
+                f'{html.escape(best.fit_label)}</span>'
             )
             detail = (
-                f'AAA / {html.escape(best.label)} ({html.escape(best.composition)}) '
-                f'食材 {best.food_score:.1f}%'
+                f'{html.escape(best.label)} ({html.escape(best.composition)}) '
+                f'食材 {best.food_score:.1f}% / 支援 {best.food_supports}'
             )
         elif row.best_any_hit:
             best = row.best_any_hit
@@ -302,7 +302,8 @@ with food_tab:
 with rec_tab:
     st.caption(
         "攻略ページでよく挙がる食材ごとのおすすめ種族を、イラスト付きで並べた参照表。"
-        f"クリア判定は **AAA** かつ **食材軸評価 {80:.0f}% 以上** の所持個体で見ています。"
+        f"判定は **理想=AAA**、**即戦力=AA*（1・2枠A）**、**実用=Aが2つある個体**。"
+        f"その上で **食材軸評価 {80:.0f}% 以上**、さらに **食材支援サブ1本以上** の所持個体を採用しています。"
     )
     rec_rows = ingredient_recommendation_rows(owned)
     total_ingredients = len(rec_rows)
@@ -319,8 +320,8 @@ with rec_tab:
     )
     st.markdown(_ingredient_recommendation_html(rec_rows), unsafe_allow_html=True)
     st.caption(
-        "※ ここでの「クリア」は、攻略おすすめ種族の AAA 個体を所持し、"
-        "食材軸が十分強いと見なせる場合の目安。"
+        "※ ここでの上位表示は、攻略おすすめ種族のうち食材軸が十分強い個体を"
+        "理想 / 即戦力 / 実用 の順で拾った目安。"
         "実運用はレシピや鍋容量でも変わるので、最終判断は食材担当ページと合わせて見るといい。"
     )
 

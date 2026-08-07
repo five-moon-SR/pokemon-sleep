@@ -18,12 +18,13 @@ class IngredientRecommendationMapTest(unittest.TestCase):
 
 
 class IngredientClearTest(unittest.TestCase):
-    def test_aaa_and_high_food_score_clears_target(self) -> None:
+    def test_aaa_is_ideal(self) -> None:
         owned = [
             {
                 "id": 1,
                 "species_name": "ホゲータ",
                 "nickname": "りんご班",
+                "subskill_lv10": "食材確率アップS",
             }
         ]
 
@@ -33,7 +34,10 @@ class IngredientClearTest(unittest.TestCase):
             ]),
             patch(
                 "utils.ingredient_coverage.db.get_species_data",
-                return_value={"species_name": "ホゲータ"},
+                return_value={
+                    "species_name": "ホゲータ",
+                    "specialty": "食材",
+                },
             ),
             patch(
                 "utils.ingredient_coverage.composition_string",
@@ -51,17 +55,24 @@ class IngredientClearTest(unittest.TestCase):
 
         self.assertEqual(len(rows), 1)
         self.assertTrue(rows[0].cleared)
-        self.assertEqual(rows[0].status_label, "クリア")
+        self.assertEqual(rows[0].status_label, "理想")
         self.assertIsNotNone(rows[0].best_clear_hit)
-        self.assertEqual(rows[0].best_clear_hit.label, "りんご班")
+        self.assertEqual(rows[0].best_clear_hit.fit_label, "理想")
 
-    def test_non_aaa_or_low_score_is_not_cleared(self) -> None:
+    def test_aab_is_immediate_and_aba_is_practical(self) -> None:
         owned = [
             {
                 "id": 2,
                 "species_name": "ホゲータ",
                 "nickname": "りんご班",
-            }
+                "subskill_lv10": "食材確率アップS",
+            },
+            {
+                "id": 3,
+                "species_name": "ホゲータ",
+                "nickname": "りんご班2",
+                "subskill_lv10": "食材確率アップS",
+            },
         ]
 
         with (
@@ -70,11 +81,14 @@ class IngredientClearTest(unittest.TestCase):
             ]),
             patch(
                 "utils.ingredient_coverage.db.get_species_data",
-                return_value={"species_name": "ホゲータ"},
+                return_value={
+                    "species_name": "ホゲータ",
+                    "specialty": "食材",
+                },
             ),
             patch(
                 "utils.ingredient_coverage.composition_string",
-                return_value="AAB",
+                side_effect=["AAB", "ABA"],
             ),
             patch(
                 "utils.ingredient_coverage.evaluate_potential",
@@ -87,10 +101,9 @@ class IngredientClearTest(unittest.TestCase):
             rows = ingredient_recommendation_rows(owned)
 
         self.assertEqual(len(rows), 1)
-        self.assertFalse(rows[0].cleared)
-        self.assertEqual(rows[0].status_label, "要育成")
-        self.assertIsNone(rows[0].best_clear_hit)
-        self.assertIsNotNone(rows[0].best_any_hit)
+        self.assertTrue(rows[0].cleared)
+        self.assertEqual(rows[0].status_label, "即戦力")
+        self.assertEqual(rows[0].best_clear_hit.fit_label, "即戦力")
 
 
 if __name__ == "__main__":

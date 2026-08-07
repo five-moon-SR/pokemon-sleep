@@ -59,6 +59,15 @@ INGREDIENT_RECOMMENDATIONS: dict[str, list[str]] = {
 # 食材ごとの「ここまで来たら実用上クリア」とみなす食材軸評価値。
 # AAA でも食材軸が弱い個体は、攻略観点ではまだ追う余地がある。
 CLEAR_FOOD_SCORE_THRESHOLD = 80.0
+MIN_FOOD_SUPPORTS = 1
+FOOD_SUPPORT_SUBSKILLS = {
+    "食材確率アップS",
+    "食材確率アップM",
+    "おてつだいスピードS",
+    "おてつだいスピードM",
+    "おてつだいボーナス",
+}
+FOOD_FIT_PRIORITY = {"理想": 0, "即戦力": 1, "実用": 2}
 
 # 食材スロット解放Lv（slot1=Lv1, slot2=Lv30, slot3=Lv60）
 _SLOT_UNLOCK = {"a": 1, "b": 30, "c": 60}
@@ -189,8 +198,10 @@ class IngredientClearHit:
     label: str
     species_name: str
     composition: str
+    fit_label: str
     food_score: float
     rank: str
+    food_supports: int
 
 
 @dataclass
@@ -207,7 +218,7 @@ class IngredientRecommendationRow:
     @property
     def status_label(self) -> str:
         if self.best_clear_hit:
-            return "クリア"
+            return self.best_clear_hit.fit_label
         if self.best_any_hit:
             return "要育成"
         return "未所持"
@@ -220,8 +231,12 @@ def ingredient_recommendation_rows(
 
     クリア判定:
       - 攻略サイトで挙がるおすすめ種族のうちどれかを所持
-      - その個体が AAA
+      - その個体が食材得意で、食材系の支援サブスキルを1本以上持つ
       - 食材軸評価が一定以上（CLEAR_FOOD_SCORE_THRESHOLD）
+      - 構成は AAA / AA* / それ以外の実用 の3段で扱う
+
+    目標は AAA。現実的な即戦力は 1・2枠目が A の AA*、
+    そこまで届かないが A が2つある個体は「実用」に落とし込む。
     """
     owned_species: dict[str, list[tuple[dict[str, Any], dict[str, Any], str, float, str]]] = {}
     for p in owned_rows:
@@ -240,19 +255,53 @@ def ingredient_recommendation_rows(
         clear_hit: IngredientClearHit | None = None
 
         for species_name in rec_species:
-            for p, _species, comp, food_score, rank in owned_species.get(species_name, []):
+            for p, species, comp, food_score, rank in owned_species.get(species_name, []):
+                support_count = sum(
+                    1
+                    for s in (
+                        p.get("subskill_lv10"),
+                        p.get("subskill_lv25"),
+                        p.get("subskill_lv50"),
+                        p.get("subskill_lv75"),
+                        p.get("subskill_lv100"),
+                    )
+                    if (s or "") in FOOD_SUPPORT_SUBSKILLS
+                )
+                if comp == "AAA":
+                    fit_label = "理想"
+                elif comp.startswith("AA"):
+                    fit_label = "即戦力"
+                elif comp.count("A") >= 2:
+                    fit_label = "実用"
+                else:
+                    fit_label = ""
+                if not fit_label:
+                    continue
                 hit = IngredientClearHit(
                     pokemon_id=int(p["id"]),
                     label=p.get("nickname") or p["species_name"],
                     species_name=species_name,
                     composition=comp,
+                    fit_label=fit_label,
                     food_score=food_score,
                     rank=rank,
+                    food_supports=support_count,
                 )
                 if any_hit is None or hit.food_score > any_hit.food_score:
                     any_hit = hit
-                if comp == "AAA" and food_score >= CLEAR_FOOD_SCORE_THRESHOLD:
-                    if clear_hit is None or hit.food_score > clear_hit.food_score:
+                if (
+                    (species.get("specialty") == "食材")
+                    and support_count >= MIN_FOOD_SUPPORTS
+                    and food_score >= CLEAR_FOOD_SCORE_THRESHOLD
+                ):
+                    if (
+                        clear_hit is None
+                        or FOOD_FIT_PRIORITY[hit.fit_label] < FOOD_FIT_PRIORITY[clear_hit.fit_label]
+                        or (
+                            FOOD_FIT_PRIORITY[hit.fit_label] == FOOD_FIT_PRIORITY[clear_hit.fit_label]
+                            and hit.food_score > clear_hit.food_score
+                        )
+                    ):
                         clear_hit = hit
 
         rows.append(
