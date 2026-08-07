@@ -28,6 +28,8 @@ CATEGORY_ORDER = ("curry_stew", "salad", "drink_dessert")
 MEALS_PER_DAY = 3
 DEFAULT_POT_BONUS = 27
 INGREDIENT_SLOT_LABELS = ("Lv1", "Lv30", "Lv60")
+SUPPLY_MODE_CURRENT = "現状"
+SUPPLY_MODE_LV60 = "Lv60育成後"
 
 
 @st.cache_data(show_spinner=False, ttl=300)
@@ -153,6 +155,17 @@ def _lv60_target_supply(p: dict, target_name: str) -> float:
     return expected_ingredients_per_day(boosted, species).get(target_name, 0.0)
 
 
+def _current_target_supply(p: dict, target_name: str) -> float:
+    species = db.get_species_data(p.get("species_name") or "") or {}
+    return expected_ingredients_per_day(p, species).get(target_name, 0.0)
+
+
+def _target_supply(p: dict, target_name: str, supply_mode: str) -> float:
+    if supply_mode == SUPPLY_MODE_CURRENT:
+        return _current_target_supply(p, target_name)
+    return _lv60_target_supply(p, target_name)
+
+
 def _food_slot_chips(p: dict, species: dict, target_name: str) -> list[str]:
     ings = species.get("ingredients") or {}
     defaults = (
@@ -183,17 +196,19 @@ def _food_slot_chips(p: dict, species: dict, target_name: str) -> list[str]:
     return chips
 
 
-def _candidate_rows(owned: list[dict], ingredient_name: str) -> list[dict]:
+def _candidate_rows(owned: list[dict], ingredient_name: str, supply_mode: str) -> list[dict]:
     rec_species = tuple(INGREDIENT_RECOMMENDATIONS.get(ingredient_name, []))
     families = _family_names(rec_species)
     rows = []
     for p in owned:
         if (p.get("species_name") or "") not in families:
             continue
+        current_species = db.get_species_data(p.get("species_name") or "") or {}
         final_name = final_evolution_of(p.get("species_name") or "")
-        species = db.get_species_data(final_name) or db.get_species_data(p.get("species_name") or "") or {}
+        final_species = db.get_species_data(final_name) or current_species
+        species = final_species if supply_mode == SUPPLY_MODE_LV60 else current_species
         comp = composition_string(p, species)
-        daily = _lv60_target_supply(p, ingredient_name)
+        daily = _target_supply(p, ingredient_name, supply_mode)
         subs = [
             p.get(f"subskill_lv{lv}")
             for lv in (10, 25, 50, 75, 100)
@@ -240,7 +255,7 @@ def _ingredient_header(name: str, count: int, best_daily: float) -> str:
     )
 
 
-def _candidate_card(row: dict, need_per_day: float) -> str:
+def _candidate_card(row: dict, need_per_day: float, supply_mode: str) -> str:
     img_url = pokemon_image_url(row["species_name"])
     img = (
         f'<img src="{img_url}" loading="lazy" style="width:48px;height:48px;object-fit:contain">'
@@ -259,7 +274,7 @@ def _candidate_card(row: dict, need_per_day: float) -> str:
         f'<div class="rt-muted">{html.escape(row["species_name"])} / Lv{row["level"]} / {html.escape(row["composition"])}</div>'
         '</div>'
         '<div class="rt-daily">'
-        '<span>Lv60期待</span>'
+        f'<span>{html.escape(supply_mode)}期待</span>'
         f'<strong>{row["daily"]:.1f}</strong>'
         '<small>個/日</small>'
         '</div>'
@@ -280,6 +295,7 @@ def _render_recipe(
     base_capacity: int,
     pot_label: str,
     pot_bonus: int,
+    supply_mode: str,
 ) -> None:
     if not recipes:
         st.html(c.empty_state("このカテゴリに対象料理がありません。"))
@@ -335,7 +351,7 @@ def _render_recipe(
     for item in recipe.get("ingredients") or []:
         ing = item["name"]
         need = float(item["count"]) * MEALS_PER_DAY
-        candidates = _candidate_rows(owned, ing)
+        candidates = _candidate_rows(owned, ing, supply_mode)
         best_daily = candidates[0]["daily"] if candidates else 0.0
         if best_daily < need:
             lacking.append(ing)
@@ -344,7 +360,7 @@ def _render_recipe(
             if candidates:
                 st.html(
                     '<div class="rt-cand-grid">'
-                    + "".join(_candidate_card(row, need) for row in candidates[:6])
+                    + "".join(_candidate_card(row, need, supply_mode) for row in candidates[:6])
                     + "</div>"
                 )
             else:
@@ -473,6 +489,19 @@ def _render_target_planner(
     st.caption(
         "週のカテゴリごとに、伸ばす料理を1品に絞って、必要食材・担当候補・捕獲先を確認します。"
     )
+    with st.container(border=True):
+        st.html('<div class="rt-sticky-toggle-anchor"></div>')
+        supply_mode = st.segmented_control(
+            "担当候補の期待値",
+            [SUPPLY_MODE_CURRENT, SUPPLY_MODE_LV60],
+            default=SUPPLY_MODE_LV60,
+            key="recipe_target_supply_mode",
+            help="現状は今の進化段階・レベルで計算。Lv60育成後は最終進化Lv60まで育てた完成形で計算します。",
+        ) or SUPPLY_MODE_LV60
+        st.caption(
+            "現状: いまの進化段階・レベル / Lv60育成後: 最終進化Lv60。"
+            "足りる判定と候補の並び順もここに連動します。"
+        )
     tabs = st.tabs([RECIPE_CATEGORY_LABELS[key] for key in CATEGORY_ORDER])
     for tab, category in zip(tabs, CATEGORY_ORDER, strict=False):
         with tab:
@@ -483,6 +512,7 @@ def _render_target_planner(
                 base_capacity=int(ctx.pot_capacity),
                 pot_label=pot_label,
                 pot_bonus=pot_bonus,
+                supply_mode=str(supply_mode),
             )
 
 
@@ -504,6 +534,7 @@ st.html(
     '.rt-ing-name{display:flex;gap:6px;align-items:center;flex-wrap:wrap;}'
     '.rt-ing-name span{color:var(--ps-ink-dim);font-size:.82rem;}'
     '.rt-ing-state{font-weight:800;font-size:.9rem;}'
+    'div[data-testid="stVerticalBlockBorderWrapper"]:has(.rt-sticky-toggle-anchor){position:sticky;top:.35rem;z-index:20;background:rgba(255,255,255,.88);backdrop-filter:blur(10px);box-shadow:0 8px 18px rgba(38,46,64,.08);}'
     '.rt-pot-board{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;margin:10px 0 16px;}'
     '.rt-pot-panel{min-width:0;background:linear-gradient(180deg,#fff,var(--ps-dusk));border:1px solid var(--ps-line);border-radius:14px;padding:9px;}'
     '.rt-pot-panel-head{display:flex;align-items:baseline;justify-content:space-between;gap:8px;margin-bottom:7px;}'
