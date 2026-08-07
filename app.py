@@ -69,6 +69,7 @@ pages = {
         st.Page("views/items.py", title="育成・アイテム", icon="🎁"),
         # 料理レベルと長期ターゲットは同じ「料理を伸ばす」導線なので1ページにまとめる。
         st.Page("views/recipe_targets.py", title="料理", icon="🍽"),
+        st.Page("views/events.py", title="イベント", icon="📅"),
         # 週エナジー以外の目的（かけら稼ぎ・リボン稼ぎ）で1日だけ組む編成
         st.Page("views/goal_party.py", title="目的別編成", icon="🌙"),
     ],

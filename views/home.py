@@ -148,11 +148,12 @@ if prof_cols[1].button("⚙ 設定", use_container_width=True):
 
 # よく使う導線を上に置く（ホームから2タップで目的のページに着けるように）。
 # 役割ページはサイドバー以外からのリンクが1つも無かったので、ここに入れる。
-nav_cols = st.columns(4)
+nav_cols = st.columns(5)
 nav_cols[0].page_link("views/party.py", label="編成", icon="🧭", use_container_width=True)
 nav_cols[1].page_link("views/register.py", label="登録", icon="📝", use_container_width=True)
 nav_cols[2].page_link("views/catch_policy.py", label="捕獲", icon="🏅", use_container_width=True)
-nav_cols[3].page_link("views/hand.py", label="役割", icon="🧩", use_container_width=True)
+nav_cols[3].page_link("views/events.py", label="イベント", icon="📅", use_container_width=True)
+nav_cols[4].page_link("views/hand.py", label="役割", icon="🧩", use_container_width=True)
 
 direction = _load_strategy_direction()
 st.html(_direction_card(direction))
