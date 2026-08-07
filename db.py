@@ -324,17 +324,25 @@ def init_db(force: bool = False) -> None:
 
 def _ensure_default_profile() -> dict[str, Any]:
     """既存データの受け皿になる初期プロフィールを用意する。"""
-    return _execute(
+    row = _execute(
         f"""
         INSERT INTO {SCHEMA}.profiles (name, pin_hash, updated_at)
         VALUES (%s, %s, {_NOW_SQL})
-        ON CONFLICT (name) DO UPDATE SET
-            updated_at = profiles.updated_at
+        ON CONFLICT (name) DO NOTHING
         RETURNING id, name
         """,
         (DEFAULT_PROFILE_NAME, _pin_hash(DEFAULT_PROFILE_PIN)),
         returning=True,
     )
+    if row is not None:
+        return row
+    existing = _fetchone(
+        f"SELECT id, name FROM {SCHEMA}.profiles WHERE name = %s",
+        (DEFAULT_PROFILE_NAME,),
+    )
+    if existing is None:
+        raise RuntimeError("初期プロフィールの作成に失敗しました")
+    return existing
 
 
 def list_profiles() -> list[dict[str, Any]]:
