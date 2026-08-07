@@ -50,6 +50,11 @@ class IngredientClearTest(unittest.TestCase):
                     species_rank="A",
                 ),
             ),
+            patch(
+                "utils.ingredient_coverage.expected_ingredients_per_day",
+                return_value={"とくせんリンゴ": 12.3},
+            ),
+            patch("utils.ingredient_coverage.get_play_ctx", return_value=SimpleNamespace()),
         ):
             rows = ingredient_recommendation_rows(owned)
 
@@ -58,6 +63,7 @@ class IngredientClearTest(unittest.TestCase):
         self.assertEqual(rows[0].status_label, "理想")
         self.assertIsNotNone(rows[0].best_clear_hit)
         self.assertEqual(rows[0].best_clear_hit.fit_label, "理想")
+        self.assertEqual(rows[0].best_clear_hit.lv60_target_per_day, 12.3)
 
     def test_aab_is_immediate_and_aba_is_practical(self) -> None:
         owned = [
@@ -97,6 +103,11 @@ class IngredientClearTest(unittest.TestCase):
                     species_rank="A",
                 ),
             ),
+            patch(
+                "utils.ingredient_coverage.expected_ingredients_per_day",
+                return_value={"とくせんリンゴ": 9.8},
+            ),
+            patch("utils.ingredient_coverage.get_play_ctx", return_value=SimpleNamespace()),
         ):
             rows = ingredient_recommendation_rows(owned)
 
@@ -104,6 +115,7 @@ class IngredientClearTest(unittest.TestCase):
         self.assertTrue(rows[0].cleared)
         self.assertEqual(rows[0].status_label, "即戦力")
         self.assertEqual(rows[0].best_clear_hit.fit_label, "即戦力")
+        self.assertEqual(rows[0].best_clear_hit.lv60_target_per_day, 9.8)
 
 
 if __name__ == "__main__":

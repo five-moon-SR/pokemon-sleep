@@ -202,6 +202,7 @@ class IngredientClearHit:
     food_score: float
     rank: str
     food_supports: int
+    lv60_target_per_day: float
 
 
 @dataclass
@@ -239,6 +240,7 @@ def ingredient_recommendation_rows(
     そこまで届かないが A が2つある個体は「実用」に落とし込む。
     """
     owned_species: dict[str, list[tuple[dict[str, Any], dict[str, Any], str, float, str]]] = {}
+    ctx = get_play_ctx()
     for p in owned_rows:
         species = db.get_species_data(p["species_name"]) or {}
         comp = composition_string(p, species)
@@ -277,6 +279,15 @@ def ingredient_recommendation_rows(
                     fit_label = ""
                 if not fit_label:
                     continue
+                lv60_target_per_day = 0.0
+                if p.get("species_name"):
+                    boosted = dict(p)
+                    boosted["current_level"] = 60
+                    lv60_target_per_day = expected_ingredients_per_day(
+                        boosted,
+                        species,
+                        ctx,
+                    ).get(name, 0.0)
                 hit = IngredientClearHit(
                     pokemon_id=int(p["id"]),
                     label=p.get("nickname") or p["species_name"],
@@ -286,6 +297,7 @@ def ingredient_recommendation_rows(
                     food_score=food_score,
                     rank=rank,
                     food_supports=support_count,
+                    lv60_target_per_day=lv60_target_per_day,
                 )
                 if any_hit is None or hit.food_score > any_hit.food_score:
                     any_hit = hit

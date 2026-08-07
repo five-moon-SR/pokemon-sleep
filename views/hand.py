@@ -128,7 +128,8 @@ def _ingredient_recommendation_html(rows) -> str:
             )
             detail = (
                 f'{html.escape(best.label)} ({html.escape(best.composition)}) '
-                f'食材 {best.food_score:.1f}% / 支援 {best.food_supports}'
+                f'食材 {best.food_score:.1f}% / 支援 {best.food_supports} / '
+                f'Lv60 {best.lv60_target_per_day:.1f}個/日'
             )
         elif row.best_any_hit:
             best = row.best_any_hit
@@ -139,7 +140,7 @@ def _ingredient_recommendation_html(rows) -> str:
             )
             detail = (
                 f'{html.escape(best.label)} ({html.escape(best.composition)}) '
-                f'食材 {best.food_score:.1f}%'
+                f'食材 {best.food_score:.1f}% / Lv60 {best.lv60_target_per_day:.1f}個/日'
             )
         else:
             status = (
@@ -304,6 +305,7 @@ with rec_tab:
         "攻略ページでよく挙がる食材ごとのおすすめ種族を、イラスト付きで並べた参照表。"
         f"判定は **理想=AAA**、**即戦力=AA*（1・2枠A）**、**実用=Aが2つある個体**。"
         f"その上で **食材軸評価 {80:.0f}% 以上**、さらに **食材支援サブ1本以上** の所持個体を採用しています。"
+        " 右端には、その候補をLv60まで育てて食材3枠目が開いた時の1日期待個数も出しています。"
     )
     rec_rows = ingredient_recommendation_rows(owned)
     total_ingredients = len(rec_rows)
