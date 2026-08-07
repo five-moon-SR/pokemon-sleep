@@ -1,7 +1,7 @@
-"""料理ターゲット相談ページ。
+"""料理ページ。
 
-週の料理カテゴリごとに「伸ばす料理を1つ決める」前提で、必要食材と
-担当候補、足りない場合の捕獲エリアをまとめて見る。
+週の料理カテゴリごとに「伸ばす料理を1つ決める」ターゲット相談と、
+作り込んだ料理レベルの軽量編集をまとめて扱う。
 """
 
 from __future__ import annotations
@@ -340,17 +340,116 @@ def _render_recipe(
         st.dataframe(pd.DataFrame(rows), hide_index=True, use_container_width=True)
 
 
-st.html(c.page_banner("料理ターゲット", "cyan", icon="🍽"))
-st.caption(
-    "週のカテゴリごとに、伸ばす料理を1品に絞って、必要食材・担当候補・捕獲先を確認します。"
-)
+def _change_recipe_level(recipe_name: str, delta: int) -> None:
+    saved = recipe_level.load_recipe_levels()
+    current = saved.get(recipe_name, recipe_level.MIN_LEVEL)
+    new_level = recipe_level.clamp_level(current + delta)
+    merged = dict(saved)
+    if new_level <= recipe_level.MIN_LEVEL:
+        merged.pop(recipe_name, None)
+    else:
+        merged[recipe_name] = new_level
+    recipe_level.save_recipe_levels(merged)
+    st.cache_data.clear()
+
+
+def _render_level_card(recipe: dict) -> None:
+    name = recipe.get("name") or "—"
+    level = recipe_level.get_recipe_level(name)
+    icon = recipe_icon_url(name)
+    img = f'<img src="{icon}" loading="lazy">' if icon else ""
+    disabled_minus = level <= recipe_level.MIN_LEVEL
+    disabled_plus = level >= recipe_level.MAX_LEVEL
+
+    with st.container(border=True):
+        st.html(
+            '<div class="rt-level-card">'
+            f'<div class="rt-level-img">{img}</div>'
+            '<div class="rt-level-main">'
+            f'<div class="rt-level-name">{html.escape(name)}</div>'
+            f'<div class="rt-level-value">Lv{level}</div>'
+            '</div></div>'
+        )
+        cols = st.columns([1, 1, 1])
+        if cols[0].button("−", key=f"recipe_lv_minus_{name}", disabled=disabled_minus, use_container_width=True):
+            _change_recipe_level(name, -1)
+            st.rerun()
+        cols[1].markdown(
+            f"<div class='rt-level-center'>Lv{level}</div>",
+            unsafe_allow_html=True,
+        )
+        if cols[2].button("+", key=f"recipe_lv_plus_{name}", disabled=disabled_plus, use_container_width=True):
+            _change_recipe_level(name, 1)
+            st.rerun()
+
+
+def _render_level_editor(recipes_by_category: dict[str, list[dict]]) -> None:
+    if recipe_level.load_error():
+        st.warning(
+            "料理レベルの設定が読み込めませんでした。全料理をLv1として計算しています"
+            f"（{recipe_level.load_error()}）。"
+        )
+
+    saved = recipe_level.load_recipe_levels()
+    total = sum(len(rows) for rows in recipes_by_category.values())
+    st.caption(
+        f"料理名とイラストだけ見て、ゲーム内で上がった分を `+` / `−` で反映します。"
+        f"登録済み **{len(saved)}件** / 全{total}品。"
+    )
+
+    tabs = st.tabs([RECIPE_CATEGORY_LABELS[key] for key in CATEGORY_ORDER])
+    for tab, category in zip(tabs, CATEGORY_ORDER, strict=False):
+        with tab:
+            rows = recipes_by_category[category]
+            if not rows:
+                st.html(c.empty_state("このカテゴリに対象料理がありません。"))
+                continue
+            for start in range(0, len(rows), 3):
+                cols = st.columns(3)
+                for col, recipe in zip(cols, rows[start:start + 3], strict=False):
+                    with col:
+                        _render_level_card(recipe)
+
+    if saved:
+        with st.expander("全部 Lv1 に戻す"):
+            st.caption("登録済みレベルを消して、すべて未開拓扱いに戻します。")
+            if st.button("全消去", key="clear_recipe_levels"):
+                recipe_level.save_recipe_levels({})
+                st.cache_data.clear()
+                st.rerun()
+
+
+def _render_target_planner(
+    recipes_by_category: dict[str, list[dict]],
+    owned: list[dict],
+    ctx,
+    pot_label: str,
+    pot_bonus: int,
+) -> None:
+    if not owned:
+        st.html(c.empty_state("所持ポケモンがいません。先に「個体登録」から追加してください。"))
+        return
+
+    st.caption(
+        "週のカテゴリごとに、伸ばす料理を1品に絞って、必要食材・担当候補・捕獲先を確認します。"
+    )
+    tabs = st.tabs([RECIPE_CATEGORY_LABELS[key] for key in CATEGORY_ORDER])
+    for tab, category in zip(tabs, CATEGORY_ORDER, strict=False):
+        with tab:
+            _render_recipe(
+                category,
+                recipes_by_category[category],
+                owned,
+                base_capacity=int(ctx.pot_capacity),
+                pot_label=pot_label,
+                pot_bonus=pot_bonus,
+            )
+
+
+st.html(c.page_banner("料理", "cyan", icon="🍽"))
 
 db.init_db()
 owned = _owned_rows()
-if not owned:
-    st.html(c.empty_state("所持ポケモンがいません。先に「個体登録」から追加してください。"))
-    st.stop()
-
 ctx = load_play_context()
 pot_label, pot_bonus = _pot_skill_label(owned)
 
@@ -379,19 +478,20 @@ st.html(
     '.rt-progress{height:6px;border-radius:999px;background:#eee;overflow:hidden;margin:8px 0 4px;}'
     '.rt-progress div{height:100%;background:var(--ps-sp-food);border-radius:999px;}'
     '.rt-subrow{display:flex;flex-wrap:wrap;gap:4px;margin-top:7px;}'
-    '@media (max-width:480px){.rt-cand-grid{grid-template-columns:1fr;}.rt-recipe-head{border-radius:12px;padding:10px;}}'
+    '.rt-level-card{display:flex;align-items:center;gap:10px;min-height:64px;}'
+    '.rt-level-img{width:54px;height:54px;display:flex;align-items:center;justify-content:center;flex:0 0 auto;}'
+    '.rt-level-img img{max-width:54px;max-height:54px;object-fit:contain;}'
+    '.rt-level-main{min-width:0;}'
+    '.rt-level-name{font-weight:800;line-height:1.25;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}'
+    '.rt-level-value{color:var(--ps-ink-dim);font-weight:800;font-variant-numeric:tabular-nums;margin-top:2px;}'
+    '.rt-level-center{text-align:center;font-weight:900;font-variant-numeric:tabular-nums;line-height:38px;color:var(--ps-ink);}'
+    '@media (max-width:480px){.rt-cand-grid{grid-template-columns:1fr;}.rt-recipe-head{border-radius:12px;padding:10px;}.rt-level-name{white-space:normal;}}'
     '</style>'
 )
 
 recipes_by_category = _recipes_by_category()
-tabs = st.tabs([RECIPE_CATEGORY_LABELS[key] for key in CATEGORY_ORDER])
-for tab, category in zip(tabs, CATEGORY_ORDER, strict=False):
-    with tab:
-        _render_recipe(
-            category,
-            recipes_by_category[category],
-            owned,
-            base_capacity=int(ctx.pot_capacity),
-            pot_label=pot_label,
-            pot_bonus=pot_bonus,
-        )
+mode_tabs = st.tabs(["ターゲット", "レベル"])
+with mode_tabs[0]:
+    _render_target_planner(recipes_by_category, owned, ctx, pot_label, pot_bonus)
+with mode_tabs[1]:
+    _render_level_editor(recipes_by_category)

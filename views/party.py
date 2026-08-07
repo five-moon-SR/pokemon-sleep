@@ -447,8 +447,8 @@ if int(picked_level) != saved_levels.get(picked_recipe, recipe_level.MIN_LEVEL):
 
 # まとめて入れ直すのは専用ページ側の仕事。ここは「いま選んでいる1品」だけ扱う。
 st.page_link(
-    "views/recipe_levels.py",
-    label=f"🍳 料理レベルを一覧で編集（登録済み {len(saved_levels)}件）",
+    "views/recipe_targets.py",
+    label=f"🍽 料理ページでレベルを編集（登録済み {len(saved_levels)}件）",
     icon="↗️",
 )
 
