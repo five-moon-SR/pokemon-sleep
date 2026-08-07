@@ -19,11 +19,14 @@ from utils.evaluator import final_evolution_of
 from utils.field_encounters import recommend_fields, species_fields
 from utils.food_expectation import composition_string, expected_ingredients_per_day
 from utils.ingredient_coverage import INGREDIENT_RECOMMENDATIONS
+from utils.play_context import load_play_context
 from utils.party_logic import RECIPE_CATEGORY_LABELS
+from utils.plan_simulation import _skill_effect
 from utils import recipe_level
 
 CATEGORY_ORDER = ("curry_stew", "salad", "drink_dessert")
 MEALS_PER_DAY = 3
+DEFAULT_POT_BONUS = 27
 
 
 @st.cache_data(show_spinner=False, ttl=300)
@@ -43,6 +46,66 @@ def _recipes_by_category() -> dict[str, list[dict]]:
     for rows in out.values():
         rows.sort(key=lambda r: recipe_level.recipe_energy(r, 60), reverse=True)
     return out
+
+
+def _pot_skill_label(owned: list[dict]) -> tuple[str, int]:
+    best: tuple[str, int] | None = None
+    for p in owned:
+        species = db.get_species_data(p.get("species_name") or "") or {}
+        category, effect = _skill_effect(p, species)
+        if category != "料理パワーアップS" or effect <= 0:
+            continue
+        label = p.get("nickname") or p.get("species_name") or "鍋役"
+        value = int(effect)
+        if best is None or value > best[1]:
+            best = (label, value)
+    return best or ("書帳", DEFAULT_POT_BONUS)
+
+
+def _pot_status(total: int | None, base_capacity: int, pot_bonus: int) -> tuple[str, str, int]:
+    if not total:
+        return ("対象外", "ごちゃまぜ", 0)
+    if total <= base_capacity:
+        return ("通常OK", "鍋スキル不要", 0)
+    if total <= base_capacity + pot_bonus:
+        return ("+1回", f"+{pot_bonus}で届く", 1)
+    if total <= base_capacity + pot_bonus * 2:
+        return ("+2回", f"+{pot_bonus * 2}で届く", 2)
+    over = total - (base_capacity + pot_bonus * 2)
+    return ("まだ無理", f"+2回でも{over}超過", 3)
+
+
+def _recipe_option_label(name: str, recipe_map: dict[str, dict], base_capacity: int, pot_bonus: int) -> str:
+    rec = recipe_map[name]
+    total = rec.get("total_ingredients")
+    status, detail, _ = _pot_status(total, base_capacity, pot_bonus)
+    return f"{name}｜食材{total}｜{status}（{detail}）"
+
+
+def _render_pot_overview(recipes: list[dict], base_capacity: int, pot_label: str, pot_bonus: int) -> None:
+    buckets = [
+        ("通常で作れるデカ料理", 0),
+        (f"{pot_label} 1回前提で届く料理", 1),
+        (f"{pot_label} 2回前提で届く期待料理", 2),
+        ("まだ鍋が足りない料理", 3),
+    ]
+    cols = st.columns(4)
+    for col, (title, bucket) in zip(cols, buckets, strict=False):
+        rows = [
+            r for r in recipes
+            if _pot_status(r.get("total_ingredients"), base_capacity, pot_bonus)[2] == bucket
+        ]
+        rows.sort(key=lambda r: int(r.get("total_ingredients") or 0), reverse=True)
+        with col:
+            st.markdown(f"**{title}**")
+            if not rows:
+                st.caption("該当なし")
+                continue
+            for rec in rows[:4]:
+                st.caption(
+                    f"{rec['name']} / 食材{rec.get('total_ingredients')} / "
+                    f"Lv60 {recipe_level.recipe_energy(rec, 60):,.0f}en"
+                )
 
 
 @st.cache_data(show_spinner=False, ttl=300)
@@ -157,15 +220,30 @@ def _candidate_card(row: dict, need_per_day: float) -> str:
     )
 
 
-def _render_recipe(category: str, recipes: list[dict], owned: list[dict]) -> None:
+def _render_recipe(
+    category: str,
+    recipes: list[dict],
+    owned: list[dict],
+    *,
+    base_capacity: int,
+    pot_label: str,
+    pot_bonus: int,
+) -> None:
     if not recipes:
         st.html(c.empty_state("このカテゴリに対象料理がありません。"))
         return
 
+    recipe_map = {r["name"]: r for r in recipes}
+    st.caption(
+        f"現在の鍋容量は **{base_capacity}**。"
+        f"鍋役は **{pot_label}** 想定で、1回発動 +{pot_bonus} / 2回発動 +{pot_bonus * 2} として見ます。"
+    )
+    _render_pot_overview(recipes, base_capacity, pot_label, pot_bonus)
+
     recipe_name = st.selectbox(
         "伸ばす料理",
         [r["name"] for r in recipes],
-        format_func=lambda n: n,
+        format_func=lambda n: _recipe_option_label(n, recipe_map, base_capacity, pot_bonus),
         key=f"recipe_target_{category}",
         filter_mode=None,
     )
@@ -173,6 +251,8 @@ def _render_recipe(category: str, recipes: list[dict], owned: list[dict]) -> Non
     level = recipe_level.get_recipe_level(recipe_name)
     energy_now = recipe_level.recipe_energy(recipe)
     energy_60 = recipe_level.recipe_energy(recipe, 60)
+    total = recipe.get("total_ingredients")
+    pot_status, pot_detail, pot_bucket = _pot_status(total, base_capacity, pot_bonus)
     icon = recipe_icon_url(recipe_name)
 
     st.html(
@@ -181,8 +261,17 @@ def _render_recipe(category: str, recipes: list[dict], owned: list[dict]) -> Non
         + '<div>'
         + f'<h3>{html.escape(recipe_name)}</h3>'
         + f'<p>現在 Lv{level}: {energy_now:,.0f} en/回　/　Lv60: {energy_60:,.0f} en/回</p>'
+        + f'<p>食材{total} / 鍋{base_capacity} / {html.escape(pot_status)}（{html.escape(pot_detail)}）</p>'
         + '</div></div>'
     )
+    if pot_bucket == 1:
+        st.info(f"{pot_label} の料理パワーアップSが1回発動すれば作れる料理です。")
+    elif pot_bucket == 2:
+        st.warning(f"{pot_label} の料理パワーアップSが2回重複すれば作れる、今後期待のデカ料理です。")
+    elif pot_bucket >= 3:
+        st.error("現在の鍋容量と鍋スキル2回分ではまだ届きません。鍋拡張かさらに発動数が必要です。")
+    else:
+        st.success("鍋スキルに頼らず、今の鍋容量だけで作れます。")
     st.html(
         '<div class="rt-req-row">'
         + "".join(c.ingredient_chip(i["name"], i["count"]) for i in recipe.get("ingredients") or [])
@@ -262,6 +351,9 @@ if not owned:
     st.html(c.empty_state("所持ポケモンがいません。先に「個体登録」から追加してください。"))
     st.stop()
 
+ctx = load_play_context()
+pot_label, pot_bonus = _pot_skill_label(owned)
+
 st.html(
     '<style>'
     '.rt-recipe-head{display:flex;gap:12px;align-items:center;background:var(--ps-dusk);border:1px solid var(--ps-line);border-radius:16px;padding:12px;margin:8px 0;}'
@@ -295,4 +387,11 @@ recipes_by_category = _recipes_by_category()
 tabs = st.tabs([RECIPE_CATEGORY_LABELS[key] for key in CATEGORY_ORDER])
 for tab, category in zip(tabs, CATEGORY_ORDER, strict=False):
     with tab:
-        _render_recipe(category, recipes_by_category[category], owned)
+        _render_recipe(
+            category,
+            recipes_by_category[category],
+            owned,
+            base_capacity=int(ctx.pot_capacity),
+            pot_label=pot_label,
+            pot_bonus=pot_bonus,
+        )
