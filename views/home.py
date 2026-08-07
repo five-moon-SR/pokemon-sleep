@@ -10,6 +10,7 @@
 from __future__ import annotations
 
 from datetime import datetime
+import html
 
 import pandas as pd
 import streamlit as st
@@ -23,6 +24,21 @@ from utils import perf, recipe_level
 from utils.roster_impact import item_impact_ranking
 from utils.play_context import PlayContext, load_play_context, save_play_context
 
+STRATEGY_DIRECTION_KEY = "user.strategy_direction"
+DEFAULT_STRATEGY_DIRECTION = {
+    "title": "ジンジャー担当を確保する",
+    "priority": "最優先: ヨーギラスを捕まえる",
+    "body": (
+        "いま一番のウィークポイントは、あったかジンジャーを安定して拾える食材ポケモンが"
+        "足りないこと。まずはヨーギラス系統を狙い、将来的なジンジャー担当を作る。"
+    ),
+    "next_steps": [
+        "ヨーギラスが出るマップを優先して睡眠リサーチする",
+        "ジンジャー枠を2枠以上持つ個体を候補にする",
+        "ヒーラー更新や他食材の補強は、ジンジャー担当確保の次点で見る",
+    ],
+}
+
 ctx = load_play_context()
 perf.mark("home: load_play_context")
 
@@ -31,6 +47,64 @@ st.html(c.page_banner("ホーム", "green", icon="🏠"))
 
 def _eff_lv(p: dict) -> int:
     return p.get("current_level") or p.get("caught_level") or p.get("level") or 1
+
+
+def _load_strategy_direction() -> dict:
+    saved = db.get_setting(STRATEGY_DIRECTION_KEY, {}) or {}
+    return {
+        "title": saved.get("title") or DEFAULT_STRATEGY_DIRECTION["title"],
+        "priority": saved.get("priority") or DEFAULT_STRATEGY_DIRECTION["priority"],
+        "body": saved.get("body") or DEFAULT_STRATEGY_DIRECTION["body"],
+        "next_steps": list(saved.get("next_steps") or DEFAULT_STRATEGY_DIRECTION["next_steps"]),
+    }
+
+
+def _save_strategy_direction(direction: dict) -> None:
+    db.set_setting(STRATEGY_DIRECTION_KEY, direction)
+
+
+def _direction_card(direction: dict) -> str:
+    steps = "".join(
+        f"<li>{html.escape(str(step))}</li>"
+        for step in direction.get("next_steps", [])
+        if str(step).strip()
+    )
+    return (
+        '<section style="background:linear-gradient(135deg,#F4FFF0,#FFF8D7);'
+        'border:1px solid color-mix(in srgb,var(--ps-sp-food) 35%,#fff);'
+        'border-radius:16px;padding:12px 14px;margin:8px 0 12px;'
+        'box-shadow:0 4px 12px rgba(65,92,44,.08);">'
+        '<div style="display:flex;gap:10px;align-items:flex-start;justify-content:space-between;">'
+        '<div>'
+        '<div style="font-size:.78rem;color:var(--ps-ink-dim);font-weight:800;letter-spacing:.08em;">直近の方針</div>'
+        f'<h3 style="margin:.12rem 0 .2rem;font-size:1.08rem;">{html.escape(str(direction["title"]))}</h3>'
+        f'<div style="font-weight:900;color:var(--ps-sp-food);">{html.escape(str(direction["priority"]))}</div>'
+        f'<p style="margin:.35rem 0;color:var(--ps-ink);line-height:1.55;">{html.escape(str(direction["body"]))}</p>'
+        + (f'<ul style="margin:.35rem 0 0;padding-left:1.2rem;line-height:1.55;">{steps}</ul>' if steps else "")
+        + '</div></div></section>'
+    )
+
+
+@st.dialog("🎯 直近の方針")
+def _strategy_direction_dialog() -> None:
+    direction = _load_strategy_direction()
+    with st.form("strategy_direction_form"):
+        title = st.text_input("見出し", value=direction["title"])
+        priority = st.text_input("最優先", value=direction["priority"])
+        body = st.text_area("理由・背景", value=direction["body"], height=110)
+        steps_text = st.text_area(
+            "次にやること（1行1件）",
+            value="\n".join(direction["next_steps"]),
+            height=120,
+        )
+        if st.form_submit_button("💾 保存", type="primary", use_container_width=True):
+            _save_strategy_direction({
+                "title": title.strip() or DEFAULT_STRATEGY_DIRECTION["title"],
+                "priority": priority.strip() or DEFAULT_STRATEGY_DIRECTION["priority"],
+                "body": body.strip() or DEFAULT_STRATEGY_DIRECTION["body"],
+                "next_steps": [s.strip() for s in steps_text.splitlines() if s.strip()],
+            })
+            st.rerun()
 
 
 @st.dialog("🧑 プレイヤープロフィール")
@@ -79,6 +153,13 @@ nav_cols[0].page_link("views/party.py", label="編成", icon="🧭", use_contain
 nav_cols[1].page_link("views/register.py", label="登録", icon="📝", use_container_width=True)
 nav_cols[2].page_link("views/catch_policy.py", label="捕獲", icon="🏅", use_container_width=True)
 nav_cols[3].page_link("views/hand.py", label="役割", icon="🧩", use_container_width=True)
+
+direction = _load_strategy_direction()
+st.html(_direction_card(direction))
+dir_cols = st.columns([3, 1])
+dir_cols[0].page_link("views/catch_policy.py", label="捕獲方針を見る →", icon="🏅")
+if dir_cols[1].button("方針を編集", use_container_width=True):
+    _strategy_direction_dialog()
 
 perf.mark("home: ヘッダ＋設定ボタン")
 
