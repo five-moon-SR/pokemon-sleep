@@ -25,6 +25,7 @@ from utils.food_expectation import (
     _effective_level,
     composition_string,
     expected_ingredients_per_day,
+    find_food_origin,
     qty_at_slot,
 )
 from utils.community_tier import get_tier, tier_weight
@@ -68,6 +69,8 @@ FOOD_SUPPORT_SUBSKILLS = {
     "おてつだいボーナス",
 }
 FOOD_FIT_PRIORITY = {"理想": 0, "即戦力": 1, "実用": 2}
+
+_SLOT_INDEX = {"a": 0, "b": 1, "c": 2}
 
 # 食材スロット解放Lv（slot1=Lv1, slot2=Lv30, slot3=Lv60）
 _SLOT_UNLOCK = {"a": 1, "b": 30, "c": 60}
@@ -225,19 +228,47 @@ class IngredientRecommendationRow:
         return "未所持"
 
 
+def _target_fit_label(composition: str, species: dict[str, Any], ingredient_name: str) -> str:
+    """対象食材の元枠に応じて、理想/即戦力/実用を判定する。
+
+    例: A食材は AAA が理想。B食材は第1枠で取れないため ABB が理想。
+    """
+    origin = find_food_origin(species, ingredient_name)
+    if origin is None:
+        return ""
+
+    target = origin.upper()
+    origin_idx = _SLOT_INDEX[origin]
+    available_slots = composition[origin_idx:]
+    target_count = available_slots.count(target)
+    if target_count <= 0:
+        return ""
+
+    if target_count == len(available_slots):
+        return "理想"
+    if origin == "a":
+        if len(composition) >= 2 and composition[0] == target and composition[1] == target:
+            return "即戦力"
+        if composition.count(target) >= 2:
+            return "実用"
+    if origin == "b" and len(composition) >= 2 and composition[1] == target:
+        return "即戦力"
+    return ""
+
+
 def ingredient_recommendation_rows(
     owned_rows: list[dict[str, Any]],
 ) -> list[IngredientRecommendationRow]:
-    """食材ごとのおすすめ種族と、所持 AAA 個体によるクリア判定を返す。
+    """食材ごとのおすすめ種族と、対象食材スロットによるクリア判定を返す。
 
     クリア判定:
       - 攻略サイトで挙がるおすすめ種族のうちどれかを所持
       - その個体が食材得意で、食材系の支援サブスキルを1本以上持つ
       - 食材軸評価が一定以上（CLEAR_FOOD_SCORE_THRESHOLD）
-      - 構成は AAA / AA* / それ以外の実用 の3段で扱う
+      - 構成は対象食材を取れるスロット数に応じて 理想 / 即戦力 / 実用 の3段で扱う
 
-    目標は AAA。現実的な即戦力は 1・2枠目が A の AA*、
-    そこまで届かないが A が2つある個体は「実用」に落とし込む。
+    目標は対象食材を取れる全スロットで拾う構成。
+    例: A食材は AAA、B食材は ABB、C食材は ABC が理想。
     """
     owned_species: dict[str, list[tuple[dict[str, Any], dict[str, Any], str, float, str]]] = {}
     ctx = get_play_ctx()
@@ -282,14 +313,7 @@ def ingredient_recommendation_rows(
                     )
                     if (s or "") in FOOD_SUPPORT_SUBSKILLS
                 )
-                if comp == "AAA":
-                    fit_label = "理想"
-                elif comp.startswith("AA"):
-                    fit_label = "即戦力"
-                elif comp.count("A") >= 2:
-                    fit_label = "実用"
-                else:
-                    fit_label = ""
+                fit_label = _target_fit_label(comp, species, name)
                 if not fit_label:
                     continue
                 lv60_target_per_day = _lv60_target_supply(p, species, name)
