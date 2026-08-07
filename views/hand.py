@@ -35,7 +35,7 @@ from utils.berry_coverage import TOP_N as BERRY_TOP_N
 from utils.ingredient_coverage import build_ingredient_index, versatile_mains
 from utils.ingredient_coverage import ingredient_recommendation_rows
 from utils.evaluator import final_evolution_of
-from utils.food_expectation import composition_string
+from utils.food_expectation import composition_string, expected_ingredients_per_day
 from utils.skill_role_coverage import TOP_N, role_holes, skill_role_audit
 
 # 食材は編成に1〜2体置ける想定。ここを満たせば「充足」
@@ -224,7 +224,20 @@ def _nature_up_down_label(nature: str | None) -> str:
     return f"{nature} {'/'.join([*ups, *downs])}"
 
 
-def _recommendation_detail_card(p: dict, target_name: str) -> str:
+def _lv60_target_supply(p: dict, target_name: str) -> float:
+    final_name = final_evolution_of(p.get("species_name") or "")
+    species = (
+        db.get_species_data(final_name)
+        or db.get_species_data(p.get("species_name") or "")
+        or {}
+    )
+    boosted = dict(p)
+    boosted["species_name"] = final_name
+    boosted["current_level"] = 60
+    return expected_ingredients_per_day(boosted, species).get(target_name, 0.0)
+
+
+def _recommendation_detail_card(p: dict, target_name: str, lv60_daily: float) -> str:
     species = db.get_species_data(p.get("species_name") or "") or {}
     img_url = pokemon_image_url(p.get("species_name") or "")
     img = (
@@ -267,6 +280,11 @@ def _recommendation_detail_card(p: dict, target_name: str) -> str:
         f' / 対象{target_count}枠</div>'
         f'<div class="rec-detail-nature">性格: {html.escape(nature_text)}</div>'
         '</div>'
+        '<div class="rec-detail-daily">'
+        '<span>Lv60期待</span>'
+        f'<strong>{lv60_daily:.1f}</strong>'
+        '<small>個/日</small>'
+        '</div>'
         '</div>'
         f'<div class="rec-detail-slots">{slot_html}</div>'
         f'<div class="rec-detail-sub"><span class="rec-detail-sub-label">サブ(開放順)</span>{sub_html}</div>'
@@ -280,15 +298,23 @@ def _recommendation_detail_html(target_name: str, row, owned_rows: list[dict]) -
         p for p in owned_rows
         if (p.get("species_name") or "") in family_names
     ]
-    matched.sort(key=lambda p: (
-        final_evolution_of(p.get("species_name") or ""),
-        p.get("species_name") or "",
-        -(int(p.get("current_level") or p.get("caught_level") or p.get("level") or 0)),
+    matched_with_supply = [
+        (p, _lv60_target_supply(p, target_name))
+        for p in matched
+    ]
+    matched_with_supply.sort(key=lambda item: (
+        -item[1],
+        final_evolution_of(item[0].get("species_name") or ""),
+        item[0].get("species_name") or "",
+        -(int(item[0].get("current_level") or item[0].get("caught_level") or item[0].get("level") or 0)),
     ))
     family_label = "、".join(sorted(family_names)) if family_names else "—"
     cards = (
-        "".join(_recommendation_detail_card(p, target_name) for p in matched)
-        if matched
+        "".join(
+            _recommendation_detail_card(p, target_name, lv60_daily)
+            for p, lv60_daily in matched_with_supply
+        )
+        if matched_with_supply
         else '<div class="rec-detail-empty">おすすめ進化系統の所持個体はまだいません。</div>'
     )
     return (
@@ -299,10 +325,14 @@ def _recommendation_detail_html(target_name: str, row, owned_rows: list[dict]) -
         '.rec-detail-card{background:var(--ps-dusk);border:1px solid var(--ps-line);border-radius:12px;padding:10px;min-width:0;}'
         '.rec-detail-head{display:flex;gap:8px;align-items:center;min-width:0;}'
         '.rec-detail-img{width:54px;height:54px;display:flex;align-items:center;justify-content:center;flex:0 0 auto;}'
-        '.rec-detail-main{min-width:0;}'
+        '.rec-detail-main{min-width:0;flex:1 1 auto;}'
         '.rec-detail-name{font-weight:800;font-size:.95rem;line-height:1.25;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}'
         '.rec-detail-meta{color:var(--ps-ink-dim);font-size:12px;line-height:1.35;margin-top:2px;}'
         '.rec-detail-nature{color:var(--ps-ink);font-size:12px;line-height:1.35;margin-top:2px;}'
+        '.rec-detail-daily{min-width:76px;text-align:right;line-height:1.05;flex:0 0 auto;}'
+        '.rec-detail-daily span{display:block;color:var(--ps-ink-dim);font-size:10px;white-space:nowrap;}'
+        '.rec-detail-daily strong{font-size:1.18rem;font-variant-numeric:tabular-nums;color:var(--ps-sp-food);}'
+        '.rec-detail-daily small{font-size:10px;color:var(--ps-ink-dim);margin-left:1px;white-space:nowrap;}'
         '.rec-detail-slots{display:flex;flex-wrap:wrap;gap:5px;margin-top:8px;}'
         '.rec-slot{display:inline-flex;align-items:center;gap:3px;border:1px solid #e2e2e2;background:#fff;border-radius:999px;'
         'padding:3px 7px;font-size:12px;line-height:1.35;white-space:nowrap;}'
@@ -513,41 +543,21 @@ with food_tab:
 # ── 攻略おすすめ ───────────────────────────────────────────────────────
 with rec_tab:
     st.caption(
-        "攻略ページでよく挙がる食材ごとのおすすめ種族を、イラスト付きで並べた参照表。"
-        "判定は **対象食材を取れる全スロット=理想**、"
-        "**Lv30時点で主食材化=即戦力**、**将来2枠以上=実用**。"
-        f"その上で **食材軸評価 {80:.0f}% 以上**、さらに **食材支援サブ1本以上** の所持個体を採用しています。"
-        " 右端には、その候補をLv60まで育てて食材3枠目が開いた時の1日期待個数も出しています。"
+        "食材を1つ選ぶと、攻略おすすめ種族の進化系統を横断して、"
+        "手持ち個体を **Lv60時の対象食材期待値が多い順** に並べます。"
+        "期待値は最終進化・Lv60・食材3枠目解放後の概算です。"
     )
     rec_rows = ingredient_recommendation_rows(owned)
-    total_ingredients = len(rec_rows)
-    clear_count = sum(1 for r in rec_rows if r.cleared)
-    any_count = sum(1 for r in rec_rows if r.best_any_hit)
-    st.html(
-        c.stat_tiles(
-            [
-                c.stat_tile("クリア済み", f"{clear_count}", sub=f"/{total_ingredients}食材"),
-                c.stat_tile("要育成", f"{any_count - clear_count}", sub=f"/{total_ingredients}食材"),
-                c.stat_tile("未所持", f"{total_ingredients - any_count}", sub=f"/{total_ingredients}食材"),
-            ]
+    detail_target = None
+    if rec_rows:
+        detail_target = st.selectbox(
+            "食材",
+            [r.ingredient_name for r in rec_rows],
+            index=0,
+            format_func=format_ingredient_short,
+            key="hand_rec_detail_ingredient",
+            filter_mode=None,
         )
-    )
-    st.html(_ingredient_recommendation_html(rec_rows))
-    st.caption(
-        "※ ここでの上位表示は、攻略おすすめ種族のうち食材軸が十分強い個体を"
-        "対象食材の元枠に合わせて 理想 / 即戦力 / 実用 の順で拾った目安。"
-        "実運用はレシピや鍋容量でも変わるので、最終判断は食材担当ページと合わせて見るといい。"
-    )
-
-    st.markdown("**おすすめ系統の手持ちを見る**")
-    detail_target = st.pills(
-        "食材",
-        [r.ingredient_name for r in rec_rows],
-        default=rec_rows[0].ingredient_name if rec_rows else None,
-        format_func=format_ingredient_short,
-        key="hand_rec_detail_ingredient",
-        label_visibility="collapsed",
-    )
     if detail_target:
         detail_row = next((r for r in rec_rows if r.ingredient_name == detail_target), None)
         if detail_row:
