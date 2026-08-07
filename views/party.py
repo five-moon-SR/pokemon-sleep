@@ -1,4 +1,4 @@
-"""フィールド×料理カテゴリの定番5体を管理する攻略プラン画面。"""
+"""フィールド×料理カテゴリのおてつだいチームを管理する画面。"""
 
 from __future__ import annotations
 
@@ -43,8 +43,8 @@ from utils.strategy_optimizer import (
 ACTIVE_WEEK_KEY = "user.active_strategy_week"
 CATEGORY_ORDER = ("curry_stew", "salad", "drink_dessert")
 
-st.html(c.page_banner("攻略プラン", "cyan", icon="🧭"))
-st.caption("今週の料理カテゴリからフィールドを選び、主料理1品と固定5体を育てる。")
+st.html(c.page_banner("チーム編成", "cyan", icon="🧭"))
+st.caption("今週の料理カテゴリからフィールドを選び、伸ばす料理1品とおてつだいチーム5体を決める。")
 db.init_db()
 ss = st.session_state
 ctx = load_play_context()
@@ -64,7 +64,7 @@ def _member_label(p: dict) -> str:
 def _sim_metrics(sim) -> None:
     cols = st.columns(4)
     cols[0].metric("3食安定度", f"{sim.stability:.0%}", f"{sim.cooked_meals}/21食")
-    cols[1].metric("主料理", f"{sim.cooked_per_day:.2f} 回/日")
+    cols[1].metric("料理", f"{sim.cooked_per_day:.2f} 回/日")
     cols[2].metric("週期待エナジー", f"{sim.weekly_energy:,.0f}")
     cols[3].metric(
         "げんき回復の効果",
@@ -93,7 +93,7 @@ active_plan = db.get_party(int(active_plan_id)) if active_plan_id else None
 fields = db.list_all_field_records()
 field_names = [f["name"] for f in fields]
 
-# 攻略プランを開いた直後は、空の先頭候補ではなく「今週のプラン」を見せる。
+# チーム編成を開いた直後は、空の先頭候補ではなく「今週のおてつだいチーム」を見せる。
 # versioned key にして、既に開いているセッションにも一度だけ新しい導線を適用する。
 if not ss.get("_strategy_entry_initialized_v2"):
     ss["_strategy_entry_initialized_v2"] = True
@@ -114,12 +114,12 @@ _registered = {
 _empty_slots = [s for s in _all_slots if s not in _registered]
 
 with st.expander(
-    f"🗂 定番プランの充足 {len(_registered)}/{len(_all_slots)} 枠",
+    f"🗂 定番チームの充足 {len(_registered)}/{len(_all_slots)} 枠",
     expanded=bool(_empty_slots) and len(_registered) < 3,
 ):
     st.caption(
         "フィールド × 料理カテゴリの全組合せを埋めておくと、"
-        "育成・アイテムページの投資先が「実際にどのプランがいくら伸びるか」で並びます。"
+        "育成・どうぐページの使い先が「実際にどのチームがいくら伸びるか」で並びます。"
         "1枠1秒ほどなので全部でも20秒前後です。"
     )
     if _empty_slots:
@@ -184,7 +184,7 @@ with st.expander(
             arrow = f"{r.prev_weekly_energy:,.0f} → **{r.weekly_energy:,.0f}** en/週（{r.energy_delta:+,.0f}）"
             st.markdown(f"**🔁 {r.label}**　{arrow}")
             if r.recipe_changed:
-                st.markdown(f"　主料理 {r.prev_recipe} → **{r.recipe_name}**")
+                st.markdown(f"　料理 {r.prev_recipe} → **{r.recipe_name}**")
             if r.members_out or r.members_in:
                 st.markdown(
                     f"　メンバー {'・'.join(r.members_out) or '—'}"
@@ -237,11 +237,11 @@ if ss.get("_strategy_loaded_key") != strategy_key:
 
 is_active = bool(plan and active_week.get("plan_id") == plan.get("id"))
 if is_active:
-    st.success("✓ この組み合わせが今週の攻略プランです")
+    st.success("✓ この組み合わせが今週のおてつだいチームです")
 elif plan:
-    st.info("保存済みの定番プランがあります。必要なら今週のプランに設定できます。")
+    st.info("保存済みの定番チームがあります。必要なら今週のおてつだいチームに設定できます。")
 else:
-    st.warning("この組み合わせの定番プランは未作成です。所持個体から候補を作ります。")
+    st.warning("この組み合わせの定番チームは未作成です。所持ポケモンから候補を作ります。")
 
 all_berries = [b["name"] for b in db.list_all_berry_records()]
 week_defaults = active_week if is_active else {}
@@ -284,7 +284,7 @@ saved_plans = db.list_parties()
 
 
 def _plan_fit_count(species_name: str) -> int:
-    """保存済み攻略プランのうち、この種族が必要食材を担当できる件数。"""
+    """保存済みチームのうち、この種族が必要食材を担当できる件数。"""
     master = db.get_species_data(species_name) or {}
     available = {
         slot.get("name")
@@ -304,7 +304,7 @@ def _plan_fit_count(species_name: str) -> int:
 
 # ── 自動提案 ──────────────────────────────────────────────────────────────
 def _run_suggestions() -> None:
-    with st.spinner("主料理と5体を探索し、上位案を7日間シミュレーション中…"):
+    with st.spinner("料理と5体を探索し、上位案を7日間シミュレーション中…"):
         ss["_strategy_suggestions"] = suggest_strategy_plans(
             owned,
             recipes,
@@ -318,13 +318,13 @@ if not plan and "_strategy_suggestions" not in ss:
 
 suggest_col, reset_col = st.columns([3, 1])
 if suggest_col.button(
-    "✨ 主料理＋5体を自動提案",
+    "✨ 料理＋5体を自動提案",
     use_container_width=True,
     type="primary" if not plan else "secondary",
 ):
     _run_suggestions()
     st.rerun()
-if reset_col.button("編成を空にする", use_container_width=True):
+if reset_col.button("チームを空にする", use_container_width=True):
     ss["strategy_member_ids"] = []
     ss["strategy_main_recipe"] = None
     ss["_strategy_clear_members"] = strategy_key
@@ -373,8 +373,8 @@ if suggestions:
                 st.rerun()
 
 
-# ── 主料理と固定5体の編集 ───────────────────────────────────────────────
-st.html(c.section_header("定番プラン"))
+# ── 料理とおてつだいチーム5体の編集 ───────────────────────────────────
+st.html(c.section_header("定番チーム"))
 current_recipe = ss.get("strategy_main_recipe")
 if current_recipe not in recipe_map:
     current_recipe = recipes[0]["name"] if recipes else None
@@ -397,12 +397,12 @@ def _recipe_label(name: str) -> str:
 
 
 picked_recipe = st.selectbox(
-    "主料理",
+    "伸ばす料理",
     recipe_names,
     index=recipe_names.index(current_recipe) if current_recipe in recipe_names else 0,
     key=recipe_widget_key,
     format_func=_recipe_label,
-    filter_mode=None,  # スマホでキーボードを出さない（主料理20件強なので検索不要）
+    filter_mode=None,  # スマホでキーボードを出さない（料理20件強なので検索不要）
 )
 ss["strategy_main_recipe"] = picked_recipe
 recipe = recipe_map[picked_recipe]
@@ -600,7 +600,7 @@ if valid_team:
         starting_inventory=starting_inventory,
     )
     overview_tab, hand_tab, analysis_tab, growth_tab, unlock_tab = st.tabs(
-        ["📋 今週の見通し", "🧩 手札・役割", "🔬 詳細分析", "🌱 育成・捕獲", "🍳 強い料理を狙う"]
+        ["📋 今週の見通し", "🧩 手札・担当", "🔬 詳細分析", "🌱 育成・仲間さがし", "🍳 強い料理を狙う"]
     )
     with overview_tab:
         _sim_metrics(carry_sim)
@@ -619,7 +619,7 @@ if valid_team:
 
     with hand_tab:
         st.caption(
-            "固定5体で足りるもの、ボックスにはいるが未編成のもの、未所持の穴を分けて表示します。"
+            "おてつだいチーム5体で足りるもの、ボックスにはいるが未編成のもの、未所持の穴を分けて表示します。"
         )
         box_roles = _cached_skill_roles(owned)
         member_id_set = set(new_member_ids)
@@ -652,12 +652,12 @@ if valid_team:
                     "役割": coverage.label,
                     "今回": priority,
                     "充足": status,
-                    "固定5体": " / ".join(p.label for p in team_providers) or "—",
+                    "チーム内": " / ".join(p.label for p in team_providers) or "—",
                     "所持": len(coverage.providers),
                 }
             )
 
-        st.markdown("##### 固定5体の役割充足")
+        st.markdown("##### おてつだいチームの担当充足")
         st.dataframe(
             pd.DataFrame(role_rows),
             hide_index=True,
@@ -696,7 +696,7 @@ if valid_team:
                     )
 
         ingredient_index = _cached_ingredient_index(owned)
-        st.markdown("##### 主料理の必要食材")
+        st.markdown("##### 料理の必要食材")
         ingredient_rows = []
         for name, required in requirements.items():
             daily_need = required * 3
@@ -715,7 +715,7 @@ if valid_team:
                     "🥕": ingredient_icon_url(name),
                     "食材": format_ingredient_short(name),
                     "充足": status,
-                    "固定5体/日": round(team_daily, 1),
+                    "チーム/日": round(team_daily, 1),
                     "3食必要/日": daily_need,
                     "即戦力": len(active),
                     "将来候補": len(future),
@@ -736,7 +736,7 @@ if valid_team:
             },
         )
         st.caption(
-            "固定5体の供給は、げんきオール・おてつだいボーナス・イベント補正込み。"
+            "おてつだいチーム5体の供給は、げんきオール・おてつだいボーナス・イベント補正込み。"
             "即戦力は現在の食材構成とLvで供給できる所持個体です。"
         )
 
@@ -797,7 +797,7 @@ if valid_team:
     with analysis_tab:
         breakdown = pd.DataFrame(
             [
-                {"内訳": "主料理", "週期待エナジー": carry_sim.dish_energy},
+                {"内訳": "料理", "週期待エナジー": carry_sim.dish_energy},
                 {"内訳": "きのみ", "週期待エナジー": carry_sim.berry_energy},
                 {"内訳": "直接スキル", "週期待エナジー": carry_sim.skill_energy},
             ]
@@ -905,13 +905,13 @@ if valid_team:
         if growth_rows:
             st.dataframe(pd.DataFrame(growth_rows), hide_index=True, use_container_width=True)
         else:
-            st.caption("この主料理に対する明確な育成改善候補はありません。")
+            st.caption("この料理に対する明確な育成改善候補はありません。")
 
-        st.markdown("##### 捕獲・厳選候補")
-        # 格納先がプラン共通の固定キーだったので、フィールドや主料理を変えても
+        st.markdown("##### 仲間さがし・厳選候補")
+        # 格納先がプラン共通の固定キーだったので、フィールドや料理を変えても
         # 前のプランの結果が出続けていた。ボタンと同じ粒度のキーにする。
         capture_key = f"_capture_results_{strategy_key}_{picked_recipe}"
-        if st.button("🎯 捕獲候補を計算", key=f"capture_{strategy_key}"):
+        if st.button("🎯 候補を計算", key=f"capture_{strategy_key}"):
             with st.spinner("未所持の最終進化個体を各枠へ入れて比較中…"):
                 ss[capture_key] = capture_improvements(
                     members,
@@ -945,7 +945,7 @@ if valid_team:
         elif capture_key in ss:
             st.caption("現在の5体を明確に改善する未所持候補はありません。")
     # ── 🍳 強い料理を狙う ────────────────────────────────────────────────
-    # capture_improvements は主料理を1品に固定するので、必要食材を2つ以上
+    # capture_improvements は料理を1品に固定するので、必要食材を2つ以上
     # 欠いた料理では素の編成も候補入り編成も1食も作れず、差分が0に潰れて
     # 「候補なし」になっていた。ここは料理側からたどって、
     # 「作れるまであと何が足りないか・誰を捕まえればいいか」を出す。
@@ -996,4 +996,4 @@ if valid_team:
             st.html(c.empty_state("このカテゴリに対象レシピがありません。"))
 
 else:
-    st.info("固定メンバーを5体選ぶと、今週の見通しと育成・捕獲候補を表示します。")
+    st.info("おてつだいチームを5体選ぶと、今週の見通しと育成・仲間さがし候補を表示します。")

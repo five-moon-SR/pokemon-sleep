@@ -1,10 +1,10 @@
-"""🏅 強ポケ捕獲方針ページ。
+"""🏅 注目ポケモンページ。
 
 攻略サイト4ソースの人間評価を統合した独自ティアの上位種を一覧し、未所持は理想構成での
-捕獲候補、所持済みでも構成が狙いと違えば引き直し候補として提示する。
+仲間さがし候補、所持済みでも構成が狙いと違えば引き直し候補として提示する。
 定石: 食材得意=AAA / きのみ=不問 / スキル=低食材。
 
-ティアは種族の「強さ」であって個体の当たり判定ではない（そちらは所持ポケデータの評価%）。
+ティアは種族の「強さ」であって個体の当たり判定ではない（そちらはポケモンボックスの評価%）。
 """
 
 from __future__ import annotations
@@ -45,10 +45,10 @@ except ImportError:  # pragma: no cover
     def _pre_evolutions_of(species_name: str) -> tuple[str, ...]:
         return ()
 
-st.html(c.page_banner("強ポケ捕獲方針", "green", icon="🏅"))
+st.html(c.page_banner("注目ポケモン", "green", icon="🏅"))
 st.caption(
     "攻略サイト4ソース（ポケらく／ゲームエイト／Pokelog／こいき10選）の**人間による評価**を"
-    "統合した独自ティア。とくいタイプ別に並べ、未所持は捕獲候補、"
+    "統合した独自ティア。とくいタイプ別に並べ、未所持は仲間さがし候補、"
     "所持済みでも構成が狙いと違えば引き直し候補として出す。"
     "定石: 食材得意=AAA / きのみ=不問 / スキル=低食材。"
 )
@@ -82,7 +82,7 @@ for species_name, tier in top_tier_species(_min_tier, reliable_only=not show_pro
     comps = [composition_string(p, sp) for p in holders]
 
     # 最終形は未所持でも、進化前を持っていれば「育てれば手に入る」。
-    # 捕獲候補として一から狙う必要はないので区別して出す。
+    # 仲間さがし候補として一から狙う必要はないので区別して出す。
     pre_holders: list[tuple[str, dict, str]] = []
     if not holders:
         for pre_name in _pre_evolutions_of(species_name):
@@ -104,7 +104,7 @@ for species_name, tier in top_tier_species(_min_tier, reliable_only=not show_pro
         else:
             status, todo, kind = f"進化前を所持 {label} → 構成が狙いと違う", True, "引き直し"
     else:
-        status, todo, kind = "未所持 → 捕獲候補", True, "未所持"
+        status, todo, kind = "未所持 → 仲間さがし候補", True, "未所持"
     rows.append({
         "species_name": species_name, "tier": tier, "want": want,
         "status": status, "todo": todo, "holders": holders,

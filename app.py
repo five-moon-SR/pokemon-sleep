@@ -124,37 +124,39 @@ if not _profile_gate():
     st.stop()
 
 # ナビは「ユーザーの目的」でグループ化する（ui_design_policy.md）。
-# 並びは実際の運用フローの順: ホーム → 今週の手持ちを決める → 箱を見る →
-# 足りないものを捕りに行く → 資料を引く。
+# 公式寄りの語彙で、ホーム → チームを決める → 料理を伸ばす →
+# 仲間を探す → ボックスを見る → 資料を引く、の順にする。
 pages = {
     # ホームだけはカテゴリを付けず最上段に置く（毎回ここから始まるため）
     "": [
         st.Page("views/home.py", title="ホーム", icon="🏠", default=True),
     ],
-    "てもち": [
-        st.Page("views/party.py", title="編成", icon="🧭"),
-        st.Page("views/items.py", title="育成・アイテム", icon="🎁"),
+    "おてつだいチーム": [
+        st.Page("views/party.py", title="チーム編成", icon="🧭"),
+        st.Page("views/items.py", title="育成・どうぐ", icon="🎁"),
+        # 週エナジー以外の目的（かけら稼ぎ・リボン稼ぎ）で1日だけ組むチーム
+        st.Page("views/goal_party.py", title="目的別チーム", icon="🌙"),
+    ],
+    "料理メニュー": [
         # 料理レベルと長期ターゲットは同じ「料理を伸ばす」導線なので1ページにまとめる。
-        st.Page("views/recipe_targets.py", title="料理", icon="🍽"),
-        st.Page("views/events.py", title="イベント", icon="📅"),
-        # 週エナジー以外の目的（かけら稼ぎ・リボン稼ぎ）で1日だけ組む編成
-        st.Page("views/goal_party.py", title="目的別編成", icon="🌙"),
+        st.Page("views/recipe_targets.py", title="料理メニュー", icon="🍽"),
     ],
-    "ボックス": [
-        st.Page("views/hand.py", title="役割", icon="🧩"),
-        st.Page("views/owned.py", title="所持ポケデータ", icon="📦"),
-    ],
-    "ほかく": [
-        # 「何を狙うか」は捕獲の前の話なので、登録・修正（捕獲後の作業）より先に置く
-        st.Page("views/catch_policy.py", title="強ポケ捕獲方針", icon="🏅"),
-        st.Page("views/register.py", title="個体登録", icon="📝"),
-        st.Page("views/update.py", title="個体強化・進化", icon="🔧"),
+    "仲間さがし": [
+        # 「何を狙うか」は仲間にする前の話なので、登録・修正（仲間になった後の作業）より先に置く
+        st.Page("views/catch_policy.py", title="注目ポケモン", icon="🏅"),
+        st.Page("views/register.py", title="仲間登録", icon="📝"),
+        st.Page("views/update.py", title="育成・進化", icon="🔧"),
         st.Page("views/edit_record.py", title="登録情報の修正", icon="✏️"),
     ],
-    "データ・ガイド": [
-        st.Page("views/master.py", title="全ポケデータ", icon="📚"),
-        st.Page("views/data_collection.py", title="データ集", icon="🗂"),
-        st.Page("views/guide.py", title="使い方", icon="📖"),
+    "ポケモンボックス": [
+        st.Page("views/owned.py", title="ポケモンボックス", icon="📦"),
+        st.Page("views/hand.py", title="ボックス診断", icon="🧩"),
+    ],
+    "リサーチノート": [
+        st.Page("views/events.py", title="イベント", icon="📅"),
+        st.Page("views/master.py", title="ポケモン図鑑", icon="📚"),
+        st.Page("views/data_collection.py", title="データノート", icon="🗂"),
+        st.Page("views/guide.py", title="はじめてガイド", icon="📖"),
     ],
 }
 

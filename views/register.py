@@ -142,7 +142,7 @@ def _bump_level(delta: int) -> None:
     st.session_state.lv_input = max(0, min(65, cur + delta))
 
 
-st.title("📝 個体登録")
+st.title("📝 仲間登録")
 
 species_names = db.list_species_names()
 if not species_names:
@@ -471,7 +471,7 @@ if submit and ready:
             st.markdown("**弱み**: " + " / ".join(ev.weaknesses))
         st.caption(
             "「育成後」は最終進化形 × Lv60 想定（メインスキルLvは進化ぶん加算）。"
-            "詳しい内訳は ボックス → 所持ポケデータ で見られます。"
+            "詳しい内訳は「ポケモンボックス」で見られます。"
         )
 
     # 連続登録の動線。評価を見た流れでそのまま次の個体へ入れる

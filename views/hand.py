@@ -1,6 +1,6 @@
-"""ボックス全体の役割充足度（食材・きのみ・スキル）を棚卸しするページ。
+"""ボックス全体の担当充足度（食材・きのみ・スキル）を棚卸しするページ。
 
-編成やレシピを決める前に「何が足りていないか」を見る場所。
+チーム編成やレシピを決める前に「何が足りていないか」を見る場所。
 
 きのみ充足度は utils/berry_coverage.py に実装があったのに、
 それを出すページがナビ未登録で到達不能になっていた（この統合で削除）。
@@ -91,9 +91,9 @@ def _coverage_table(
     )
 
 
-st.html(c.page_banner("役割", "bag", icon="🧩"))
+st.html(c.page_banner("ボックス診断", "bag", icon="🧩"))
 st.caption(
-    "編成を決める前に、ボックス全体で食材・きのみ・スキルの担当が"
+    "チームを決める前に、ポケモンボックス全体で食材・きのみ・スキルの担当が"
     "どこまで埋まっているかをざっくり棚卸しする。"
 )
 
@@ -101,7 +101,7 @@ db.init_db()
 owned = [dict(row) for row in db.list_pokemon()]
 owned_by_id = {int(p["id"]): p for p in owned}
 if not owned:
-    st.html(c.empty_state("所持ポケモンがいません。先に「個体登録」から追加してください。"))
+    st.html(c.empty_state("所持ポケモンがいません。先に「仲間登録」から追加してください。"))
     st.stop()
 
 index = _ingredient_index(owned)

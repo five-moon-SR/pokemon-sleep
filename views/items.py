@@ -1,4 +1,4 @@
-"""レベル・希少アイテムを誰へ投資するか比較するページ。"""
+"""レベル・希少などうぐを誰へ投資するか比較するページ。"""
 
 from __future__ import annotations
 
@@ -140,13 +140,13 @@ def _impact_list(rows: list[ImpactRow], *, limit: int = 20, unit: str = "") -> N
                 _impact_row(row, index, unit, actionable=False)
 
 
-st.html(c.page_banner("育成・アイテム戦略", "green", icon="🎁"))
-st.caption("レベル・メインスキルのたね・サブスキルのたね・まっしろミントの投資先を比較する。")
+st.html(c.page_banner("育成・どうぐ", "green", icon="🎁"))
+st.caption("レベル・メインスキルのたね・サブスキルのたね・まっしろミントの使い先を比較する。")
 db.init_db()
 owned = [dict(row) for row in db.list_pokemon()]
 owned_by_id = {int(p["id"]): p for p in owned}
 if not owned:
-    st.html(c.empty_state("所持ポケモンがいません。先に個体登録してください。"))
+    st.html(c.empty_state("所持ポケモンがいません。先に仲間登録してください。"))
     st.stop()
 
 inventory = {**ITEM_DEFAULTS, **(db.get_setting(INVENTORY_KEY, {}) or {})}
@@ -208,7 +208,7 @@ st.html(
 if not plans:
     st.warning(
         "定番プランが1件も揃っていないので、実戦での改善量が測れません。"
-        "「てもち → 編成」で各フィールドの編成を保存すると、"
+        "「おてつだいチーム → チーム編成」で各フィールドのチームを保存すると、"
         "ここが評価値順ではなく**週エナジーの実改善順**になります。"
     )
     st.caption("いまは育成後評価の伸び（×種族ティア）で並べています。")

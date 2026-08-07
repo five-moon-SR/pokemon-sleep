@@ -1,4 +1,4 @@
-"""所持ポケデータ。
+"""ポケモンボックス。
 
 機能:
   - master.py 並みの絞り込み・並び替え
@@ -75,14 +75,14 @@ RANK_ORDER_MAP: dict[str, int] = {r: i for i, r in enumerate(DAIFUKU_RANKS)}
 from image_utils import berry_icon_url, ingredient_icon_url, pokemon_image_url, sleep_ribbon_icon_url
 
 st.html(
-    uic.page_banner("所持ポケデータ", "box", icon="📦")
+    uic.page_banner("ポケモンボックス", "box", icon="📦")
     + " " + uic.count_pill(f"{len(db.list_pokemon())}匹", "box")
 )
 
 owned = [dict(r) for r in db.list_pokemon()]
 owned_by_id = {p["id"]: p for p in owned}
 if not owned:
-    st.info("まだ登録されていません。「個体登録」から追加してください。")
+    st.info("まだ登録されていません。「仲間登録」から追加してください。")
     st.stop()
 
 
@@ -879,8 +879,8 @@ else:
 # 育成判断は専用ページへ集約
 # ---------------------------------------------------------------------------
 st.divider()
-st.info("レベル上げ・各種たね・まっしろミントの優先度は「育成・アイテム戦略」でまとめて比較できます。")
-st.page_link("views/items.py", label="育成・アイテム戦略を開く", icon="🎁")
+st.info("レベル上げ・各種たね・まっしろミントの優先度は「育成・どうぐ」でまとめて比較できます。")
+st.page_link("views/items.py", label="育成・どうぐを開く", icon="🎁")
 
 
 # ---------------------------------------------------------------------------

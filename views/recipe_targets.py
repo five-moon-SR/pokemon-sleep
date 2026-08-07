@@ -483,11 +483,11 @@ def _render_target_planner(
     pot_bonus: int,
 ) -> None:
     if not owned:
-        st.html(c.empty_state("所持ポケモンがいません。先に「個体登録」から追加してください。"))
+        st.html(c.empty_state("所持ポケモンがいません。先に「仲間登録」から追加してください。"))
         return
 
     st.caption(
-        "週のカテゴリごとに、伸ばす料理を1品に絞って、必要食材・担当候補・捕獲先を確認します。"
+        "週のカテゴリごとに、伸ばす料理を1品に絞って、必要食材・担当候補・出会えるフィールドを確認します。"
     )
     with st.container(border=True):
         st.html('<div class="rt-sticky-toggle-anchor"></div>')
@@ -516,7 +516,7 @@ def _render_target_planner(
             )
 
 
-st.html(c.page_banner("料理", "cyan", icon="🍽"))
+st.html(c.page_banner("料理メニュー", "cyan", icon="🍽"))
 
 db.init_db()
 owned = _owned_rows()

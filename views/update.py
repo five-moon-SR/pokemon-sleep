@@ -1,4 +1,4 @@
-"""個体強化・進化ページ。
+"""育成・進化ページ。
 
 フロー:
   1. 検索（ニックネーム or 種族名）
@@ -40,7 +40,7 @@ SLEEP_RIBBON_OPTIONS: list[tuple[str, int]] = [
     ("段階4（2,000h）", 4),
 ]
 
-st.title("🔧 個体強化・進化")
+st.title("🔧 育成・進化")
 
 
 def _truncate_pct(x):
@@ -90,7 +90,7 @@ def _upgrade_options(current: str | None) -> list[str]:
 
 owned = [dict(r) for r in db.list_pokemon()]
 if not owned:
-    st.info("まだ登録されていません。「個体登録」から追加してください。")
+    st.info("まだ登録されていません。「仲間登録」から追加してください。")
     st.stop()
 
 header_cols = st.columns([4, 1])

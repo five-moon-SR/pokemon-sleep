@@ -1,6 +1,6 @@
-"""エナジー以外の目的で組む1日限りの編成（ゆめのかけら / おやすみリボン）。
+"""エナジー以外の目的で組む1日限りのチーム（ゆめのかけら / おやすみリボン）。
 
-通常の「編成」ページは週エナジーを最大化する。だが実際には
+通常の「チーム編成」ページは週エナジーを最大化する。だが実際には
 「今週はもう十分だから、かけらを稼ぐ日／リボンを進める日にする」という運用がある。
 その2つはどちらも週エナジーの物差しでは0点になるので、ここで別建てに評価する。
 """
@@ -15,11 +15,11 @@ from image_utils import pokemon_image_url
 from ui import components as c
 from utils import goal_teams
 
-st.html(c.page_banner("目的別編成", "bag", icon="🌙"))
+st.html(c.page_banner("目的別チーム", "bag", icon="🌙"))
 
 owned = db.list_pokemon()
 if not owned:
-    st.html(c.empty_state("所持ポケモンが登録されていません。先に「個体登録」から登録してください。"))
+    st.html(c.empty_state("所持ポケモンが登録されていません。先に「仲間登録」から登録してください。"))
     st.stop()
 
 

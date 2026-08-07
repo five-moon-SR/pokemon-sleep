@@ -4,7 +4,7 @@ import streamlit as st
 import db
 from image_utils import berry_icon_url, ingredient_icon_url, pokemon_image_url
 
-st.title("📚 全ポケデータ")
+st.title("📚 ポケモン図鑑")
 
 records = db.list_all_master_records()
 if not records:

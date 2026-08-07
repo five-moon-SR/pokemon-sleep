@@ -44,7 +44,7 @@ def _ingredient_icon_map() -> dict[str, str]:
     }
 
 
-st.title("🗂 データ集")
+st.title("🗂 データノート")
 st.caption(
     "ゲーム内データの参照ページ。各データが揃い次第、対応するタブの中身を埋めていく。"
 )

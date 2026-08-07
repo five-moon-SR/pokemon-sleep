@@ -1,7 +1,7 @@
 """ホーム画面（ダッシュボード）。
 
 ブロック構成:
-  ① 今週の攻略プラン — 料理カテゴリ×フィールドの定番5体と週見通し
+  ① 今週のおてつだいチーム — 料理カテゴリ×フィールドの定番5体と週見通し
   ② 所持ポケモン統計 — 統計タイル + だいふく/specialty分布
   ③ 最近登録した子 — カード行
 プレイヤープロフィール編集は ⚙ ボタンから st.dialog で開く。
@@ -180,18 +180,18 @@ if prof_cols[1].button("⚙ 設定", use_container_width=True):
     _profile_dialog()
 
 # よく使う導線を上に置く（ホームから2タップで目的のページに着けるように）。
-# 役割ページはサイドバー以外からのリンクが1つも無かったので、ここに入れる。
+# ボックス診断はサイドバー以外からのリンクが1つも無かったので、ここに入れる。
 nav_cols = st.columns(5)
-nav_cols[0].page_link("views/party.py", label="編成", icon="🧭", use_container_width=True)
-nav_cols[1].page_link("views/register.py", label="登録", icon="📝", use_container_width=True)
-nav_cols[2].page_link("views/catch_policy.py", label="捕獲", icon="🏅", use_container_width=True)
+nav_cols[0].page_link("views/party.py", label="チーム編成", icon="🧭", use_container_width=True)
+nav_cols[1].page_link("views/register.py", label="仲間登録", icon="📝", use_container_width=True)
+nav_cols[2].page_link("views/catch_policy.py", label="仲間さがし", icon="🏅", use_container_width=True)
 nav_cols[3].page_link("views/events.py", label="イベント", icon="📅", use_container_width=True)
-nav_cols[4].page_link("views/hand.py", label="役割", icon="🧩", use_container_width=True)
+nav_cols[4].page_link("views/hand.py", label="ボックス診断", icon="🧩", use_container_width=True)
 
 direction = _load_strategy_direction()
 st.html(_direction_card(direction))
 dir_cols = st.columns([3, 1])
-dir_cols[0].page_link("views/catch_policy.py", label="捕獲方針を見る →", icon="🏅")
+dir_cols[0].page_link("views/catch_policy.py", label="注目ポケモンを見る →", icon="🏅")
 if dir_cols[1].button("方針を編集", use_container_width=True):
     _strategy_direction_dialog()
 
@@ -201,13 +201,13 @@ owned = [dict(r) for r in db.list_pokemon()]
 perf.mark("home: list_pokemon")
 
 
-# ============ ① 今週の攻略プラン ============
+# ============ ① 今週のおてつだいチーム ============
 
 active_week = db.get_setting("user.active_strategy_week", {}) or {}
 pt = db.get_party(int(active_week["plan_id"])) if active_week.get("plan_id") else None
 perf.mark("home: get_setting + get_party")
 if pt:
-    st.html(c.section_header(f"今週の攻略プラン: {pt['name']}"))
+    st.html(c.section_header(f"今週のおてつだいチーム: {pt['name']}"))
 
     # フィールド/好みきのみ/候補レシピ を1行のチップにまとめる
     field_name = pt.get("field_name") or "（未設定）"
@@ -277,11 +277,11 @@ if pt:
             c.stat_tile("1日の料理", f"{sim.cooked_per_day:.1f}", "回"),
         ]))
         bottleneck = " / ".join(sim.bottlenecks) if sim.bottlenecks else "なし"
-        st.caption(f"主料理: **{pt.get('main_recipe') or '—'}**　｜　律速: {bottleneck}")
+        st.caption(f"伸ばす料理: **{pt.get('main_recipe') or '—'}**　｜　律速: {bottleneck}")
 
         perf.mark("home: simulate_plan＋指標4つ")
 
-        # 育成おすすめは「育成・アイテム」ページと同じ物差し（全定番プランの
+        # 育成おすすめは「育成・どうぐ」ページと同じ物差し（全定番プランの
         # 週エナジー実改善・今週は重み2倍）を使う。ページごとに順位が違うと
         # どれを信じればいいか分からなくなるため。
         # キャッシュキーには所持状態も混ぜる（レベルを上げても更新されなかった）。
@@ -334,14 +334,14 @@ if pt:
         f"{RECIPE_CATEGORY_LABELS.get(category, category or '旧編成')}　"
         f"最終更新: {(pt.get('updated_at') or '')[:16]}"
     )
-    meta_cols[1].page_link("views/party.py", label="→ 攻略プランを調整", icon="🧭")
+    meta_cols[1].page_link("views/party.py", label="→ チーム編成を調整", icon="🧭")
 else:
-    st.html(c.section_header("今週の攻略プラン"))
-    st.html(c.empty_state("料理カテゴリとフィールドを選び、今週の攻略プランを設定してください。"))
-    st.page_link("views/party.py", label="攻略プランを作る →", icon="🧭")
+    st.html(c.section_header("今週のおてつだいチーム"))
+    st.html(c.empty_state("料理カテゴリとフィールドを選び、今週のおてつだいチームを設定してください。"))
+    st.page_link("views/party.py", label="チーム編成を作る →", icon="🧭")
 
 
-perf.mark("home: ①攻略プラン 仕上げ")
+perf.mark("home: ①おてつだいチーム 仕上げ")
 
 
 # ============ ② 所持ポケモン統計 ============
@@ -349,7 +349,7 @@ perf.mark("home: ①攻略プラン 仕上げ")
 st.html(c.section_header("所持ポケモン"))
 
 if not owned:
-    st.html(c.empty_state("まだ登録されていません。「個体登録」から追加できます。"))
+    st.html(c.empty_state("まだ登録されていません。「仲間登録」から追加できます。"))
 else:
     species_count = len({p["species_name"] for p in owned})
     lv60_count = sum(1 for p in owned if _eff_lv(p) >= 60)
