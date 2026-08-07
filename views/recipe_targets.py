@@ -153,7 +153,7 @@ def _lv60_target_supply(p: dict, target_name: str) -> float:
     return expected_ingredients_per_day(boosted, species).get(target_name, 0.0)
 
 
-def _food_slot_chips(p: dict, species: dict) -> list[str]:
+def _food_slot_chips(p: dict, species: dict, target_name: str) -> list[str]:
     ings = species.get("ingredients") or {}
     defaults = (
         (ings.get("a") or {}).get("name"),
@@ -171,13 +171,14 @@ def _food_slot_chips(p: dict, species: dict) -> list[str]:
             continue
         qty = qty_at_slot(species, name, idx)
         qty_label = f"×{qty}" if qty > 0 else "?"
+        active = name == target_name
+        cls = "rt-slot-chip rt-slot-chip-active" if active else "rt-slot-chip"
+        icon = ingredient_icon_url(name)
+        img = f'<img src="{icon}" width="18" loading="lazy">' if icon else ""
+        label = f"{INGREDIENT_SLOT_LABELS[idx]} {format_ingredient_short(name)}{qty_label}"
         chips.append(
-            c.icon_chip(
-                ingredient_icon_url(name),
-                f"{INGREDIENT_SLOT_LABELS[idx]} {format_ingredient_short(name)}{qty_label}",
-                size=18,
-                title=name,
-            )
+            f'<span class="{cls}" title="{html.escape(name)}">'
+            f'{img}{html.escape(label)}</span>'
         )
     return chips
 
@@ -206,7 +207,7 @@ def _candidate_rows(owned: list[dict], ingredient_name: str) -> list[dict]:
                 "level": int(p.get("current_level") or p.get("caught_level") or p.get("level") or 1),
                 "composition": comp,
                 "daily": daily,
-                "food_slots": _food_slot_chips(p, species),
+                "food_slots": _food_slot_chips(p, species, ingredient_name),
                 "subs": subs,
             }
         )
@@ -530,6 +531,8 @@ st.html(
     '.rt-progress{height:6px;border-radius:999px;background:#eee;overflow:hidden;margin:8px 0 4px;}'
     '.rt-progress div{height:100%;background:var(--ps-sp-food);border-radius:999px;}'
     '.rt-slotrow{display:flex;flex-wrap:wrap;gap:4px;margin-top:7px;}'
+    '.rt-slot-chip{display:inline-flex;align-items:center;gap:3px;border:1px solid var(--ps-line);background:#fff;border-radius:999px;padding:2px 7px;font-size:11px;font-weight:750;line-height:1.25;}'
+    '.rt-slot-chip-active{color:var(--ps-sp-food);border-color:color-mix(in srgb,var(--ps-sp-food) 55%,#fff);background:color-mix(in srgb,var(--ps-sp-food) 16%,#fff);}'
     '.rt-subrow{display:flex;flex-wrap:wrap;gap:4px;margin-top:7px;}'
     '.rt-level-img{height:48px;display:flex;align-items:center;justify-content:center;}'
     '.rt-level-img img{max-width:54px;max-height:54px;object-fit:contain;}'
