@@ -248,7 +248,11 @@ def _recommendation_detail_card(p: dict, target_name: str) -> str:
         for lv in (10, 25, 50, 75, 100)
         if p.get(f"subskill_lv{lv}")
     ]
-    sub_text = " / ".join(format_subskill_short(str(s)) for s in subs) if subs else "—"
+    sub_html = (
+        "".join(c.subskill_chip(str(s)) for s in subs)
+        if subs
+        else '<span class="rec-sub-empty">—</span>'
+    )
     nature_text = _nature_up_down_label(p.get("nature"))
     return (
         '<article class="rec-detail-card">'
@@ -263,7 +267,7 @@ def _recommendation_detail_card(p: dict, target_name: str) -> str:
         '</div>'
         '</div>'
         f'<div class="rec-detail-slots">{slot_html}</div>'
-        f'<div class="rec-detail-sub">サブ(開放順): {html.escape(sub_text)}</div>'
+        f'<div class="rec-detail-sub"><span class="rec-detail-sub-label">サブ(開放順)</span>{sub_html}</div>'
         '</article>'
     )
 
@@ -303,7 +307,9 @@ def _recommendation_detail_html(target_name: str, row, owned_rows: list[dict]) -
         '.rec-slot b{font-size:10px;color:var(--ps-ink-dim);}'
         '.rec-slot-target{border-color:#2f7a38;background:#dff2e3;color:#245a2b;font-weight:700;}'
         '.rec-slot-empty{color:var(--ps-ink-dim);background:#f6f6f6;}'
-        '.rec-detail-sub{border-top:1px solid rgba(0,0,0,.08);margin-top:8px;padding-top:6px;color:var(--ps-ink-dim);font-size:12px;line-height:1.4;}'
+        '.rec-detail-sub{border-top:1px solid rgba(0,0,0,.08);margin-top:8px;padding-top:6px;display:flex;flex-wrap:wrap;gap:4px;align-items:center;}'
+        '.rec-detail-sub-label{color:var(--ps-ink-dim);font-size:12px;margin-right:2px;}'
+        '.rec-sub-empty{color:var(--ps-ink-dim);font-size:12px;}'
         '.rec-detail-empty{background:#f6f6f6;border:1px dashed #ddd;border-radius:12px;padding:12px;color:var(--ps-ink-dim);font-size:13px;}'
         '@media (max-width:480px){.rec-detail-grid{grid-template-columns:1fr;}.rec-detail-card{border-radius:10px;padding:9px;}}'
         '</style>'

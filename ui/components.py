@@ -92,7 +92,9 @@ def subskill_chip(name: str | None) -> str:
         return ""
     var = _SUB_VAR.get(get_subskill_rarity(name), "--ps-sub-white")
     return (
-        f'<span class="ps-chip" title="{escape(name)}">'
+        f'<span class="ps-chip" title="{escape(name)}" '
+        f'style="border-color: color-mix(in srgb, var({var}) 48%, #fff); '
+        f'background: color-mix(in srgb, var({var}) 14%, #fff);">'
         f'<span class="ps-dot" style="background: var({var});"></span>'
         f"{escape(format_subskill_short(name))}</span>"
     )
