@@ -20,7 +20,7 @@ from dataclasses import dataclass, field
 from typing import Any
 
 import db
-from utils.evaluator import evaluate_potential
+from utils.evaluator import evaluate_potential, final_evolution_of
 from utils.food_expectation import (
     _effective_level,
     composition_string,
@@ -241,6 +241,19 @@ def ingredient_recommendation_rows(
     """
     owned_species: dict[str, list[tuple[dict[str, Any], dict[str, Any], str, float, str]]] = {}
     ctx = get_play_ctx()
+
+    def _lv60_target_supply(
+        p: dict[str, Any],
+        species: dict[str, Any],
+        ingredient_name: str,
+    ) -> float:
+        final_name = final_evolution_of(p.get("species_name") or "")
+        final_species = db.get_species_data(final_name) or species
+        boosted = dict(p)
+        boosted["species_name"] = final_name
+        boosted["current_level"] = 60
+        return expected_ingredients_per_day(boosted, final_species, ctx).get(ingredient_name, 0.0)
+
     for p in owned_rows:
         species = db.get_species_data(p["species_name"]) or {}
         comp = composition_string(p, species)
@@ -279,15 +292,7 @@ def ingredient_recommendation_rows(
                     fit_label = ""
                 if not fit_label:
                     continue
-                lv60_target_per_day = 0.0
-                if p.get("species_name"):
-                    boosted = dict(p)
-                    boosted["current_level"] = 60
-                    lv60_target_per_day = expected_ingredients_per_day(
-                        boosted,
-                        species,
-                        ctx,
-                    ).get(name, 0.0)
+                lv60_target_per_day = _lv60_target_supply(p, species, name)
                 hit = IngredientClearHit(
                     pokemon_id=int(p["id"]),
                     label=p.get("nickname") or p["species_name"],
