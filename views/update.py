@@ -19,6 +19,7 @@ import db
 from constants import (
     SUBSKILL_UNLOCK_LEVELS,
     format_nature_label,
+    format_subskill_short,
     get_subskill_upgrades,
 )
 from image_utils import (
@@ -174,11 +175,16 @@ for p in filtered:
         }
     )
 list_df = pd.DataFrame(list_rows)
+list_display_df = list_df.copy()
+for lv in SUBSKILL_UNLOCK_LEVELS:
+    col = f"サブLv{lv}"
+    if col in list_display_df.columns:
+        list_display_df[col] = list_display_df[col].map(format_subskill_short)
 display_cols_list = [c for c in list_df.columns if not c.startswith("_")]
 
 st.caption(f"{len(filtered)} / {len(owned)} 件　行をクリックで1体選択")
 event = st.dataframe(
-    list_df,
+    list_display_df,
     hide_index=True,
     use_container_width=True,
     on_select="rerun",

@@ -13,6 +13,7 @@ from typing import Any
 
 import streamlit as st
 
+from constants import format_subskill_short
 import db
 from image_utils import pokemon_image_url
 
@@ -79,7 +80,8 @@ def pokemon_status_popover(
 
         subs = [p.get(f"subskill_lv{n}") for n in _SUB_LVS]
         subs = [s for s in subs if s]
-        st.caption("サブ: " + (" / ".join(subs) if subs else "—"))
+        sub_labels = [format_subskill_short(s) for s in subs]
+        st.caption("サブ: " + (" / ".join(sub_labels) if sub_labels else "—"))
 
         berry = (species.get("berry") or {}).get("name") or "—"
         ings = [p.get("ingredient_1"), p.get("ingredient_2"), p.get("ingredient_3")]

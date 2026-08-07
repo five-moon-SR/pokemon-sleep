@@ -18,7 +18,7 @@ import pandas as pd
 import streamlit as st
 
 import db
-from constants import NATURES
+from constants import NATURES, format_subskill_short
 from image_utils import berry_icon_url, ingredient_icon_url, pokemon_image_url
 from ui import components as c
 from ui.widgets import pokemon_popover_row
@@ -248,7 +248,7 @@ def _recommendation_detail_card(p: dict, target_name: str) -> str:
         for lv in (10, 25, 50, 75, 100)
         if p.get(f"subskill_lv{lv}")
     ]
-    sub_text = " / ".join(str(s) for s in subs) if subs else "—"
+    sub_text = " / ".join(format_subskill_short(str(s)) for s in subs) if subs else "—"
     nature_text = _nature_up_down_label(p.get("nature"))
     return (
         '<article class="rec-detail-card">'

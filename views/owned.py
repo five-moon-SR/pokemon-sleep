@@ -29,6 +29,7 @@ from constants import (
     THEME_INK_DIM,
     blend_hex,
     format_nature_label,
+    format_subskill_short,
     get_subskill_rarity,
 )
 from utils.evaluator import (
@@ -657,7 +658,9 @@ def _build_styler(df: pd.DataFrame):
 
         return styles
 
-    return df.style.apply(_apply, axis=None)
+    return df.style.apply(_apply, axis=None).format({
+        c: format_subskill_short for c in sub_cols_present
+    })
 
 
 # ---------------------------------------------------------------------------
@@ -763,7 +766,11 @@ def _render_detail(row: pd.Series, selected_id: int) -> None:
             )
         elif pick == "⬆ サブスキルS→M":
             b = sim.best_sub_upgrade
-            after, delta, note = b.total, b.delta, f"{b.from_sub} → {b.to_sub}"
+            after, delta, note = (
+                b.total,
+                b.delta,
+                f"{format_subskill_short(b.from_sub)} → {format_subskill_short(b.to_sub)}",
+            )
         else:
             after, delta, note = sim.base_total, 0.0, "アイテムなし"
         sc = st.columns([2, 2, 3])

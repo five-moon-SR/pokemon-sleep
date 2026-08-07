@@ -8,7 +8,7 @@ from __future__ import annotations
 
 from html import escape
 
-from constants import get_subskill_rarity
+from constants import format_subskill_short, get_subskill_rarity
 from image_utils import berry_icon_url, ingredient_icon_url
 
 
@@ -92,8 +92,9 @@ def subskill_chip(name: str | None) -> str:
         return ""
     var = _SUB_VAR.get(get_subskill_rarity(name), "--ps-sub-white")
     return (
-        f'<span class="ps-chip"><span class="ps-dot" style="background: var({var});"></span>'
-        f"{escape(name)}</span>"
+        f'<span class="ps-chip" title="{escape(name)}">'
+        f'<span class="ps-dot" style="background: var({var});"></span>'
+        f"{escape(format_subskill_short(name))}</span>"
     )
 
 

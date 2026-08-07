@@ -5,6 +5,7 @@ from __future__ import annotations
 import pandas as pd
 import streamlit as st
 
+from constants import format_subskill_short
 import db
 from image_utils import pokemon_image_url
 from ui import components as c
@@ -295,12 +296,12 @@ with detail_tab:
                 ),
                 "期待改善": round(analysis.expected_delta, 1),
                 "抽選対象": " / ".join(
-                    f"{outcome.from_sub}→{outcome.to_sub}"
+                    f"{format_subskill_short(outcome.from_sub)}→{format_subskill_short(outcome.to_sub)}"
                     for outcome in analysis.outcomes
                 )
                 or "—",
                 "ブロック": " / ".join(
-                    f"{blocked.from_sub}（{blocked.reason}）"
+                    f"{format_subskill_short(blocked.from_sub)}（{blocked.reason}）"
                     for blocked in analysis.blocked
                 )
                 or "—",
@@ -317,7 +318,10 @@ with detail_tab:
             {
                 "確率": f"{path.probability:.0%}",
                 "使用数": path.used_seeds,
-                "強化順": " → ".join(path.steps) or "使用不可",
+                "強化順": " → ".join(
+                    "→".join(format_subskill_short(part) for part in step.split("→"))
+                    for step in path.steps
+                ) or "使用不可",
                 "改善": f"{path.delta:+.1f}",
             }
             for path in paths

@@ -94,6 +94,34 @@ SUBSKILL_OPTIONS: list[str] = [
     "ゆめのかけらボーナス",
 ]
 
+SUBSKILL_SHORT_LABELS: dict[str, str] = {
+    "きのみの数S": "きのみS",
+    "食材確率アップS": "食確S",
+    "食材確率アップM": "食確M",
+    "スキル確率アップS": "スキ確S",
+    "スキル確率アップM": "スキ確M",
+    "スキルレベルアップS": "スキLvS",
+    "スキルレベルアップM": "スキLvM",
+    "おてつだいスピードS": "おてスピS",
+    "おてつだいスピードM": "おてスピM",
+    "おてつだいボーナス": "おてボ",
+    "げんき回復ボーナス": "げんボ",
+    "最大所持数アップS": "所持S",
+    "最大所持数アップM": "所持M",
+    "最大所持数アップL": "所持L",
+    "リサーチEXPボーナス": "リサEXP",
+    "睡眠EXPボーナス": "睡眠EXP",
+    "ゆめのかけらボーナス": "ゆめボ",
+}
+
+
+def format_subskill_short(name: str | None) -> str:
+    """UI向けの短いサブスキル名。保存・判定用の正式名称は変更しない。"""
+    if not isinstance(name, str) or not name:
+        return ""
+    normalized = normalize_subskill_name(name)
+    return SUBSKILL_SHORT_LABELS.get(normalized or "", str(name))
+
 # サブスキルのレアリティ（金 > 青 > 白）。data/subskill.json 整備後はそちら参照に切替。
 # キーは正規表記。get_subskill_rarity() 経由で旧表記も自動マッチする。
 SUBSKILL_RARITY: dict[str, str] = {
