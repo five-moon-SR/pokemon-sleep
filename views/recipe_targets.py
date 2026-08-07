@@ -17,7 +17,7 @@ from image_utils import ingredient_icon_url, pokemon_image_url, recipe_icon_url
 from ui import components as c
 from utils.evaluator import final_evolution_of
 from utils.field_encounters import recommend_fields, species_fields
-from utils.food_expectation import composition_string, expected_ingredients_per_day
+from utils.food_expectation import composition_string, expected_ingredients_per_day, qty_at_slot
 from utils.ingredient_coverage import INGREDIENT_RECOMMENDATIONS
 from utils.play_context import load_play_context
 from utils.party_logic import RECIPE_CATEGORY_LABELS
@@ -27,6 +27,7 @@ from utils import recipe_level
 CATEGORY_ORDER = ("curry_stew", "salad", "drink_dessert")
 MEALS_PER_DAY = 3
 DEFAULT_POT_BONUS = 27
+INGREDIENT_SLOT_LABELS = ("Lv1", "Lv30", "Lv60")
 
 
 @st.cache_data(show_spinner=False, ttl=300)
@@ -152,6 +153,35 @@ def _lv60_target_supply(p: dict, target_name: str) -> float:
     return expected_ingredients_per_day(boosted, species).get(target_name, 0.0)
 
 
+def _food_slot_chips(p: dict, species: dict) -> list[str]:
+    ings = species.get("ingredients") or {}
+    defaults = (
+        (ings.get("a") or {}).get("name"),
+        (ings.get("b") or {}).get("name"),
+        (ings.get("c") or {}).get("name"),
+    )
+    chosen = (
+        p.get("ingredient_1") or defaults[0],
+        p.get("ingredient_2") or defaults[1],
+        p.get("ingredient_3") or defaults[2],
+    )
+    chips = []
+    for idx, name in enumerate(chosen):
+        if not name:
+            continue
+        qty = qty_at_slot(species, name, idx)
+        qty_label = f"×{qty}" if qty > 0 else "?"
+        chips.append(
+            c.icon_chip(
+                ingredient_icon_url(name),
+                f"{INGREDIENT_SLOT_LABELS[idx]} {format_ingredient_short(name)}{qty_label}",
+                size=18,
+                title=name,
+            )
+        )
+    return chips
+
+
 def _candidate_rows(owned: list[dict], ingredient_name: str) -> list[dict]:
     rec_species = tuple(INGREDIENT_RECOMMENDATIONS.get(ingredient_name, []))
     families = _family_names(rec_species)
@@ -159,7 +189,8 @@ def _candidate_rows(owned: list[dict], ingredient_name: str) -> list[dict]:
     for p in owned:
         if (p.get("species_name") or "") not in families:
             continue
-        species = db.get_species_data(p.get("species_name") or "") or {}
+        final_name = final_evolution_of(p.get("species_name") or "")
+        species = db.get_species_data(final_name) or db.get_species_data(p.get("species_name") or "") or {}
         comp = composition_string(p, species)
         daily = _lv60_target_supply(p, ingredient_name)
         subs = [
@@ -175,6 +206,7 @@ def _candidate_rows(owned: list[dict], ingredient_name: str) -> list[dict]:
                 "level": int(p.get("current_level") or p.get("caught_level") or p.get("level") or 1),
                 "composition": comp,
                 "daily": daily,
+                "food_slots": _food_slot_chips(p, species),
                 "subs": subs,
             }
         )
@@ -216,6 +248,7 @@ def _candidate_card(row: dict, need_per_day: float) -> str:
     )
     cover = row["daily"] / need_per_day if need_per_day else 0.0
     sub_html = "".join(c.subskill_chip(s) for s in row["subs"][:5]) or '<span class="rt-muted">サブ未入力</span>'
+    slot_html = "".join(row.get("food_slots") or []) or '<span class="rt-muted">食材枠未入力</span>'
     return (
         '<article class="rt-cand-card">'
         '<div class="rt-cand-top">'
@@ -232,6 +265,7 @@ def _candidate_card(row: dict, need_per_day: float) -> str:
         '</div>'
         f'<div class="rt-progress"><div style="width:{min(100, cover * 100):.0f}%"></div></div>'
         f'<div class="rt-muted">3食必要量に対して {cover:.0%}</div>'
+        f'<div class="rt-slotrow">{slot_html}</div>'
         f'<div class="rt-subrow">{sub_html}</div>'
         '</article>'
     )
@@ -495,6 +529,7 @@ st.html(
     '.rt-daily small{font-size:10px;color:var(--ps-ink-dim);margin-left:1px;}'
     '.rt-progress{height:6px;border-radius:999px;background:#eee;overflow:hidden;margin:8px 0 4px;}'
     '.rt-progress div{height:100%;background:var(--ps-sp-food);border-radius:999px;}'
+    '.rt-slotrow{display:flex;flex-wrap:wrap;gap:4px;margin-top:7px;}'
     '.rt-subrow{display:flex;flex-wrap:wrap;gap:4px;margin-top:7px;}'
     '.rt-level-img{height:48px;display:flex;align-items:center;justify-content:center;}'
     '.rt-level-img img{max-width:54px;max-height:54px;object-fit:contain;}'
