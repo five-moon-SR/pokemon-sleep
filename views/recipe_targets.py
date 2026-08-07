@@ -84,28 +84,45 @@ def _recipe_option_label(name: str, recipe_map: dict[str, dict], base_capacity: 
 
 def _render_pot_overview(recipes: list[dict], base_capacity: int, pot_label: str, pot_bonus: int) -> None:
     buckets = [
-        ("通常で作れるデカ料理", 0),
-        (f"{pot_label} 1回前提で届く料理", 1),
-        (f"{pot_label} 2回前提で届く期待料理", 2),
-        ("まだ鍋が足りない料理", 3),
+        ("通常OK", "鍋スキルなし", 0),
+        ("+1回", f"{pot_label} 1回", 1),
+        ("+2回", f"{pot_label} 2回", 2),
+        ("未到達", "鍋拡張待ち", 3),
     ]
-    cols = st.columns(4)
-    for col, (title, bucket) in zip(cols, buckets, strict=False):
+    panels = []
+    for title, subtitle, bucket in buckets:
         rows = [
             r for r in recipes
             if _pot_status(r.get("total_ingredients"), base_capacity, pot_bonus)[2] == bucket
         ]
         rows.sort(key=lambda r: int(r.get("total_ingredients") or 0), reverse=True)
-        with col:
-            st.markdown(f"**{title}**")
-            if not rows:
-                st.caption("該当なし")
-                continue
-            for rec in rows[:4]:
-                st.caption(
-                    f"{rec['name']} / 食材{rec.get('total_ingredients')} / "
-                    f"Lv60 {recipe_level.recipe_energy(rec, 60):,.0f}en"
-                )
+        cards = []
+        for rec in rows[:5]:
+            name = rec.get("name") or "—"
+            icon = recipe_icon_url(name)
+            img = f'<img src="{icon}" loading="lazy">' if icon else ""
+            cards.append(
+                '<div class="rt-pot-card">'
+                f'<div class="rt-pot-img">{img}</div>'
+                '<div class="rt-pot-main">'
+                f'<div class="rt-pot-name" title="{html.escape(name)}">{html.escape(name)}</div>'
+                f'<div class="rt-pot-meta">食材{int(rec.get("total_ingredients") or 0)}'
+                f' / Lv60 {recipe_level.recipe_energy(rec, 60):,.0f}en</div>'
+                '</div></div>'
+            )
+        if not cards:
+            cards.append('<div class="rt-pot-empty">該当なし</div>')
+        panels.append(
+            '<section class="rt-pot-panel">'
+            '<div class="rt-pot-panel-head">'
+            f'<strong>{html.escape(title)}</strong>'
+            f'<span>{html.escape(subtitle)}</span>'
+            '</div>'
+            '<div class="rt-pot-strip">'
+            + "".join(cards)
+            + '</div></section>'
+        )
+    st.html('<div class="rt-pot-board">' + "".join(panels) + '</div>')
 
 
 @st.cache_data(show_spinner=False, ttl=300)
@@ -452,6 +469,19 @@ st.html(
     '.rt-ing-name{display:flex;gap:6px;align-items:center;flex-wrap:wrap;}'
     '.rt-ing-name span{color:var(--ps-ink-dim);font-size:.82rem;}'
     '.rt-ing-state{font-weight:800;font-size:.9rem;}'
+    '.rt-pot-board{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;margin:10px 0 16px;}'
+    '.rt-pot-panel{min-width:0;background:linear-gradient(180deg,#fff,var(--ps-dusk));border:1px solid var(--ps-line);border-radius:14px;padding:9px;}'
+    '.rt-pot-panel-head{display:flex;align-items:baseline;justify-content:space-between;gap:8px;margin-bottom:7px;}'
+    '.rt-pot-panel-head strong{font-size:.9rem;}'
+    '.rt-pot-panel-head span{font-size:.72rem;color:var(--ps-ink-dim);white-space:nowrap;}'
+    '.rt-pot-strip{display:flex;gap:7px;overflow-x:auto;padding-bottom:2px;scroll-snap-type:x proximity;}'
+    '.rt-pot-card{display:flex;gap:6px;align-items:center;min-width:178px;max-width:178px;background:#fff;border:1px solid color-mix(in srgb,var(--ps-line) 82%,transparent);border-radius:12px;padding:7px;scroll-snap-align:start;}'
+    '.rt-pot-img{width:34px;height:34px;display:flex;align-items:center;justify-content:center;flex:0 0 auto;}'
+    '.rt-pot-img img{max-width:34px;max-height:34px;object-fit:contain;}'
+    '.rt-pot-main{min-width:0;}'
+    '.rt-pot-name{font-weight:800;font-size:.8rem;line-height:1.2;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}'
+    '.rt-pot-meta{font-size:.68rem;color:var(--ps-ink-dim);line-height:1.2;margin-top:2px;white-space:nowrap;}'
+    '.rt-pot-empty{min-width:120px;color:var(--ps-ink-dim);font-size:.8rem;padding:8px;}'
     '.rt-cand-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(245px,1fr));gap:8px;}'
     '.rt-cand-card{background:var(--ps-dusk);border:1px solid var(--ps-line);border-radius:12px;padding:10px;min-width:0;}'
     '.rt-cand-top{display:flex;gap:8px;align-items:center;}'
@@ -470,7 +500,8 @@ st.html(
     '.rt-level-img img{max-width:54px;max-height:54px;object-fit:contain;}'
     '.rt-level-name{min-height:48px;display:flex;align-items:center;font-weight:850;line-height:1.25;}'
     '.rt-level-current{min-height:48px;display:flex;align-items:center;justify-content:center;font-size:1.05rem;font-weight:900;font-variant-numeric:tabular-nums;color:var(--ps-sp-food);}'
-    '@media (max-width:480px){.rt-cand-grid{grid-template-columns:1fr;}.rt-recipe-head{border-radius:12px;padding:10px;}.rt-level-name{font-size:.9rem;}}'
+    '@media (max-width:900px){.rt-pot-board{grid-template-columns:repeat(2,minmax(0,1fr));}}'
+    '@media (max-width:480px){.rt-pot-board{grid-template-columns:1fr;}.rt-cand-grid{grid-template-columns:1fr;}.rt-recipe-head{border-radius:12px;padding:10px;}.rt-level-name{font-size:.9rem;}}'
     '</style>'
 )
 
