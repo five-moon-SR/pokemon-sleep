@@ -8,7 +8,7 @@ from __future__ import annotations
 
 from html import escape
 
-from constants import format_subskill_short, get_subskill_rarity
+from constants import format_ingredient_short, format_subskill_short, get_subskill_rarity
 from image_utils import berry_icon_url, ingredient_icon_url
 
 
@@ -117,7 +117,7 @@ def berry_chip(berry_name: str | None, label: str | None = None) -> str:
 def ingredient_chip(name: str, qty: float | str | None = None) -> str:
     """食材アイコンチップ。qty があれば「×N」を添える。"""
     if qty is None:
-        label = name
+        label = format_ingredient_short(name)
     elif isinstance(qty, str):
         label = f"{qty}"
     elif qty == int(qty):

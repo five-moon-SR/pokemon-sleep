@@ -18,7 +18,7 @@ import pandas as pd
 import streamlit as st
 
 import db
-from constants import NATURES, format_subskill_short
+from constants import NATURES, format_ingredient_short, format_subskill_short
 from image_utils import berry_icon_url, ingredient_icon_url, pokemon_image_url
 from ui import components as c
 from ui.widgets import pokemon_popover_row
@@ -197,7 +197,9 @@ def _slot_chip_html(label: str, ingredient_name: str | None, target_name: str) -
     active = " rec-slot-target" if ingredient_name == target_name else ""
     return (
         f'<span class="rec-slot{active}">'
-        f'<b>{html.escape(label)}</b>{icon_html}<span>{html.escape(ingredient_name)}</span></span>'
+        f'<b>{html.escape(label)}</b>{icon_html}'
+        f'<span title="{html.escape(ingredient_name)}">'
+        f'{html.escape(format_ingredient_short(ingredient_name))}</span></span>'
     )
 
 
@@ -314,7 +316,8 @@ def _recommendation_detail_html(target_name: str, row, owned_rows: list[dict]) -
         '@media (max-width:480px){.rec-detail-grid{grid-template-columns:1fr;}.rec-detail-card{border-radius:10px;padding:9px;}}'
         '</style>'
         '<div class="rec-detail-wrap">'
-        f'<div class="rec-family">対象進化系統: {html.escape(family_label)}</div>'
+        f'<div class="rec-family">対象食材: {html.escape(format_ingredient_short(target_name))}'
+        f' / 対象進化系統: {html.escape(family_label)}</div>'
         f'<div class="rec-detail-grid">{cards}</div>'
         '</div>'
     )
@@ -338,7 +341,8 @@ def _ingredient_recommendation_html(rows) -> str:
             '<div class="rec-head">'
             f'<div class="rec-icon">{icon_html}</div>'
             '<div class="rec-title-block">'
-            f'<div class="rec-title">{html.escape(row.ingredient_name)}</div>'
+            f'<div class="rec-title" title="{html.escape(row.ingredient_name)}">'
+            f'{html.escape(format_ingredient_short(row.ingredient_name))}</div>'
             f'<div class="rec-status-line">{status}</div>'
             '</div>'
             f'{metric_html}'
@@ -439,7 +443,7 @@ with food_tab:
     food_rows = [
         {
             "🥕": ingredient_icon_url(name),
-            "食材": name,
+            "食材": format_ingredient_short(name),
             "充足": _fill_ratio(len(active), FOOD_TOP_N) * 100,
             "状態": _status_label(len(active), FOOD_TOP_N),
             "供給/日": sum(p.per_day_now for p in active[:FOOD_TOP_N]),
@@ -464,6 +468,7 @@ with food_tab:
         list(index),
         index=list(index).index(food_holes[0]) if food_holes else 0,
         key="hand_food_detail",
+        format_func=format_ingredient_short,
         filter_mode=None,  # スマホでキーボードを出さない（食材19件なので検索不要）
         help="穴がある場合は、その先頭を最初に選んでいます。",
     )
@@ -499,7 +504,8 @@ with food_tab:
                 img_species=main.species_name,
                 badges_text=f"{len(main.duties)}食材",
                 caption=" / ".join(
-                    f"{name} {daily:.1f}/日" for name, daily in main.duties
+                    f"{format_ingredient_short(name)} {daily:.1f}/日"
+                    for name, daily in main.duties
                 ),
             )
 
@@ -538,6 +544,7 @@ with rec_tab:
         "食材",
         [r.ingredient_name for r in rec_rows],
         default=rec_rows[0].ingredient_name if rec_rows else None,
+        format_func=format_ingredient_short,
         key="hand_rec_detail_ingredient",
         label_visibility="collapsed",
     )

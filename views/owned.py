@@ -28,6 +28,7 @@ from constants import (
     SUBSKILL_UNLOCK_LEVELS,
     THEME_INK_DIM,
     blend_hex,
+    format_ingredient_short,
     format_nature_label,
     format_subskill_short,
     get_subskill_rarity,
@@ -624,6 +625,7 @@ GRAY_STYLE = f"color: {THEME_INK_DIM}; background-color: #F4EFE2; font-style: it
 def _build_styler(df: pd.DataFrame):
     """ランク列・サブスキル列の通常色 + 未開放スロットを灰色で塗る。"""
     sub_cols_present = [c for c in SUB_COLS if c in df.columns]
+    ingredient_cols_present = [c for c in ("食材1", "食材2", "食材3") if c in df.columns]
     rank_cols_present = [
         c for c in ("ランク", "Lv50ランク", "Lv60ランク", "全体ランク", "だいふくランク")
         if c in df.columns
@@ -658,9 +660,9 @@ def _build_styler(df: pd.DataFrame):
 
         return styles
 
-    return df.style.apply(_apply, axis=None).format({
-        c: format_subskill_short for c in sub_cols_present
-    })
+    formatters = {c: format_subskill_short for c in sub_cols_present}
+    formatters.update({c: format_ingredient_short for c in ingredient_cols_present})
+    return df.style.apply(_apply, axis=None).format(formatters)
 
 
 # ---------------------------------------------------------------------------

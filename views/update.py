@@ -18,6 +18,7 @@ import streamlit as st
 import db
 from constants import (
     SUBSKILL_UNLOCK_LEVELS,
+    format_ingredient_short,
     format_nature_label,
     format_subskill_short,
     get_subskill_upgrades,
@@ -180,6 +181,9 @@ for lv in SUBSKILL_UNLOCK_LEVELS:
     col = f"サブLv{lv}"
     if col in list_display_df.columns:
         list_display_df[col] = list_display_df[col].map(format_subskill_short)
+for col in ("食材1", "食材2", "食材3"):
+    if col in list_display_df.columns:
+        list_display_df[col] = list_display_df[col].map(format_ingredient_short)
 display_cols_list = [c for c in list_df.columns if not c.startswith("_")]
 
 st.caption(f"{len(filtered)} / {len(owned)} 件　行をクリックで1体選択")

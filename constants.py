@@ -94,6 +94,35 @@ SUBSKILL_OPTIONS: list[str] = [
     "ゆめのかけらボーナス",
 ]
 
+INGREDIENT_SHORT_LABELS: dict[str, str] = {
+    "ふといながねぎ": "ネギ",
+    "あじわいキノコ": "キノコ",
+    "とくせんエッグ": "卵",
+    "ほっこりポテト": "ポテト",
+    "とくせんリンゴ": "リンゴ",
+    "げきからハーブ": "ハーブ",
+    "マメミート": "ミート",
+    "モーモーミルク": "ミルク",
+    "あまいミツ": "ミツ",
+    "ピュアなオイル": "オイル",
+    "あったかジンジャー": "ジンジャー",
+    "あんみんトマト": "トマト",
+    "リラックスカカオ": "カカオ",
+    "おいしいシッポ": "シッポ",
+    "ワカクサ大豆": "大豆",
+    "ワカクサコーン": "コーン",
+    "めざましコーヒー": "コーヒー",
+    "ずっしりカボチャ": "カボチャ",
+    "つやつやアボカド": "アボカド",
+}
+
+
+def format_ingredient_short(name: str | None) -> str:
+    """UI向けの短い食材名。保存・判定用の正式名称は変更しない。"""
+    if not isinstance(name, str) or not name:
+        return ""
+    return INGREDIENT_SHORT_LABELS.get(name, str(name))
+
 SUBSKILL_SHORT_LABELS: dict[str, str] = {
     "きのみの数S": "きのみS",
     "食材確率アップS": "食確S",

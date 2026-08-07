@@ -8,6 +8,7 @@ Streamlit に依存しないので、CLIやオプティマイザ(utils/optimizer
 from __future__ import annotations
 
 import db
+from constants import format_ingredient_short
 from image_utils import ingredient_icon_url
 from utils.food_expectation import expected_berry_per_day, expected_ingredients_per_day
 from utils.play_context import load_play_context
@@ -317,7 +318,7 @@ def _ingredient_chip(name: str, qty: float) -> str:
             f'<span style="margin-left:2px; vertical-align:middle">{qty_str}</span>'
             f'</span>'
         )
-    return f'<span style="margin-right:6px">{name}{qty_str}</span>'
+    return f'<span style="margin-right:6px" title="{name}">{format_ingredient_short(name)}{qty_str}</span>'
 
 
 def _recipe_base_energy(recipe: dict) -> int:
@@ -563,4 +564,3 @@ def _recipe_progress(
         })
     progress.sort(key=lambda x: (x["days"] == float("inf"), x["days"]))
     return progress
-

@@ -6,6 +6,7 @@ import pandas as pd
 import streamlit as st
 
 import db
+from constants import format_ingredient_short
 from image_utils import (
     field_icon_url,
     ingredient_icon_url,
@@ -454,7 +455,12 @@ st.page_link(
 requirements = {x["name"]: int(x["count"]) for x in recipe.get("ingredients") or []}
 chips = []
 for name, qty in requirements.items():
-    chips.append(c.icon_chip(ingredient_icon_url(name), f"{name} ×{qty}", size=24))
+    chips.append(c.icon_chip(
+        ingredient_icon_url(name),
+        f"{format_ingredient_short(name)} ×{qty}",
+        size=24,
+        title=name,
+    ))
 st.html('<div style="display:flex;flex-wrap:wrap;gap:5px">' + "".join(chips) + "</div>")
 
 member_ids = list(ss.get("strategy_member_ids") or [])
@@ -707,7 +713,7 @@ if valid_team:
             ingredient_rows.append(
                 {
                     "🥕": ingredient_icon_url(name),
-                    "食材": name,
+                    "食材": format_ingredient_short(name),
                     "充足": status,
                     "固定5体/日": round(team_daily, 1),
                     "3食必要/日": daily_need,
@@ -744,7 +750,7 @@ if valid_team:
                 all_food_rows.append(
                     {
                         "🥕": ingredient_icon_url(name),
-                        "食材": name,
+                        "食材": format_ingredient_short(name),
                         "現在担当": len(active),
                         "将来候補": len(providers) - len(active),
                         "上位担当": " / ".join(
@@ -768,7 +774,9 @@ if valid_team:
                 },
             )
             if uncovered:
-                st.warning("現在担当がいない食材：" + " / ".join(uncovered))
+                st.warning("現在担当がいない食材：" + " / ".join(
+                    format_ingredient_short(name) for name in uncovered
+                ))
 
             versatile = versatile_mains(ingredient_index)
             if versatile:
@@ -780,7 +788,8 @@ if valid_team:
                         label=main.label,
                         img_species=main.species_name,
                         caption=" / ".join(
-                            f"{name} {daily:.1f}/日" for name, daily in main.duties
+                            f"{format_ingredient_short(name)} {daily:.1f}/日"
+                            for name, daily in main.duties
                         ),
                         badges_text=f"{len(main.duties)}食材",
                     )
@@ -851,7 +860,7 @@ if valid_team:
             daily = carry_sim.ingredient_supply.get(name, 0.0)
             food_rows.append(
                 {
-                    "食材": name,
+                    "食材": format_ingredient_short(name),
                     "必要/食": required,
                     "供給/日": round(daily, 1),
                     "最大料理/日": round(daily / required, 2),

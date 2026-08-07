@@ -13,7 +13,7 @@ from typing import Any
 
 import streamlit as st
 
-from constants import format_subskill_short
+from constants import format_ingredient_short, format_subskill_short
 import db
 from image_utils import pokemon_image_url
 
@@ -86,7 +86,8 @@ def pokemon_status_popover(
         berry = (species.get("berry") or {}).get("name") or "—"
         ings = [p.get("ingredient_1"), p.get("ingredient_2"), p.get("ingredient_3")]
         ings = [i for i in ings if i]
-        st.caption(f"きのみ: {berry}　／　食材: {'/'.join(ings) if ings else '—'}")
+        ing_labels = [format_ingredient_short(i) for i in ings]
+        st.caption(f"きのみ: {berry}　／　食材: {'/'.join(ing_labels) if ing_labels else '—'}")
 
         ribbon = int(p.get("sleep_ribbon_stage") or 0)
         if ribbon:
