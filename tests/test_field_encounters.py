@@ -28,7 +28,8 @@ class FieldEncounterTest(unittest.TestCase):
 
     def test_known_pairs(self) -> None:
         """代表的な出現関係が取れていること。"""
-        self.assertIn("カイリュー", field_species("アンバー渓谷"))
+        self.assertIn("ヨーギラス", field_species("アンバー渓谷"))
+        self.assertIn("ナックラー", field_species("アンバー渓谷"))
         self.assertIn("ゲンガー", field_species("ゴールド旧発電所"))
         self.assertIn("カメックス", field_species("シアンの砂浜"))
         self.assertIn("サーナイト", field_species("ワカクサ本島 EX"))
@@ -44,7 +45,8 @@ class FieldEncounterTest(unittest.TestCase):
         self.assertIsNone(appears_in("カイリュー", "存在しないマップ"))
 
     def test_appears_in_is_boolean_when_data_exists(self) -> None:
-        self.assertTrue(appears_in("カイリュー", "アンバー渓谷"))
+        self.assertTrue(appears_in("ヨーギラス", "アンバー渓谷"))
+        self.assertFalse(appears_in("カイリュー", "アンバー渓谷"))
         self.assertFalse(appears_in("カイリュー", "ウノハナ雪原"))
 
     def test_recommend_fields_prioritises_exclusives(self) -> None:
