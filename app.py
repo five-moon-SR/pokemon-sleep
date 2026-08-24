@@ -72,7 +72,15 @@ st.logo(
     link="https://pokemon-sleep-sr.streamlit.app/",
 )
 
-db.init_db()
+try:
+    db.init_db()
+except Exception as exc:
+    st.error(
+        "DB接続でエラーが出ています。\n\n"
+        f"`{db.safe_db_error(exc)}`\n\n"
+        "Streamlit Cloud の Secrets に入っている `DB_URL` と、Supabase 側の接続先/SSL設定を確認してください。"
+    )
+    st.stop()
 perf.mark("app.py: テーマ＋init_db")
 
 

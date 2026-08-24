@@ -2,11 +2,13 @@ import copy
 import hashlib
 import json
 import os
+import re
 import threading
 import time
 from functools import lru_cache
 from pathlib import Path
 from typing import Any
+from urllib.parse import parse_qsl, urlencode, urlsplit, urlunsplit
 
 import psycopg2
 import psycopg2.extras
@@ -68,6 +70,28 @@ def _get_db_url() -> str:
     return str(url)
 
 
+def _db_url_for_connect(url: str) -> str:
+    """Supabase/Postgres 接続で SSL 指定が無ければ require を補う。"""
+    if not url.startswith(("postgres://", "postgresql://")):
+        return url
+
+    parts = urlsplit(url)
+    query = dict(parse_qsl(parts.query, keep_blank_values=True))
+    if "sslmode" not in query:
+        query["sslmode"] = "require"
+    return urlunsplit((parts.scheme, parts.netloc, parts.path, urlencode(query), parts.fragment))
+
+
+def safe_db_error(exc: Exception) -> str:
+    """画面に出してもよい範囲まで DB 接続エラーをマスクする。"""
+    msg = str(exc).strip() or exc.__class__.__name__
+    msg = re.sub(r"(postgres(?:ql)?://)[^\s'\"<>]+", r"\1<redacted>", msg)
+    msg = re.sub(r"(?<![A-Za-z])(password=)[^\s'\"<>]+", r"\1<redacted>", msg, flags=re.IGNORECASE)
+    msg = re.sub(r"(?<![A-Za-z])(user=)[^\s'\"<>]+", r"\1<redacted>", msg, flags=re.IGNORECASE)
+    msg = re.sub(r"([A-Za-z0-9._%+-]+)@([A-Za-z0-9.-]+)", r"<redacted>@\2", msg)
+    return f"{exc.__class__.__name__}: {msg}"
+
+
 _conn = None
 
 
@@ -77,7 +101,7 @@ def get_connection():
     if _conn is None or _conn.closed:
         # Supabase pooler/PgBouncer 経由では startup parameter の `options` が
         # OperationalError になることがあるため、接続後に SQL で search_path を設定する。
-        conn = psycopg2.connect(_get_db_url(), connect_timeout=10)
+        conn = psycopg2.connect(_db_url_for_connect(_get_db_url()), connect_timeout=10)
         try:
             with conn.cursor() as cur:
                 cur.execute(f"set search_path to {SCHEMA}")

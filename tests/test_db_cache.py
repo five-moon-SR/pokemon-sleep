@@ -71,8 +71,27 @@ class ConnectionTest(unittest.TestCase):
         ):
             self.assertIs(db.get_connection(), conn)
 
-        connect.assert_called_once_with("postgresql://example", connect_timeout=10)
+        connect.assert_called_once_with("postgresql://example?sslmode=require", connect_timeout=10)
         self.assertEqual(sql, [f"set search_path to {db.SCHEMA}"])
+
+    def test_existing_sslmode_is_preserved(self) -> None:
+        self.assertEqual(
+            db._db_url_for_connect("postgresql://example/db?sslmode=verify-full"),
+            "postgresql://example/db?sslmode=verify-full",
+        )
+
+    def test_safe_db_error_redacts_credentials(self) -> None:
+        msg = db.safe_db_error(
+            RuntimeError(
+                "could not connect to postgresql://alice:secret@example.supabase.co/db "
+                "user=bob password=hunter2"
+            )
+        )
+        self.assertIn("postgresql://<redacted>", msg)
+        self.assertIn("user=<redacted>", msg)
+        self.assertIn("password=<redacted>", msg)
+        self.assertNotIn("secret", msg)
+        self.assertNotIn("hunter2", msg)
 
 
 class ReadCacheTest(unittest.TestCase):
