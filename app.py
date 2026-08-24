@@ -1,3 +1,5 @@
+import inspect
+
 import streamlit as st
 
 import db
@@ -18,6 +20,23 @@ st.set_page_config(
 )
 
 ui.apply_theme()
+
+
+def _patch_streamlit_compat() -> None:
+    """古い Streamlit 環境でも、新しめの widget 引数でアプリ全体を落とさない。"""
+    if "filter_mode" in inspect.signature(st.selectbox).parameters:
+        return
+
+    original_selectbox = st.selectbox
+
+    def selectbox_compat(*args, **kwargs):
+        kwargs.pop("filter_mode", None)
+        return original_selectbox(*args, **kwargs)
+
+    st.selectbox = selectbox_compat
+
+
+_patch_streamlit_compat()
 
 # ── 起動時の自己診断 ─────────────────────────────────────────────────
 # 本番で views/home.py の `from image_utils import ...` が ImportError になり、
