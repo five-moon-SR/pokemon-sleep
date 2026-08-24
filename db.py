@@ -75,7 +75,17 @@ def get_connection():
     """psycopg2 接続を返す。プロセス内で使い回し、切れていたら張り直す。"""
     global _conn
     if _conn is None or _conn.closed:
-        _conn = psycopg2.connect(_get_db_url(), options=f"-c search_path={SCHEMA}")
+        # Supabase pooler/PgBouncer 経由では startup parameter の `options` が
+        # OperationalError になることがあるため、接続後に SQL で search_path を設定する。
+        conn = psycopg2.connect(_get_db_url(), connect_timeout=10)
+        try:
+            with conn.cursor() as cur:
+                cur.execute(f"set search_path to {SCHEMA}")
+            conn.commit()
+        except Exception:
+            conn.close()
+            raise
+        _conn = conn
     return _conn
 
 

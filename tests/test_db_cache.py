@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import unittest
+from unittest.mock import patch
 
 import db
 
@@ -46,6 +47,32 @@ class FakeConn:
 
     def commit(self) -> None:
         pass
+
+    def close(self) -> None:
+        self.closed = 1
+
+
+class ConnectionTest(unittest.TestCase):
+    """Supabase pooler 経由でも接続できる引数に保つ。"""
+
+    def setUp(self) -> None:
+        self._orig_conn = db._conn
+        db._conn = None
+
+    def tearDown(self) -> None:
+        db._conn = self._orig_conn
+
+    def test_search_path_is_set_after_connect_without_startup_options(self) -> None:
+        sql: list[str] = []
+        conn = FakeConn(sql)
+        with (
+            patch("db._get_db_url", return_value="postgresql://example"),
+            patch("db.psycopg2.connect", return_value=conn) as connect,
+        ):
+            self.assertIs(db.get_connection(), conn)
+
+        connect.assert_called_once_with("postgresql://example", connect_timeout=10)
+        self.assertEqual(sql, [f"set search_path to {db.SCHEMA}"])
 
 
 class ReadCacheTest(unittest.TestCase):
