@@ -67,7 +67,14 @@ DAIFUKU_EVAL_LABELS: list[str] = [
 
 EVOLUTION_STAGES: list[int] = [0, 1, 2]
 
-SUBSKILL_UNLOCK_LEVELS: list[int] = [10, 25, 50, 75, 100]
+# サブスキル枠。DB列名 subskill_lv{スロット} のスロット番号は、実装当時の解放Lv
+# (10/25/50/75/100) がそのまま残っている。Ver.3.6.0(2026-06-25)で実際の解放Lvが
+# 75→70 / 100→80 に前倒しされたので、「列名の接尾辞」と「解放Lv」を別物として持つ。
+# 列アクセスは SUBSKILL_SLOT_KEYS、表示と解放判定は SUBSKILL_UNLOCK_LEVELS を使う。
+# 両方要る場面は SUBSKILL_SLOTS（(スロット, 解放Lv) の組）を回す。
+SUBSKILL_SLOT_KEYS: list[int] = [10, 25, 50, 75, 100]
+SUBSKILL_UNLOCK_LEVELS: list[int] = [10, 25, 50, 70, 80]
+SUBSKILL_SLOTS: list[tuple[int, int]] = list(zip(SUBSKILL_SLOT_KEYS, SUBSKILL_UNLOCK_LEVELS))
 
 DAIFUKU_CHECKER_URL: str = "https://www.pokemonsleepdaifuku.com/checker/"
 

@@ -13,11 +13,11 @@ from typing import Any
 
 import streamlit as st
 
-from constants import format_ingredient_short, format_subskill_short
+from constants import SUBSKILL_SLOT_KEYS, format_ingredient_short, format_subskill_short
 import db
 from image_utils import pokemon_image_url
 
-_SUB_LVS = (10, 25, 50, 75, 100)
+_SUB_SLOTS = tuple(SUBSKILL_SLOT_KEYS)  # DB列名の接尾辞。実解放Lvとは別物
 
 
 def pokemon_popover_row(
@@ -78,7 +78,7 @@ def pokemon_status_popover(
         ms = p.get("main_skill_name") or species.get("main_skill") or "—"
         st.caption(f"メインスキル: {ms} Lv{p.get('main_skill_level') or 1}")
 
-        subs = [p.get(f"subskill_lv{n}") for n in _SUB_LVS]
+        subs = [p.get(f"subskill_lv{n}") for n in _SUB_SLOTS]
         subs = [s for s in subs if s]
         sub_labels = [format_subskill_short(s) for s in subs]
         st.caption("サブ: " + (" / ".join(sub_labels) if sub_labels else "—"))

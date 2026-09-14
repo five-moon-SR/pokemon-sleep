@@ -185,8 +185,8 @@ for p in owned:
             "サブLv10": p.get("subskill_lv10"),
             "サブLv25": p.get("subskill_lv25"),
             "サブLv50": p.get("subskill_lv50"),
-            "サブLv75": p.get("subskill_lv75"),
-            "サブLv100": p.get("subskill_lv100"),
+            "サブLv70": p.get("subskill_lv75"),
+            "サブLv80": p.get("subskill_lv100"),
             "性格": format_nature_label(p.get("nature")),
             "捕獲時Lv": p.get("caught_level"),
             "睡眠": species.get("sleep_type"),
@@ -250,8 +250,8 @@ CONSIDER_LV_OPTIONS: list[tuple[str, int | None]] = [
     ("🔮 Lv30まで（食材2 解放）", 30),
     ("🔮 Lv50まで（サブLv50 解放）", 50),
     ("🔮 Lv60まで（食材3 解放）", 60),
-    ("🔮 Lv75まで（サブLv75 解放）", 75),
-    ("🔮 Lv100まで（サブLv100 解放／全枠）", 100),
+    ("🔮 Lv70まで（サブLv70 解放）", 70),
+    ("🔮 Lv80まで（サブLv80 解放／全枠）", 80),
 ]
 _CONSIDER_LV_MAP = dict(CONSIDER_LV_OPTIONS)
 
@@ -322,7 +322,7 @@ with detail_pop:
     )
 
     st.caption("数値レンジ")
-    lv_range = st.slider("現在Lv", min_value=1, max_value=65, value=(1, 65), key="of_lv")
+    lv_range = st.slider("現在Lv", min_value=1, max_value=70, value=(1, 70), key="of_lv")  # Ver.3.6.0 上限70
     skill_lv_range = st.slider("メインスキルLv", min_value=1, max_value=8, value=(1, 8), key="of_slv")
     pct_range = st.slider("種族内%（今）", min_value=0.0, max_value=120.0, value=(0.0, 120.0), step=0.5, key="of_pct")
     pct60_range = st.slider("種族内%（育成後Lv60）", min_value=0.0, max_value=120.0, value=(0.0, 120.0), step=0.5, key="of_pct60")
@@ -550,7 +550,7 @@ VIEW_PRESETS: dict[str, list[str] | None] = {
     "⚡ スキル": [
         "姿", "✨", "ニックネーム", "種族", "ランク", "評価%", "現在Lv",
         "メインスキル", "メインスキルLv",
-        "サブLv10", "サブLv25", "サブLv50", "サブLv75", "サブLv100",
+        "サブLv10", "サブLv25", "サブLv50", "サブLv70", "サブLv80",
     ],
     "🥕 食材・きのみ": [
         "姿", "✨", "ニックネーム", "種族", "現在Lv", "構成", "メインスキル",

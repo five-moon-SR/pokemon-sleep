@@ -16,7 +16,12 @@ from __future__ import annotations
 from dataclasses import dataclass, field
 from typing import Any
 
-from constants import SUBSKILL_UNLOCK_LEVELS, SUBSKILL_UPGRADES, normalize_subskill_name
+from constants import (
+    SUBSKILL_SLOTS,
+    SUBSKILL_SLOT_KEYS,
+    SUBSKILL_UPGRADES,
+    normalize_subskill_name,
+)
 from utils.evaluator import (
     EvaluationResult,
     evaluate_pokemon,
@@ -49,10 +54,10 @@ def _potential_dict(p: dict[str, Any]) -> dict[str, Any]:
 def _equipped_subskill_fields(p: dict[str, Any]) -> list[tuple[str, str]]:
     """(フィールド名, 正規化サブスキル名) のリスト。Lv60で解放済みの枠のみ。"""
     out: list[tuple[str, str]] = []
-    for lv in SUBSKILL_UNLOCK_LEVELS:
-        if lv > POTENTIAL_LEVEL:
+    for slot, unlock in SUBSKILL_SLOTS:
+        if unlock > POTENTIAL_LEVEL:
             continue
-        field_name = f"subskill_lv{lv}"
+        field_name = f"subskill_lv{slot}"
         raw = p.get(field_name)
         norm = normalize_subskill_name(raw) if raw else None
         if norm:
@@ -89,14 +94,14 @@ def eligible_subskill_upgrades(
     """
     level = int(at_level if at_level is not None else _effective_level(p))
     all_owned = {
-        normalize_subskill_name(p.get(f"subskill_lv{lv}"))
-        for lv in SUBSKILL_UNLOCK_LEVELS
-        if p.get(f"subskill_lv{lv}")
+        normalize_subskill_name(p.get(f"subskill_lv{slot}"))
+        for slot in SUBSKILL_SLOT_KEYS
+        if p.get(f"subskill_lv{slot}")
     }
     eligible: list[SubSeedCandidate] = []
     blocked: list[BlockedSubSeed] = []
-    for unlock_level in SUBSKILL_UNLOCK_LEVELS:
-        field_name = f"subskill_lv{unlock_level}"
+    for slot, unlock_level in SUBSKILL_SLOTS:
+        field_name = f"subskill_lv{slot}"
         raw = p.get(field_name)
         sub = normalize_subskill_name(raw) if raw else None
         to_sub = _IMMEDIATE_SUB_UPGRADE.get(sub or "")

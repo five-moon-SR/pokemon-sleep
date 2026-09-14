@@ -17,6 +17,7 @@ import streamlit as st
 
 import db
 from constants import (
+    SUBSKILL_SLOTS,
     SUBSKILL_UNLOCK_LEVELS,
     format_ingredient_short,
     format_nature_label,
@@ -52,10 +53,10 @@ def _truncate_pct(x):
 
 def _format_subskills(row: dict) -> str:
     parts = []
-    for lv in SUBSKILL_UNLOCK_LEVELS:
-        v = row.get(f"subskill_lv{lv}")
+    for slot, unlock in SUBSKILL_SLOTS:
+        v = row.get(f"subskill_lv{slot}")
         if v:
-            parts.append(f"Lv{lv}:{v}")
+            parts.append(f"Lv{unlock}:{v}")
     return " / ".join(parts) if parts else "—"
 
 
@@ -155,8 +156,8 @@ for p in filtered:
             "サブLv10": p.get("subskill_lv10"),
             "サブLv25": p.get("subskill_lv25"),
             "サブLv50": p.get("subskill_lv50"),
-            "サブLv75": p.get("subskill_lv75"),
-            "サブLv100": p.get("subskill_lv100"),
+            "サブLv70": p.get("subskill_lv75"),
+            "サブLv80": p.get("subskill_lv100"),
             "性格": format_nature_label(p.get("nature")),
             "捕獲時Lv": p.get("caught_level"),
             "睡眠": species.get("sleep_type"),
@@ -297,7 +298,7 @@ with st.form(f"update_form_{selected_id}"):
     new_current = st.number_input(
         "現在Lv（0=未指定）",
         min_value=0,
-        max_value=65,
+        max_value=70,  # Ver.3.6.0 で上限65→70
         value=int(cur_current) if cur_current else 0,
         step=1,
         key=f"f_current_{selected_id}",
@@ -353,18 +354,19 @@ with st.form(f"update_form_{selected_id}"):
         "金スキルや既に最大ランクのものは編集不可。"
         "未入力の枠は「📝 登録情報の修正」から記入してください。"
     )
+    # キーはDB列のスロット番号、ラベルは実解放Lv
     new_subs: dict[int, str | None] = {}
-    for lv in SUBSKILL_UNLOCK_LEVELS:
-        cur = target.get(f"subskill_lv{lv}")
+    for slot, lv in SUBSKILL_SLOTS:
+        cur = target.get(f"subskill_lv{slot}")
         if cur is None:
             # 未入力: 編集不可（記入は edit_record.py で）
             st.text_input(
                 f"Lv{lv}",
                 value="未入力",
                 disabled=True,
-                key=f"f_sub_{lv}_{selected_id}",
+                key=f"f_sub_{slot}_{selected_id}",
             )
-            new_subs[lv] = None
+            new_subs[slot] = None
             continue
 
         upgrades = _upgrade_options(cur)
@@ -374,9 +376,9 @@ with st.form(f"update_form_{selected_id}"):
                 f"Lv{lv}",
                 value=f"{cur}（強化先なし）",
                 disabled=True,
-                key=f"f_sub_{lv}_{selected_id}",
+                key=f"f_sub_{slot}_{selected_id}",
             )
-            new_subs[lv] = cur
+            new_subs[slot] = cur
             continue
 
         # 強化先あり: 現在値 + 強化先を選択肢に
@@ -386,10 +388,10 @@ with st.form(f"update_form_{selected_id}"):
             filter_mode=None,  # スマホでキーボードを出さない（選択肢が少なく検索不要）
             options=options,
             index=0,
-            key=f"f_sub_{lv}_{selected_id}",
+            key=f"f_sub_{slot}_{selected_id}",
             help=f"サブスキルのたね使用時に「{cur}」から選べる強化先のみ表示。",
         )
-        new_subs[lv] = choice
+        new_subs[slot] = choice
 
     st.divider()
     btn_cols = st.columns([1, 1])
@@ -454,11 +456,11 @@ if submitted:
         msgs.append(f"おやすみリボン: 段階{cur_ribbon} → 段階{new_ribbon}")
 
     # サブスキル
-    for lv in SUBSKILL_UNLOCK_LEVELS:
-        cur_val = target.get(f"subskill_lv{lv}")
-        if new_subs[lv] != cur_val:
-            updates[f"subskill_lv{lv}"] = new_subs[lv]
-            msgs.append(f"サブスキルLv{lv}: {cur_val or '未解放'} → {new_subs[lv] or '未解放'}")
+    for slot, lv in SUBSKILL_SLOTS:
+        cur_val = target.get(f"subskill_lv{slot}")
+        if new_subs[slot] != cur_val:
+            updates[f"subskill_lv{slot}"] = new_subs[slot]
+            msgs.append(f"サブスキルLv{lv}: {cur_val or '未解放'} → {new_subs[slot] or '未解放'}")
 
     if not updates:
         st.warning("変更がありません。")

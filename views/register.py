@@ -220,7 +220,7 @@ with lv_cols[0]:
     lv_input = st.number_input(
         "Lv",
         min_value=0,
-        max_value=65,
+        max_value=70,  # Ver.3.6.0 で上限65→70
         value=0,
         step=1,
         key="lv_input",

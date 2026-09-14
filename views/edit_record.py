@@ -16,7 +16,7 @@ from constants import (
     SUBSKILL_OPTIONS,
     SUBSKILL_RARITY_EMOJI,
     SUBSKILL_RARITY_ORDER,
-    SUBSKILL_UNLOCK_LEVELS,
+    SUBSKILL_SLOTS,
     find_nature_axis,
     format_nature_label,
     get_subskill_rarity,
@@ -197,7 +197,7 @@ with lv_cols[0]:
     new_current = st.number_input(
         "現在Lv（0=未指定）",
         min_value=0,
-        max_value=65,
+        max_value=70,  # Ver.3.6.0 で上限65→70
         value=int(target.get("current_level") or 0),
         step=1,
         key=f"e_current_{target_id}",
@@ -206,7 +206,7 @@ with lv_cols[1]:
     new_caught = st.number_input(
         "捕獲時Lv（0=未指定）",
         min_value=0,
-        max_value=65,
+        max_value=70,  # Ver.3.6.0 で上限65→70
         value=int(target.get("caught_level") or 0),
         step=1,
         key=f"e_caught_{target_id}",
@@ -346,9 +346,9 @@ st.caption("各Lvで解放されるサブスキルを直接編集できます。
 sorted_subs = sorted(SUBSKILL_OPTIONS, key=_sub_sort_key)
 new_subs: dict[int, str | None] = {}
 sub_cols = st.columns(5)
-for col, lv in zip(sub_cols, SUBSKILL_UNLOCK_LEVELS):
+for col, (slot, lv) in zip(sub_cols, SUBSKILL_SLOTS):
     with col:
-        cur_val = target.get(f"subskill_lv{lv}")
+        cur_val = target.get(f"subskill_lv{slot}")
         options = ["（未入力）", *sorted_subs]
         if cur_val and cur_val not in options:
             options.insert(1, cur_val)
@@ -359,9 +359,9 @@ for col, lv in zip(sub_cols, SUBSKILL_UNLOCK_LEVELS):
             options=options,
             index=idx,
             format_func=_sub_label,
-            key=f"e_sub_{lv}_{target_id}",
+            key=f"e_sub_{slot}_{target_id}",
         )
-        new_subs[lv] = None if choice == "（未入力）" else choice
+        new_subs[slot] = None if choice == "（未入力）" else choice
 
 st.divider()
 
@@ -488,11 +488,11 @@ if save_clicked:
         msgs.append(f"食材3: {target.get('ingredient_3') or '—'} → {new_slot3 or '—'}")
 
     # サブスキル
-    for lv in SUBSKILL_UNLOCK_LEVELS:
-        cur_v = target.get(f"subskill_lv{lv}")
-        if new_subs[lv] != cur_v:
-            updates[f"subskill_lv{lv}"] = new_subs[lv]
-            msgs.append(f"サブLv{lv}: {cur_v or '未入力'} → {new_subs[lv] or '未入力'}")
+    for slot, lv in SUBSKILL_SLOTS:
+        cur_v = target.get(f"subskill_lv{slot}")
+        if new_subs[slot] != cur_v:
+            updates[f"subskill_lv{slot}"] = new_subs[slot]
+            msgs.append(f"サブLv{lv}: {cur_v or '未入力'} → {new_subs[slot] or '未入力'}")
 
     # 🎀 おやすみリボン
     if int(new_ribbon) != cur_ribbon:

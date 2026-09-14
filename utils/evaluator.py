@@ -29,7 +29,8 @@ from constants import (
     OPTION_BONUS_RANGE,
     OPTION_BONUS_SKILL_LVUP_EXTRA,
     OPTION_BONUS_SUBSKILL,
-    SUBSKILL_UNLOCK_LEVELS,
+    SUBSKILL_SLOTS,
+    SUBSKILL_SLOT_KEYS,
     get_nature_modifier,
     infer_eval_type,
     normalize_subskill_name,
@@ -493,7 +494,7 @@ def _option_bonus(p: dict[str, Any], eval_type: int) -> tuple[float, list[tuple[
     total = 0.0
 
     subs = _normalize_subs(
-        [p.get(f"subskill_lv{lv}") for lv in SUBSKILL_UNLOCK_LEVELS]
+        [p.get(f"subskill_lv{slot}") for slot in SUBSKILL_SLOT_KEYS]
     )
     skill_focused = eval_type in (7, 8, 9)
     for s in subs:
@@ -544,7 +545,7 @@ def evaluate_pokemon(p: dict[str, Any], eval_level: int | None = None) -> Evalua
 
     nature = p.get("nature")
     subs = _normalize_subs(
-        [p.get(f"subskill_lv{lv}") for lv in SUBSKILL_UNLOCK_LEVELS if eff_lv >= lv]
+        [p.get(f"subskill_lv{slot}") for slot, unlock in SUBSKILL_SLOTS if eff_lv >= unlock]
     )
     main_skill_lv = p.get("main_skill_level") or 1
 
