@@ -20,9 +20,18 @@ from utils.field_encounters import recommend_fields, species_fields
 from utils.food_expectation import (
     composition_string,
     expected_ingredients_per_day,
-    expected_skill_ingredients_per_day,
     qty_at_slot,
 )
+import utils.food_expectation as _food
+
+# Streamlit Cloud は既存モジュールを古いまま掴むことがあり、utils に足したばかりの
+# 関数を from-import するとページ全体が ImportError で落ちる（アプリのRebootが要る）。
+# 内訳表示のためだけの関数でページを殺さないよう、取れなければ 0 として扱う。
+_skill_ings = getattr(_food, "expected_skill_ingredients_per_day", None)
+
+
+def expected_skill_ingredients_per_day(p: dict, species: dict) -> dict[str, float]:
+    return _skill_ings(p, species) if _skill_ings else {}
 from utils.ingredient_coverage import INGREDIENT_RECOMMENDATIONS
 from utils.play_context import load_play_context
 from utils.party_logic import RECIPE_CATEGORY_LABELS
