@@ -30,11 +30,8 @@ from utils.berry_coverage import (
     save_random_favs,
 )
 from utils.berry_coverage import TOP_N as BERRY_TOP_N
-from utils.ingredient_coverage import (
-    build_ingredient_index,
-    demanding_recipes,
-    versatile_mains,
-)
+from utils.ingredient_coverage import build_ingredient_index, versatile_mains
+from utils.ingredient_demand import demanding_recipes
 from utils.play_context import load_play_context
 from utils.skill_role_coverage import TOP_N, role_holes, skill_role_audit
 
