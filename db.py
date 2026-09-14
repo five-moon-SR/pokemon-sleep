@@ -315,6 +315,9 @@ def init_db(force: bool = False) -> None:
     )
     default_profile = _ensure_default_profile()
     default_profile_id = int(default_profile["id"])
+    # ログイン（PINゲート）は廃止したので、常に既定プロフィールのデータを見る。
+    # id を 1 と決め打ちにはしない（既定プロフィールの id は環境次第で変わりうる）。
+    set_current_profile_id(default_profile_id)
     _execute(f"alter table {SCHEMA}.pokemon add column if not exists profile_id bigint")
     _execute(f"alter table {SCHEMA}.party add column if not exists profile_id bigint")
     _execute(
