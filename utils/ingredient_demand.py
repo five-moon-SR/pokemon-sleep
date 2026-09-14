@@ -118,6 +118,8 @@ def best_supply_per_ingredient(
 # 「ここまで来ていれば足りている」と扱い、**同じ料理を組む相方のうち本当に遠い
 # 食材だけ**が残るようにする。
 REACH_THRESHOLD = 0.7
+# 弱い料理は目標にならないので、評価からも一覧からも外す（Lv60エナジー基準）。
+MIN_ENERGY_LV60 = 10_000
 
 
 @dataclass(frozen=True)
@@ -139,6 +141,7 @@ def recipe_reachability(
     *,
     meals_per_day: float = MEALS_PER_DAY,
     threshold: float = REACH_THRESHOLD,
+    min_energy: int = MIN_ENERGY_LV60,
 ) -> list[RecipeReach]:
     """料理ごとの到達度。「あとこの食材さえあれば作れる」を読むための一覧。
 
@@ -155,6 +158,8 @@ def recipe_reachability(
         items = recipe.get("ingredients") or []
         if not items:
             continue  # ごちゃまぜ系
+        if recipe_energy(recipe, 60) < min_energy:
+            continue  # 弱い料理は目標にしない
         reach = 1.0
         missing: list[tuple[str, float]] = []
         for item in items:
@@ -212,6 +217,7 @@ def recommend_ingredients(
     meals_per_day: float = MEALS_PER_DAY,
     threshold: float = REACH_THRESHOLD,
     gamma: float = GAMMA,
+    min_energy: int = MIN_ENERGY_LV60,
 ) -> tuple[list[IngredientScore], list[CategoryBaseline]]:
     """食材ごとのおすすめ度と、カテゴリ別の現状（判定の根拠）を返す。
 
@@ -231,8 +237,8 @@ def recommend_ingredients(
         if not items:
             continue
         energy = float(recipe_energy(recipe, 60))
-        if energy <= 0:
-            continue
+        if energy < min_energy:
+            continue  # 弱い料理は目標にしないので、カテゴリ現最高の判定からも外す
         ratios: dict[str, float] = {}
         for item in items:
             name = str(item["name"])

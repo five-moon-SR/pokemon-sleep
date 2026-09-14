@@ -244,6 +244,7 @@ with food_tab:
         key="hand_recipe_reach",
         help=(
             "「あとこの食材さえ埋まれば、この料理に手が届く」を料理ごとに出す。"
+            "Lv60エナジーが1万に満たない料理は目標にならないので除外。"
             "全レシピを走査するので、開いたときだけ計算します。"
         ),
     ):
@@ -261,7 +262,7 @@ with food_tab:
             "あと1つで届くものだけ", value=True, key="hand_reach_only_one"
         )
         shown = [r for r in reaches if r.missing_count == 1] if only_one else reaches
-        shown = [r for r in shown if r.energy_lv60 > 0]
+
         reach_rows = [
             {
                 "料理": r.recipe_name,
@@ -290,7 +291,7 @@ with food_tab:
                     "不足数": st.column_config.NumberColumn("不足数", format="%d", width="small"),
                 },
             )
-            done = sum(1 for r in reaches if r.missing_count == 0 and r.energy_lv60 > 0)
+            done = sum(1 for r in reaches if r.missing_count == 0)
             st.caption(
                 f"いまの段階（{stage}）で既に必要量を満たす料理は **{done}品**。"
                 "残りは表の「足りない食材」を埋めれば届きます。"
