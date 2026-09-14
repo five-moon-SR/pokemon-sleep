@@ -24,6 +24,7 @@ from utils import perf, recipe_level
 from utils.roster_impact import item_impact_ranking
 from utils.play_context import PlayContext, load_play_context, save_play_context
 from utils import weekly_goals
+from utils.field_encounters import species_fields
 
 ctx = load_play_context()
 perf.mark("home: load_play_context")
@@ -52,10 +53,25 @@ def _add_goal_dialog(owned: list[dict]) -> None:
             help="3食ぶんの必要量を入れておくと「料理メニュー」の判定と揃う。",
         )
         payload = {"type": "ingredient", "ingredient": ing, "per_day": float(per_day)}
+        # 常設のロードマップは作らない方針なので、決めるこの場だけ参考を出す。
+        cands = weekly_goals.ingredient_candidates(ing, owned)
+        if cands:
+            st.caption(f"{ing} を多く拾う子（Lv60想定 / 所持は実個体の最大）")
+            for row in cands:
+                fields = "、".join(row["fields"][:3]) or "出現情報なし"
+                st.markdown(
+                    f'- {"✅" if row["owned"] else "🎯"} **{row["species_name"]}** '
+                    f'{row["per_day"]:.1f}個/日　<span style="color:var(--ps-ink-dim)">{fields}</span>',
+                    unsafe_allow_html=True,
+                )
     elif kind == "catch":
         species = st.selectbox("種族", db.list_species_names(), key="goal_species")
         count = st.number_input("何体", min_value=1, max_value=10, value=1, step=1)
         payload = {"type": "catch", "species": species, "count": int(count)}
+        fields = species_fields(species)
+        st.caption(
+            f"出現: {'、'.join(fields)}" if fields else "出現フィールドのデータが無い種"
+        )
     else:
         if not owned:
             st.info("先に個体を登録してください。")

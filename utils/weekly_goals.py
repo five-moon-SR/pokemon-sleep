@@ -20,6 +20,7 @@ from typing import Any
 
 import db
 from utils.evaluator import final_evolution_of
+from utils.field_encounters import species_fields
 from utils.food_expectation import expected_ingredients_per_day
 from utils.play_context import load_play_context
 
@@ -198,3 +199,47 @@ def evaluate_goals(owned: list[dict[str, Any]]) -> list[GoalProgress]:
         save_goals(goals)
     out.sort(key=lambda pr: (pr.done, -pr.ratio))
     return out
+
+
+# ---------------------------------------------------------------------------
+# 目標を決めるときの参考情報
+# ---------------------------------------------------------------------------
+# 常設の「作りたい料理ロードマップ」は作らない方針。目標を立てるその場で、
+# 「この食材なら誰が何個拾うか」「どこに出るか」だけを見られればいい。
+
+
+def ingredient_candidates(
+    ingredient: str, owned: list[dict[str, Any]], *, limit: int = 6
+) -> list[dict[str, Any]]:
+    """その食材を多く拾える種族（所持・未所持の両方）を供給量順に返す。
+
+    未所持は「理想個体（Lv60・補正なし・既定の食材枠）」で概算する。
+    所持している種族は、実際に持っている個体の最大供給量を出す。
+    """
+    ctx = load_play_context()
+    owned_best: dict[str, float] = {}
+    for p in owned:
+        name = str(p.get("species_name") or "")
+        species = db.get_species_data(name) or {}
+        qty = expected_ingredients_per_day(p, species, ctx).get(ingredient, 0.0)
+        if qty > owned_best.get(name, 0.0):
+            owned_best[name] = qty
+
+    out: list[dict[str, Any]] = []
+    for species in db.list_all_master_records():
+        name = str(species.get("species_name") or "")
+        pseudo = {"species_name": name, "current_level": 60}
+        sp = species
+        if sp.get("food_drop_rate") is None:
+            sp = {**species, "food_drop_rate": 20.0}  # 未掲載の新ポケを落とさない
+        ideal = expected_ingredients_per_day(pseudo, sp, ctx).get(ingredient, 0.0)
+        if ideal <= 0:
+            continue
+        out.append({
+            "species_name": name,
+            "per_day": owned_best.get(name, ideal),
+            "owned": name in owned_best,
+            "fields": species_fields(name),
+        })
+    out.sort(key=lambda r: (-r["per_day"], r["species_name"]))
+    return out[:limit]

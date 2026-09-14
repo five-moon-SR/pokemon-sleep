@@ -15,6 +15,7 @@ import db
 from image_utils import pokemon_image_url
 from ui import components as c
 from ui.widgets import pokemon_status_popover
+from utils.evaluator import _main_skill_category
 from utils.community_tier import (
     get_tier_detail,
     recommended_composition,
@@ -107,6 +108,9 @@ for species_name, tier in top_tier_species(_min_tier, reliable_only=not show_pro
         status, todo, kind = "未所持 → 仲間さがし候補", True, "未所持"
     rows.append({
         "species_name": species_name, "tier": tier, "want": want,
+        "main_skill": sp.get("main_skill") or "",
+        "skill_category": _main_skill_category(sp) or "",
+        "skill_rate": sp.get("main_skill_rate"),
         "status": status, "todo": todo, "holders": holders,
         "specialty": specialty, "kind": kind,
         "pre_holders": pre_holders,
@@ -162,6 +166,16 @@ _KIND_FILTER = {
     "引き直し": {"引き直し"},
 }[kind_pick]
 
+# ── メインスキルで絞る ──
+# 「料理チャンス持ちをとにかく捕まえたい」のように、スキルから狙いを決めることがある。
+_skill_opts = sorted({r["skill_category"] for r in rows if r["skill_category"]})
+skill_pick = st.selectbox(
+    "メインスキル", ["すべて", *_skill_opts], key="cp_skill",
+    help="そのスキルを持つ種だけに絞る。発動率の高い順に見たいときは並び替えも効く。",
+    filter_mode=None,
+)
+skill_filter = None if skill_pick == "すべて" else skill_pick
+
 # ── 今週のマップで出る種だけに絞る ──
 active_week = db.get_setting("user.active_strategy_week", {}) or {}
 active_plan = db.get_party(int(active_week["plan_id"])) if active_week.get("plan_id") else None
@@ -185,13 +199,19 @@ if not PRE_EVO_AVAILABLE:
 
 view = [
     r for r in rows
-    if r["specialty"] == sel_specialty
+    # スキルで絞っているときは、とくいタイプ横断で見たいので specialty は効かせない
+    if (skill_filter is not None or r["specialty"] == sel_specialty)
+    and (skill_filter is None or r["skill_category"] == skill_filter)
     and (_KIND_FILTER is None or r["kind"] in _KIND_FILTER)
     and (field_filter is None or field_filter in species_fields(r["species_name"]))
 ]
+if skill_filter:
+    # スキル狙いのときは発動率が最優先の判断材料
+    view.sort(key=lambda r: -(float(r["skill_rate"] or 0.0)))
 # ボタンから外した件数はここにまとめる（スマホで折り返さないため）
 st.caption(
-    f"{sel_specialty}得意 **{len(view)}** 種を表示中"
+    (f"{skill_filter} 持ち **{len(view)}** 種を表示中（発動率順・とくいタイプ横断）"
+     if skill_filter else f"{sel_specialty}得意 **{len(view)}** 種を表示中")
     + f"　｜　未所持 {_counts_kind['未所持']} ・ 進化前 {_counts_kind['進化前所持']} ・ "
       f"引き直し {_counts_kind['引き直し']} ・ 充足 {_counts_kind['充足']}"
     + (f"　｜　{week_field}に出る種のみ" if field_filter else "")
@@ -261,6 +281,12 @@ for row in view:
             badges += c.text_badge("評価が割れている")
         head[1].markdown(f"**{species_name}**")
         head[1].html(badges)
+        if row.get("main_skill"):
+            rate = row.get("skill_rate")
+            head[1].caption(
+                f"⚡ {row['main_skill']}"
+                + (f"　発動 {float(rate):.1f}%" if rate else "")
+            )
 
         # 進化前を持っている＝捕獲ではなく育成で解決できるので別アイコンにする
         icon = "🎯 " if todo else ("🌱 " if row["kind"] == "進化前所持" else "✅ ")
