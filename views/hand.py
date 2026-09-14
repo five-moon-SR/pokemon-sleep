@@ -40,7 +40,7 @@ demanding_recipes = getattr(_demand, "demanding_recipes", None)
 best_supply_per_ingredient = getattr(_demand, "best_supply_per_ingredient", None)
 recipe_reachability = getattr(_demand, "recipe_reachability", None)
 recommend_ingredients = getattr(_demand, "recommend_ingredients", None)
-REACH_THRESHOLD = getattr(_demand, "REACH_THRESHOLD", 0.7)
+REACH_THRESHOLD = getattr(_demand, "REACH_THRESHOLD", 0.85)
 from utils.play_context import load_play_context
 from utils.skill_role_coverage import TOP_N, role_holes, skill_role_audit
 
