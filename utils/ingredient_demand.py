@@ -9,8 +9,12 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
+from typing import Any
 
 import db
+from utils.evaluator import final_evolution_of
+from utils.food_expectation import expected_ingredients_per_day
+from utils.play_context import load_play_context
 
 
 # カビゴンには朝・昼・晩の1日3食を作る。
@@ -68,3 +72,37 @@ def demanding_recipes(
             sources=tuple((name, count) for count, name in picked),
         )
     return out
+
+
+# 育成後の姿でどこまで伸びるかを見たいことがある（今は足りなくても、
+# 最終進化のLv60まで育てれば基準に届くのか）。
+POTENTIAL_LEVEL = 60
+
+
+def best_supply_per_ingredient(
+    owned: list[dict[str, Any]], *, grown: bool = False
+) -> dict[str, float]:
+    """食材ごとに「一番多く拾える1体」の供給量/日を返す。
+
+    grown=True なら、各個体を最終進化・Lv{POTENTIAL_LEVEL} に置き換えて計算する
+    （食材枠の選択は個体のものを引き継ぎ、未選択の枠は種族の既定を使う）。
+    """
+    ctx = load_play_context()
+    best: dict[str, float] = {}
+    for p in owned:
+        name = str(p.get("species_name") or "")
+        if grown:
+            final_name = final_evolution_of(name)
+            species = db.get_species_data(final_name) or db.get_species_data(name) or {}
+            target = dict(p)
+            target["species_name"] = final_name
+            target["current_level"] = max(
+                int(p.get("current_level") or 0), POTENTIAL_LEVEL
+            )
+        else:
+            species = db.get_species_data(name) or {}
+            target = p
+        for ingredient, qty in expected_ingredients_per_day(target, species, ctx).items():
+            if qty > best.get(ingredient, 0.0):
+                best[ingredient] = qty
+    return best

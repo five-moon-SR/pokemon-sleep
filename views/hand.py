@@ -31,7 +31,7 @@ from utils.berry_coverage import (
 )
 from utils.berry_coverage import TOP_N as BERRY_TOP_N
 from utils.ingredient_coverage import build_ingredient_index, versatile_mains
-from utils.ingredient_demand import demanding_recipes
+from utils.ingredient_demand import best_supply_per_ingredient, demanding_recipes
 from utils.play_context import load_play_context
 from utils.skill_role_coverage import TOP_N, role_holes, skill_role_audit
 
@@ -100,6 +100,9 @@ def _coverage_table(
             "将来候補": st.column_config.NumberColumn("将来候補", format="%d体", width="small"),
             "供給/日": st.column_config.NumberColumn("供給/日", format="%.1f", width="small"),
             "最大の1体": st.column_config.NumberColumn("最大の1体", format="%.1f個/日", width="small"),
+            "育成後の最大1体": st.column_config.NumberColumn(
+                "育成後の最大1体", format="%.1f個/日", width="small"
+            ),
             "基準/日": st.column_config.NumberColumn("基準/日", format="%.0f個/日", width="small"),
             "基準の料理": st.column_config.TextColumn("基準の料理", width="medium"),
             "エナジー/日": st.column_config.NumberColumn("エナジー/日", format="%.0f", width="small"),
@@ -164,16 +167,25 @@ with food_tab:
     # 必要量トップ2の平均 × 3食」。今後どの強い料理を狙うことになっても耐えられる
     # 水準を見たいので、鍋容量では絞らない。判定は**一番多く拾える1体**で行う。
     demands = demanding_recipes()
+    grown = st.toggle(
+        "育成後（最終進化・Lv60）で見る",
+        value=False,
+        key="hand_food_grown",
+        help="今は届かなくても、育て切れば基準に手が届くのかを見る。",
+    )
+    best_supply = best_supply_per_ingredient(owned, grown=bool(grown))
     st.caption(
         "基準は「その食材を使う料理のうち**必要量トップ2の平均 × 1日3食**」。"
-        "判定は担当の頭数ではなく、**一番多く拾える1体の供給量**です。"
+        "判定は担当の頭数ではなく、**一番多く拾える1体の供給量**です"
+        + ("（**育成後**＝最終進化・Lv60で計算）。" if grown else "（現在のLv・構成）。")
+        +
         "1体で埋めきれる食材はまずないので、合否ではなく**達成率の低い順**に"
         "「どこが一番遠いか」を見てください。"
     )
 
     food_rows = []
     for name, active in food_active.items():
-        best = max((p.per_day_now for p in active), default=0.0)
+        best = best_supply.get(name, 0.0)
         demand = demands.get(name)
         need = demand.per_day if demand else 0.0
         food_rows.append({
@@ -181,7 +193,7 @@ with food_tab:
             "食材": format_ingredient_short(name),
             "充足": (min(1.0, best / need) * 100) if need else 100.0,
             "状態": _amount_label(best, need),
-            "最大の1体": best,
+            ("育成後の最大1体" if grown else "最大の1体"): best,
             "基準/日": need,
             "基準の料理": demand.label if demand else "—",
             "即戦力": len(active),

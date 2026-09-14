@@ -616,6 +616,87 @@
       "description": "コクのあるホワイトソースとクリーミーなアボカドが相性ばつぐん。"
     },
     {
+      "no": 28,
+      "category": "curry_stew",
+      "name": "ハニーカレー",
+      "icon": null,
+      "ingredients": [
+        {
+          "name": "あまいミツ",
+          "count": 7
+        }
+      ],
+      "total_ingredients": 7,
+      "energy_lv1": 839,
+      "energy_lv30": null,
+      "energy_lv60": null,
+      "energy_max_pot69": null,
+      "energy_max_pot507": null,
+      "description": ""
+    },
+    {
+      "no": 29,
+      "category": "curry_stew",
+      "name": "ワカクサカレーパン",
+      "icon": null,
+      "ingredients": [
+        {
+          "name": "あったかジンジャー",
+          "count": 20
+        },
+        {
+          "name": "げきからハーブ",
+          "count": 20
+        },
+        {
+          "name": "ワカクサ大豆",
+          "count": 8
+        },
+        {
+          "name": "ピュアなオイル",
+          "count": 15
+        }
+      ],
+      "total_ingredients": 63,
+      "energy_lv1": 10945,
+      "energy_lv30": null,
+      "energy_lv60": null,
+      "energy_max_pot69": null,
+      "energy_max_pot507": null,
+      "description": ""
+    },
+    {
+      "no": 30,
+      "category": "curry_stew",
+      "name": "とびはねるカレーうどん",
+      "icon": null,
+      "ingredients": [
+        {
+          "name": "あったかジンジャー",
+          "count": 39
+        },
+        {
+          "name": "あじわいキノコ",
+          "count": 31
+        },
+        {
+          "name": "げきからハーブ",
+          "count": 22
+        },
+        {
+          "name": "マメミート",
+          "count": 20
+        }
+      ],
+      "total_ingredients": 112,
+      "energy_lv1": 25539,
+      "energy_lv30": null,
+      "energy_lv60": null,
+      "energy_max_pot69": null,
+      "energy_max_pot507": null,
+      "description": ""
+    },
+    {
       "no": 0,
       "category": "salad",
       "name": "ごちゃまぜサラダ",
@@ -2052,7 +2133,7 @@
     }
   ],
   "_meta": {
-    "count": 79,
+    "count": 82,
     "merged_with_plus": 71
   }
 }
