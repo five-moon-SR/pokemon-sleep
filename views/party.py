@@ -809,7 +809,7 @@ if valid_team:
         team_help_count = sum(_has_help_bonus(m) for m in members)
         buff_rows = []
         for m, master in zip(members, [db.get_species_data(x["species_name"]) or {} for x in members]):
-            skill_cat, amount = _skill_effect(m, master)
+            skill_cat, amount, _ = _skill_effect(m, master)
             if skill_cat not in HEAL_CATEGORIES:
                 continue
             acts = expected_skill_activations_per_day(

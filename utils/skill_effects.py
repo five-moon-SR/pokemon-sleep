@@ -66,6 +66,42 @@ SKILL_EFFECT_TABLE: dict[str, dict[int, float]] = {
 }
 
 
+# 大成功確率を上げるスキルの「+%」。料理チャンスSは SKILL_EFFECT_TABLE 自体が%だが、
+# 料理アシスト(ビルドアップ)は主効果が食材個数なので、%はこちらに持つ。
+# 両者は同じプールに加算され、上限も共通で +70%（大成功 or フィールド移動でリセット）。
+# 出典: wikiwiki メインスキル/料理チャンス・メインスキル/料理アシスト/ビルドアップ
+GREAT_CHANCE_BONUS_TABLE: dict[str, dict[int, float]] = {
+    "料理チャンスS": {1: 4, 2: 5, 3: 6, 4: 7, 5: 8, 6: 10},
+    "料理アシスト": {1: 1, 2: 2, 3: 2, 4: 3, 5: 3, 6: 4, 7: 5},
+}
+
+
+def get_great_chance_bonus(category: str, lv: int) -> float:
+    """大成功確率の上げ幅(+%)。対象外カテゴリは 0。"""
+    table = GREAT_CHANCE_BONUS_TABLE.get(category)
+    if not table:
+        return 0.0
+    lv = max(min(int(lv), max(table)), min(table))
+    return float(table[lv])
+
+
+def get_help_boost_total(skill_record: dict | None, lv: int, same_type_species: int) -> float:
+    """おてつだいブーストの合計おてつだい回数（チーム1体あたり）。
+
+    マスタ(data/main_skill.json)の help_boost.total_by_level を引く。
+    same_type_species は「チーム内の、発動者と同じタイプの異なる種族数（発動者含む）」で 1..5。
+    宣言が無ければ 0 を返す（呼び出し側は従来のカテゴリ表にフォールバックする）。
+    """
+    spec = (skill_record or {}).get("help_boost") or {}
+    table = spec.get("total_by_level") or {}
+    if not table:
+        return 0.0
+    levels = sorted(int(k) for k in table)
+    lv = max(min(int(lv), levels[-1]), levels[0])
+    row = table[str(lv)]
+    idx = max(1, min(int(same_type_species), len(row))) - 1
+    return float(row[idx])
+
 # ---------------------------------------------------------------------------
 # 派生スキル固有テーブル（キーは pokemon_master.json の main_skill 表記そのまま）
 # ---------------------------------------------------------------------------
@@ -94,6 +130,13 @@ SKILL_NAME_EFFECT_TABLE: dict[str, dict[int, float]] = {
     "みかづきのいのり(げんきオールS)": {1: 1500, 2: 2100, 3: 2700, 4: 3500, 5: 4300, 6: 5100},
     # ほっぺすりすり: げんき回復 9-35×80（スキル発動ボーナス抽選は未加算）
     "ほっぺすりすり(げんきエールS)": {1: 720, 2: 960, 3: 1280, 4: 1600, 5: 2160, 6: 2800},
+    # はどうだん(ルカリオ, Ver.3.7.0で実装): 1回の発動でゆめのかけらとエナジーを
+    # 同時に獲得する複合スキル。ここはエナジー側の直値だけを持つ
+    # （かけら側 240-2500 は ゆめのかけらゲットS 固定版と全Lv同値。週間エナジー外の
+    #  扱いはゆめのかけら系と同じ）。出典: ポケらく post160549 / skypenguin 161663。
+    "はどうだん(ゆめのかけらゲットS)": {
+        1: 200, 2: 285, 3: 393, 4: 542, 5: 748, 6: 1033, 7: 1501, 8: 2042
+    },
 }
 
 

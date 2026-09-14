@@ -81,7 +81,7 @@ def _pot_bonus_per_day(p: dict[str, Any], master: dict[str, Any]) -> float:
     """
     from utils.plan_simulation import _skill_effect, expected_skill_activations_per_day
 
-    category, effect = _skill_effect(p, master)
+    category, effect, _ = _skill_effect(p, master)
     if category != "料理パワーアップS" or effect <= 0:
         return 0.0
     return float(expected_skill_activations_per_day(p, master)) * effect

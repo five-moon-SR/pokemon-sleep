@@ -10,6 +10,8 @@ from dataclasses import dataclass, field
 from datetime import datetime
 from typing import Any
 
+from functools import lru_cache
+
 import db
 from utils.evaluator import (
     _assist_seconds_at_lv,
@@ -34,7 +36,12 @@ from utils.genki import (
 )
 from utils.play_context import PlayContext
 from utils.recipe_level import recipe_energy
-from utils.skill_effects import get_skill_effect_amount, get_skill_max_lv
+from utils.skill_effects import (
+    get_great_chance_bonus,
+    get_help_boost_total,
+    get_skill_effect_amount,
+    get_skill_max_lv,
+)
 from utils.skill_expectation import expected_skill_energy_per_day
 from utils.sleep_ribbon import get_time_multiplier
 
@@ -47,8 +54,21 @@ RANDOM_HEAL_CATEGORIES = {"げんきエールS"}
 # 自分だけを回復する。チームには波及しない
 SELF_HEAL_CATEGORIES = {"げんきチャージS"}
 HEAL_CATEGORIES = TEAM_HEAL_CATEGORIES | RANDOM_HEAL_CATEGORIES | SELF_HEAL_CATEGORIES
+# 大成功まわり（出典: docs/eval_context/main_skills/cooking.md）
+# 基礎確率は月〜土 10% / 日曜 30%。料理チャンスS等のボーナスは **ボーナス側が上限+70%** で、
+# 基礎に加算されるので合計の理論上限は平日80% / 日曜100%。
 BASE_GREAT_CHANCE = 0.10
-MAX_GREAT_CHANCE = 0.70
+SUNDAY_GREAT_CHANCE = 0.30
+MAX_GREAT_CHANCE_BONUS = 0.70
+# 大成功時の料理エナジー倍率（平日2倍・日曜3倍）
+GREAT_ENERGY_MULT = 2.0
+SUNDAY_GREAT_ENERGY_MULT = 3.0
+# 料理パワーアップSの増加分は加算で上限+200。日曜のなべ2倍は基礎容量にだけ掛かり、
+# スキル増加分は倍化の対象外。
+MAX_POT_BONUS = 200.0
+SUNDAY_POT_MULT = 2.0
+# 週の並びは月曜始まり。day==6 が日曜。
+SUNDAY_INDEX = 6
 
 
 @dataclass
@@ -119,7 +139,61 @@ def expected_skill_activations_per_day(
     return assists * rate * _skill_proc_mult(pokemon.get("nature"), subs)
 
 
-def _skill_effect(pokemon: dict[str, Any], species: dict[str, Any]) -> tuple[str, float]:
+
+def _main_skill_record(species: dict[str, Any]) -> dict[str, Any] | None:
+    """種族の main_skill 名に対応するマスタレコード（派生表記は括弧前で引く）。"""
+    name = (species.get("main_skill") or "").strip()
+    if not name:
+        return None
+    records = db.list_all_main_skill_records()
+    for r in records:
+        if r.get("name") == name:
+            return r
+    outer = name.split("(")[0].strip()
+    for r in records:
+        if r.get("name") == outer:
+            return r
+    category = _main_skill_category(species)
+    for r in records:
+        if r.get("name") == category:
+            return r
+    return None
+
+
+
+@lru_cache(maxsize=1)
+def _berry_type_map() -> dict[str, str]:
+    """きのみ名 → タイプ。ポケスリではポケモンのタイプがきのみで決まるので、
+    種族のタイプ判定に使う（マスタに type 列は無い）。"""
+    return {
+        str(r.get("name")): str(r.get("type") or "")
+        for r in db.list_all_berry_records()
+    }
+
+
+def _species_type(species: dict[str, Any]) -> str:
+    berry = (species.get("berry") or {}).get("name") or ""
+    return _berry_type_map().get(berry, "")
+
+
+def _same_type_species_count(species: dict[str, Any], masters: list[dict[str, Any]]) -> int:
+    """チーム内の「発動者と同じタイプの異なる種族」数（発動者を含む、1..5）。"""
+    my_type = _species_type(species)
+    if not my_type:
+        return 1
+    names = {
+        str(m.get("species_name") or m.get("name") or "")
+        for m in masters
+        if _species_type(m) == my_type
+    }
+    names.discard("")
+    return max(1, min(len(names) or 1, 5))
+
+
+def _skill_effect(
+    pokemon: dict[str, Any], species: dict[str, Any]
+) -> tuple[str, float, int]:
+    """(カテゴリ, 効果量, 有効スキルLv)。効果量の単位はカテゴリ依存。"""
     category = _main_skill_category(species) or ""
     max_lv = get_skill_max_lv(category) or 6
     level = _effective_skill_lv(
@@ -127,7 +201,7 @@ def _skill_effect(pokemon: dict[str, Any], species: dict[str, Any]) -> tuple[str
         max_lv,
         _individual_subs(pokemon),
     )
-    return category, float(get_skill_effect_amount(category, level) or 0.0)
+    return category, float(get_skill_effect_amount(category, level) or 0.0), level
 
 
 def _healer_boost(heals: list[tuple[float, float]]) -> float:
@@ -190,7 +264,7 @@ def simulate_plan(
     self_heals: list[float] = [0.0] * len(members)
     healer_acts = 0.0
     for idx, (p, s, acts) in enumerate(zip(members, masters, base_activations)):
-        category, amount = _skill_effect(p, s)
+        category, amount, _ = _skill_effect(p, s)
         if category in TEAM_HEAL_CATEGORIES:
             team_heals.append((acts, amount))
             healer_acts += acts
@@ -207,7 +281,8 @@ def simulate_plan(
     supply: dict[str, float] = {}
     berry_daily = 0.0
     direct_skill_daily = 0.0
-    pot_acts = pot_effect = chance_acts = chance_effect = 0.0
+    pot_gain_per_day = chance_gain_per_day = 0.0
+    pot_acts = chance_acts = 0.0  # 表示用の発動回数/日
     food_mult = 2.0 if "food_2x" in event_set else 1.0
     berry_field_bonus = 1.0 if "berry_2x" in event_set else 0.0
 
@@ -227,16 +302,32 @@ def simulate_plan(
             * boost
         )
 
-        category, effect = _skill_effect(p, s)
+        category, effect, skill_lv = _skill_effect(p, s)
         if category == "料理パワーアップS":
+            # なべ容量は加算。1日あたりの増加量として持つ。
             pot_acts += acts
-            pot_effect = max(pot_effect, effect)
+            pot_gain_per_day += acts * effect
         elif category in {"料理チャンスS", "料理アシスト"}:
+            # 大成功確率は各個体が自分のLvの%を持ち寄って加算する（max ではない）。
+            # 料理アシスト(ビルドアップ)は主効果が食材個数なので%は別表から引く。
             chance_acts += acts
-            chance_effect = max(chance_effect, effect if category == "料理チャンスS" else 1.0)
+            chance_gain_per_day += (
+                acts * get_great_chance_bonus(category, skill_lv) / 100.0
+            )
         elif category not in HEAL_CATEGORIES:
             # 食材・きのみを産むスキルの cap.skill_energy_per_day は 0（供給側に計上済み）。
-            direct_skill_daily += cap.skill_energy_per_day * boost
+            energy = cap.skill_energy_per_day
+            # おてつだいブーストは「チーム内の同タイプの異なる種族数」で効果が伸びる。
+            # 素の値は種族数1の想定なので、実編成ぶんを倍率として掛ける。
+            skill_rec = _main_skill_record(s)
+            if skill_rec and skill_rec.get("help_boost"):
+                base_total = get_help_boost_total(skill_rec, skill_lv, 1)
+                team_total = get_help_boost_total(
+                    skill_rec, skill_lv, _same_type_species_count(s, masters)
+                )
+                if base_total > 0:
+                    energy *= team_total / base_total
+            direct_skill_daily += energy * boost
 
     inventory = {k: float(v) for k, v in (starting_inventory or {}).items() if v > 0}
     requirements = {
@@ -254,36 +345,44 @@ def simulate_plan(
     dish_mult = 2.0 if "dish_2x" in event_set else 1.0
 
     for day in range(7):
+        is_sunday = day == SUNDAY_INDEX
+        base_chance = SUNDAY_GREAT_CHANCE if is_sunday else BASE_GREAT_CHANCE
+        great_mult = SUNDAY_GREAT_ENERGY_MULT if is_sunday else GREAT_ENERGY_MULT
+        # 日曜のなべ2倍は基礎容量だけ。スキルの増加分は倍化されない。
+        day_capacity = ctx.pot_capacity * (SUNDAY_POT_MULT if is_sunday else 1.0)
         for fraction in meal_fractions[:3]:
             for name, qty in supply.items():
                 inventory[name] = inventory.get(name, 0.0) + qty * fraction
-            pot_bonus += pot_acts * pot_effect * fraction
+            pot_bonus = min(MAX_POT_BONUS, pot_bonus + pot_gain_per_day * fraction)
             chance_bonus = min(
-                MAX_GREAT_CHANCE - BASE_GREAT_CHANCE,
-                chance_bonus + chance_acts * chance_effect / 100.0 * fraction,
+                MAX_GREAT_CHANCE_BONUS,
+                chance_bonus + chance_gain_per_day * fraction,
             )
             has_food = all(inventory.get(name, 0.0) + 1e-9 >= qty for name, qty in requirements.items())
-            capacity = ctx.pot_capacity + pot_bonus
+            capacity = day_capacity + pot_bonus
             if not has_food or capacity + 1e-9 < total_required:
                 continue
-            if total_required > ctx.pot_capacity:
+            if total_required > day_capacity:
                 conditional += 1
             for name, qty in requirements.items():
                 inventory[name] -= qty
             cooked += 1
-            great_chance = min(MAX_GREAT_CHANCE, BASE_GREAT_CHANCE + chance_bonus)
-            dish_energy += base_energy * (1.0 + great_chance) * dish_mult
+            great_chance = base_chance + chance_bonus
+            # 大成功すると料理エナジーが平日2倍・日曜3倍。期待値は (1 + p×(倍率-1))。
+            dish_energy += (
+                base_energy * (1.0 + great_chance * (great_mult - 1.0)) * dish_mult
+            )
             pot_bonus = 0.0
-            # 大成功時だけリセットされる蓄積を期待値で減衰させる。
+            # 大成功したときだけ蓄積がリセットされるので、期待値で減衰させる。
             chance_bonus *= 1.0 - great_chance
         # 夕食後〜翌日0時の生産分
         tail = meal_fractions[3]
         for name, qty in supply.items():
             inventory[name] = inventory.get(name, 0.0) + qty * tail
-        pot_bonus += pot_acts * pot_effect * tail
+        pot_bonus = min(MAX_POT_BONUS, pot_bonus + pot_gain_per_day * tail)
         chance_bonus = min(
-            MAX_GREAT_CHANCE - BASE_GREAT_CHANCE,
-            chance_bonus + chance_acts * chance_effect / 100.0 * tail,
+            MAX_GREAT_CHANCE_BONUS,
+            chance_bonus + chance_gain_per_day * tail,
         )
 
     bottlenecks = sorted(
@@ -305,9 +404,11 @@ def simulate_plan(
         ingredient_supply=supply,
         ingredient_remaining=inventory,
         pot_activation_per_day=pot_acts,
-        pot_bonus_per_activation=pot_effect,
+        pot_bonus_per_activation=(pot_gain_per_day / pot_acts if pot_acts else 0.0),
         chance_activation_per_day=chance_acts,
-        chance_bonus_per_activation=chance_effect,
+        chance_bonus_per_activation=(
+            chance_gain_per_day * 100.0 / chance_acts if chance_acts else 0.0
+        ),
         healer_activation_per_day=healer_acts,
         healer_team_boost=activity_boost - 1.0,
         conditional_pot_meals=conditional,

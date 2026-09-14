@@ -60,7 +60,7 @@ def _pot_skill_label(owned: list[dict]) -> tuple[str, int]:
     best: tuple[str, int] | None = None
     for p in owned:
         species = db.get_species_data(p.get("species_name") or "") or {}
-        category, effect = _skill_effect(p, species)
+        category, effect, _ = _skill_effect(p, species)
         if category != "料理パワーアップS" or effect <= 0:
             continue
         label = p.get("nickname") or p.get("species_name") or "鍋役"

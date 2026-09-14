@@ -91,7 +91,7 @@ def evaluate_shard_team(members: Sequence[dict[str, Any]]) -> ShardTeam:
     team_heals: list[tuple[float, float]] = []
     self_heals = [0.0] * len(members)
     for idx, (p, s, acts) in enumerate(zip(members, masters, base_acts)):
-        category, amount = _skill_effect(p, s)
+        category, amount, _ = _skill_effect(p, s)
         if category in TEAM_HEAL_CATEGORIES:
             team_heals.append((acts, amount))
         elif category in RANDOM_HEAL_CATEGORIES and members:
@@ -106,7 +106,7 @@ def evaluate_shard_team(members: Sequence[dict[str, Any]]) -> ShardTeam:
     rows: list[ShardRow] = []
     total = 0.0
     for p, s, acts, boost in zip(members, masters, base_acts, boosts):
-        category, amount = _skill_effect(p, s)
+        category, amount, _ = _skill_effect(p, s)
         real_acts = acts * boost
         per = amount if category == SHARD_CATEGORY else 0.0
         shards = real_acts * per
@@ -139,7 +139,7 @@ def _shard_pool(owned: Iterable[dict[str, Any]], *, limit: int = 40) -> list[dic
         species = db.get_species_data(p.get("species_name") or "") or {}
         if not species:
             continue
-        category, amount = _skill_effect(p, species)
+        category, amount, _ = _skill_effect(p, species)
         acts = expected_skill_activations_per_day(p, species)
         if category == SHARD_CATEGORY:
             scored.append((acts * amount, p))

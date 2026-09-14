@@ -110,7 +110,7 @@ class ShardTeamTest(unittest.TestCase):
         for name in db.list_species_names():
             species = db.get_species_data(name) or {}
             mon = {"id": 1, "species_name": name, "current_level": 30, "main_skill_level": 3}
-            category, _ = goal_teams._skill_effect(mon, species)
+            category, _, _ = goal_teams._skill_effect(mon, species)
             if category == goal_teams.SHARD_CATEGORY and holder is None:
                 holder = mon
             elif category not in goal_teams.HEAL_CATEGORIES and other is None:

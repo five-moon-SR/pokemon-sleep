@@ -138,7 +138,15 @@ def qty_at_slot(species: dict[str, Any], food_name: str, slot_idx: int) -> int:
 
 
 def _ingredient_yield_spec(species: dict[str, Any]) -> dict[str, Any] | None:
-    """種族の main_skill 名 → マスタの ingredient_yield 宣言。無ければ None。"""
+    """食材が増えるスキルの宣言を引く。無ければ None。
+
+    種族側（data/pokemon_master.json）の宣言を優先し、無ければスキル側
+    （data/main_skill.json）を見る。きょううん・かいりきバサミの4種プールは
+    種族ごとに中身が違う（統一規則は見つかっていない）ので種族側に持たせている。
+    """
+    own = species.get("ingredient_yield")
+    if isinstance(own, dict):
+        return own
     name = (species.get("main_skill") or "").strip()
     if not name:
         return None

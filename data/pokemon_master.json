@@ -3706,7 +3706,27 @@
       "main_skill": "きょううん(食材セレクトS)",
       "base_assist_seconds": 3600,
       "food_drop_rate": 14.1,
-      "main_skill_rate": 6.2
+      "main_skill_rate": 6.2,
+      "ingredient_yield": {
+        "pool": "fixed",
+        "pick": 1,
+        "names": [
+          "あじわいキノコ",
+          "マメミート",
+          "ワカクサ大豆",
+          "めざましコーヒー"
+        ],
+        "count_by_level": {
+          "1": 5,
+          "2": 6,
+          "3": 8,
+          "4": 11,
+          "5": 13,
+          "6": 16,
+          "7": 18
+        },
+        "source": "docs/eval_context/main_skills/ingredient_help.md（4種プールは種族ごとに個別固定。統一規則は不明）"
+      }
     },
     {
       "dex_no": "0199",
@@ -4927,7 +4947,27 @@
       "main_skill": "かいりきバサミ(食材セレクトS)",
       "base_assist_seconds": 3200,
       "food_drop_rate": 20.4,
-      "main_skill_rate": 3.8
+      "main_skill_rate": 3.8,
+      "ingredient_yield": {
+        "pool": "fixed",
+        "pick": 1,
+        "names": [
+          "ほっこりポテト",
+          "ピュアなオイル",
+          "あんみんトマト",
+          "ワカクサコーン"
+        ],
+        "count_by_level": {
+          "1": 5,
+          "2": 6,
+          "3": 8,
+          "4": 11,
+          "5": 13,
+          "6": 16,
+          "7": 18
+        },
+        "source": "docs/eval_context/main_skills/ingredient_help.md（4種プールは種族ごとに個別固定。統一規則は不明）"
+      }
     },
     {
       "dex_no": "0304",
@@ -6407,7 +6447,27 @@
       "main_skill": "きょううん(食材セレクトS)",
       "base_assist_seconds": 3200,
       "food_drop_rate": 14.3,
-      "main_skill_rate": 6.7
+      "main_skill_rate": 6.7,
+      "ingredient_yield": {
+        "pool": "fixed",
+        "pick": 1,
+        "names": [
+          "あじわいキノコ",
+          "マメミート",
+          "ワカクサ大豆",
+          "めざましコーヒー"
+        ],
+        "count_by_level": {
+          "1": 5,
+          "2": 6,
+          "3": 8,
+          "4": 11,
+          "5": 13,
+          "6": 16,
+          "7": 18
+        },
+        "source": "docs/eval_context/main_skills/ingredient_help.md（4種プールは種族ごとに個別固定。統一規則は不明）"
+      }
     },
     {
       "dex_no": "0438",
