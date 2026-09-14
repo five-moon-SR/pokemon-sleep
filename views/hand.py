@@ -30,11 +30,16 @@ from utils.berry_coverage import (
     save_random_favs,
 )
 from utils.berry_coverage import TOP_N as BERRY_TOP_N
-from utils.ingredient_coverage import build_ingredient_index, versatile_mains
+from utils.ingredient_coverage import (
+    build_ingredient_index,
+    demanding_recipes,
+    versatile_mains,
+)
+from utils.play_context import load_play_context
 from utils.skill_role_coverage import TOP_N, role_holes, skill_role_audit
 
-# 食材は編成に1〜2体置ける想定。ここを満たせば「充足」
-FOOD_TOP_N = 2
+# きのみ・スキルは頭数で見る（編成に置ける枠数）。食材だけは量で見るので、
+# ここには定数を置かない（基準は ingredient_coverage.demanding_recipes が出す）。
 
 
 @st.cache_data(show_spinner=False, ttl=300)
@@ -65,6 +70,17 @@ def _status_label(count: int, need: int) -> str:
     return "担当ゼロ"
 
 
+def _amount_label(best_per_day: float, need_per_day: float) -> str:
+    """量で見た充足の言い方。基準が無い食材は判定しない。"""
+    if need_per_day <= 0:
+        return "基準なし"
+    if best_per_day >= need_per_day:
+        return "足りる"
+    if best_per_day <= 0:
+        return "担当ゼロ"
+    return f"あと{need_per_day - best_per_day:.1f}個/日"
+
+
 def _coverage_table(
     rows: list[dict],
     *,
@@ -86,6 +102,9 @@ def _coverage_table(
             "即戦力": st.column_config.NumberColumn("即戦力", format="%d体", width="small"),
             "将来候補": st.column_config.NumberColumn("将来候補", format="%d体", width="small"),
             "供給/日": st.column_config.NumberColumn("供給/日", format="%.1f", width="small"),
+            "最大の1体": st.column_config.NumberColumn("最大の1体", format="%.1f個/日", width="small"),
+            "基準/日": st.column_config.NumberColumn("基準/日", format="%.0f個/日", width="small"),
+            "基準の料理": st.column_config.TextColumn("基準の料理", width="medium"),
             "エナジー/日": st.column_config.NumberColumn("エナジー/日", format="%.0f", width="small"),
         },
     )
@@ -98,6 +117,7 @@ st.caption(
 )
 
 db.init_db()
+ctx = load_play_context()
 owned = [dict(row) for row in db.list_pokemon()]
 owned_by_id = {int(p["id"]): p for p in owned}
 if not owned:
@@ -125,7 +145,7 @@ st.html(
         [
             c.stat_tile("所持個体", f"{len(owned)}", sub="体"),
             c.stat_tile(
-                "食材の穴", f"{len(food_holes)}", sub=f"/{len(index)}種"
+                "担当ゼロの食材", f"{len(food_holes)}", sub=f"/{len(index)}種"
             ),
             c.stat_tile(
                 "好物きのみの穴", f"{len(berry_holes)}", sub=f"/{len(fav_berries) or '—'}種"
@@ -142,32 +162,55 @@ food_tab, berry_tab, skill_tab = st.tabs(["🥕 食材", "🌳 きのみ", "🎯
 
 # ── 食材 ────────────────────────────────────────────────────────────────
 with food_tab:
+    # 頭数で「2体そろったか」を見ても、実際に回るかは量で決まる。
+    # 「これから目指す強い料理を1日◯回まわせるか」を基準にして、
+    # **一番働く1体**がそこに届くかで判定する。鍋が育つと基準も自動で上がる。
+    meals_label = st.segmented_control(
+        "基準にする回転数",
+        options=["1日1回", "1日2回", "1日3回"],
+        default="1日1回",
+        key="hand_food_meals",
+        help="強い料理を1日に何回まわす前提で必要量を見るか。既定は1日1回。",
+    ) or "1日1回"
+    meals_per_day = {"1日1回": 1.0, "1日2回": 2.0, "1日3回": 3.0}[meals_label]
+    demands = demanding_recipes(int(ctx.pot_capacity), meals_per_day=meals_per_day)
     st.caption(
-        f"現在のLv・食材構成で供給できる個体を数えています。編成枠の都合で"
-        f"**{FOOD_TOP_N}体そろえば充足**、1体なら「あと1体」、0体が穴です。"
+        f"鍋容量 **{ctx.pot_capacity}** で作れる食材4種以上の料理のうち、"
+        f"最もエナジーが高いものを基準にしています（{meals_label}想定）。"
+        "判定は担当の頭数ではなく、**一番多く拾える1体の供給量**です。"
     )
-    food_rows = [
-        {
+
+    food_rows = []
+    for name, active in food_active.items():
+        best = max((p.per_day_now for p in active), default=0.0)
+        demand = demands.get(name)
+        need = demand.per_day if demand else 0.0
+        food_rows.append({
             "🥕": ingredient_icon_url(name),
             "食材": format_ingredient_short(name),
-            "充足": _fill_ratio(len(active), FOOD_TOP_N) * 100,
-            "状態": _status_label(len(active), FOOD_TOP_N),
-            "供給/日": sum(p.per_day_now for p in active[:FOOD_TOP_N]),
+            "充足": (min(1.0, best / need) * 100) if need else 100.0,
+            "状態": _amount_label(best, need),
+            "最大の1体": best,
+            "基準/日": need,
+            "基準の料理": demand.recipe_name if demand else "—",
             "即戦力": len(active),
             "将来候補": len(index[name]) - len(active),
-        }
-        for name, active in food_active.items()
-    ]
-    food_rows.sort(key=lambda r: (r["充足"], r["供給/日"]))
+        })
+    food_rows.sort(key=lambda r: (r["充足"], -r["基準/日"]))
     _coverage_table(food_rows, icon_col="🥕", height=380)
 
-    if food_holes:
+    short = [
+        name for name, active in food_active.items()
+        if demands.get(name)
+        and max((p.per_day_now for p in active), default=0.0) < demands[name].per_day
+    ]
+    if short:
         st.html(
             '<div style="display:flex;flex-wrap:wrap;gap:4px;margin:6px 0">'
-            + "".join(c.ingredient_chip(n) for n in food_holes)
+            + "".join(c.ingredient_chip(n) for n in short)
             + "</div>"
         )
-        st.caption("↑ 現在の担当がゼロの食材。")
+        st.caption("↑ 一番働く1体でも基準に届いていない食材。ここを埋めると強い料理に手が届く。")
 
     detail_name = st.selectbox(
         "担当個体を見る食材",

@@ -30,6 +30,7 @@ from utils.food_expectation import (
 )
 from utils.community_tier import get_tier, tier_weight
 from utils.party_logic import _main_recipe_pace, _recipe_base_energy, get_play_ctx
+from utils.recipe_level import recipe_energy
 
 TARGET_RECIPES_KEY = "user.target_recipes"
 
@@ -657,3 +658,66 @@ if __name__ == "__main__":
         )
     for cp in catch_priorities(owned, targets)[:5]:
         print(f"  捕獲: {cp.species_name} score={cp.score:.0f} 埋まる穴={list(cp.fills)}")
+
+
+# ---------------------------------------------------------------------------
+# 「強い料理」を基準にした食材の必要量
+# ---------------------------------------------------------------------------
+
+
+@dataclass(frozen=True)
+class IngredientDemand:
+    """その食材に対して置く基準（1日あたり必要個数）と、その根拠の料理。"""
+
+    ingredient: str
+    recipe_name: str
+    per_meal: int          # その料理1回に必要な個数
+    meals_per_day: float   # 1日に何回作る想定か
+    energy_lv60: int
+
+    @property
+    def per_day(self) -> float:
+        return self.per_meal * self.meals_per_day
+
+
+def demanding_recipes(
+    pot_capacity: int | None,
+    *,
+    meals_per_day: float = 1.0,
+    min_ingredients: int = 4,
+) -> dict[str, IngredientDemand]:
+    """食材ごとの基準量を「今の鍋で作れる、食材◯種以上の最高エナジー料理」から出す。
+
+    頭数で「担当が2体いるか」を見ても、実際に足りるかは量で決まる。そこで
+    「これから目指す強い料理を1日 meals_per_day 回まわせるか」を基準にする。
+    鍋容量で候補を絞るので、鍋が育つと基準も自動で上がる。
+
+    容量内に該当料理が無い場合は、容量を無視して最小構成の候補を使う
+    （基準ゼロで全部『充足』に見えるのを避ける）。
+    """
+    recipes = [
+        r for r in db.list_all_recipe_records()
+        if len(r.get("ingredients") or []) >= min_ingredients
+    ]
+    pool = [
+        r for r in recipes
+        if pot_capacity is None or float(r.get("total_ingredients") or 1e9) <= pot_capacity
+    ]
+    if not pool:
+        pool = sorted(recipes, key=lambda r: float(r.get("total_ingredients") or 1e9))[:3]
+
+    out: dict[str, IngredientDemand] = {}
+    for recipe in pool:
+        energy = int(recipe_energy(recipe, 60))
+        for item in recipe.get("ingredients") or []:
+            name = str(item["name"])
+            current = out.get(name)
+            if current is None or energy > current.energy_lv60:
+                out[name] = IngredientDemand(
+                    ingredient=name,
+                    recipe_name=str(recipe.get("name") or ""),
+                    per_meal=int(item["count"]),
+                    meals_per_day=float(meals_per_day),
+                    energy_lv60=energy,
+                )
+    return out
