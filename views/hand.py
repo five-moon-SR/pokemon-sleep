@@ -188,13 +188,14 @@ with food_tab:
     stage = st.segmented_control(
         "見る段階",
         options=["現在", "Lv30", "Lv60"],
-        default="現在",
+        # 見たいのは「育て切ったときにどこが穴か」なので Lv60 を既定にする。
+        default="Lv60",
         key="hand_food_stage",
         help=(
             "Lv30で食材2枠目、Lv60で3枠目が開く。指定したLvまで育てた姿"
             "（最終進化・Lvは max(現在Lv, 指定Lv)）で見る。"
         ),
-    ) or "現在"
+    ) or "Lv60"
     stage_level = {"現在": None, "Lv30": 30, "Lv60": 60}[stage]
     best_supply = (
         best_supply_per_ingredient(owned, level=stage_level)
