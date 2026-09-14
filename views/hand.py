@@ -71,14 +71,14 @@ def _status_label(count: int, need: int) -> str:
 
 
 def _amount_label(best_per_day: float, need_per_day: float) -> str:
-    """量で見た充足の言い方。基準が無い食材は判定しない。"""
+    """量で見た充足の言い方。基準（強い料理×3食）は高いので、達成率で語る。"""
     if need_per_day <= 0:
         return "基準なし"
     if best_per_day >= need_per_day:
         return "足りる"
     if best_per_day <= 0:
         return "担当ゼロ"
-    return f"あと{need_per_day - best_per_day:.1f}個/日"
+    return f"あと{need_per_day - best_per_day:.0f}個/日"
 
 
 def _coverage_table(
@@ -163,21 +163,15 @@ food_tab, berry_tab, skill_tab = st.tabs(["🥕 食材", "🌳 きのみ", "🎯
 # ── 食材 ────────────────────────────────────────────────────────────────
 with food_tab:
     # 頭数で「2体そろったか」を見ても、実際に回るかは量で決まる。
-    # 「これから目指す強い料理を1日◯回まわせるか」を基準にして、
-    # **一番働く1体**がそこに届くかで判定する。鍋が育つと基準も自動で上がる。
-    meals_label = st.segmented_control(
-        "基準にする回転数",
-        options=["1日1回", "1日2回", "1日3回"],
-        default="1日1回",
-        key="hand_food_meals",
-        help="強い料理を1日に何回まわす前提で必要量を見るか。既定は1日1回。",
-    ) or "1日1回"
-    meals_per_day = {"1日1回": 1.0, "1日2回": 2.0, "1日3回": 3.0}[meals_label]
-    demands = demanding_recipes(int(ctx.pot_capacity), meals_per_day=meals_per_day)
+    # カビゴンには1日3食作るので、基準は「その食材を必要とする料理のうち
+    # 必要量トップ2の平均 × 3食」。今後どの強い料理を狙うことになっても耐えられる
+    # 水準を見たいので、鍋容量では絞らない。判定は**一番多く拾える1体**で行う。
+    demands = demanding_recipes()
     st.caption(
-        f"鍋容量 **{ctx.pot_capacity}** で作れる食材4種以上の料理のうち、"
-        f"最もエナジーが高いものを基準にしています（{meals_label}想定）。"
+        "基準は「その食材を使う料理のうち**必要量トップ2の平均 × 1日3食**」。"
         "判定は担当の頭数ではなく、**一番多く拾える1体の供給量**です。"
+        "1体で埋めきれる食材はまずないので、合否ではなく**達成率の低い順**に"
+        "「どこが一番遠いか」を見てください。"
     )
 
     food_rows = []
@@ -192,25 +186,16 @@ with food_tab:
             "状態": _amount_label(best, need),
             "最大の1体": best,
             "基準/日": need,
-            "基準の料理": demand.recipe_name if demand else "—",
+            "基準の料理": demand.label if demand else "—",
             "即戦力": len(active),
             "将来候補": len(index[name]) - len(active),
         })
     food_rows.sort(key=lambda r: (r["充足"], -r["基準/日"]))
     _coverage_table(food_rows, icon_col="🥕", height=380)
 
-    short = [
-        name for name, active in food_active.items()
-        if demands.get(name)
-        and max((p.per_day_now for p in active), default=0.0) < demands[name].per_day
-    ]
-    if short:
-        st.html(
-            '<div style="display:flex;flex-wrap:wrap;gap:4px;margin:6px 0">'
-            + "".join(c.ingredient_chip(n) for n in short)
-            + "</div>"
-        )
-        st.caption("↑ 一番働く1体でも基準に届いていない食材。ここを埋めると強い料理に手が届く。")
+    worst = [r["食材"] for r in food_rows[:4] if r["充足"] < 100]
+    if worst:
+        st.caption("いま一番遠いのは： **" + "** / **".join(worst) + "**")
 
     detail_name = st.selectbox(
         "担当個体を見る食材",
