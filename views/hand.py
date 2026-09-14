@@ -31,13 +31,16 @@ from utils.berry_coverage import (
 )
 from utils.berry_coverage import TOP_N as BERRY_TOP_N
 from utils.ingredient_coverage import build_ingredient_index, versatile_mains
-from utils.ingredient_demand import (
-    REACH_THRESHOLD,
-    best_supply_per_ingredient,
-    demanding_recipes,
-    recipe_reachability,
-    recommend_ingredients,
-)
+import utils.ingredient_demand as _demand
+
+# Streamlit Cloud は既存モジュールを古いまま掴むことがある。from-import だと
+# 追記したばかりの関数が無いときにページ全体が ImportError で落ちるので、
+# 属性として取りに行き、無ければその機能だけ畳む。
+demanding_recipes = getattr(_demand, "demanding_recipes", None)
+best_supply_per_ingredient = getattr(_demand, "best_supply_per_ingredient", None)
+recipe_reachability = getattr(_demand, "recipe_reachability", None)
+recommend_ingredients = getattr(_demand, "recommend_ingredients", None)
+REACH_THRESHOLD = getattr(_demand, "REACH_THRESHOLD", 0.7)
 from utils.play_context import load_play_context
 from utils.skill_role_coverage import TOP_N, role_holes, skill_role_audit
 
@@ -175,7 +178,13 @@ with food_tab:
     # カビゴンには1日3食作るので、基準は「その食材を必要とする料理のうち
     # 必要量トップ2の平均 × 3食」。今後どの強い料理を狙うことになっても耐えられる
     # 水準を見たいので、鍋容量では絞らない。判定は**一番多く拾える1体**で行う。
-    demands = demanding_recipes()
+    degraded = demanding_recipes is None or best_supply_per_ingredient is None
+    if degraded:
+        st.warning(
+            "食材の基準計算がまだ読み込めていません（再デプロイ待ち）。"
+            "いまは現在の供給量だけ表示します。"
+        )
+    demands = demanding_recipes() if demanding_recipes else {}
     stage = st.segmented_control(
         "見る段階",
         options=["現在", "Lv30", "Lv60"],
@@ -187,7 +196,11 @@ with food_tab:
         ),
     ) or "現在"
     stage_level = {"現在": None, "Lv30": 30, "Lv60": 60}[stage]
-    best_supply = best_supply_per_ingredient(owned, level=stage_level)
+    best_supply = (
+        best_supply_per_ingredient(owned, level=stage_level)
+        if best_supply_per_ingredient
+        else {n: max((p.per_day_now for p in a), default=0.0) for n, a in food_active.items()}
+    )
     st.caption(
         "基準は「その食材を使う料理のうち**必要量トップ2の平均 × 1日3食**」。"
         "判定は担当の頭数ではなく、**一番多く拾える1体の供給量**です"
@@ -225,7 +238,7 @@ with food_tab:
 
     # ── 料理ごとの到達度（重いので見たいときだけ計算する） ──
     st.divider()
-    if st.toggle(
+    if recipe_reachability is not None and st.toggle(
         "料理ごとの到達度を見る",
         value=False,
         key="hand_recipe_reach",
@@ -286,7 +299,10 @@ with food_tab:
             st.html(c.empty_state("条件に合う料理がありません。"))
 
         # ── 食材ごとのおすすめ度 ──
-        ranked, baselines = recommend_ingredients(best_supply, threshold=float(threshold))
+        ranked, baselines = (
+            recommend_ingredients(best_supply, threshold=float(threshold))
+            if recommend_ingredients else ([], [])
+        )
         st.markdown("**次に埋めるべき食材**")
         st.caption(
             "料理のエナジーは直線では見ず E^1.5 で効かせ、価値は"
