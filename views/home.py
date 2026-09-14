@@ -1,6 +1,7 @@
 """ホーム画面（ダッシュボード）。
 
 ブロック構成:
+  ⓪ 今週の目標 — 食材の担当/捕獲/育成のゴールと、データから計算した進捗
   ① 今週のおてつだいチーム — 料理カテゴリ×フィールドの定番5体と週見通し
   ② 所持ポケモン統計 — 統計タイル + だいふく/specialty分布
   ③ 最近登録した子 — カード行
@@ -10,7 +11,6 @@
 from __future__ import annotations
 
 from datetime import datetime
-import html
 
 import pandas as pd
 import streamlit as st
@@ -23,24 +23,7 @@ from utils.plan_simulation import capture_improvements, simulate_plan
 from utils import perf, recipe_level
 from utils.roster_impact import item_impact_ranking
 from utils.play_context import PlayContext, load_play_context, save_play_context
-
-STRATEGY_DIRECTION_KEY = "user.strategy_direction"
-DEFAULT_STRATEGY_DIRECTION = {
-    "title": "ジンジャー担当を確保する",
-    "priority": "最優先: ヨーギラスを捕まえる",
-    "maps": ["アンバー渓谷", "トープ洞窟", "ワカクサ本島"],
-    "body": (
-        "いま一番のウィークポイントは、あったかジンジャーを安定して拾える食材ポケモンが"
-        "足りないこと。まずはアンバー渓谷、トープ洞窟、ワカクサ本島でヨーギラスを狙い、将来的な"
-        "ジンジャー担当を作る。進化後まで見るなら、サナギラスはトープ洞窟/ワカクサ本島 EX、"
-        "バンギラスはウノハナ雪原/ワカクサ本島 EXも候補。"
-    ),
-    "next_steps": [
-        "アンバー渓谷、トープ洞窟、ワカクサ本島でヨーギラスを優先して睡眠リサーチする",
-        "ジンジャー枠を2枠以上持つ個体を候補にする",
-        "ヒーラー更新や他食材の補強は、ジンジャー担当確保の次点で見る",
-    ],
-}
+from utils import weekly_goals
 
 ctx = load_play_context()
 perf.mark("home: load_play_context")
@@ -52,92 +35,79 @@ def _eff_lv(p: dict) -> int:
     return p.get("current_level") or p.get("caught_level") or p.get("level") or 1
 
 
-def _load_strategy_direction() -> dict:
-    saved = db.get_setting(STRATEGY_DIRECTION_KEY, {}) or {}
-    maps = saved.get("maps")
-    if isinstance(maps, str):
-        maps = [m.strip() for m in maps.replace("、", "/").split("/") if m.strip()]
-    return {
-        "title": saved.get("title") or DEFAULT_STRATEGY_DIRECTION["title"],
-        "priority": saved.get("priority") or DEFAULT_STRATEGY_DIRECTION["priority"],
-        "maps": list(maps or DEFAULT_STRATEGY_DIRECTION["maps"]),
-        "body": saved.get("body") or DEFAULT_STRATEGY_DIRECTION["body"],
-        "next_steps": list(saved.get("next_steps") or DEFAULT_STRATEGY_DIRECTION["next_steps"]),
-    }
-
-
-def _save_strategy_direction(direction: dict) -> None:
-    db.set_setting(STRATEGY_DIRECTION_KEY, direction)
-
-
-def _direction_card(direction: dict) -> str:
-    maps = [
-        str(m).strip()
-        for m in direction.get("maps", [])
-        if str(m).strip()
-    ]
-    map_chips = "".join(
-        '<span style="display:inline-flex;align-items:center;border:1px solid '
-        'color-mix(in srgb,var(--ps-sp-food) 28%,#fff);background:#fff;'
-        'border-radius:999px;padding:3px 9px;font-size:.78rem;font-weight:800;">'
-        f'{html.escape(map_name)}</span>'
-        for map_name in maps
+@st.dialog("🎯 今週の目標を追加")
+def _add_goal_dialog(owned: list[dict]) -> None:
+    kind = st.radio(
+        "種類",
+        list(weekly_goals.GOAL_TYPE_LABELS),
+        format_func=lambda k: weekly_goals.GOAL_TYPE_LABELS[k],
+        horizontal=True,
+        key="goal_kind",
     )
-    steps = "".join(
-        f"<li>{html.escape(str(step))}</li>"
-        for step in direction.get("next_steps", [])
-        if str(step).strip()
-    )
-    return (
-        '<section style="background:linear-gradient(135deg,#F4FFF0,#FFF8D7);'
-        'border:1px solid color-mix(in srgb,var(--ps-sp-food) 35%,#fff);'
-        'border-radius:16px;padding:12px 14px;margin:8px 0 12px;'
-        'box-shadow:0 4px 12px rgba(65,92,44,.08);">'
-        '<div style="display:flex;gap:10px;align-items:flex-start;justify-content:space-between;">'
-        '<div>'
-        '<div style="font-size:.78rem;color:var(--ps-ink-dim);font-weight:800;letter-spacing:.08em;">直近の方針</div>'
-        f'<h3 style="margin:.12rem 0 .2rem;font-size:1.08rem;">{html.escape(str(direction["title"]))}</h3>'
-        f'<div style="font-weight:900;color:var(--ps-sp-food);">{html.escape(str(direction["priority"]))}</div>'
-        + (
-            '<div style="display:flex;gap:5px;flex-wrap:wrap;margin:.35rem 0 .1rem;">'
-            '<span style="font-size:.78rem;color:var(--ps-ink-dim);font-weight:800;padding:3px 0;">出現マップ</span>'
-            f'{map_chips}</div>'
-            if map_chips
-            else ""
+    if kind == "ingredient":
+        names = sorted({str(r.get("name")) for r in db.list_all_ingredient_records() if r.get("name")})
+        ing = st.selectbox("食材", names, key="goal_ing")
+        per_day = st.number_input(
+            "1日あたりの目標個数", min_value=1.0, max_value=200.0, value=9.0, step=1.0,
+            help="3食ぶんの必要量を入れておくと「料理メニュー」の判定と揃う。",
         )
-        + f'<p style="margin:.35rem 0;color:var(--ps-ink);line-height:1.55;">{html.escape(str(direction["body"]))}</p>'
-        + (f'<ul style="margin:.35rem 0 0;padding-left:1.2rem;line-height:1.55;">{steps}</ul>' if steps else "")
-        + '</div></div></section>'
-    )
+        payload = {"type": "ingredient", "ingredient": ing, "per_day": float(per_day)}
+    elif kind == "catch":
+        species = st.selectbox("種族", db.list_species_names(), key="goal_species")
+        count = st.number_input("何体", min_value=1, max_value=10, value=1, step=1)
+        payload = {"type": "catch", "species": species, "count": int(count)}
+    else:
+        if not owned:
+            st.info("先に個体を登録してください。")
+            return
+        labels = {
+            f'{p.get("nickname") or p.get("species_name")}（{p.get("species_name")} Lv{_eff_lv(p)}）': int(p["id"])
+            for p in owned
+        }
+        picked = st.selectbox("個体", list(labels), key="goal_mon")
+        mode = st.radio("ゴール", ["Lvを上げる", "進化させる"], horizontal=True, key="goal_raise_mode")
+        if mode == "進化させる":
+            payload = {"type": "raise", "pokemon_id": labels[picked], "want_evolution": True}
+        else:
+            target_lv = st.number_input("目標Lv", min_value=2, max_value=70, value=60, step=1)
+            payload = {"type": "raise", "pokemon_id": labels[picked], "target_level": int(target_lv)}
+
+    if st.button("💾 追加", type="primary", use_container_width=True):
+        weekly_goals.add_goal(payload)
+        st.rerun()
 
 
-@st.dialog("🎯 直近の方針")
-def _strategy_direction_dialog() -> None:
-    direction = _load_strategy_direction()
-    with st.form("strategy_direction_form"):
-        title = st.text_input("見出し", value=direction["title"])
-        priority = st.text_input("最優先", value=direction["priority"])
-        maps_text = st.text_area(
-            "出現マップ（1行1件）",
-            value="\n".join(direction["maps"]),
-            height=80,
-            help="例: ヨーギラスなら アンバー渓谷 / トープ洞窟 / ワカクサ本島",
-        )
-        body = st.text_area("理由・背景", value=direction["body"], height=110)
-        steps_text = st.text_area(
-            "次にやること（1行1件）",
-            value="\n".join(direction["next_steps"]),
-            height=120,
-        )
-        if st.form_submit_button("💾 保存", type="primary", use_container_width=True):
-            _save_strategy_direction({
-                "title": title.strip() or DEFAULT_STRATEGY_DIRECTION["title"],
-                "priority": priority.strip() or DEFAULT_STRATEGY_DIRECTION["priority"],
-                "maps": [s.strip() for s in maps_text.splitlines() if s.strip()],
-                "body": body.strip() or DEFAULT_STRATEGY_DIRECTION["body"],
-                "next_steps": [s.strip() for s in steps_text.splitlines() if s.strip()],
-            })
-            st.rerun()
+def _goal_row(pr: weekly_goals.GoalProgress) -> None:
+    cols = st.columns([6, 1])
+    with cols[0]:
+        head = f'{"✅" if pr.done else "🎯"} **{pr.title}**'
+        st.markdown(head)
+        st.progress(pr.ratio, text=pr.detail)
+    if cols[1].button("削除", key=f"goal_del_{pr.goal_id}", use_container_width=True):
+        weekly_goals.remove_goal(pr.goal_id)
+        st.rerun()
+
+
+def _render_weekly_goals(owned: list[dict]) -> None:
+    """今週の目標。進捗は毎回データから計算するので、書きっぱなしで腐らない。"""
+    st.html(c.section_header(f"今週の目標（{weekly_goals.current_week_key()}）"))
+    progresses = weekly_goals.evaluate_goals(owned)
+    pending = [pr for pr in progresses if not pr.done]
+    done = [pr for pr in progresses if pr.done]
+
+    if not progresses:
+        st.html(c.empty_state("目標がまだありません。食材の担当・狙いのポケモン・育成から決められます。"))
+    for pr in pending:
+        _goal_row(pr)
+    if done:
+        with st.expander(f"達成済み {len(done)}件", expanded=False):
+            for pr in done:
+                _goal_row(pr)
+
+    btn_cols = st.columns([1, 2])
+    if btn_cols[0].button("＋ 目標を追加", use_container_width=True):
+        _add_goal_dialog(owned)
+    btn_cols[1].page_link("views/catch_policy.py", label="注目ポケモンから探す →", icon="🏅")
 
 
 @st.dialog("🧑 プレイヤープロフィール")
@@ -188,17 +158,13 @@ nav_cols[2].page_link("views/catch_policy.py", label="仲間さがし", icon="�
 nav_cols[3].page_link("views/events.py", label="イベント", icon="📅", use_container_width=True)
 nav_cols[4].page_link("views/hand.py", label="ボックス診断", icon="🧩", use_container_width=True)
 
-direction = _load_strategy_direction()
-st.html(_direction_card(direction))
-dir_cols = st.columns([3, 1])
-dir_cols[0].page_link("views/catch_policy.py", label="注目ポケモンを見る →", icon="🏅")
-if dir_cols[1].button("方針を編集", use_container_width=True):
-    _strategy_direction_dialog()
-
 perf.mark("home: ヘッダ＋設定ボタン")
 
 owned = [dict(r) for r in db.list_pokemon()]
 perf.mark("home: list_pokemon")
+
+_render_weekly_goals(owned)
+perf.mark("home: 今週の目標")
 
 
 # ============ ① 今週のおてつだいチーム ============

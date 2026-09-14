@@ -24,6 +24,20 @@ from typing import Any
 
 import db
 from utils.capability import capability_of
+from utils.genki import combined_heal_boost
+from utils.plan_simulation import (
+    BASE_GREAT_CHANCE,
+    GREAT_ENERGY_MULT,
+    MAX_GREAT_CHANCE_BONUS,
+    MAX_POT_BONUS,
+    RANDOM_HEAL_CATEGORIES,
+    SELF_HEAL_CATEGORIES,
+    SUNDAY_GREAT_CHANCE,
+    SUNDAY_GREAT_ENERGY_MULT,
+    TEAM_HEAL_CATEGORIES,
+    _skill_effect,
+)
+from utils.skill_effects import get_great_chance_bonus
 from utils.party_logic import (
     ROLE_LABELS,
     _main_recipe_pace,
@@ -50,6 +64,10 @@ class MemberStat:
     has_help_bonus: bool
     roles: set[str] = field(default_factory=set)
     pot_bonus_per_day: float = 0.0         # 料理パワーアップSで1日に積める鍋容量（同上）
+    # 料理チャンスS / ビルドアップで1日に積める大成功確率（0.10 = +10%ぶん）
+    great_chance_per_day: float = 0.0
+    # げんき回復スキル: (1体あたりの回復回数/日, 1回の回復量%)。エナジーには換算しない
+    heal_profile: tuple[float, float] | None = None
 
 
 @dataclass
@@ -105,6 +123,18 @@ def precompute_member_stats(
         # 素の能力は capability 層が正本。ここで掛けるのは好物きのみ×2 と
         # 週イベントのフィールド補正だけ。
         cap = capability_of(p, master, ctx)
+        category, effect, skill_lv = _skill_effect(p, master)
+        acts = cap.skill_activations_per_day
+        great_chance = acts * get_great_chance_bonus(category, skill_lv) / 100.0
+        # げんき回復は「エナジーを産む」のではなく「チームの稼働を上げる」。
+        # simulate_plan と物差しを揃えるため、エナジー加算からは外す。
+        heal_profile: tuple[float, float] | None = None
+        if category in TEAM_HEAL_CATEGORIES:
+            heal_profile = (acts, effect)
+        elif category in RANDOM_HEAL_CATEGORIES:
+            heal_profile = (acts / 5.0, effect)  # 5体からランダム1体
+        elif category in SELF_HEAL_CATEGORIES:
+            heal_profile = (acts, effect)
         is_fav = bool(fav_berries) and cap.berry_name in fav_berries
         berry_e = (
             cap.berry_energy_per_day * (2.0 if is_fav else 1.0) * (1.0 + field_bonus)
@@ -112,7 +142,8 @@ def precompute_member_stats(
         b = {"energy": berry_e}
         ings = cap.ingredients_per_day
         # 食材・きのみを産むスキルの skill_energy_per_day は 0（供給側に計上済み）。
-        skill_e = cap.skill_energy_per_day
+        # 回復系も 0 にして、稼働ブーストとして別に評価する。
+        skill_e = 0.0 if heal_profile else cap.skill_energy_per_day
         roles = {
             k for k, v in compute_role_scores(
                 p, master, fav_berries, event_set, needed_ings
@@ -128,6 +159,8 @@ def precompute_member_stats(
             has_help_bonus=_has_help_bonus(p),
             roles=roles,
             pot_bonus_per_day=_pot_bonus_per_day(p, master),
+            great_chance_per_day=great_chance,
+            heal_profile=heal_profile,
         )
     return stats
 
@@ -169,18 +202,36 @@ def build_candidate_pool(
     return sorted(pool)
 
 
+def _great_success_multiplier(great_chance_per_day: float, meals_per_day: float) -> float:
+    """大成功を織り込んだ料理エナジーの期待倍率。
+
+    大成功すると料理エナジーが平日2倍・日曜3倍になる（週6:1で加重）。
+    1日ぶんに積める大成功確率を、その日の食数で割って1食あたりの平均ボーナスとみなす
+    粗い近似（蓄積と大成功リセットの厳密な推移は simulate_plan が担当）。
+    """
+    meals = max(float(meals_per_day), 1.0)
+    bonus = min(MAX_GREAT_CHANCE_BONUS, max(0.0, great_chance_per_day) / meals)
+    weekday = 1.0 + (BASE_GREAT_CHANCE + bonus) * (GREAT_ENERGY_MULT - 1.0)
+    sunday = 1.0 + (SUNDAY_GREAT_CHANCE + bonus) * (SUNDAY_GREAT_ENERGY_MULT - 1.0)
+    return (weekday * 6.0 + sunday) / 7.0
+
+
 def _effective_pot_capacity(
     pot_capacity: int | None, pot_bonus_per_day: float
 ) -> float | None:
     """その編成が実際に到達しうる鍋容量の上限。
 
     料理パワーアップSの容量ボーナスは料理するたびリセットされるので、
-    1日1回は料理する前提で「素の容量 + 1日ぶんの積み上げ」を上限とする。
+    1日1回は料理する前提で「素の容量 + 1日ぶんの積み上げ（上限+200）」を上限とする。
+    日曜だけは素の容量が2倍になるが、週1日しか作れない料理を「毎食作れる」扱いで
+    主料理に選ぶと pace の計算が歪むので、ここでは平日基準のままにする
+    （日曜ぶんの上振れは simulate_plan が7日シミュレーションで拾う）。
     容量UP持ちが居なければ素の容量そのまま。
     """
     if pot_capacity is None:
         return None
-    return float(pot_capacity) + max(0.0, float(pot_bonus_per_day))
+    bonus = min(MAX_POT_BONUS, max(0.0, float(pot_bonus_per_day)))
+    return float(pot_capacity) + bonus
 
 
 def _recipe_fits_pot(
@@ -218,6 +269,9 @@ def evaluate_combo(
     members = [stats[i] for i in ids]
     team_help = sum(1 for m in members if m.has_help_bonus)
     factor = 1.0 + 0.05 * team_help  # 全員のspeedに掛かる線形係数
+    # げんき回復は稼働そのものを押し上げる（simulate_plan と同じ扱い）。
+    heals = [m.heal_profile for m in members if m.heal_profile]
+    factor *= 1.0 + combined_heal_boost(heals) if heals else 1.0
 
     berry_e = sum(m.berry_energy for m in members) * factor
     skill_e = sum(m.skill_energy for m in members) * factor
@@ -228,7 +282,8 @@ def evaluate_combo(
             combined[n] = combined.get(n, 0.0) + v * factor
 
     dish_mult = 2.0 if "dish_2x" in event_set else 1.0
-    pot_bonus_per_day = sum(m.pot_bonus_per_day for m in members)
+    pot_bonus_per_day = sum(m.pot_bonus_per_day for m in members) * factor
+    great_chance_per_day = sum(m.great_chance_per_day for m in members) * factor
     dish_e, best_recipe, bottleneck = 0.0, None, []
     for rec in recipes:
         if not _recipe_fits_pot(rec, pot_capacity, pot_bonus_per_day):
@@ -237,7 +292,13 @@ def evaluate_combo(
         if pace <= 0:
             continue
         # 料理は1日3食まで。過剰供給で一次探索の順位が歪まないよう上限を置く。
-        e = _recipe_base_energy(rec) * min(pace, 3.0) * dish_mult
+        meals = min(pace, 3.0)
+        e = (
+            _recipe_base_energy(rec)
+            * meals
+            * dish_mult
+            * _great_success_multiplier(great_chance_per_day, meals)
+        )
         if e > dish_e:
             dish_e, best_recipe, bottleneck = e, rec["name"], bn
 
