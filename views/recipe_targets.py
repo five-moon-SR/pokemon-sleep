@@ -197,18 +197,24 @@ def _food_slot_chips(p: dict, species: dict, target_name: str) -> list[str]:
 
 
 def _candidate_rows(owned: list[dict], ingredient_name: str, supply_mode: str) -> list[dict]:
+    """その食材を実際に拾える所持個体を、期待値（個/日）の降順で返す。
+
+    攻略サイト由来の INGREDIENT_RECOMMENDATIONS は「担当できる条件」ではなく
+    「推奨系統かどうか」の目印としてだけ使う。推奨表に載らない種族でも、
+    食材枠にその食材を持っていれば拾ってくる量は出るので候補に入れる。
+    """
     rec_species = tuple(INGREDIENT_RECOMMENDATIONS.get(ingredient_name, []))
     families = _family_names(rec_species)
     rows = []
     for p in owned:
-        if (p.get("species_name") or "") not in families:
-            continue
         current_species = db.get_species_data(p.get("species_name") or "") or {}
         final_name = final_evolution_of(p.get("species_name") or "")
         final_species = db.get_species_data(final_name) or current_species
         species = final_species if supply_mode == SUPPLY_MODE_LV60 else current_species
         comp = composition_string(p, species)
         daily = _target_supply(p, ingredient_name, supply_mode)
+        if daily <= 0:
+            continue  # その食材を拾わない個体は候補にしない
         subs = [
             p.get(f"subskill_lv{lv}")
             for lv in (10, 25, 50, 75, 100)
@@ -222,6 +228,7 @@ def _candidate_rows(owned: list[dict], ingredient_name: str, supply_mode: str) -
                 "level": int(p.get("current_level") or p.get("caught_level") or p.get("level") or 1),
                 "composition": comp,
                 "daily": daily,
+                "recommended": (p.get("species_name") or "") in families,
                 "food_slots": _food_slot_chips(p, species, ingredient_name),
                 "subs": subs,
             }
@@ -263,6 +270,8 @@ def _candidate_card(row: dict, need_per_day: float, supply_mode: str) -> str:
         else ""
     )
     cover = row["daily"] / need_per_day if need_per_day else 0.0
+    # 攻略サイトのおすすめ系統かどうかは目印だけ。並び順は拾う量（期待値）で決める。
+    rec_badge = '<span class="rt-rec-badge">推奨</span>' if row.get("recommended") else ""
     sub_html = "".join(c.subskill_chip(s) for s in row["subs"][:5]) or '<span class="rt-muted">サブ未入力</span>'
     slot_html = "".join(row.get("food_slots") or []) or '<span class="rt-muted">食材枠未入力</span>'
     return (
@@ -270,7 +279,7 @@ def _candidate_card(row: dict, need_per_day: float, supply_mode: str) -> str:
         '<div class="rt-cand-top">'
         f'<div class="rt-cand-img">{img}</div>'
         '<div class="rt-cand-main">'
-        f'<div class="rt-cand-name">{html.escape(row["label"])}</div>'
+        f'<div class="rt-cand-name">{html.escape(row["label"])}{rec_badge}</div>'
         f'<div class="rt-muted">{html.escape(row["species_name"])} / Lv{row["level"]} / {html.escape(row["composition"])}</div>'
         '</div>'
         '<div class="rt-daily">'
@@ -364,7 +373,7 @@ def _render_recipe(
                     + "</div>"
                 )
             else:
-                st.html(c.empty_state("おすすめ進化系統の手持ち候補はまだいません。"))
+                st.html(c.empty_state("この食材を拾える手持ちがまだいません。"))
 
     st.markdown("**不足時の捕獲エリア**")
     if not lacking:
@@ -554,6 +563,10 @@ st.html(
     '.rt-cand-img{width:50px;height:50px;display:flex;align-items:center;justify-content:center;flex:0 0 auto;}'
     '.rt-cand-main{min-width:0;flex:1 1 auto;}'
     '.rt-cand-name{font-weight:800;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}'
+    '.rt-rec-badge{display:inline-block;margin-left:5px;padding:1px 6px;border-radius:999px;'
+    'font-size:10px;font-weight:800;vertical-align:middle;color:var(--ps-sp-food);'
+    'border:1px solid color-mix(in srgb,var(--ps-sp-food) 45%,#fff);'
+    'background:color-mix(in srgb,var(--ps-sp-food) 14%,#fff);}'
     '.rt-muted{color:var(--ps-ink-dim);font-size:12px;line-height:1.35;}'
     '.rt-daily{text-align:right;min-width:72px;line-height:1.05;flex:0 0 auto;}'
     '.rt-daily span{display:block;color:var(--ps-ink-dim);font-size:10px;white-space:nowrap;}'
