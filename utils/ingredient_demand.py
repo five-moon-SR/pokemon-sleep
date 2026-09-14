@@ -177,3 +177,106 @@ def recipe_reachability(
     # 「あと1つで届く」ものを上に、その中はエナジーの高い順
     out.sort(key=lambda r: (r.missing_count, -r.energy_lv60))
     return out
+
+
+# ---------------------------------------------------------------------------
+# 食材ごとのおすすめ度
+# ---------------------------------------------------------------------------
+# 料理のエナジーは直線では評価しない。強い料理を1品作れるようになることの価値は
+# 弱い料理を何品増やすより大きいので、E^GAMMA で効かせる。
+GAMMA = 1.5
+# 料理の3カテゴリは週ごとに巡ってくる。あるカテゴリで既に強い料理が安定して
+# 作れるなら、同じカテゴリの2番手を増やしても価値は薄い。逆に安定が無い
+# カテゴリを1品でも埋められる価値は大きい。そこで料理の価値は
+# 「そのカテゴリの現最高をどれだけ更新するか」で測る。
+
+
+@dataclass(frozen=True)
+class CategoryBaseline:
+    category: str
+    cookable: int          # いま作れると判定した品数
+    best_energy: int       # そのうち最高のLv60エナジー（無ければ0）
+    best_recipe: str
+
+
+@dataclass(frozen=True)
+class IngredientScore:
+    ingredient: str
+    score: float           # 相対値。最大を100に正規化する
+    raw: float
+
+
+def recommend_ingredients(
+    best_supply: dict[str, float],
+    *,
+    meals_per_day: float = MEALS_PER_DAY,
+    threshold: float = REACH_THRESHOLD,
+    gamma: float = GAMMA,
+) -> tuple[list[IngredientScore], list[CategoryBaseline]]:
+    """食材ごとのおすすめ度と、カテゴリ別の現状（判定の根拠）を返す。
+
+        r'      = min(1, 達成率 / threshold)      … しきい値超えは「足りている」
+        B_c     = そのカテゴリで今作れる料理の最高エナジー
+        gain(R) = max(0, E_R^gamma - B_c^gamma)   … カテゴリ最高の更新幅
+        score(i)= Σ_R gain(R) × Π_{j≠i} r'_j × (1 - r'_i)
+
+    「相方が全部そろっていて、自分だけが遠い」料理ほど強く効く。既に安定している
+    カテゴリの料理は gain がゼロに近づくので、自然に優先度が落ちる。
+    """
+    from utils.recipe_level import recipe_energy  # 循環を避けて遅延取り込み
+
+    parsed = []
+    for recipe in db.list_all_recipe_records():
+        items = recipe.get("ingredients") or []
+        if not items:
+            continue
+        energy = float(recipe_energy(recipe, 60))
+        if energy <= 0:
+            continue
+        ratios: dict[str, float] = {}
+        for item in items:
+            name = str(item["name"])
+            need = float(item["count"]) * meals_per_day
+            got = float(best_supply.get(name, 0.0))
+            ratios[name] = min(1.0, (got / need) / threshold) if need > 0 else 1.0
+        parsed.append((recipe, energy, ratios))
+
+    # カテゴリごとの現状（全食材が「足りている」料理のうち最高エナジー）
+    baselines: dict[str, CategoryBaseline] = {}
+    for recipe, energy, ratios in parsed:
+        category = str(recipe.get("category") or "")
+        cur = baselines.get(category) or CategoryBaseline(category, 0, 0, "")
+        cookable = all(r >= 1.0 for r in ratios.values())
+        if not cookable:
+            baselines[category] = cur
+            continue
+        better = energy > cur.best_energy
+        baselines[category] = CategoryBaseline(
+            category=category,
+            cookable=cur.cookable + 1,
+            best_energy=int(energy) if better else cur.best_energy,
+            best_recipe=str(recipe.get("name")) if better else cur.best_recipe,
+        )
+
+    scores: dict[str, float] = {}
+    for recipe, energy, ratios in parsed:
+        base = baselines.get(str(recipe.get("category") or ""))
+        base_energy = float(base.best_energy) if base else 0.0
+        gain = max(0.0, energy ** gamma - base_energy ** gamma)
+        if gain <= 0:
+            continue
+        for name, ratio in ratios.items():
+            if ratio >= 1.0:
+                continue  # 足りている食材は狙う理由がない
+            others = 1.0
+            for other, other_ratio in ratios.items():
+                if other != name:
+                    others *= other_ratio
+            scores[name] = scores.get(name, 0.0) + gain * others * (1.0 - ratio)
+
+    top = max(scores.values(), default=0.0)
+    ranked = [
+        IngredientScore(ingredient=name, score=(v / top * 100.0) if top else 0.0, raw=v)
+        for name, v in sorted(scores.items(), key=lambda x: -x[1])
+    ]
+    return ranked, sorted(baselines.values(), key=lambda b: b.category)

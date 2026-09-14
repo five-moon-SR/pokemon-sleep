@@ -36,6 +36,7 @@ from utils.ingredient_demand import (
     best_supply_per_ingredient,
     demanding_recipes,
     recipe_reachability,
+    recommend_ingredients,
 )
 from utils.play_context import load_play_context
 from utils.skill_role_coverage import TOP_N, role_holes, skill_role_audit
@@ -283,6 +284,44 @@ with food_tab:
             )
         else:
             st.html(c.empty_state("条件に合う料理がありません。"))
+
+        # ── 食材ごとのおすすめ度 ──
+        ranked, baselines = recommend_ingredients(best_supply, threshold=float(threshold))
+        st.markdown("**次に埋めるべき食材**")
+        st.caption(
+            "料理のエナジーは直線では見ず E^1.5 で効かせ、価値は"
+            "**そのカテゴリの現最高をどれだけ更新するか**で測ります。"
+            "カレーが既に安定していれば他のカレー用食材は自然に下がり、"
+            "安定の無いカテゴリを埋める食材が上がります。"
+        )
+        cat_labels = {"curry_stew": "カレー・シチュー", "salad": "サラダ", "drink_dessert": "デザート・ドリンク"}
+        st.caption(
+            "　／　".join(
+                f"**{cat_labels.get(b.category, b.category)}**: 作れる{b.cookable}品"
+                + (f"・最高 {b.best_energy:,}en（{b.best_recipe}）" if b.best_energy else "・まだ無し")
+                for b in baselines
+            )
+        )
+        if ranked:
+            st.dataframe(
+                pd.DataFrame([
+                    {"🥕": ingredient_icon_url(r.ingredient),
+                     "食材": format_ingredient_short(r.ingredient),
+                     "おすすめ度": r.score}
+                    for r in ranked[:12]
+                ]),
+                hide_index=True,
+                use_container_width=True,
+                height=260,
+                column_config={
+                    "🥕": st.column_config.ImageColumn("🥕", width="small"),
+                    "おすすめ度": st.column_config.ProgressColumn(
+                        "おすすめ度", format="%.0f", min_value=0, max_value=100
+                    ),
+                },
+            )
+        else:
+            st.caption("埋めるべき食材が見つかりません（すべて基準を満たしています）。")
 
     detail_name = st.selectbox(
         "担当個体を見る食材",
