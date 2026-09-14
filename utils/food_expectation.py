@@ -30,6 +30,7 @@ from __future__ import annotations
 
 from typing import Any
 
+import db
 from constants import INGREDIENT_SLOT_RATIO
 from utils.berry_energy import lv_energy
 from utils.evaluator import (
@@ -37,11 +38,14 @@ from utils.evaluator import (
     _assist_seconds_at_lv,
     _berry_energy_map,
     _berry_qty_mult,
+    _effective_skill_lv,
     _food_drop_mult,
     _normalize_subs,
+    _skill_proc_mult,
     _speed_mult,
 )
 from utils.genki import DAILY_EFFECTIVE_ASSIST_SECONDS
+from utils.skill_effects import get_skill_effect_amount, get_skill_max_lv
 from utils.play_context import PlayContext
 from utils.sleep_ribbon import get_time_multiplier
 
@@ -115,6 +119,157 @@ def qty_at_slot(species: dict[str, Any], food_name: str, slot_idx: int) -> int:
     return int(qty_list[rel])
 
 
+# ---------------------------------------------------------------------------
+# メインスキルで増える「食材」
+# ---------------------------------------------------------------------------
+# どのスキルが食材を何から拾うかは data/main_skill.json の `ingredient_yield` に
+# 宣言する（コード側にスキル名を埋めない）。形式:
+#   "ingredient_yield": {"pool": "own_slots", "pick": 1}          … 自分の食材3枠から1種
+#   "ingredient_yield": {"pool": "fixed", "names": [...], "pick": 1} … 固定候補から1種
+# 1発動あたりの個数は utils/skill_effects.py のカテゴリ表（例: 食材セレクトS）を使う。
+#
+# 食材セレクトS の仕様（wikiwiki / ゲームエイトで確認、2026-09）:
+#   発動すると、その個体の食材構成3種のうち 1種をランダムに選んで N個 獲得する。
+#   食材枠の解放状況は問わない（Lv30/60 未解放でも b/c 枠の食材が出る）。
+# 「食材ゲットS」は全食材からのランダムで種類を特定できないため宣言していない
+# （従来どおりエナジー換算のまま）。派生表記の「きょううん(食材セレクトS)」
+# 「かいりきバサミ(食材セレクトS)」は候補4種の内訳が未確認なので同じく未宣言。
+# 分かった時点で main_skill.json に1行足せば、この計算はそのまま効く。
+
+
+def _ingredient_yield_spec(species: dict[str, Any]) -> dict[str, Any] | None:
+    """種族の main_skill 名 → マスタの ingredient_yield 宣言。無ければ None。"""
+    name = (species.get("main_skill") or "").strip()
+    if not name:
+        return None
+    for rec in db.list_all_main_skill_records():
+        if rec.get("name") == name:
+            spec = rec.get("ingredient_yield")
+            return spec if isinstance(spec, dict) else None
+    return None
+
+
+def _skill_category_of(species: dict[str, Any]) -> str:
+    """種族の main_skill 名 → カテゴリ（マスタ引き。見つからなければ名前そのまま）。"""
+    name = (species.get("main_skill") or "").strip()
+    for rec in db.list_all_main_skill_records():
+        if rec.get("name") == name:
+            return str(rec.get("category") or name)
+    return name
+
+
+def has_skill_ingredients(species: dict[str, Any]) -> bool:
+    """メインスキルで食材が増える種族か（マスタに ingredient_yield 宣言があるか）。"""
+    return _ingredient_yield_spec(species) is not None
+
+
+def _skill_ingredient_pool(
+    pokemon: dict[str, Any], species: dict[str, Any], spec: dict[str, Any]
+) -> list[str]:
+    """スキルの抽選対象になる食材名。"""
+    pool = str(spec.get("pool") or "own_slots")
+    if pool == "fixed":
+        return [str(n) for n in (spec.get("names") or []) if n]
+    # own_slots: 個体が選んだ食材（未指定なら master の既定枠）。解放状況は問わない。
+    ings = species.get("ingredients") or {}
+    defaults = (
+        (ings.get("a") or {}).get("name"),
+        (ings.get("b") or {}).get("name"),
+        (ings.get("c") or {}).get("name"),
+    )
+    chosen = (
+        pokemon.get("ingredient_1") or defaults[0],
+        pokemon.get("ingredient_2") or defaults[1],
+        pokemon.get("ingredient_3") or defaults[2],
+    )
+    return [name for name in chosen if name]
+
+
+def expected_skill_activations_per_day(
+    pokemon: dict[str, Any],
+    species: dict[str, Any],
+    *,
+    team_help_bonus_count: int = 0,
+) -> float:
+    """1日あたりのメインスキル発動回数の期待値。
+
+    おてつだい回数の出し方は expected_ingredients_per_day と同じ軸
+    （日次実効秒数 × 速度倍率 / おてつだい時間 / リボン時間倍率）。
+    """
+    skill_rate = float(species.get("main_skill_rate") or 0.0) / 100.0
+    if skill_rate <= 0.0:
+        return 0.0
+
+    level = _effective_level(pokemon)
+    subs = _individual_subs(pokemon)
+    base_assist = _assist_seconds_at_lv(
+        max(int(species.get("base_assist_seconds") or 1), 1), level
+    )
+    ribbon_stage = int(pokemon.get("sleep_ribbon_stage") or 0)
+    species_name = pokemon.get("species_name") or species.get("name") or ""
+    ribbon_time_mult = (
+        get_time_multiplier(species_name=species_name, stage=ribbon_stage)
+        if ribbon_stage > 0
+        else 1.0
+    )
+    speed = _speed_mult(pokemon.get("nature"), subs)
+    if team_help_bonus_count > 0:
+        speed *= 1.0 + 0.05 * team_help_bonus_count
+
+    assists_per_day = (
+        DAILY_EFFECTIVE_ASSIST_SECONDS * speed / (base_assist * ribbon_time_mult)
+    )
+    return assists_per_day * skill_rate * _skill_proc_mult(pokemon.get("nature"), subs)
+
+
+def expected_skill_ingredients_per_day(
+    pokemon: dict[str, Any],
+    species: dict[str, Any],
+    *,
+    team_help_bonus_count: int = 0,
+) -> dict[str, float]:
+    """メインスキルで1日に増える食材 {食材名: 個数/日}。宣言が無いスキルは空辞書。
+
+    「N個を候補のうち1種類」なので、どれが出るかは確率。期待値として
+    N / 候補数 を各食材に配る（同じ食材を複数枠に持つ個体はその分だけ厚くなる）。
+    """
+    spec = _ingredient_yield_spec(species)
+    if not spec:
+        return {}
+    names = _skill_ingredient_pool(pokemon, species, spec)
+    if not names:
+        return {}
+
+    subs = _individual_subs(pokemon)
+    # 1発動あたりの獲得個数はマスタの count_by_level を正本にする。
+    # 未宣言のスキルだけ skill_effects.py のカテゴリ表にフォールバックする。
+    counts = {int(k): float(v) for k, v in (spec.get("count_by_level") or {}).items()}
+    category = _skill_category_of(species)
+    max_lv = (max(counts) if counts else None) or get_skill_max_lv(category) or 7
+    eff_lv = _effective_skill_lv(
+        int(pokemon.get("main_skill_level") or 1), max_lv, subs
+    )
+    if counts:
+        per_activation = counts.get(min(max(eff_lv, min(counts)), max(counts)), 0.0)
+    else:
+        per_activation = get_skill_effect_amount(category, eff_lv) or 0.0
+    if per_activation <= 0.0:
+        return {}
+
+    acts = expected_skill_activations_per_day(
+        pokemon, species, team_help_bonus_count=team_help_bonus_count
+    )
+    if acts <= 0.0:
+        return {}
+
+    picks = int(spec.get("pick") or 1)
+    share = picks / len(names)
+    out: dict[str, float] = {}
+    for name in names:
+        out[name] = out.get(name, 0.0) + per_activation * acts * share
+    return out
+
+
 def expected_ingredients_per_day(
     pokemon: dict[str, Any],
     species: dict[str, Any],
@@ -122,6 +277,7 @@ def expected_ingredients_per_day(
     *,
     weekend: bool = False,
     team_help_bonus_count: int = 0,
+    include_main_skill: bool = True,
 ) -> dict[str, float]:
     """個体ごとの 1日あたり食材獲得期待値を {食材名: 個数} で返す。
 
@@ -135,9 +291,17 @@ def expected_ingredients_per_day(
     play_context / weekend 引数は v0.3 で「日中/睡眠中」分割モデルに移行する際に使う予定。
     v0.2 では使用しない（げんき変動を加味した日合計実効秒数で1日を表す）。
     """
+    skill_ings = (
+        expected_skill_ingredients_per_day(
+            pokemon, species, team_help_bonus_count=team_help_bonus_count
+        )
+        if include_main_skill
+        else {}
+    )
+
     food_rate = float(species.get("food_drop_rate") or 0.0) / 100.0
     if food_rate <= 0.0:
-        return {}
+        return dict(skill_ings)
 
     level = _effective_level(pokemon)
     nature = pokemon.get("nature")
@@ -168,7 +332,7 @@ def expected_ingredients_per_day(
     food_assists_per_day = assists_per_day * food_rate * drop
 
     if food_assists_per_day <= 0.0:
-        return {}
+        return dict(skill_ings)
 
     ings = species.get("ingredients") or {}
     # 個体が選んだ各スロットの食材（未指定なら master のデフォルト枠食材を当てる）
@@ -207,6 +371,9 @@ def expected_ingredients_per_day(
         slot_ratio = INGREDIENT_SLOT_RATIO[idx] / total_weight
         slot_count = food_assists_per_day * slot_ratio * float(qty)
         result[name] = result.get(name, 0.0) + slot_count
+
+    for name, qty in skill_ings.items():
+        result[name] = result.get(name, 0.0) + qty
 
     return result
 

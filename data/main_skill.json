@@ -187,7 +187,20 @@
       "category_icon": "食材セレクト.png",
       "name": "食材セレクトS",
       "description": "特定の食材の中からランダムで1種類の食材をN個ゲットする",
-      "max_level": 7
+      "max_level": 7,
+      "ingredient_yield": {
+        "pool": "own_slots",
+        "pick": 1,
+        "count_by_level": {
+          "1": 5,
+          "2": 6,
+          "3": 8,
+          "4": 11,
+          "5": 13,
+          "6": 16,
+          "7": 18
+        }
+      }
     },
     {
       "category": "食材セレクトS",

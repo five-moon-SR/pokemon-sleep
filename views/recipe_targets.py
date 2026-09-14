@@ -17,7 +17,12 @@ from image_utils import ingredient_icon_url, pokemon_image_url, recipe_icon_url
 from ui import components as c
 from utils.evaluator import final_evolution_of
 from utils.field_encounters import recommend_fields, species_fields
-from utils.food_expectation import composition_string, expected_ingredients_per_day, qty_at_slot
+from utils.food_expectation import (
+    composition_string,
+    expected_ingredients_per_day,
+    expected_skill_ingredients_per_day,
+    qty_at_slot,
+)
 from utils.ingredient_coverage import INGREDIENT_RECOMMENDATIONS
 from utils.play_context import load_play_context
 from utils.party_logic import RECIPE_CATEGORY_LABELS
@@ -166,6 +171,23 @@ def _target_supply(p: dict, target_name: str, supply_mode: str) -> float:
     return _lv60_target_supply(p, target_name)
 
 
+def _skill_target_supply(p: dict, target_name: str, supply_mode: str) -> float:
+    """そのうちメインスキル（食材セレクトS等）で増えるぶん。おてつだい分と別に出す。"""
+    if supply_mode == SUPPLY_MODE_CURRENT:
+        species = db.get_species_data(p.get("species_name") or "") or {}
+        return expected_skill_ingredients_per_day(p, species).get(target_name, 0.0)
+    final_name = final_evolution_of(p.get("species_name") or "")
+    species = (
+        db.get_species_data(final_name)
+        or db.get_species_data(p.get("species_name") or "")
+        or {}
+    )
+    boosted = dict(p)
+    boosted["species_name"] = final_name
+    boosted["current_level"] = 60
+    return expected_skill_ingredients_per_day(boosted, species).get(target_name, 0.0)
+
+
 def _food_slot_chips(p: dict, species: dict, target_name: str) -> list[str]:
     ings = species.get("ingredients") or {}
     defaults = (
@@ -228,6 +250,7 @@ def _candidate_rows(owned: list[dict], ingredient_name: str, supply_mode: str) -
                 "level": int(p.get("current_level") or p.get("caught_level") or p.get("level") or 1),
                 "composition": comp,
                 "daily": daily,
+                "skill_daily": _skill_target_supply(p, ingredient_name, supply_mode),
                 "recommended": (p.get("species_name") or "") in families,
                 "food_slots": _food_slot_chips(p, species, ingredient_name),
                 "subs": subs,
@@ -272,6 +295,9 @@ def _candidate_card(row: dict, need_per_day: float, supply_mode: str) -> str:
     cover = row["daily"] / need_per_day if need_per_day else 0.0
     # 攻略サイトのおすすめ系統かどうかは目印だけ。並び順は拾う量（期待値）で決める。
     rec_badge = '<span class="rt-rec-badge">推奨</span>' if row.get("recommended") else ""
+    # メインスキルで増える分は「拾ってくる量」と性質が違うので内訳を出す
+    skill_daily = float(row.get("skill_daily") or 0.0)
+    skill_note = f"　/　うちスキル {skill_daily:.1f}" if skill_daily > 0 else ""
     sub_html = "".join(c.subskill_chip(s) for s in row["subs"][:5]) or '<span class="rt-muted">サブ未入力</span>'
     slot_html = "".join(row.get("food_slots") or []) or '<span class="rt-muted">食材枠未入力</span>'
     return (
@@ -289,7 +315,7 @@ def _candidate_card(row: dict, need_per_day: float, supply_mode: str) -> str:
         '</div>'
         '</div>'
         f'<div class="rt-progress"><div style="width:{min(100, cover * 100):.0f}%"></div></div>'
-        f'<div class="rt-muted">3食必要量に対して {cover:.0%}</div>'
+        f'<div class="rt-muted">3食必要量に対して {cover:.0%}{skill_note}</div>'
         f'<div class="rt-slotrow">{slot_html}</div>'
         f'<div class="rt-subrow">{sub_html}</div>'
         '</article>'

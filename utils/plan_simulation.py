@@ -18,6 +18,7 @@ from utils.evaluator import (
     _skill_proc_mult,
     _speed_mult,
 )
+from utils.capability import capability_of
 from utils.food_expectation import (
     _effective_level,
     _individual_subs,
@@ -211,18 +212,21 @@ def simulate_plan(
     berry_field_bonus = 1.0 if "berry_2x" in event_set else 0.0
 
     for p, s, acts, boost in zip(members, masters, activations, member_boost):
-        for name, qty in expected_ingredients_per_day(
-            p, s, ctx, team_help_bonus_count=team_help
-        ).items():
+        # 素の能力（何個拾う/何回発動する）は capability 層が正本。
+        # ここで掛けるのは状況依存の倍率だけ: 好物きのみ×2・フィールド・週イベント・
+        # げんき回復によるチーム稼働ブースト(boost)。
+        cap = capability_of(p, s, ctx, team_help_bonus_count=team_help)
+        for name, qty in cap.ingredients_per_day.items():
             supply[name] = supply.get(name, 0.0) + qty * boost * food_mult
-        berry_daily += expected_berry_per_day(
-            p,
-            s,
-            ctx,
-            fav_berries=fav_berries,
-            field_bonus=berry_field_bonus,
-            team_help_bonus_count=team_help,
-        )["energy"] * boost
+
+        is_fav = bool(fav_berries) and cap.berry_name in (fav_berries or set())
+        berry_daily += (
+            cap.berry_energy_per_day
+            * (2.0 if is_fav else 1.0)
+            * (1.0 + berry_field_bonus)
+            * boost
+        )
+
         category, effect = _skill_effect(p, s)
         if category == "料理パワーアップS":
             pot_acts += acts
@@ -231,9 +235,8 @@ def simulate_plan(
             chance_acts += acts
             chance_effect = max(chance_effect, effect if category == "料理チャンスS" else 1.0)
         elif category not in HEAL_CATEGORIES:
-            direct_skill_daily += expected_skill_energy_per_day(
-                p, s, team_help_bonus_count=team_help
-            ) * boost
+            # 食材・きのみを産むスキルの cap.skill_energy_per_day は 0（供給側に計上済み）。
+            direct_skill_daily += cap.skill_energy_per_day * boost
 
     inventory = {k: float(v) for k, v in (starting_inventory or {}).items() if v > 0}
     requirements = {

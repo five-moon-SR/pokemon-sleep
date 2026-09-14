@@ -23,7 +23,7 @@ from itertools import combinations
 from typing import Any
 
 import db
-from utils.food_expectation import expected_berry_per_day, expected_ingredients_per_day
+from utils.capability import capability_of
 from utils.party_logic import (
     ROLE_LABELS,
     _main_recipe_pace,
@@ -31,7 +31,6 @@ from utils.party_logic import (
     compute_role_scores,
     get_play_ctx,
 )
-from utils.skill_expectation import expected_skill_energy_per_day
 
 # 役割目標が1人不足するごとの減点（エナジー相当）。UIから調整可能にしても良い。
 DEFAULT_ROLE_PENALTY = 3000.0
@@ -103,11 +102,17 @@ def precompute_member_stats(
         master = db.get_species_data(p["species_name"]) or {}
         if not master:
             continue
-        b = expected_berry_per_day(
-            p, master, ctx, fav_berries=fav_berries, field_bonus=field_bonus
+        # 素の能力は capability 層が正本。ここで掛けるのは好物きのみ×2 と
+        # 週イベントのフィールド補正だけ。
+        cap = capability_of(p, master, ctx)
+        is_fav = bool(fav_berries) and cap.berry_name in fav_berries
+        berry_e = (
+            cap.berry_energy_per_day * (2.0 if is_fav else 1.0) * (1.0 + field_bonus)
         )
-        ings = expected_ingredients_per_day(p, master, ctx)
-        skill_e = expected_skill_energy_per_day(p, master)
+        b = {"energy": berry_e}
+        ings = cap.ingredients_per_day
+        # 食材・きのみを産むスキルの skill_energy_per_day は 0（供給側に計上済み）。
+        skill_e = cap.skill_energy_per_day
         roles = {
             k for k, v in compute_role_scores(
                 p, master, fav_berries, event_set, needed_ings

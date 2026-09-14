@@ -10,6 +10,7 @@ from __future__ import annotations
 import db
 from constants import format_ingredient_short
 from image_utils import ingredient_icon_url
+from utils.capability import capability_of
 from utils.food_expectation import expected_berry_per_day, expected_ingredients_per_day
 from utils.play_context import load_play_context
 from utils.recipe_level import recipe_energy
@@ -154,15 +155,20 @@ def _role_score_berry(
 ) -> tuple[float, str] | None:
     """きのみ枠スコア = 1日獲得エナジー（好物倍率＋イベント補正込み）/ 100。"""
     field_bonus = 1.0 if "berry_2x" in event_set else 0.0
-    b = expected_berry_per_day(
-        p, master, get_play_ctx(), fav_berries=fav_set, field_bonus=field_bonus
-    )
-    if not b["name"] or b["energy"] <= 0:
+    # 素の個数・単価は capability 層から。好物×2 と 2倍週はここで掛ける。
+    cap = capability_of(p, master, get_play_ctx())
+    is_fav = bool(fav_set) and cap.berry_name in fav_set
+    energy = cap.berry_energy_per_day * (2.0 if is_fav else 1.0) * (1.0 + field_bonus)
+    if not cap.berry_name or energy <= 0:
         return None
-    score = b["energy"] / 100.0  # 100エナジー=1点
+    score = energy / 100.0  # 100エナジー=1点
 
-    parts = [f"🍓{b['name']}", f"{int(round(b['energy'])):,} en/日", f"{b['count']:.1f}個"]
-    if b["is_favorite"]:
+    parts = [
+        f"🍓{cap.berry_name}",
+        f"{int(round(energy)):,} en/日",
+        f"{cap.berry_count_per_day:.1f}個",
+    ]
+    if is_fav:
         parts.append("⭐好物")
     if "berry_2x" in event_set:
         parts.append("🍓2x週")

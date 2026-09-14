@@ -100,39 +100,74 @@ def find_pokemon_table(html: str) -> str:
     )
 
 
+# ヘッダ名 → このスクリプトが使う論理名。Wiki側は列の増減があるので
+# （2026-09: FPと手伝の間に「進化」列が挿入された）位置ではなく名前で引く。
+_COLUMN_KEYS = {
+    "No.": "dex_no",
+    "名前": "name",
+    "睡眠": "sleep_type",
+    "得意": "specialty",
+    "木実": "berry",
+    "食A": "food_a",
+    "食B": "food_b",
+    "食C": "food_c",
+    "メインスキル": "main_skill",
+    "手伝": "base_assist",
+}
+
+
+def _column_index(table_html: str) -> dict[str, int]:
+    """ヘッダ行から {論理名: 列番号} を作る。列が増減しても追従するため。"""
+    headers = [_cell_text(h) for h in _TH_RE.findall(table_html)]
+    index = {
+        _COLUMN_KEYS[h]: i
+        for i, h in enumerate(headers)
+        if h in _COLUMN_KEYS
+    }
+    missing = sorted(set(_COLUMN_KEYS.values()) - set(index))
+    if missing:
+        raise RuntimeError(
+            f"一覧表に必要な列が見つからない: {missing} / 実ヘッダ: {headers}"
+        )
+    return index
+
+
 def parse_rows(table_html: str) -> tuple[list[dict], list[str]]:
     """一覧表の各行を pokemon_master.json のレコード形式にパースする。
 
     返り値: (レコードのリスト, 警告のリスト)
-    列: 画像 | No. | 名前 | 睡眠 | 得意 | 木実 | 食A | 食B | 食C | メインスキル | FP | 手伝
+    列の並びはヘッダ名から解決する（_column_index）。
     """
     records: list[dict] = []
     warnings: list[str] = []
+    col = _column_index(table_html)
+    need_cells = max(col.values()) + 1
 
     for row_html in _TR_RE.findall(table_html):
         cells = _TD_RE.findall(row_html)
-        if len(cells) < 12:
+        if len(cells) < need_cells:
             continue  # ヘッダ行（th）や区切り行
 
-        raw_name = _cell_text(cells[2])
+        raw_name = _cell_text(cells[col["name"]])
         if not raw_name:
             continue
         name = WIKI_NAME_ALIASES.get(raw_name, raw_name)
 
-        dex_no = _cell_text(cells[1])
-        sleep_type = _cell_text(cells[3])
-        specialty = _cell_text(cells[4])
-        berry = _parse_item_cell(cells[5])
-        food_a = _parse_item_cell(cells[6])
-        food_b = _parse_item_cell(cells[7])
-        food_c = _parse_item_cell(cells[8])
-        main_skill = _cell_text(cells[9])
+        dex_no = _cell_text(cells[col["dex_no"]])
+        sleep_type = _cell_text(cells[col["sleep_type"]])
+        specialty = _cell_text(cells[col["specialty"]])
+        berry = _parse_item_cell(cells[col["berry"]])
+        food_a = _parse_item_cell(cells[col["food_a"]])
+        food_b = _parse_item_cell(cells[col["food_b"]])
+        food_c = _parse_item_cell(cells[col["food_c"]])
+        main_skill = _cell_text(cells[col["main_skill"]])
 
+        assist_text = _cell_text(cells[col["base_assist"]])
         try:
-            base_assist = int(re.sub(r"[^\d]", "", _cell_text(cells[11])))
+            base_assist = int(re.sub(r"[^\d]", "", assist_text))
         except ValueError:
             base_assist = None
-            warnings.append(f"{name}: 手伝時間がパースできない: {_cell_text(cells[11])!r}")
+            warnings.append(f"{name}: 手伝時間がパースできない: {assist_text!r}")
 
         if not berry:
             warnings.append(f"{name}: きのみセルがパースできない（スキップ）")

@@ -631,6 +631,43 @@
     },
     {
       "dex_no": "0025",
+      "species_name": "ピカチュウ(キャプテン)",
+      "sleep_type": "すやすや",
+      "specialty": "きのみ",
+      "berry": {
+        "name": "ウブのみ",
+        "qty": 2
+      },
+      "ingredients": {
+        "a": {
+          "name": "とくせんリンゴ",
+          "qty": [
+            1,
+            2,
+            4
+          ]
+        },
+        "b": {
+          "name": "あったかジンジャー",
+          "qty": [
+            2,
+            3
+          ]
+        },
+        "c": {
+          "name": "とくせんエッグ",
+          "qty": [
+            3
+          ]
+        }
+      },
+      "main_skill": "食材ゲットS",
+      "base_assist_seconds": 2500,
+      "food_drop_rate": 17.5,
+      "main_skill_rate": 1.8
+    },
+    {
+      "dex_no": "0025",
       "species_name": "ピカチュウ(ハロウィン)",
       "sleep_type": "すやすや",
       "specialty": "きのみ",
@@ -886,7 +923,7 @@
       "main_skill": "ゆびをふる",
       "base_assist_seconds": 2800,
       "food_drop_rate": 16.8,
-      "main_skill_rate": 3.6
+      "main_skill_rate": 4.0
     },
     {
       "dex_no": "0037",
@@ -2670,6 +2707,43 @@
       "base_assist_seconds": 2600,
       "food_drop_rate": 26.4,
       "main_skill_rate": 2.6
+    },
+    {
+      "dex_no": "0150",
+      "species_name": "ミュウツー",
+      "sleep_type": "すやすや",
+      "specialty": "スキル",
+      "berry": {
+        "name": "マゴのみ",
+        "qty": 1
+      },
+      "ingredients": {
+        "a": {
+          "name": "ワカクサ大豆",
+          "qty": [
+            1,
+            2,
+            4
+          ]
+        },
+        "b": {
+          "name": "ワカクサコーン",
+          "qty": [
+            2,
+            3
+          ]
+        },
+        "c": {
+          "name": "ほっこりポテト",
+          "qty": [
+            3
+          ]
+        }
+      },
+      "main_skill": "サイコブレイク(きのみゾーン)?",
+      "base_assist_seconds": 2300,
+      "food_drop_rate": null,
+      "main_skill_rate": null
     },
     {
       "dex_no": "0151",
@@ -6552,7 +6626,7 @@
           ]
         }
       },
-      "main_skill": "ゆめのかけらゲットS",
+      "main_skill": "はどうだん(ゆめのかけらゲットS)",
       "base_assist_seconds": 2600,
       "food_drop_rate": 15.0,
       "main_skill_rate": 5.1
@@ -7306,6 +7380,43 @@
       "base_assist_seconds": 2600,
       "food_drop_rate": 17.77,
       "main_skill_rate": 4.0
+    },
+    {
+      "dex_no": "0701",
+      "species_name": "ルチャブル",
+      "sleep_type": "ぐっすり",
+      "specialty": "スキル",
+      "berry": {
+        "name": "シーヤのみ",
+        "qty": 1
+      },
+      "ingredients": {
+        "a": {
+          "name": "げきからハーブ",
+          "qty": [
+            1,
+            2,
+            4
+          ]
+        },
+        "b": {
+          "name": "あったかジンジャー",
+          "qty": [
+            3,
+            4
+          ]
+        },
+        "c": {
+          "name": "マメミート",
+          "qty": [
+            5
+          ]
+        }
+      },
+      "main_skill": "食材セレクトS",
+      "base_assist_seconds": 2400,
+      "food_drop_rate": 19.2,
+      "main_skill_rate": 5.2
     },
     {
       "dex_no": "0702",
@@ -8714,6 +8825,117 @@
       "main_skill_rate": 3.9
     },
     {
+      "dex_no": "0957",
+      "species_name": "カヌチャン",
+      "sleep_type": "すやすや",
+      "specialty": "きのみ",
+      "berry": {
+        "name": "モモンのみ",
+        "qty": 2
+      },
+      "ingredients": {
+        "a": {
+          "name": "あんみんトマト",
+          "qty": [
+            1,
+            2,
+            4
+          ]
+        },
+        "b": {
+          "name": "リラックスカカオ",
+          "qty": [
+            2,
+            3
+          ]
+        },
+        "c": {
+          "name": "ほっこりポテト",
+          "qty": [
+            3
+          ]
+        }
+      },
+      "main_skill": "エナジーチャージM",
+      "base_assist_seconds": 4500,
+      "food_drop_rate": 20.2,
+      "main_skill_rate": 1.6
+    },
+    {
+      "dex_no": "0958",
+      "species_name": "ナカヌチャン",
+      "sleep_type": "すやすや",
+      "specialty": "きのみ",
+      "berry": {
+        "name": "モモンのみ",
+        "qty": 2
+      },
+      "ingredients": {
+        "a": {
+          "name": "あんみんトマト",
+          "qty": [
+            1,
+            2,
+            4
+          ]
+        },
+        "b": {
+          "name": "リラックスカカオ",
+          "qty": [
+            2,
+            3
+          ]
+        },
+        "c": {
+          "name": "ほっこりポテト",
+          "qty": [
+            3
+          ]
+        }
+      },
+      "main_skill": "エナジーチャージM",
+      "base_assist_seconds": 3300,
+      "food_drop_rate": 18.6,
+      "main_skill_rate": 1.8
+    },
+    {
+      "dex_no": "0959",
+      "species_name": "デカヌチャン",
+      "sleep_type": "すやすや",
+      "specialty": "きのみ",
+      "berry": {
+        "name": "モモンのみ",
+        "qty": 2
+      },
+      "ingredients": {
+        "a": {
+          "name": "あんみんトマト",
+          "qty": [
+            1,
+            2,
+            4
+          ]
+        },
+        "b": {
+          "name": "リラックスカカオ",
+          "qty": [
+            2,
+            3
+          ]
+        },
+        "c": {
+          "name": "ほっこりポテト",
+          "qty": [
+            3
+          ]
+        }
+      },
+      "main_skill": "エナジーチャージM",
+      "base_assist_seconds": 2400,
+      "food_drop_rate": 18.5,
+      "main_skill_rate": 2.0
+    },
+    {
       "dex_no": "0974",
       "species_name": "アルクジラ",
       "sleep_type": "ぐっすり",
@@ -8826,7 +9048,7 @@
     }
   ],
   "_meta": {
-    "count": 241,
+    "count": 247,
     "skipped_duplicates": [
       "ピカチュウ(ハロウィン)"
     ],
