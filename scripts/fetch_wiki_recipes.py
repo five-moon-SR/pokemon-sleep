@@ -31,6 +31,9 @@ sys.path.insert(0, str(ROOT))
 from scripts.add_recipe import add_recipe  # noqa: E402
 
 WIKI_URL = "https://wikiwiki.jp/poke_sleep/料理/レシピの一覧"
+# レシピレベル別エナジーは別ページ。一覧表には Lv1 しか載らない。
+# 2026-09時点で Wiki の表記は Lv1 / Lv30 / Lv70（Lv70解放に合わせて Lv60 の掲載は消えた）。
+ENERGY_URL = "https://wikiwiki.jp/poke_sleep/料理/レシピごとの獲得できるエナジー量"
 RECIPE_PATH = ROOT / "data" / "recipe.json"
 USER_AGENT = (
     "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) "
@@ -78,6 +81,31 @@ def _ingredients(cell_html: str) -> list[dict]:
         for name, count in zip(names, counts)
         if name and count > 0
     ]
+
+
+def parse_energy_page(html: str) -> dict[str, dict[str, int]]:
+    """レシピ名 → {"energy_lv1","energy_lv30","energy_lv70"}。
+
+    この表はヘッダが入れ子で列名を引けないので、位置で読む。
+    [No, 画像, 料理名, 食材, 計, Lv1, Lv30, Lv70, なべ小, なべ大]
+    """
+    out: dict[str, dict[str, int]] = {}
+    for table in _TABLE_RE.findall(html):
+        for row_html in _TR_RE.findall(table):
+            cells = [_text(c) for c in _TD_RE.findall(row_html)]
+            if len(cells) < 8:
+                continue
+            name = cells[2]
+            if not name or name.startswith("ごちゃまぜ"):
+                continue
+            values: dict[str, int] = {}
+            for key, idx in (("energy_lv1", 5), ("energy_lv30", 6), ("energy_lv70", 7)):
+                raw = re.sub(r"[^\d]", "", cells[idx])
+                if raw:
+                    values[key] = int(raw)
+            if values:
+                out[name] = values
+    return out
 
 
 def _column_index(table_html: str) -> dict[str, int]:
@@ -152,6 +180,9 @@ def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--apply", action="store_true", help="新レシピを書き込む")
     parser.add_argument("--html", help="取得済みHTMLファイル")
+    parser.add_argument(
+        "--energy-html", help="エナジー別ページの取得済みHTML（デバッグ用）"
+    )
     args = parser.parse_args()
 
     if args.html:
@@ -204,20 +235,31 @@ def main() -> int:
         print("\n(dry-run) 追記するには --apply を付けて再実行。")
         return 0
 
+    if args.energy_html:
+        energy_html = Path(args.energy_html).read_text(encoding="utf-8")
+    else:
+        print(f"\n取得中: {ENERGY_URL}")
+        energy_html = fetch_html(ENERGY_URL)
+    energies = parse_energy_page(energy_html)
+
     next_no = max((int(r.get("no") or 0) for r in local["records"]), default=0)
     for rec in new:
         next_no += 1
+        extra = energies.get(rec["name"], {})
         add_recipe(
             name=rec["name"],
             category=rec["category"],
             no=next_no,
             ingredients=rec["ingredients"],
             total_ingredients=rec["total_ingredients"],
-            energy_lv1=rec["energy_lv1"],
+            energy_lv1=extra.get("energy_lv1", rec["energy_lv1"]),
+            energy_lv30=extra.get("energy_lv30"),
         )
+        if not extra:
+            print(f"  ⚠ {rec['name']}: エナジー別ページに掲載が無く Lv30 を入れられない")
     print(f"\n追記完了: {len(new)} 品 → data/recipe.json")
-    print("⚠ Lv30/Lv60/なべ別のエナジーは一覧表に無いので未設定。")
-    print("   recipe_level が Lv1 から換算するが、実値が要るなら別ページから補完すること。")
+    print("⚠ Lv60 は Wiki が掲載をやめた（Lv70表記へ移行）ため未設定のまま。")
+    print("   recipe_level が Lv1 から換算するので計算には支障しない。")
     return 0
 
 

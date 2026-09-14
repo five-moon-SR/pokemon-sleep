@@ -63,14 +63,23 @@ class RecipeEnergyTest(unittest.TestCase):
             )
 
     def test_level30_and_60_match_master_within_rounding(self) -> None:
-        """Lv30/Lv60 はマスターに実値がある。誤差は整数丸めぶんの1まで。"""
+        """Lv30/Lv60 に実値があるレシピは、計算と一致する（誤差は整数丸めぶん）。
+
+        Wiki は Lv70 解放にあわせて Lv60 の掲載をやめたため、そこから取り込んだ
+        新レシピは実値を持たない。値をでっち上げず、持っているものだけ突き合わせる。
+        """
+        checked = 0
         for r in COOKABLE:
             for lv, key in ((30, "energy_lv30"), (60, "energy_lv60")):
+                if r.get(key) is None:
+                    continue
+                checked += 1
                 got = recipe_energy(r, lv)
                 self.assertLessEqual(
                     abs(got - float(r[key])), 1.0,
                     f"{r['name']} Lv{lv}: 計算 {got:.1f} / マスター {r[key]}",
                 )
+        self.assertGreater(checked, 0, "実値を持つレシピが1件も無い")
 
     def test_mixed_recipes_are_zero_at_any_level(self) -> None:
         """ごちゃまぜ系はレシピレベルの恩恵を受けない（基準エナジーが0）。"""
