@@ -31,7 +31,12 @@ from utils.berry_coverage import (
 )
 from utils.berry_coverage import TOP_N as BERRY_TOP_N
 from utils.ingredient_coverage import build_ingredient_index, versatile_mains
-from utils.ingredient_demand import best_supply_per_ingredient, demanding_recipes
+from utils.ingredient_demand import (
+    REACH_THRESHOLD,
+    best_supply_per_ingredient,
+    demanding_recipes,
+    recipe_reachability,
+)
 from utils.play_context import load_play_context
 from utils.skill_role_coverage import TOP_N, role_holes, skill_role_audit
 
@@ -100,8 +105,11 @@ def _coverage_table(
             "将来候補": st.column_config.NumberColumn("将来候補", format="%d体", width="small"),
             "供給/日": st.column_config.NumberColumn("供給/日", format="%.1f", width="small"),
             "最大の1体": st.column_config.NumberColumn("最大の1体", format="%.1f個/日", width="small"),
-            "育成後の最大1体": st.column_config.NumberColumn(
-                "育成後の最大1体", format="%.1f個/日", width="small"
+            "Lv30での最大1体": st.column_config.NumberColumn(
+                "Lv30での最大1体", format="%.1f個/日", width="small"
+            ),
+            "Lv60での最大1体": st.column_config.NumberColumn(
+                "Lv60での最大1体", format="%.1f個/日", width="small"
             ),
             "基準/日": st.column_config.NumberColumn("基準/日", format="%.0f個/日", width="small"),
             "基準の料理": st.column_config.TextColumn("基準の料理", width="medium"),
@@ -167,17 +175,25 @@ with food_tab:
     # 必要量トップ2の平均 × 3食」。今後どの強い料理を狙うことになっても耐えられる
     # 水準を見たいので、鍋容量では絞らない。判定は**一番多く拾える1体**で行う。
     demands = demanding_recipes()
-    grown = st.toggle(
-        "育成後（最終進化・Lv60）で見る",
-        value=False,
-        key="hand_food_grown",
-        help="今は届かなくても、育て切れば基準に手が届くのかを見る。",
-    )
-    best_supply = best_supply_per_ingredient(owned, grown=bool(grown))
+    stage = st.segmented_control(
+        "見る段階",
+        options=["現在", "Lv30", "Lv60"],
+        default="現在",
+        key="hand_food_stage",
+        help=(
+            "Lv30で食材2枠目、Lv60で3枠目が開く。指定したLvまで育てた姿"
+            "（最終進化・Lvは max(現在Lv, 指定Lv)）で見る。"
+        ),
+    ) or "現在"
+    stage_level = {"現在": None, "Lv30": 30, "Lv60": 60}[stage]
+    best_supply = best_supply_per_ingredient(owned, level=stage_level)
     st.caption(
         "基準は「その食材を使う料理のうち**必要量トップ2の平均 × 1日3食**」。"
         "判定は担当の頭数ではなく、**一番多く拾える1体の供給量**です"
-        + ("（**育成後**＝最終進化・Lv60で計算）。" if grown else "（現在のLv・構成）。")
+        + (
+            "（現在のLv・構成）。" if stage_level is None
+            else f"（**{stage}まで育てた姿**＝最終進化・Lvは現在値と{stage_level}の大きい方）。"
+        )
         +
         "1体で埋めきれる食材はまずないので、合否ではなく**達成率の低い順**に"
         "「どこが一番遠いか」を見てください。"
@@ -193,7 +209,7 @@ with food_tab:
             "食材": format_ingredient_short(name),
             "充足": (min(1.0, best / need) * 100) if need else 100.0,
             "状態": _amount_label(best, need),
-            ("育成後の最大1体" if grown else "最大の1体"): best,
+            ("最大の1体" if stage_level is None else f"{stage}での最大1体"): best,
             "基準/日": need,
             "基準の料理": demand.label if demand else "—",
             "即戦力": len(active),
@@ -205,6 +221,68 @@ with food_tab:
     worst = [r["食材"] for r in food_rows[:4] if r["充足"] < 100]
     if worst:
         st.caption("いま一番遠いのは： **" + "** / **".join(worst) + "**")
+
+    # ── 料理ごとの到達度（重いので見たいときだけ計算する） ──
+    st.divider()
+    if st.toggle(
+        "料理ごとの到達度を見る",
+        value=False,
+        key="hand_recipe_reach",
+        help=(
+            "「あとこの食材さえ埋まれば、この料理に手が届く」を料理ごとに出す。"
+            "全レシピを走査するので、開いたときだけ計算します。"
+        ),
+    ):
+        threshold = st.slider(
+            "「足りている」とみなす達成率", min_value=0.3, max_value=1.0,
+            value=float(REACH_THRESHOLD), step=0.05, key="hand_reach_threshold",
+            help=(
+                "不足の量は強い個体を1体引けば一気に消えるし、あと数個ならサブスキルや"
+                "おてつだいボーナスで吸収できる。ここを超えた食材は『足りている』として"
+                "扱い、本当に遠い相方だけが残るようにする。"
+            ),
+        )
+        reaches = recipe_reachability(best_supply, threshold=float(threshold))
+        only_one = st.toggle(
+            "あと1つで届くものだけ", value=True, key="hand_reach_only_one"
+        )
+        shown = [r for r in reaches if r.missing_count == 1] if only_one else reaches
+        shown = [r for r in shown if r.energy_lv60 > 0]
+        reach_rows = [
+            {
+                "料理": r.recipe_name,
+                "Lv60エナジー": r.energy_lv60,
+                "到達度": r.reach * 100,
+                "足りない食材": "、".join(
+                    f"{format_ingredient_short(n)}({ratio:.0%})" for n, ratio in r.missing[:3]
+                ) or "—",
+                "不足数": r.missing_count,
+            }
+            for r in shown
+        ]
+        if reach_rows:
+            st.dataframe(
+                pd.DataFrame(reach_rows),
+                hide_index=True,
+                use_container_width=True,
+                height=360,
+                column_config={
+                    "Lv60エナジー": st.column_config.NumberColumn(
+                        "Lv60エナジー", format="%d en", width="small"
+                    ),
+                    "到達度": st.column_config.ProgressColumn(
+                        "到達度", format="%.0f%%", min_value=0, max_value=100, width="small"
+                    ),
+                    "不足数": st.column_config.NumberColumn("不足数", format="%d", width="small"),
+                },
+            )
+            done = sum(1 for r in reaches if r.missing_count == 0 and r.energy_lv60 > 0)
+            st.caption(
+                f"いまの段階（{stage}）で既に必要量を満たす料理は **{done}品**。"
+                "残りは表の「足りない食材」を埋めれば届きます。"
+            )
+        else:
+            st.html(c.empty_state("条件に合う料理がありません。"))
 
     detail_name = st.selectbox(
         "担当個体を見る食材",
